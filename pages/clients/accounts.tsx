@@ -1,0 +1,14 @@
+import Accounts from '@/components/clients/accounts'
+import { ClientsAccountsContextProvider } from '@/context/clients/AccountsContext'
+import { NextPage } from 'next'
+import React from 'react'
+
+const ClientsAccountsPage: NextPage = () => {
+  return (
+    <ClientsAccountsContextProvider>
+      <Accounts />
+    </ClientsAccountsContextProvider>
+  )
+}
+
+export default ClientsAccountsPage
