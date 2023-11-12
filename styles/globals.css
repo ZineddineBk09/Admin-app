@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+input:-webkit-autofill {
+  -webkit-background-clip: text;
+}
+
+.styled-select select {
+  -moz-appearance: none; /* Firefox */
+  -webkit-appearance: none; /* Safari and Chrome */
+  appearance: none;
+}
+
+input[type='date']::-webkit-inner-spin-button,
+input[type='date']::-webkit-calendar-picker-indicator {
+  background: transparent;
+  bottom: 0;
+  color: transparent;
+  cursor: pointer;
+  height: auto;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: auto;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  display: none;
+}
+*::-webkit-scrollbar-track {
+  background: rgb(231, 230, 230);
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 20px;
+  border: 2px solid #eee;
+}
+
+img,
+a {
+  -o-user-drag: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.css-f3jnds-MuiDataGrid-columnHeaders,
+.css-17jjc08-MuiDataGrid-footerContainer {
+  border: none !important;
+  border-radius: 10px !important;
+}
+
+/* change browser input suggestions color */
+input:-webkit-autofill {
+  -webkit-text-fill-color: white !important;
+}
+
+input[type='datetime-local']::-webkit-calendar-picker-indicator {
+  background: transparent;
+  bottom: 0;
+  color: transparent;
+  cursor: pointer;
+  height: auto;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: auto;
+}
+/* remove the default mm/dd/yyyy, --.-- placeholder of datetime input*/
+input[type='datetime-local']::-webkit-input-placeholder {
+  color: gray;
+  font-style: italic;
+}
+input[type='datetime-local']:-moz-placeholder {
+  color: gray;
+  font-style: italic;
+}
+input[type='datetime-local']::-moz-placeholder {
+  color: gray;
+  font-style: italic;
+}
+input[type='datetime-local']:-ms-input-placeholder {
+  color: gray;
+  font-style: italic;
+}
+
