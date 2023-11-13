@@ -102,23 +102,24 @@ const AccountCard = ({ account }: { account: Account }) => {
               <div className='w-full flex flex-col items-start gap-y-2'>
                 {branches.map(
                   (branch: { id: string; name: string }, index: number) => (
-                    <Link
-                      key={index}
-                      href={`/clients/branches?branchId=${branch.id}`}
-                      passHref
-                    >
-                      <a className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
-                        <label className='text-gray-600 text-sm'>
-                          Branch #{index + 1}
-                        </label>
-                        <p className='text-sm'>
-                          {branch.name}{' '}
-                          <span className='ml-6 text-sm text-gray-400'>
-                            #{branch.id}
-                          </span>
-                        </p>
-                      </a>
-                    </Link>
+                    <div key={index}>
+                      <Link
+                        href={`/clients/branches?branchId=${branch.id}`}
+                        passHref
+                      >
+                        <a className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
+                          <label className='text-gray-600 text-sm'>
+                            Branch #{index + 1}
+                          </label>
+                          <p className='text-sm'>
+                            {branch.name}{' '}
+                            <span className='ml-6 text-sm text-gray-400'>
+                              #{branch.id}
+                            </span>
+                          </p>
+                        </a>
+                      </Link>
+                    </div>
                   )
                 )}
               </div>
