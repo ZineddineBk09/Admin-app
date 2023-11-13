@@ -30,17 +30,17 @@ export const ClientsBranchesContextProvider = ({
       rows.push({
         id: faker.number.bigInt().toString(),
         name: faker.company.name(),
-        country: faker.address.country(),
-        governorate: faker.address.state(),
-        city: faker.address.city(),
+        country: faker.location.country(),
+        governorate: faker.location.state(),
+        city: faker.location.city(),
         customOrderFee: faker.number.float(),
         customDriverFee: faker.number.float(),
         phone: faker.phone.number(),
         supervisor: faker.person.firstName(),
         clientAccount: faker.company.name(),
         location: {
-          latitude: faker.address.latitude({ max: 22, min: 21 }),
-          longitude: faker.address.longitude({
+          latitude: faker.location.latitude({ max: 22, min: 21 }),
+          longitude: faker.location.longitude({
             max: 40,
             min: 39,
           }),
