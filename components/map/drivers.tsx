@@ -44,7 +44,6 @@ const DriversList = () => {
       arr.push(fakeDriver)
     }
     setDrivers(arr as Driver[])
-    console.log(arr)
   }
 
   useEffect(() => {
