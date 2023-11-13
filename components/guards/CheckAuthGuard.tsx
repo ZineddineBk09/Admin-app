@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react'
 
 const CheckAuthGuard = ({ children }: { children: React.ReactNode }): any => {
   const { data: session, status } = useSession()
+  console.log(session, status)
 
   const router = useRouter()
   const path = useRouter().pathname.split('/')[1]
@@ -23,6 +24,7 @@ const CheckAuthGuard = ({ children }: { children: React.ReactNode }): any => {
     if (status === 'loading') return
     if (status === 'authenticated') {
       // stay on the same page if user is authenticated
+      if (router.asPath === '/') router.push('/dashboard')
       router.push(router.asPath)
     }
     if (status == 'unauthenticated' && protectedRoutes.includes(path)) {
