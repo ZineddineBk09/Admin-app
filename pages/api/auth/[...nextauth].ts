@@ -36,10 +36,8 @@ export default NextAuth({
               accessToken: access,
               refreshToken: refresh,
             }
-            console.log('returned token', token)
             return token
           } else {
-            console.log('Invalid credentials')
             throw new Error('Invalid credentials')
           }
         } catch (error: any) {
@@ -50,8 +48,6 @@ export default NextAuth({
   ],
   callbacks: {
     async jwt({ token, user }: any) {
-      console.log('jwt', token)
-      console.log('user', user)
       if (user) {
         token.accessToken = user.accessToken
         token.refreshToken = user.refreshToken
@@ -60,8 +56,6 @@ export default NextAuth({
       return token
     },
     async session({ session, token }: any) {
-      console.log('session', session)
-      console.log('token', token)
       session.accessToken = token.accessToken
       session.refreshToken = token.refreshToken
       session.user.username = token.username
