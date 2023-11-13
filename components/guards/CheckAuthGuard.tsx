@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router'
-import { useAuthContext } from '@/context/AuthContext'
 import { useEffect } from 'react'
 import Loading from '@/components/shared/Loading'
 import React from 'react'
+import { useSession } from 'next-auth/react'
 
 const CheckAuthGuard = ({ children }: { children: React.ReactNode }): any => {
-  const { user } = useAuthContext() as any
+  const { data: session, status } = useSession()
+
   const router = useRouter()
   const path = useRouter().pathname.split('/')[1]
   const protectedRoutes = [
@@ -19,20 +20,17 @@ const CheckAuthGuard = ({ children }: { children: React.ReactNode }): any => {
   ]
 
   useEffect(() => {
-    if (user.uid == null && protectedRoutes.includes(path)) router.push('/')
-    else if (
-      (user.uid != null || user.email != null) &&
-      !protectedRoutes.includes(path)
-    ) {
-      console.log('User is logged in')
-      router.push('/dashboard')
+    if (status === 'loading') return
+    if (status === 'authenticated') {
+      // stay on the same page if user is authenticated
+      router.push(router.asPath)
     }
-  }, [user])
+    if (status == 'unauthenticated' && protectedRoutes.includes(path)) {
+      router.push('/')
+    }
+  }, [session, status])
 
-  if (!user) return <Loading />
-
-  // if user account not yet approved
-  if (!user.status && user.uid != null && user.email != null) return <div />
+  if (status === 'loading') return <Loading />
 
   return children
 }
