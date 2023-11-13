@@ -3,9 +3,7 @@ import Logo from '@/components/navbar/Logo'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
-import { signIn } from '@/lib/auth'
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
@@ -14,14 +12,12 @@ const LoginForm = () => {
   const router = useRouter()
   const formik = useFormik({
     initialValues: {
-      email: '',
+      username: '',
       password: '',
     },
 
     validationSchema: Yup.object({
-      email: Yup.string()
-        .email('please enter a valid email')
-        .required('please enter a valid email'),
+      username: Yup.string().required('please enter a valid username'),
       password: Yup.string()
         .min(6, 'password must be at least 6 characters')
         .required('please enter a password'),
@@ -31,16 +27,20 @@ const LoginForm = () => {
       try {
         // empty the error
         setError('')
-
-        const signin = await signIn(values.email, values.password)
-        if (signin) {
+        const { signIn } = await import('next-auth/react')
+        const signin = await signIn('fleetrun-auth', {
+          username: values.username,
+          password: values.password,
+          redirect: false,
+        })
+        if (signin?.status === 200) {
           console.log('signin ', signin)
           router.push('/dashboard')
         }
       } catch (error: any) {
         // empty the form password field
         formik.setFieldValue('password', '')
-        setError('email or password incorrect, please try again')
+        setError('username or password incorrect, please try again')
       }
     },
   })
@@ -61,27 +61,27 @@ const LoginForm = () => {
             >
               <div>
                 <label className='block mb-2 text-sm font-medium text-gray-500'>
-                  Email
+                  Username
                 </label>
                 <input
-                  type='email'
-                  name='email'
-                  id='email'
-                  placeholder='name@company.com'
+                  type='text'
+                  name='username'
+                  id='username'
+                  placeholder='John Doe'
                   className={
                     'bg-gray-200 text-slate-900 sm:text-sm rounded block w-full py-3 px-2.5 outline-none' +
                     ' ' +
-                    (formik.touched.email && formik.errors.email
+                    (formik.touched.username && formik.errors.username
                       ? 'border border-red-500'
                       : '')
                   }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.email}
+                  value={formik.values.username}
                 />
-                {formik.touched.email && formik.errors.email ? (
+                {formik.touched.username && formik.errors.username ? (
                   <span className='w-full transition-all duration-300 text-xs text-red-500 rounded py-1 px-2 mx-auto'>
-                    {formik.errors.email}
+                    {formik.errors.username}
                   </span>
                 ) : null}
               </div>
@@ -133,7 +133,7 @@ const LoginForm = () => {
                 className={
                   'w-full text-black bg-primary-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-3 text-center cursor-pointer' +
                   ' ' +
-                  (formik.errors.email ||
+                  (formik.errors.username ||
                   formik.errors.password ||
                   formik.isSubmitting
                     ? 'bg-gray-300 cursor-not-allowed'
