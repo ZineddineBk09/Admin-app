@@ -33,9 +33,12 @@ const LoginForm = () => {
           password: values.password,
           redirect: false,
         })
+        console.log('signin ', signin)
         if (signin?.status === 200) {
           console.log('signin ', signin)
           router.push('/dashboard')
+        } else {
+          setError('username or password incorrect, please try again')
         }
       } catch (error: any) {
         // empty the form password field
@@ -54,6 +57,15 @@ const LoginForm = () => {
             <h1 className='text-xl font-bold leading-tight tracking-tight text-slate-900  md:text-2xl text-center'>
               Company name
             </h1>
+
+            {
+              // show error message
+              error && (
+                <div className='w-full text-center transition-all duration-300 text-xs text-red-500 rounded py-1 px-2 mx-auto'>
+                  {error}
+                </div>
+              )
+            }
 
             <form
               className='w-full flex flex-col space-y-4 md:space-y-6'
