@@ -29,12 +29,15 @@ export default NextAuth({
           } = response.data
 
           if (refresh && access) {
-            return {
+            const token = {
               user: {
                 username,
               },
               accessToken: access,
+              refreshToken: refresh,
             }
+            console.log('returned token', token)
+            return token
           } else {
             console.log('Invalid credentials')
             throw new Error('Invalid credentials')
@@ -46,15 +49,23 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    async session({ session, token }: any) {
-      session.accessToken = token.access
-      return session
-    },
     async jwt({ token, user }: any) {
+      console.log('jwt', token)
+      console.log('user', user)
       if (user) {
-        token.access = user.accessToken
+        token.accessToken = user.accessToken
+        token.refreshToken = user.refreshToken
+        token.username = user.user.username
       }
       return token
+    },
+    async session({ session, token }: any) {
+      console.log('session', session)
+      console.log('token', token)
+      session.accessToken = token.accessToken
+      session.refreshToken = token.refreshToken
+      session.user.username = token.username
+      return session
     },
   },
   pages: {
