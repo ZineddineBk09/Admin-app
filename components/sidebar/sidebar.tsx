@@ -16,9 +16,9 @@ import {
   MapIcon,
 } from '../icons/sidebar'
 import { Text } from '@nextui-org/react'
-import { signOutUser } from '@/lib/auth'
 import Image from 'next/image'
 import { CollapseItems } from './collapse-items'
+import { signOut } from 'next-auth/react'
 
 export const SidebarWrapper = () => {
   const router = useRouter()
@@ -128,10 +128,9 @@ export const SidebarWrapper = () => {
         <Flex direction={'column'} justify={'between'} css={{ height: '100%' }}>
           <Sidebar.Body className='w-full'>
             {sidebarLinks.map((link, index) => (
-              <>
+              <div key={index}>
                 {link.subLinks.length > 0 ? (
                   <CollapseItems
-                    key={index}
                     title={link.title}
                     icon={link.icon}
                     isActive={link.isActive}
@@ -140,14 +139,13 @@ export const SidebarWrapper = () => {
                   />
                 ) : (
                   <SidebarItem
-                    key={index}
                     title={link.title}
                     icon={link.icon}
                     isActive={link.isActive}
                     href={link.href}
                   />
                 )}
-              </>
+              </div>
             ))}
           </Sidebar.Body>
 
@@ -159,7 +157,7 @@ export const SidebarWrapper = () => {
                 <button
                   className='border-none outline-none bg-transparent'
                   onClick={() => {
-                    signOutUser()
+                    signOut({ callbackUrl: `/` })
                   }}
                 >
                   Sign Out
