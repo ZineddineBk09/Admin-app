@@ -1,6 +1,7 @@
 import { Account } from '@/interfaces'
 import { searchAccounts } from '@/lib/search'
 import React, { useEffect, useState } from 'react'
+import { faker } from '@faker-js/faker'
 
 export const ClientsAccountsContext = React.createContext({})
 
@@ -29,14 +30,43 @@ export const ClientsAccountsContextProvider = ({
         discount: 10,
         website: 'https://www.mcdonalds.com',
         phone: '920000000',
+        branches: Array(3).fill({
+          id: faker.number.bigInt().toString(),
+          name: faker.company.name(),
+        }),
       },
       {
         id: '215352',
+        name: 'KFC',
+        city: 'Riyadh',
+        discount: 10,
+        website: 'https://www.kfc.com',
+        phone: '920000000',
+        branches: Array(3).fill({
+          id: faker.number.bigInt().toString(),
+          name: faker.company.name(),
+        }),
+      },
+      {
+        id: '215353',
         name: 'Burger King',
         city: 'Riyadh',
         discount: 10,
         website: 'https://www.burgerking.com',
         phone: '920000000',
+        branches: Array(3).fill({
+          id: faker.number.bigInt().toString(),
+          name: faker.company.name(),
+        }),
+      },
+      {
+        id: '215354',
+        name: 'Hardees',
+        city: 'Riyadh',
+        discount: 10,
+        website: 'https://www.hardees.com',
+        phone: '920000000',
+        branches: [],
       },
     ])
   }
