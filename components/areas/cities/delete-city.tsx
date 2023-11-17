@@ -15,11 +15,10 @@ export const DeleteCity = ({ id }: { id: string }) => {
   const handleDelete = async () => {
     setLoading(true)
     // await deleteCity(id)
-    // await deleteImage(id, 'rooms')
     // closeHandler()
     // setLoading(false)
     // refreshCitys()
-    console.log('delete room')
+    console.log('delete city')
     setLoading(false)
     closeHandler()
   }
