@@ -31,7 +31,7 @@ const CityMap = () => {
   }, [control, map])
 
   return (
-    <div className=''>
+    <div>
       <MapContainer
         center={[21.3891, 39.8579]}
         zoom={13}
