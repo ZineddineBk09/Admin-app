@@ -9,6 +9,7 @@ import 'leaflet-easybutton/src/easy-button.css'
 import * as L from 'leaflet'
 import { MapPinIcon } from '../icons/map'
 import { Driver } from '@/interfaces'
+import { getDriversInArea } from '../../lib/api/map'
 
 // create a custom icon with L.divIcon and reactDOM.renderToString
 const icon = (image?: string, symbol?: string) =>
@@ -33,104 +34,26 @@ const Map = ({ drivers }: { drivers: Driver[] }) => {
   const [changed, setChanged] = useState(false)
   const markerRef = useRef<any>(null)
 
-  // useEffect(() => {
-  //   if (typeof window !== 'undefined') {
-  //     if (!map) return
-  //     if (control) {
-  //       map.removeControl(control)
-  //       setControl(null)
-  //     }
+  // add an event listener on map: load, move, zoom, etc.
+  useEffect(() => {
+    if (!map) return
 
-  //     setControl(
-  //       L.easyButton({
-  //         states: [
-  //           {
-  //             stateName: 'unloaded',
-  //             icon: '/icons/locationPin.png',
-  //             title: 'load image',
-  //             onClick: function (control: any) {
-  //               control.state('loading')
-  //               control._map.on('locationfound', function (e: any) {
-  //                 setPosition(e.latlng)
-  //                 map.flyTo(e.latlng, 18)
-  //                 control.state('loaded')
-  //               })
-  //               control._map.on('locationerror', function () {
-  //                 control.state('error')
-  //               })
-  //               control._map.locate()
-  //             },
-  //           },
-  //           {
-  //             stateName: 'loading',
-  //             icon: 'fa-spinner fa-spin',
-  //             onClick: function () {},
-  //             title: 'loading',
-  //           },
-  //           {
-  //             stateName: 'loaded',
-  //             icon: 'fa-crosshairs',
-  //             onClick: function () {},
-  //             title: 'location loaded',
-  //           },
-  //           {
-  //             stateName: 'error',
-  //             icon: 'fa-frown-o',
-  //             onClick: function () {},
-  //             title: 'location not found',
-  //           },
-  //         ],
-  //       })
-  //     )
-  //   }
-  // }, [map])
+    map.on('moveend', async () => {
+      const [max_lat, max_lng, min_lat, min_lng] = map
+        .getBounds()
+        .toBBoxString()
+        .split(',')
 
-  // useEffect(() => {
-  //   if (!map) return
-  //   if (control) {
-  //     control.addTo(map)
-  //     map.on('click', function (e: any) {
-  //       setPosition(e.latlng)
-  //       control.state('unloaded')
-
-  //       return false
-  //     })
-  //   }
-  // }, [control, map])
-
-  const eventHandlers = {
-    dragend() {
-      const marker = markerRef?.current
-      if (marker) {
-        if (!changed) setChanged(true)
-        setPosition(marker.getLatLng())
-        control.state('unloaded')
-      }
-    },
-  }
-
-  const LocationMarker = () => {
-    if (position) {
-      const { lat, lng } = position
-
-      return (
-        <Marker
-          draggable
-          icon={icon()}
-          eventHandlers={eventHandlers}
-          position={position}
-          ref={markerRef}
-        >
-          <Popup>
-            {changed
-              ? 'Position: ' + lat.toFixed(4) + ', ' + lng.toFixed(4) + ''
-              : 'Position: ' + lat.toFixed(4) + ', ' + lng.toFixed(4) + ''}
-          </Popup>
-        </Marker>
-      )
-    }
-    return null
-  }
+      // send the new bounds to the server, to get the drivers in that area
+      const drivers = await getDriversInArea({
+        min_lat,
+        min_lng,
+        max_lat,
+        max_lng,
+      })
+      console.log(drivers)
+    })
+  }, [map])
 
   return (
     <div className=''>
