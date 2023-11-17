@@ -15,6 +15,7 @@ const CityMap = () => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if (!map) return
+
       if (control) {
         map.removeControl(control)
         setControl(null)
