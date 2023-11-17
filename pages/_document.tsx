@@ -8,7 +8,6 @@ import Document, {
   DocumentInitialProps,
 } from 'next/document'
 import { CssBaseline } from '@nextui-org/react'
-import GoogleAnalytics from '@/components/analytics/GoogleAnaytics'
 
 class MyDocument extends Document {
   static async getInitialProps(
@@ -32,7 +31,6 @@ class MyDocument extends Document {
         <title>Delivery App</title>
         <Head>
           {CssBaseline.flush()}
-          <GoogleAnalytics />
         </Head>
 
         <body>
