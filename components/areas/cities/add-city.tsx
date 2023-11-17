@@ -18,6 +18,7 @@ export const AddCity = () => {
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
 
+  // Formik to handle the form state
   const formik = useFormik({
     initialValues: {
       name: '',
