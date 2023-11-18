@@ -106,3 +106,10 @@ input[type='datetime-local']:-ms-input-placeholder {
   font-style: italic;
 }
 
+/* remove select fields border */
+select {
+  border: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
