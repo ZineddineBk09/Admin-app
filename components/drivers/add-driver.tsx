@@ -4,17 +4,12 @@ import {
   Input,
   Modal,
   Text,
-  Textarea,
-  Tooltip,
   Loading,
 } from '@nextui-org/react'
-import { IconButton } from '../table/table.styled'
 import React from 'react'
 import { Flex } from '../styles/flex'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { EditIcon } from '../icons/table'
-import { Driver } from '@/interfaces'
 
 export const AddDriver = () => {
   const [visible, setVisible] = React.useState(false)
