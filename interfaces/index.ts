@@ -3,6 +3,12 @@ export interface AuthUser {
   uid: string | null
 }
 
+export interface AuthSession {
+  user: any
+  accessToken: string
+  refreshToken?: string
+}
+
 export interface RegisterUser {
   uid: string | null
   email: string | null
@@ -12,15 +18,6 @@ export interface RegisterUser {
   storeManager: string | null
   storePhone: string | null
   status: boolean
-}
-
-export interface Plate {
-  id: string
-  name: string
-  category: string
-  price: number
-  image: string
-  description: string
 }
 
 export interface Driver {
@@ -124,3 +121,5 @@ export interface BBox {
   max_lat: number
   max_lng: number
 }
+
+export type APIRecord = Driver | Order | Account | Branch
