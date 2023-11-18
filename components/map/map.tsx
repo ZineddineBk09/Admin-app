@@ -8,8 +8,8 @@ import 'leaflet-easybutton/src/easy-button.js'
 import 'leaflet-easybutton/src/easy-button.css'
 import * as L from 'leaflet'
 import { MapPinIcon } from '../icons/map'
-import { Driver } from '@/interfaces'
-import { getDriversInArea } from '../../lib/api/map'
+import { BBox, Driver } from '@/interfaces'
+import { addDriverToArea, getDriversInArea } from '../../lib/api/map'
 
 // create a custom icon with L.divIcon and reactDOM.renderToString
 const icon = (image?: string, symbol?: string) =>
@@ -39,19 +39,23 @@ const Map = ({ drivers }: { drivers: Driver[] }) => {
     if (!map) return
 
     map.on('moveend', async () => {
-      const [max_lat, max_lng, min_lat, min_lng] = map
+      const [min_lat, min_lng, max_lat, max_lng] = map
         .getBounds()
         .toBBoxString()
         .split(',')
 
-      // send the new bounds to the server, to get the drivers in that area
-      const drivers = await getDriversInArea({
+      const bbox: BBox = {
         min_lat,
         min_lng,
         max_lat,
         max_lng,
-      })
-      console.log(drivers)
+      }
+
+      console.log('bbox: ', bbox)
+      
+      // send the new bounds to the server, to get the drivers in that area
+      const drivers = await getDriversInArea(bbox)
+      console.log('drivers: ', drivers)
     })
   }, [map])
 
