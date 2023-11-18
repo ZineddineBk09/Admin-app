@@ -142,7 +142,7 @@ export const AddDriver = () => {
                       onChange={formik.handleChange}
                     >
                       <option value='' className='text-gray-300'>
-                        Select Category
+                        Select Status
                       </option>
                       <option value='Available'>Available</option>
                       <option value='Busy'>Busy</option>
@@ -235,7 +235,7 @@ export const AddDriver = () => {
                       formik.touched.inProgressTasks &&
                       formik.errors.inProgressTasks
                         ? formik.errors.inProgressTasks
-                        : 'InProgressTasks'
+                        : 'Tasks In Progress'
                     }
                     bordered
                     clearable
@@ -267,7 +267,7 @@ export const AddDriver = () => {
                       formik.touched.completedTasks &&
                       formik.errors.completedTasks
                         ? formik.errors.completedTasks
-                        : 'CompletedTasks'
+                        : 'Completed Tasks'
                     }
                     bordered
                     clearable
