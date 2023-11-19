@@ -52,7 +52,7 @@ const Map = ({ drivers }: { drivers: Driver[] }) => {
       }
 
       console.log('bbox: ', bbox)
-      
+
       // send the new bounds to the server, to get the drivers in that area
       const drivers = await getDriversInArea(bbox)
       console.log('drivers: ', drivers)
