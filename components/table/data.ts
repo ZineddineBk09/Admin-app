@@ -21,7 +21,7 @@ export const driversTableRows: Driver[] = [
     inProgressTasks: 31,
     image:
       'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/570.jpg',
-    status: 'Inactive',
+    status: 'inactive',
     location: {
       latitude: 21.5059,
       longitude: 39.0517,
@@ -38,7 +38,7 @@ export const driversTableRows: Driver[] = [
     inProgressTasks: 75,
     image:
       'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/535.jpg',
-    status: 'Available',
+    status: 'available',
     location: {
       latitude: 21.2826,
       longitude: 39.1236,
@@ -54,7 +54,7 @@ export const driversTableRows: Driver[] = [
     completedTasks: 80,
     inProgressTasks: 42,
     image: 'https://avatars.githubusercontent.com/u/37124297',
-    status: 'Available',
+    status: 'available',
     location: {
       latitude: 21.2721,
       longitude: 39.3594,
@@ -70,7 +70,7 @@ export const driversTableRows: Driver[] = [
     completedTasks: 46,
     inProgressTasks: 78,
     image: 'https://avatars.githubusercontent.com/u/67940394',
-    status: 'Available',
+    status: 'available',
     location: {
       latitude: 21.8567,
       longitude: 39.6579,
@@ -87,7 +87,7 @@ export const driversTableRows: Driver[] = [
     inProgressTasks: 31,
     image:
       'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/236.jpg',
-    status: 'Busy',
+    status: 'busy',
     location: {
       latitude: 21.0902,
       longitude: 39.9151,
@@ -104,7 +104,7 @@ export const driversTableRows: Driver[] = [
     inProgressTasks: 90,
     image:
       'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/241.jpg',
-    status: 'Busy',
+    status: 'busy',
     location: {
       latitude: 21.6564,
       longitude: 39.9769,
@@ -120,7 +120,7 @@ export const driversTableRows: Driver[] = [
     completedTasks: 32,
     inProgressTasks: 40,
     image: 'https://avatars.githubusercontent.com/u/41879973',
-    status: 'Busy',
+    status: 'busy',
     location: {
       latitude: 21.6076,
       longitude: 39.8013,
@@ -136,7 +136,7 @@ export const driversTableRows: Driver[] = [
     completedTasks: 26,
     inProgressTasks: 7,
     image: 'https://avatars.githubusercontent.com/u/63628203',
-    status: 'Busy',
+    status: 'busy',
     location: {
       latitude: 21.0019,
       longitude: 39.8066,
@@ -153,7 +153,7 @@ export const driversTableRows: Driver[] = [
     inProgressTasks: 54,
     image:
       'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/360.jpg',
-    status: 'Busy',
+    status: 'busy',
     location: {
       latitude: 21.3552,
       longitude: 39.2525,
@@ -170,7 +170,7 @@ export const driversTableRows: Driver[] = [
     inProgressTasks: 45,
     image:
       'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/310.jpg',
-    status: 'Inactive',
+    status: 'inactive',
     location: {
       latitude: 21.3993,
       longitude: 39.1874,
@@ -186,7 +186,7 @@ export const driversTableRows: Driver[] = [
     completedTasks: 47,
     inProgressTasks: 95,
     image: 'https://avatars.githubusercontent.com/u/59988021',
-    status: 'Available',
+    status: 'available',
     location: {
       latitude: 21.2071,
       longitude: 39.808,
@@ -202,7 +202,7 @@ export const driversTableRows: Driver[] = [
     completedTasks: 34,
     inProgressTasks: 47,
     image: 'https://avatars.githubusercontent.com/u/81806976',
-    status: 'Available',
+    status: 'available',
     location: {
       latitude: 21.315,
       longitude: 39.5543,
@@ -219,7 +219,7 @@ export const driversTableRows: Driver[] = [
     inProgressTasks: 47,
     image:
       'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/943.jpg',
-    status: 'Inactive',
+    status: 'inactive',
     location: {
       latitude: 21.704,
       longitude: 39.7459,
@@ -235,7 +235,7 @@ export const driversTableRows: Driver[] = [
     completedTasks: 26,
     inProgressTasks: 16,
     image: 'https://avatars.githubusercontent.com/u/9690594',
-    status: 'Available',
+    status: 'available',
     location: {
       latitude: 21.586,
       longitude: 39.4468,
@@ -252,7 +252,7 @@ export const driversTableRows: Driver[] = [
     inProgressTasks: 83,
     image:
       'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/183.jpg',
-    status: 'Inactive',
+    status: 'inactive',
     location: {
       latitude: 21.0309,
       longitude: 39.2366,
@@ -269,7 +269,7 @@ export const driversTableRows: Driver[] = [
     inProgressTasks: 68,
     image:
       'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1168.jpg',
-    status: 'Inactive',
+    status: 'inactive',
     location: {
       latitude: 21.868,
       longitude: 39.1341,
@@ -286,7 +286,7 @@ export const driversTableRows: Driver[] = [
     inProgressTasks: 92,
     image:
       'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/632.jpg',
-    status: 'Busy',
+    status: 'busy',
     location: {
       latitude: 21.9306,
       longitude: 39.7713,
@@ -302,7 +302,7 @@ export const driversTableRows: Driver[] = [
     completedTasks: 21,
     inProgressTasks: 40,
     image: 'https://avatars.githubusercontent.com/u/50295298',
-    status: 'Inactive',
+    status: 'inactive',
     location: {
       latitude: 21.4053,
       longitude: 39.1492,
@@ -318,7 +318,7 @@ export const driversTableRows: Driver[] = [
     completedTasks: 76,
     inProgressTasks: 80,
     image: 'https://avatars.githubusercontent.com/u/38894918',
-    status: 'Available',
+    status: 'available',
     location: {
       latitude: 21.8049,
       longitude: 39.382,
@@ -334,7 +334,7 @@ export const driversTableRows: Driver[] = [
     completedTasks: 35,
     inProgressTasks: 80,
     image: 'https://avatars.githubusercontent.com/u/27111727',
-    status: 'Busy',
+    status: 'busy',
     location: {
       latitude: 21.3729,
       longitude: 39.1821,
