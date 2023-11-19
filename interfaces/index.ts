@@ -135,5 +135,14 @@ export interface Team {
     name: string
   }
 }
-
-export type APIRecord = Driver | Order | Account | Branch
+interface APIDriver {
+  username: string
+  firstname: string
+  lastname: string
+  email: string
+  phone_number: string
+  team_id: string
+  password: string
+  is_freelance: boolean
+}
+export type APIRecord = APIDriver | Order | Account | Branch
