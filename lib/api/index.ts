@@ -3,7 +3,6 @@ import { getSession } from 'next-auth/react'
 
 export const createRecord = async (record: APIRecord, endpoint: string) => {
   const session: any = await getSession()
-  console.log('createRecord session: ', session)
 
   const response = await fetch(
     process.env.NEXT_PUBLIC_API_URL + '/' + endpoint,
@@ -11,7 +10,7 @@ export const createRecord = async (record: APIRecord, endpoint: string) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${session.accessToken}`,
+        // Authorization: `Bearer ${session.accessToken}`,
       },
       body: JSON.stringify(record),
     }
@@ -23,14 +22,14 @@ export const createRecord = async (record: APIRecord, endpoint: string) => {
 
 export const updateRecord = async (record: APIRecord, endpoint: string) => {
   const session: any = await getSession()
-  console.log('updateRecord session: ', session)
+
   const response = await fetch(
     process.env.NEXT_PUBLIC_API_URL + '/' + endpoint,
     {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${session.accessToken}`,
+        // Authorization: `Bearer ${session.accessToken}`,
       },
       body: JSON.stringify(record),
     }
@@ -42,14 +41,14 @@ export const updateRecord = async (record: APIRecord, endpoint: string) => {
 
 export const deleteRecord = async (record: APIRecord, endpoint: string) => {
   const session: any = await getSession()
-  console.log('deleteRecord session: ', session)
+
   const response = await fetch(
     process.env.NEXT_PUBLIC_API_URL + '/' + endpoint,
     {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${session.accessToken}`,
+        // Authorization: `Bearer ${session.accessToken}`,
       },
       body: JSON.stringify(record),
     }
