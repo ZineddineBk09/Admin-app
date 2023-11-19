@@ -5,6 +5,7 @@ import { DriversTable } from '../table/drivers-table'
 import { AddDriver } from './add-driver'
 import { useDriversContext } from '@/context/driver/DriversContext'
 import { Driver } from '@/interfaces'
+import { getRecords } from '@/lib/api'
 
 export const DriversPage = () => {
   const { drivers, loading } = useDriversContext()
@@ -24,7 +25,7 @@ export const DriversPage = () => {
     >
       <div className='w-full flex justify-between px-6'>
         <h1 className='font-semibold text-2xl'>Drivers</h1>
-        <AddDriver />
+        {/* <AddDriver /> */}
       </div>
 
       <SearchAndFilter />
@@ -54,9 +55,15 @@ export const SearchAndFilter = () => {
   const { drivers, handleSearchDrivers, handleSelectTeam, handleSelectStatus } =
     useDriversContext()
   // get unique teams
-  const teams: string[] = Array.from(
-    new Set(drivers.map((driver: Driver) => driver.team))
-  ).sort() as string[]
+  const [teams, setTeams] = React.useState<string[]>([])
+
+  React.useEffect(() => {
+    const fetchTeams = async () => {
+      const uniqueTeams = await getRecords('team')
+      setTeams([])
+    }
+    fetchTeams()
+  }, [drivers])
 
   return (
     <div className='w-full grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 px-6'>
