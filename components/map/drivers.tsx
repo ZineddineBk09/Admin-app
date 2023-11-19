@@ -156,9 +156,9 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
             <p className='text-black text-xs font-medium w-20'>Status</p>
             <span
               className={`py-1 px-3 rounded-full  text-xs ${
-                status === 'Available'
+                status === 'available'
                   ? 'bg-green-400'
-                  : status === 'Busy'
+                  : status === 'busy'
                   ? 'bg-orange-500'
                   : 'bg-gray-400'
               }`}
@@ -203,9 +203,9 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
               {
                 <span
                   className={`py-1 px-3 rounded-full text-xs ${
-                    status === 'Available'
+                    status === 'available'
                       ? 'bg-green-400'
-                      : status === 'Busy'
+                      : status === 'busy'
                       ? 'bg-orange-500'
                       : 'bg-gray-400'
                   }`}
