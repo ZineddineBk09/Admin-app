@@ -25,7 +25,7 @@ export interface Driver {
   fullName: string
   email: string
   image: string
-  status: 'Available' | 'Inactive' | 'Busy'
+  status: 'available' | 'inactive' | 'busy'
   team: string
   completedTasks: number
   inProgressTasks: number
@@ -120,6 +120,20 @@ export interface BBox {
   min_lng: number
   max_lat: number
   max_lng: number
+}
+/**{
+			"model": "operationapp.team",
+			"pk": "b4b3dbc0-ba48-4ffc-b437-d24d06b82b9e",
+			"fields": {
+				"name": "team2"
+			}
+		} */
+export interface Team {
+  model: string
+  pk: string
+  fields: {
+    name: string
+  }
 }
 
 export type APIRecord = Driver | Order | Account | Branch
