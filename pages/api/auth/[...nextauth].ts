@@ -1,8 +1,9 @@
 import axios from 'axios'
 import NextAuth from 'next-auth'
+import { RequestInternal } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
-async function refreshAccessToken(token: string) {
+async function refreshAccessToken(token: any) {
   console.log('Refreshing access token')
   try {
     const url = process.env.NEXT_PUBLIC_API_URL + '/refresh'
@@ -13,7 +14,7 @@ async function refreshAccessToken(token: string) {
       },
       method: 'POST',
       body: JSON.stringify({
-        refreshToken: token,
+        refreshToken: token.refreshToken,
       }),
     })
 
@@ -56,14 +57,12 @@ export default NextAuth({
         },
       },
 
-      async authorize({
-        username,
-        password,
-      }: {
-        username: string
-        password: string
-      }) {
+      async authorize(
+        credentials: Record<'username' | 'password', string> | undefined,
+        req: Pick<RequestInternal, 'method' | 'body' | 'query' | 'headers'>
+      ): Promise<any> {
         try {
+          const { username, password } = credentials!
           const response = await axios.post(
             process.env.NEXT_PUBLIC_API_URL + '/login',
             { username, password }
