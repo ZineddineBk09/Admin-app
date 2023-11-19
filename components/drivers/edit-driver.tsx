@@ -4,7 +4,6 @@ import {
   Input,
   Modal,
   Text,
-  Textarea,
   Tooltip,
   Loading,
 } from '@nextui-org/react'
@@ -136,18 +135,18 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
                       )}
                     </label>
                     <select
-                      className='w-full h-12 rounded-2xl px-3 py-1 border-2 border-gray-300 bg-white dark:bg-transparent dark:border-[#393A3C] transition-all duration-200 hover:border-black dark:hover:border-white'
+                      className='w-full h-12 rounded-2xl px-3 py-1 !border-2 !border-gray-300 bg-white dark:bg-transparent dark:!border-[#393A3C] transition-all duration-200 hover:border-black dark:hover:border-white'
                       name='status'
                       id='status'
                       value={formik.values.status}
                       onChange={formik.handleChange}
                     >
                       <option value='' className='text-gray-300'>
-                        Select Category
+                        Select status
                       </option>
-                      <option value='Available'>Available</option>
-                      <option value='Busy'>Busy</option>
-                      <option value='Offline'>Offline</option>
+                      <option value='available'>Available</option>
+                      <option value='busy'>Busy</option>
+                      <option value='inactive'>Inactive</option>
                     </select>
                   </div>
                 </Flex>
