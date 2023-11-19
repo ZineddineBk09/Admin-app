@@ -25,10 +25,10 @@ export const RenderCell = ({ driver, columnKey }: Props) => {
     case 'status':
       return (
         <span
-          className={`text-xs font-semibold inline-flex px-2 py-1 rounded-full text-white ${
-            cellValue === 'Available'
+          className={`text-xs font-semibold inline-flex px-2 py-1 rounded-full text-white capitalize ${
+            cellValue === 'available'
               ? 'bg-green-400'
-              : cellValue === 'Busy'
+              : cellValue === 'busy'
               ? 'bg-orange-500'
               : 'bg-gray-400'
           }`}
