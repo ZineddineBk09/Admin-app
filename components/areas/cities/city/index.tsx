@@ -126,7 +126,7 @@ export const SearchCity = () => {
 }
 
 const GovernoratesModal = () => {
-  const [selected, setSelected] = React.useState(['buenos-aires', 'sydney'])
+  const [selected, setSelected] = React.useState([])
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
 
@@ -167,7 +167,7 @@ const GovernoratesModal = () => {
                 label='Governorates'
                 color='warning'
                 value={selected}
-                onChange={setSelected}
+                onChange={(e: any) => setSelected(e)}
               >
                 <Checkbox value='riyadh'>Riyadh</Checkbox>
                 <Checkbox value='jeddah'>Jeddah</Checkbox>
