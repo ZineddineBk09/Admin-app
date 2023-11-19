@@ -4,7 +4,7 @@ import { Flex } from '../styles/flex'
 import { DriversTable } from '../table/drivers-table'
 import { AddDriver } from './add-driver'
 import { useDriversContext } from '@/context/driver/DriversContext'
-import { Driver } from '@/interfaces'
+import { Team } from '@/interfaces'
 import { getRecords } from '@/lib/api'
 
 export const DriversPage = () => {
@@ -25,7 +25,7 @@ export const DriversPage = () => {
     >
       <div className='w-full flex justify-between px-6'>
         <h1 className='font-semibold text-2xl'>Drivers</h1>
-        {/* <AddDriver /> */}
+        <AddDriver />
       </div>
 
       <SearchAndFilter />
@@ -55,12 +55,12 @@ export const SearchAndFilter = () => {
   const { drivers, handleSearchDrivers, handleSelectTeam, handleSelectStatus } =
     useDriversContext()
   // get unique teams
-  const [teams, setTeams] = React.useState<string[]>([])
+  const [teams, setTeams] = React.useState<Team[]>([])
 
   React.useEffect(() => {
     const fetchTeams = async () => {
       const uniqueTeams = await getRecords('team')
-      setTeams([])
+      setTeams(uniqueTeams)
     }
     fetchTeams()
   }, [drivers])
@@ -68,22 +68,13 @@ export const SearchAndFilter = () => {
   return (
     <div className='w-full grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 px-6'>
       {/* Date */}
-      <div className='h-10 bg-white rounded-full px-4'>
-        <select name='date' id='date' className='w-full h-full bg-transparent '>
-          <option
-            value={new Date().toLocaleDateString('en-US', {
-              month: 'long',
-              day: 'numeric',
-              year: 'numeric',
-            })}
-          >
-            {new Date().toLocaleDateString('en-US', {
-              month: 'long',
-              day: 'numeric',
-              year: 'numeric',
-            })}
-          </option>
-        </select>
+      <div className='h-10 bg-white rounded-full px-4 relative'>
+        <input
+          type='date'
+          name='date'
+          id='date'
+          className='w-fit h-full bg-transparent'
+        />
       </div>
 
       {/* Team */}
@@ -94,10 +85,10 @@ export const SearchAndFilter = () => {
           className='w-full h-full bg-transparent'
           onChange={(e) => handleSelectTeam(e.target.value)}
         >
-          <option value=''>Select Team</option>
-          {teams.map((team: string, index: number) => (
-            <option key={index} value={team}>
-              {team}
+          <option value=''>Select Team All</option>
+          {teams.map((team: Team, index: number) => (
+            <option key={index} value={team.pk}>
+              {team.fields.name}
             </option>
           ))}
         </select>
@@ -111,10 +102,10 @@ export const SearchAndFilter = () => {
           className='w-full h-full bg-transparent'
           onChange={(e) => handleSelectStatus(e.target.value)}
         >
-          <option value=''>Select Driver State</option>
-          <option value='Available'>Available</option>
-          <option value='Busy'>Busy</option>
-          <option value='Inactive'>Inactive</option>
+          <option value=''>Select Status (All)</option>
+          <option value='available'>Available</option>
+          <option value='busy'>Busy</option>
+          <option value='inactive'>Inactive</option>
         </select>
       </div>
 
