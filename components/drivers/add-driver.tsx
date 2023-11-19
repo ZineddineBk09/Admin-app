@@ -1,11 +1,4 @@
-import {
-  Button,
-  Divider,
-  Input,
-  Modal,
-  Text,
-  Loading,
-} from '@nextui-org/react'
+import { Button, Divider, Input, Modal, Text, Loading } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../styles/flex'
 import { useFormik } from 'formik'
@@ -39,6 +32,7 @@ export const AddDriver = () => {
       orders: Yup.number().required('orders is required'),
     }),
     onSubmit: (values) => {
+      // use createRecord function to create a new record
       setLoading(true)
     },
   })
@@ -50,7 +44,11 @@ export const AddDriver = () => {
 
   return (
     <div>
-      <Button auto onClick={handler} className='bg-primary text-black rounded-md'>
+      <Button
+        auto
+        onClick={handler}
+        className='bg-primary text-black rounded-md'
+      >
         Add Driver
       </Button>
 
@@ -130,7 +128,7 @@ export const AddDriver = () => {
                       )}
                     </label>
                     <select
-                      className='w-full h-12 rounded-2xl px-3 py-1 border-2 border-gray-300 bg-white dark:bg-transparent dark:border-[#393A3C] transition-all duration-200 hover:border-black dark:hover:border-white'
+                      className='w-full h-12 rounded-2xl px-3 py-1 border-2 !border-gray-300 bg-white dark:bg-transparent dark:border-[#393A3C] transition-all duration-200 hover:border-black dark:hover:!border-white'
                       name='status'
                       id='status'
                       value={formik.values.status}
