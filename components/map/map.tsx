@@ -10,6 +10,7 @@ import * as L from 'leaflet'
 import { MapPinIcon } from '../icons/map'
 import { BBox, Driver } from '@/interfaces'
 import { addDriverToArea, getDriversInArea } from '../../lib/api/map'
+import { useSession } from 'next-auth/react'
 
 // create a custom icon with L.divIcon and reactDOM.renderToString
 const icon = (image?: string, symbol?: string) =>
@@ -28,6 +29,8 @@ const icon = (image?: string, symbol?: string) =>
   })
 
 const Map = ({ drivers }: { drivers: Driver[] }) => {
+  const { data: session, status } = useSession()
+  const [driversPositions, setDriversPositions] = useState<any>([])
   const [position, setPosition] = useState<any>()
   const [map, setMap] = useState<any>(null)
   const [control, setControl] = useState<any>(null)
@@ -53,9 +56,41 @@ const Map = ({ drivers }: { drivers: Driver[] }) => {
 
       console.log('bbox: ', bbox)
 
-      // send the new bounds to the server, to get the drivers in that area
-      const drivers = await getDriversInArea(bbox)
-      console.log('drivers: ', drivers)
+      // get drivers in bbox from websocket server: NEXT_PUBLIC_WEBSOCKET_URL/map
+      const mapSocket: any = new WebSocket(
+        process.env.NEXT_PUBLIC_WEBSOCKET_URL + '/map'
+      )
+
+      mapSocket.onopen = () => {
+        if (mapSocket.readyState === WebSocket.OPEN) {
+          mapSocket.send(
+            JSON.stringify({
+              bbox,
+            })
+          )
+
+          console.log('map socket opened')
+        } else {
+          console.log('map socket not opened')
+        }
+      }
+
+      mapSocket.onmessage = (event: MessageEvent) => {
+        console.log('map socket message: ', event)
+        const data = JSON.parse(event.data)
+        console.log('map data: ', data)
+        setDriversPositions([...driversPositions, ...data])
+      }
+      
+      mapSocket.onclose = () => {
+        //console.log('map socket closed')
+      }
+
+      mapSocket.onerror = (error: any) => {
+        console.log('map socket error: ', error)
+        mapSocket.close()
+      }
+      console.log('driversPositions: ', driversPositions)
     })
   }, [map])
 
