@@ -59,7 +59,7 @@ export const SearchAndFilter = () => {
 
   React.useEffect(() => {
     const fetchTeams = async () => {
-      const uniqueTeams = await getRecords('team')
+      const uniqueTeams = await getRecords('team').then((res: any) => res.teams)
       setTeams(uniqueTeams)
     }
     fetchTeams()
