@@ -62,7 +62,7 @@ export const AddDriver = () => {
         },
         'driver'
       )
-      
+
       if (response.status) {
         setVisible(false)
         setLoading(false)
@@ -81,7 +81,7 @@ export const AddDriver = () => {
 
   React.useEffect(() => {
     const fetchTeams = async () => {
-      const uniqueTeams = await getRecords('team')
+      const uniqueTeams = await getRecords('team').then((res: any) => res.teams)
       setTeams(uniqueTeams)
     }
     fetchTeams()
