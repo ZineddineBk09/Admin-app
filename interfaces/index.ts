@@ -21,7 +21,7 @@ export interface RegisterUser {
 }
 
 export interface Driver {
-  id: string
+  pk: string
   fullName: string
   email: string
   image: string
@@ -121,13 +121,7 @@ export interface BBox {
   max_lat: number
   max_lng: number
 }
-/**{
-			"model": "operationapp.team",
-			"pk": "b4b3dbc0-ba48-4ffc-b437-d24d06b82b9e",
-			"fields": {
-				"name": "team2"
-			}
-		} */
+
 export interface Team {
   model: string
   pk: string
