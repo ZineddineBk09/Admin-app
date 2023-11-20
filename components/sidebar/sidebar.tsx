@@ -123,7 +123,7 @@ export const SidebarWrapper = () => {
             height={50}
             className='object-contain w-full h-full'
           />
-          <p>Company name</p>
+          <p className='text-xl font-medium'>FleetRun</p>
         </Sidebar.Header>
         <Flex direction={'column'} justify={'between'} css={{ height: '100%' }}>
           <Sidebar.Body className='w-full'>
