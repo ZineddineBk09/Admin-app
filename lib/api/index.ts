@@ -65,7 +65,7 @@ export const getRecords = async (endpoint: string) => {
     const response = await fetch(
       process.env.NEXT_PUBLIC_API_URL + '/' + endpoint,
       {
-        method: 'GET',        
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           // Authorization: `Bearer ${session.accessToken}`,
@@ -73,8 +73,7 @@ export const getRecords = async (endpoint: string) => {
       }
     )
     const data = await response.json()
-    console.log('getRecords data: ', data)
-    return data.teams
+    return data
   } catch (error) {
     console.log('getRecords error: ', error)
     return []
