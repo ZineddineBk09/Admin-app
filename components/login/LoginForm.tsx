@@ -55,7 +55,7 @@ const LoginForm = () => {
           <div className='w-full flex flex-col items-center justify-center mx-auto p-6 space-y-4 md:space-y-6 sm:p-8'>
             <Logo />
             <h1 className='text-xl font-bold leading-tight tracking-tight text-slate-900  md:text-2xl text-center'>
-              Company name
+              FleetRun
             </h1>
 
             {
