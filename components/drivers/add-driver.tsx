@@ -62,7 +62,8 @@ export const AddDriver = () => {
         },
         'driver'
       )
-      if (response.status === 201) {
+      
+      if (response.status) {
         setVisible(false)
         setLoading(false)
         handleSelectTeam('')
@@ -70,8 +71,6 @@ export const AddDriver = () => {
         setError('Something went wrong')
         setLoading(false)
       }
-
-      
     },
   })
 
@@ -283,15 +282,13 @@ export const AddDriver = () => {
                       id='isFreelancer'
                       color='warning'
                       value={formik.values.isFreelancer}
-                      onChange={(e) =>
-                        formik.setFieldValue('isFreelancer', e)
-                      }
+                      onChange={(e) => formik.setFieldValue('isFreelancer', e)}
                       orientation='horizontal'
                     >
-                      <Radio value={'Yes'} isSquared>
+                      <Radio value={'Yes'} isSquared size='sm'>
                         Yes
                       </Radio>
-                      <Radio value={'No'} isSquared>
+                      <Radio value={'No'} isSquared size='sm'>
                         No
                       </Radio>
                     </Radio.Group>
