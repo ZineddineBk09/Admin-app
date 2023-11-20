@@ -1,5 +1,6 @@
 import { driversTableRows } from '@/components/table/data'
 import { Driver, Sort } from '@/interfaces'
+import { getRecords } from '@/lib/api'
 import { searchDrivers } from '@/lib/search'
 import React, { useEffect, useState } from 'react'
 
@@ -16,11 +17,14 @@ export const DriversContextProvider = ({
   const [loading, setLoading] = useState(false)
 
   const refreshDrivers = async () => {
-    // setLoading(true)
+    setLoading(true)
     // setDrivers([] as Driver[])
-    // const records = await fetchDrivers()
+    const records = await getRecords('driver').then((res) =>
+      res.data.map((driver: any) => driver[0])
+    )
+    console.log('records: ', records)
     // setDrivers(records)
-    // setLoading(false)
+    setLoading(false)
     setDrivers(driversTableRows)
   }
 
@@ -36,7 +40,6 @@ export const DriversContextProvider = ({
 
   const handleSortDrivers = (sort: Sort) => {
     const { column, direction } = sort
-
 
     const sortedDrivers = drivers.slice().sort((a: any, b: any) => {
       if (a[column] < b[column]) {
