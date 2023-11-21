@@ -3,6 +3,8 @@ import React from 'react'
 import { Flex } from '../styles/flex'
 import { DeleteIcon } from '../icons/table'
 import { IconButton } from '../table/table.styled'
+import { deleteRecord } from '@/lib/api'
+import { useDriversContext } from '@/context/driver/DriversContext'
 
 export const DeleteDriver = ({
   id,
@@ -15,6 +17,7 @@ export const DeleteDriver = ({
   const handler = () => setVisible(true)
   const [error, setError] = React.useState<string>('')
   const [loading, setLoading] = React.useState<boolean>(false)
+  const { refreshDrivers } = useDriversContext()
 
   const closeHandler = () => {
     setVisible(false)
@@ -23,10 +26,11 @@ export const DeleteDriver = ({
 
   const handleDelete = async () => {
     setLoading(true)
-    //await deleteDriver(id)
+    await deleteRecord(id, 'driver')
+    console.log('deleted: ', id)
     closeHandler()
     setLoading(false)
-    //refreshDrivers()
+    refreshDrivers()
   }
 
   return (
@@ -50,7 +54,7 @@ export const DeleteDriver = ({
           </Text>
         </Modal.Header>
         {loading ? (
-          <Loading size='xl' className='my-3' />
+          <Loading size='xl' className='my-3' color='warning' />
         ) : (
           <Modal.Body>
             <Flex
