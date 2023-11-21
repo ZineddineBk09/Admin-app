@@ -21,7 +21,7 @@ const DriversList = () => {
     for (let i = 0; i < 20; i++) {
       const fakeDriver: Driver = {
         id: faker.string.uuid(),
-        fullName: faker.person.fullName(),
+        username: faker.person.fullName(),
         email: faker.internet.email(),
         team: faker.company.name(),
         completedTasks: faker.number.int({ max: 100, min: 0 }),
@@ -134,15 +134,15 @@ const DriversList = () => {
 export default DriversList
 
 const DriverCard = ({ driver }: { driver: Driver }) => {
-  const { fullName, image, status, orders } = driver
+  const { username, image, status, orders } = driver
   return (
     <Tooltip
       className='text-md'
       content={
         <div className='w-fit flex flex-col items-start gap-y-2'>
           <div className='flex items-center gap-x-2'>
-            <p className='text-black text-xs font-medium w-20'>Fullname</p>
-            <p className='text-gray-500 text-xs'>{driver.fullName}</p>
+            <p className='text-black text-xs font-medium w-20'>Username</p>
+            <p className='text-gray-500 text-xs'>{driver.username}</p>
           </div>
           <div className='flex items-center gap-x-2'>
             <p className='text-black text-xs font-medium w-20'>Phone</p>
@@ -169,7 +169,7 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
           <div className='flex items-center gap-x-2'>
             <p className='text-black text-xs font-medium w-20'>Location</p>
             <p className='text-gray-500 text-xs'>
-              {driver.location.latitude}, {driver.location.longitude}
+              {driver?.location?.latitude}, {driver?.location?.longitude}
             </p>
           </div>
         </div>
@@ -187,7 +187,7 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
 
         {/* Infos */}
         <div className='h-full w-full flex flex-col text-gray-500'>
-          <p className='text-sm'>{truncateTxt(fullName, 16)}</p>
+          <p className='text-sm'>{truncateTxt(username, 16)}</p>
           <div className='w-full flex items-center justify-between'>
             <div className='flex items-end gap-x-1'>
               <DriverOrdersIcon />
