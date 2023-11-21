@@ -6,6 +6,7 @@ import {
   Text,
   Tooltip,
   Loading,
+  Radio,
 } from '@nextui-org/react'
 import { IconButton } from '../table/table.styled'
 import React from 'react'
@@ -13,37 +14,57 @@ import { Flex } from '../styles/flex'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { EditIcon } from '../icons/table'
-import { Driver } from '@/interfaces'
+import { Driver, Team } from '@/interfaces'
+import { getRecords, updateRecord } from '@/lib/api'
+import { useDriversContext } from '@/context/driver/DriversContext'
 
 export const EditDriver = ({ driver }: { driver: Driver }) => {
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
   const [error, setError] = React.useState<string>('')
   const [loading, setLoading] = React.useState<boolean>(false)
+  const [teams, setTeams] = React.useState<Team[]>([])
+  const { refreshDrivers } = useDriversContext()
 
   const formik = useFormik({
     initialValues: {
-      fullName: driver.fullName,
-      email: driver.email,
-      team: driver.team,
-      inProgressTasks: driver.inProgressTasks,
-      completedTasks: driver.completedTasks,
-      status: driver.status,
-      orders: driver.orders,
-      phone: driver.phone,
+      username: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      team: '',
+      isFreelancer: '',
     },
     validationSchema: Yup.object({
-      fullName: Yup.string().required('fullname is required'),
+      username: Yup.string().required('username is required'),
+      firstName: Yup.string().required('firstname is required'),
+      lastName: Yup.string().required('lastname is required'),
       email: Yup.string().required('email is required'),
       phone: Yup.string().required('phone is required'),
       team: Yup.string().required('team is required'),
-      inProgressTasks: Yup.number().required('inProgressTasks is required'),
-      completedTasks: Yup.number().required('completedTasks is required'),
-      status: Yup.string().required('status is required'),
-      orders: Yup.number().required('orders is required'),
+      isFreelancer: Yup.string().required('isFreelancer is required'),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       setLoading(true)
+      console.log('errors: ', formik.errors)
+      const response = await updateRecord(
+        {
+          id: driver.id,
+          ...values,
+        },
+        'driver'
+      )
+      console.log('response: ', response)
+      setVisible(false)
+      setLoading(false)
+      // if (response.status) {
+      //   setVisible(false)
+      //   setLoading(false)
+      // } else {
+      //   setError('Something went wrong')
+      //   setLoading(false)
+      // }
     },
   })
 
@@ -51,6 +72,18 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
     setVisible(false)
     console.log('closed')
   }
+
+  React.useEffect(() => {
+    console.log('driver: ', driver)
+    //set formik values
+    formik.setValues({ ...(driver as any) })
+
+    const fetchTeams = async () => {
+      const uniqueTeams = await getRecords('team').then((res: any) => res.teams)
+      setTeams(uniqueTeams)
+    }
+    fetchTeams()
+  }, [])
 
   return (
     <div>
@@ -69,7 +102,7 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
       >
         {/* Form */}
         {loading ? (
-          <Loading size='xl' className='my-3' />
+          <Loading size='xl' className='my-3' color='warning' />
         ) : (
           <form onSubmit={formik.handleSubmit}>
             <Modal.Header css={{ justifyContent: 'start' }}>
@@ -102,60 +135,58 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
                   css={{
                     gap: '$10',
                     flexWrap: 'wrap',
-                    '@lg': { flexWrap: 'nowrap' },
+                    '@xl': { flexWrap: 'nowrap' },
                   }}
                 >
                   <Input
                     label={
-                      formik.touched.fullName && formik.errors.fullName
-                        ? formik.errors.fullName
-                        : 'Name'
+                      formik.touched.firstName && formik.errors.firstName
+                        ? formik.errors.firstName
+                        : 'First Name'
                     }
                     bordered
                     clearable
                     fullWidth
                     size='lg'
-                    placeholder='Name'
-                    name='name'
-                    id='name'
-                    value={formik.values.fullName}
+                    placeholder='First Name'
+                    name='firstName'
+                    id='firstName'
+                    value={formik.values.firstName}
                     onChange={formik.handleChange}
                     status={
-                      formik.touched.fullName && formik.errors.fullName
+                      formik.touched.firstName && formik.errors.firstName
                         ? 'error'
                         : 'default'
                     }
                   />
-                  <div className='h-fit w-full flex flex-col items-start'>
-                    <label className='mb-1'>
-                      {formik.touched.status && formik.errors.status ? (
-                        <p className='text-red-500'>{formik.errors.status}</p>
-                      ) : (
-                        'Status'
-                      )}
-                    </label>
-                    <select
-                      className='w-full h-12 rounded-2xl px-3 py-1 !border-2 !border-gray-300 bg-white dark:bg-transparent dark:!border-[#393A3C] transition-all duration-200 hover:border-black dark:hover:border-white'
-                      name='status'
-                      id='status'
-                      value={formik.values.status}
-                      onChange={formik.handleChange}
-                    >
-                      <option value='' className='text-gray-300'>
-                        Select status
-                      </option>
-                      <option value='available'>Available</option>
-                      <option value='busy'>Busy</option>
-                      <option value='inactive'>Inactive</option>
-                    </select>
-                  </div>
+                  <Input
+                    label={
+                      formik.touched.lastName && formik.errors.lastName
+                        ? formik.errors.lastName
+                        : 'Last Name'
+                    }
+                    bordered
+                    clearable
+                    fullWidth
+                    size='lg'
+                    placeholder='First Name'
+                    name='lastName'
+                    id='lastName'
+                    value={formik.values.lastName}
+                    onChange={formik.handleChange}
+                    status={
+                      formik.touched.lastName && formik.errors.lastName
+                        ? 'error'
+                        : 'default'
+                    }
+                  />
                 </Flex>
 
                 <Flex
                   css={{
                     gap: '$10',
                     flexWrap: 'wrap',
-                    '@lg': { flexWrap: 'nowrap' },
+                    '@xl': { flexWrap: 'nowrap' },
                   }}
                 >
                   <Input
@@ -206,102 +237,83 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
                   css={{
                     gap: '$10',
                     flexWrap: 'wrap',
-                    '@lg': { flexWrap: 'nowrap' },
+                    '@xl': { flexWrap: 'nowrap' },
                   }}
                 >
-                  <Input
-                    label={
-                      formik.touched.team && formik.errors.team
-                        ? formik.errors.team
-                        : 'Team'
-                    }
-                    bordered
-                    clearable
-                    fullWidth
-                    size='lg'
-                    placeholder='Team'
-                    name='team'
-                    id='team'
-                    value={formik.values.team}
-                    onChange={formik.handleChange}
-                    status={
-                      formik.touched.team && formik.errors.team
-                        ? 'error'
-                        : 'default'
-                    }
-                  />
-                  <Input
-                    label={
-                      formik.touched.inProgressTasks &&
-                      formik.errors.inProgressTasks
-                        ? formik.errors.inProgressTasks
-                        : 'InProgressTasks'
-                    }
-                    bordered
-                    clearable
-                    fullWidth
-                    size='lg'
-                    placeholder='InProgressTasks'
-                    name='inProgressTasks'
-                    id='inProgressTasks'
-                    value={formik.values.inProgressTasks}
-                    onChange={formik.handleChange}
-                    status={
-                      formik.touched.inProgressTasks &&
-                      formik.errors.inProgressTasks
-                        ? 'error'
-                        : 'default'
-                    }
-                  />
+                  <div className='h-12 w-full bg-white rounded-2xl px-2 border-2 border-gray-300'>
+                    <select
+                      name='team'
+                      id='team'
+                      value={formik.values.team}
+                      className='w-full h-full bg-transparent'
+                      onChange={formik.handleChange}
+                    >
+                      <option value=''>Select Team</option>
+                      {teams.map((team: Team, index: number) => (
+                        <option key={index} value={team.pk}>
+                          {team.fields.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className='h-10 w-full bg-white rounded-full px-2'>
+                    <Radio.Group
+                      label={
+                        formik.touched.isFreelancer &&
+                        formik.errors.isFreelancer ? (
+                          <p
+                            className='text-md font-[400] text-red-500'
+                            style={{ marginTop: '-1rem' }}
+                          >
+                            {formik.errors.isFreelancer}
+                          </p>
+                        ) : (
+                          <p className='text-md font-[400] text-black'>
+                            Is Freelancer
+                          </p>
+                        )
+                      }
+                      name='isFreelancer'
+                      id='isFreelancer'
+                      color='warning'
+                      value={formik.values.isFreelancer}
+                      onChange={(e) => formik.setFieldValue('isFreelancer', e)}
+                      orientation='horizontal'
+                    >
+                      <Radio value={'Yes'} isSquared size='sm'>
+                        Yes
+                      </Radio>
+                      <Radio value={'No'} isSquared size='sm'>
+                        No
+                      </Radio>
+                    </Radio.Group>
+                  </div>
                 </Flex>
 
                 <Flex
                   css={{
                     gap: '$10',
                     flexWrap: 'wrap',
-                    '@lg': { flexWrap: 'nowrap' },
+                    '@xl': { flexWrap: 'nowrap' },
                   }}
                 >
                   <Input
                     label={
-                      formik.touched.completedTasks &&
-                      formik.errors.completedTasks
-                        ? formik.errors.completedTasks
-                        : 'CompletedTasks'
+                      formik.touched.username && formik.errors.username
+                        ? formik.errors.username
+                        : 'Username'
                     }
                     bordered
                     clearable
                     fullWidth
                     size='lg'
-                    placeholder='CompletedTasks'
-                    name='completedTasks'
-                    id='completedTasks'
-                    value={formik.values.completedTasks}
+                    placeholder='Username'
+                    name='username'
+                    id='username'
+                    value={formik.values.username}
                     onChange={formik.handleChange}
                     status={
-                      formik.touched.completedTasks &&
-                      formik.errors.completedTasks
-                        ? 'error'
-                        : 'default'
-                    }
-                  />
-                  <Input
-                    label={
-                      formik.touched.orders && formik.errors.orders
-                        ? formik.errors.orders
-                        : 'Orders'
-                    }
-                    bordered
-                    clearable
-                    fullWidth
-                    size='lg'
-                    placeholder='Orders'
-                    name='orders'
-                    id='orders'
-                    value={formik.values.orders}
-                    onChange={formik.handleChange}
-                    status={
-                      formik.touched.orders && formik.errors.orders
+                      formik.touched.username && formik.errors.username
                         ? 'error'
                         : 'default'
                     }
