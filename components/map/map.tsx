@@ -9,7 +9,6 @@ import 'leaflet-easybutton/src/easy-button.css'
 import * as L from 'leaflet'
 import { MapPinIcon } from '../icons/map'
 import { BBox, Driver } from '@/interfaces'
-import { addDriverToArea, getDriversInArea } from '../../lib/api/map'
 import { useSession } from 'next-auth/react'
 
 // create a custom icon with L.divIcon and reactDOM.renderToString
@@ -81,7 +80,7 @@ const Map = ({ drivers }: { drivers: Driver[] }) => {
         console.log('map data: ', data)
         setDriversPositions([...driversPositions, ...data])
       }
-      
+
       mapSocket.onclose = () => {
         //console.log('map socket closed')
       }
@@ -133,18 +132,21 @@ const DriversMarkers = ({ drivers }: { drivers: Driver[] }) => {
       {drivers.map((driver) => (
         <Marker
           key={driver.id}
-          position={[driver.location.latitude, driver.location.longitude]}
+          position={[
+            driver?.location?.latitude || 0,
+            driver?.location?.longitude || 0,
+          ]}
           icon={icon(
             driver.image,
             // first 2 letters of first name and last name
-            driver.fullName.split(' ')[0].slice(0, 1) +
-              driver.fullName.split(' ')[1].slice(0, 1) +
+            driver.username.split(' ')[0].slice(0, 1) +
+              driver.username.split(' ')[1].slice(0, 1) +
               ''
           )}
         >
           <Popup>
             <div className='flex flex-col items-center gap-y-1'>
-              <p className=''>{driver.fullName}</p>
+              <p className=''>{driver.username}</p>
               <p className=''>{driver.phone}</p>
             </div>
           </Popup>
