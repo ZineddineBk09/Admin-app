@@ -1,59 +1,55 @@
-import { APIRecord, AuthSession } from '@/interfaces'
 import { getSession } from 'next-auth/react'
+import axios from 'axios'
 
-export const createRecord = async (record: APIRecord, endpoint: string) => {
+export const createRecord = async (record: any, endpoint: string) => {
   const session: any = await getSession()
 
-  const response = await fetch(
+  const response = await axios.post(
     process.env.NEXT_PUBLIC_API_URL + '/' + endpoint,
+    record,
     {
-      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         // Authorization: `Bearer ${session.accessToken}`,
       },
-      body: JSON.stringify(record),
     }
   )
-  const data = await response.json()
+  const data = await response.data
   console.log('createRecord data: ', data)
   return data
 }
 
-export const updateRecord = async (record: APIRecord, endpoint: string) => {
+export const updateRecord = async (record: any, endpoint: string) => {
   const session: any = await getSession()
 
-  const response = await fetch(
-    process.env.NEXT_PUBLIC_API_URL + '/' + endpoint,
+  const response = await axios.put(
+    process.env.NEXT_PUBLIC_API_URL + '/' + endpoint + '/edit/' + record.id,
+    {},
     {
-      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         // Authorization: `Bearer ${session.accessToken}`,
       },
-      body: JSON.stringify(record),
     }
   )
-  const data = await response.json()
+  const data = await response.data
   console.log('updateRecord data: ', data)
   return data
 }
 
-export const deleteRecord = async (record: APIRecord, endpoint: string) => {
+export const deleteRecord = async (id: string, endpoint: string) => {
   const session: any = await getSession()
 
-  const response = await fetch(
-    process.env.NEXT_PUBLIC_API_URL + '/' + endpoint,
+  const response = await axios.delete(
+    process.env.NEXT_PUBLIC_API_URL + '/' + endpoint + '/del/' + id,
     {
-      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         // Authorization: `Bearer ${session.accessToken}`,
       },
-      body: JSON.stringify(record),
     }
   )
-  const data = await response.json()
+  const data = await response.data
   console.log('deleteRecord data: ', data)
   return data
 }
@@ -62,17 +58,16 @@ export const getRecords = async (endpoint: string) => {
   const session: any = await getSession()
 
   try {
-    const response = await fetch(
+    const response = await axios.get(
       process.env.NEXT_PUBLIC_API_URL + '/' + endpoint,
       {
-        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           // Authorization: `Bearer ${session.accessToken}`,
         },
       }
     )
-    const data = await response.json()
+    const data = await response.data
     return data
   } catch (error) {
     console.log('getRecords error: ', error)
