@@ -35,7 +35,7 @@ export const AddDriver = () => {
       isFreelancer: '',
     },
     validationSchema: Yup.object({
-      username: Yup.string().required('fullname is required'),
+      username: Yup.string().required('username is required'),
       firstName: Yup.string().required('firstname is required'),
       lastName: Yup.string().required('lastname is required'),
       email: Yup.string().required('email is required'),
@@ -107,7 +107,7 @@ export const AddDriver = () => {
       >
         {/* Form */}
         {loading ? (
-          <Loading size='xl' className='my-3' />
+          <Loading size='xl' className='my-3' color='warning' />
         ) : (
           <form onSubmit={formik.handleSubmit}>
             <Modal.Header css={{ justifyContent: 'start' }}>
