@@ -64,7 +64,7 @@ export const AddAccount = () => {
       >
         {/* Form */}
         {loading ? (
-          <Loading size='xl' className='my-3' color='success' />
+          <Loading size='xl' className='my-3' color='warning' />
         ) : (
           <form onSubmit={formik.handleSubmit}>
             <Modal.Header css={{ justifyContent: 'start' }}>
