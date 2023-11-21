@@ -49,7 +49,7 @@ export const DeleteAccount = ({ id }: { id: string }) => {
           </Text>
         </Modal.Header>
         {loading ? (
-          <Loading size='xl' className='my-3' color='success' />
+          <Loading size='xl' className='my-3' color='warning' />
         ) : (
           <Modal.Body>
             <Flex
