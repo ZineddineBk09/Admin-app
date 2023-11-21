@@ -32,7 +32,7 @@ export const Content = () => {
 
     const fakeDriver: Driver = {
       id: faker.string.uuid(),
-      fullName: faker.person.fullName(),
+      username: faker.person.fullName(),
       email: faker.internet.email(),
       team: faker.company.name(),
       completedTasks: faker.number.int({ max: 100, min: 0 }),
