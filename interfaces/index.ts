@@ -21,15 +21,15 @@ export interface RegisterUser {
 }
 
 export interface Driver {
-  pk: string
-  fullName: string
+  id: string
+  username: string
   email: string
   image: string
   status: 'available' | 'inactive' | 'busy'
   team: string
   completedTasks: number
   inProgressTasks: number
-  location: {
+  location?: {
     latitude: number
     longitude: number
   }
@@ -130,6 +130,7 @@ export interface Team {
   }
 }
 interface APIDriver {
+  id: string
   username: string
   firstname: string
   lastname: string
