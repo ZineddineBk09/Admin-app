@@ -55,7 +55,7 @@ export const searchBranches = (list: Branch[], pattern: string) => {
 export const searchDrivers = (list: Driver[], pattern: string) => {
   const fuse = new Fuse(list, {
     ...options,
-    keys: ['fullName', 'email', 'team', 'phone'],
+    keys: ['username', 'email', 'team', 'phone'],
   })
 
   return fuse.search(pattern).map((item) => item.item)
