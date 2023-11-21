@@ -17,7 +17,7 @@ export const RenderCell = ({ driver, columnKey }: Props) => {
   switch (columnKey) {
     case 'name':
       return (
-        <User squared src={driver.image} name={driver.fullName} css={{ p: 0 }}>
+        <User squared src={driver.image} name={driver.username} css={{ p: 0 }}>
           #{driver.id}
         </User>
       )
