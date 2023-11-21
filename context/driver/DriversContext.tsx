@@ -1,7 +1,7 @@
-import { driversTableRows } from '@/components/table/data'
 import { Driver, Sort } from '@/interfaces'
 import { getRecords } from '@/lib/api'
 import { searchDrivers } from '@/lib/search'
+import { faker } from '@faker-js/faker'
 import React, { useEffect, useState } from 'react'
 
 export const DriversContext = React.createContext({})
@@ -23,9 +23,32 @@ export const DriversContextProvider = ({
       res.data.map((driver: any) => driver[0])
     )
     console.log('records: ', records)
-    // setDrivers(records)
+    setDrivers(
+      records.map((driver: any) => ({
+        id: driver.pk,
+        username: driver.fields.username,
+        firstName: driver.fields.first_name,
+        lastName: driver.fields.last_name,
+        email: driver.fields.email,
+        team: ['team 01', 'team 02', 'team 03', 'team 04'][
+          Math.floor(Math.random() * 4)
+        ],
+        status: ['available', 'inactive', 'busy'][
+          Math.floor(Math.random() * 3)
+        ],
+        image: faker.image.avatar(),
+        completedTasks: Math.floor(Math.random() * 100),
+        inProgressTasks: Math.floor(Math.random() * 100),
+        location: {
+          latitude: 0,
+          longitude: 0,
+        },
+        phone: driver.fields.phone_number,
+        orders: Math.floor(Math.random() * 100),
+      }))
+    )
     setLoading(false)
-    setDrivers(driversTableRows)
+    // setDrivers(drivers)
   }
 
   const handleSearchDrivers = (search: string) => {
@@ -59,7 +82,7 @@ export const DriversContextProvider = ({
       refreshDrivers()
       return
     }
-    const filteredDrivers = driversTableRows.filter(
+    const filteredDrivers = drivers.filter(
       (driver) => driver.team === team
     )
     setDrivers(filteredDrivers)
@@ -70,7 +93,8 @@ export const DriversContextProvider = ({
       refreshDrivers()
       return
     }
-    const filteredDrivers = driversTableRows.filter(
+    console.log('status: ', status)
+    const filteredDrivers = drivers.filter(
       (driver) => driver.status === status
     )
     setDrivers(filteredDrivers)
@@ -89,6 +113,7 @@ export const DriversContextProvider = ({
         handleSortDrivers,
         handleSelectTeam,
         handleSelectStatus,
+        refreshDrivers,
       }}
     >
       {children}
