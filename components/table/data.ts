@@ -14,7 +14,7 @@ export const menuTableColumns = [
 export const driversTableRows: Driver[] = [
   {
     id: 'cd5f2e1e-f902-435b-a8c6-08b194a6bc07',
-    fullName: 'Lola Price',
+    username: 'Lola Price',
     email: 'Pink.Christiansen71@yahoo.com',
     team: 'Bergnaum - Greenholt',
     completedTasks: 10,
@@ -31,7 +31,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: '7441edf7-d49d-4243-b8e6-49628fa0a380',
-    fullName: 'Jana Runolfsson',
+    username: 'Jana Runolfsson',
     email: 'Haskell_Quitzon@gmail.com',
     team: 'Von, Klocko and Block',
     completedTasks: 100,
@@ -48,7 +48,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: '852f19f5-494c-49eb-9845-8d8a185e54a4',
-    fullName: 'Raquel Upton',
+    username: 'Raquel Upton',
     email: 'Daija.Anderson27@yahoo.com',
     team: 'Batz, Ondricka and Renner',
     completedTasks: 80,
@@ -64,7 +64,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: '4be059a6-7eeb-46fa-a616-dda317555827',
-    fullName: 'Mack Kuhic',
+    username: 'Mack Kuhic',
     email: 'Arielle57@hotmail.com',
     team: 'Sipes, Upton and Bradtke',
     completedTasks: 46,
@@ -80,7 +80,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: '718c5798-6c91-4fb5-8639-91f54e4734db',
-    fullName: 'Esther Kreiger',
+    username: 'Esther Kreiger',
     email: 'Elissa.Weimann@gmail.com',
     team: 'Bechtelar - Breitenberg',
     completedTasks: 69,
@@ -97,7 +97,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: '88053a4f-1c39-4efd-b3a0-d3f3536966a1',
-    fullName: 'Kellie Schinner',
+    username: 'Kellie Schinner',
     email: 'Jena34@yahoo.com',
     team: 'Zieme - Okuneva',
     completedTasks: 100,
@@ -114,7 +114,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: '32609eea-13e7-4cba-b7ae-f3466bba316f',
-    fullName: 'Grace Lehner',
+    username: 'Grace Lehner',
     email: 'Rhiannon.Bogisich@gmail.com',
     team: 'Harvey and Sons',
     completedTasks: 32,
@@ -130,7 +130,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: 'e3c70b7b-f602-4e96-9b62-42ae09e01912',
-    fullName: 'Herbert Blanda',
+    username: 'Herbert Blanda',
     email: 'Joshua_Maggio35@yahoo.com',
     team: 'Rath Group',
     completedTasks: 26,
@@ -146,7 +146,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: 'a18014e2-3ba1-4dc6-a9d5-b625e3e9165f',
-    fullName: 'Wendell Fahey DVM',
+    username: 'Wendell Fahey DVM',
     email: 'Albertha_Heaney@hotmail.com',
     team: 'Becker - Jenkins',
     completedTasks: 14,
@@ -163,7 +163,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: 'ca44841e-d720-4d25-9947-d7394f44cf59',
-    fullName: 'Corey Macejkovic',
+    username: 'Corey Macejkovic',
     email: 'Breana.Spencer@hotmail.com',
     team: 'Hettinger, Haag and Hoppe',
     completedTasks: 48,
@@ -180,7 +180,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: '2bc864d4-af84-46e7-a33d-f0af1ba7b5e5',
-    fullName: 'Randy Kulas II',
+    username: 'Randy Kulas II',
     email: 'Sarai49@yahoo.com',
     team: 'Mraz, Price and Fahey',
     completedTasks: 47,
@@ -196,7 +196,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: '1a78aeaa-d851-40a7-a89a-a71bf4f457d4',
-    fullName: 'Mr. Darrel Dare',
+    username: 'Mr. Darrel Dare',
     email: 'Gonzalo.Boyer7@hotmail.com',
     team: 'Becker - Stiedemann',
     completedTasks: 34,
@@ -212,7 +212,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: '6a862ca0-a5c3-40e5-a0fc-e0e750fadd2a',
-    fullName: 'Mabel Klocko',
+    username: 'Mabel Klocko',
     email: 'Clare53@hotmail.com',
     team: 'Ratke LLC',
     completedTasks: 78,
@@ -229,7 +229,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: 'a78be8ae-1f09-4dde-8d21-ba76940d38b4',
-    fullName: 'Delia Cremin',
+    username: 'Delia Cremin',
     email: 'Kurtis_Hermann7@gmail.com',
     team: "O'Kon Group",
     completedTasks: 26,
@@ -245,7 +245,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: '2d902c00-b8dc-4ceb-b0a5-0c6689486ed6',
-    fullName: 'Ellis McGlynn',
+    username: 'Ellis McGlynn',
     email: 'Maybell43@yahoo.com',
     team: 'Davis and Sons',
     completedTasks: 36,
@@ -262,7 +262,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: '0605fb9d-6522-44f5-9d79-9ecf8aeefd5b',
-    fullName: 'Janie Harvey',
+    username: 'Janie Harvey',
     email: 'Jane.Powlowski46@gmail.com',
     team: 'Trantow Inc',
     completedTasks: 36,
@@ -279,7 +279,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: 'e1f8ac50-bfcb-4f30-81b5-2601edafefbd',
-    fullName: 'Russell Rice',
+    username: 'Russell Rice',
     email: 'Henri.Keebler@yahoo.com',
     team: 'Kuhlman Group',
     completedTasks: 75,
@@ -296,7 +296,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: 'e877e8b8-2f5c-4ff4-baa5-cb3543242163',
-    fullName: 'Jenny Schimmel',
+    username: 'Jenny Schimmel',
     email: 'Nola_Welch53@gmail.com',
     team: 'Marks Group',
     completedTasks: 21,
@@ -312,7 +312,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: '1722acb2-290f-4cb1-88ae-97c31a08e9e9',
-    fullName: 'Edna Moore',
+    username: 'Edna Moore',
     email: 'Trycia.Bechtelar@gmail.com',
     team: 'Larson, Ernser and Spencer',
     completedTasks: 76,
@@ -328,7 +328,7 @@ export const driversTableRows: Driver[] = [
   },
   {
     id: '081ba854-efd8-4853-91bd-691cd174ff95',
-    fullName: 'Randal Littel',
+    username: 'Randal Littel',
     email: 'Jennings.Harvey93@yahoo.com',
     team: 'Pollich, Kozey and Lubowitz',
     completedTasks: 35,
