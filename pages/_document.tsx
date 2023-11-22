@@ -28,10 +28,8 @@ class MyDocument extends Document {
           href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
           rel='stylesheet'
         />
-        <title>Delivery App</title>
-        <Head>
-          {CssBaseline.flush()}
-        </Head>
+        <title>FleetRun</title>
+        <Head>{CssBaseline.flush()}</Head>
 
         <body>
           <Main />
