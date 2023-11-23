@@ -32,7 +32,7 @@ export const AddDriver = () => {
       phone: '',
       team: '',
       password: '',
-      isFreelancer: '',
+      isFreelance: '',
     },
     validationSchema: Yup.object({
       username: Yup.string().required('username is required'),
@@ -42,8 +42,8 @@ export const AddDriver = () => {
       phone: Yup.string().required('phone is required'),
       team: Yup.string().required('team is required'),
       password: Yup.string().required('password is required'),
-      // isFreelancer have 2 potential values: Yes or No
-      isFreelancer: Yup.string().required('isFreelancer is required'),
+      // isFreelance have 2 potential values: Yes or No
+      isFreelance: Yup.string().required('isFreelance is required'),
     }),
     onSubmit: async (values) => {
       // use createRecord function to create a new record
@@ -58,7 +58,7 @@ export const AddDriver = () => {
           phone_number: values.phone,
           team_id: values.team,
           password: values.password,
-          is_freelance: values.isFreelancer === 'Yes' ? true : false,
+          is_freelance: values.isFreelance === 'Yes' ? true : false,
         },
         'driver'
       )
@@ -264,13 +264,13 @@ export const AddDriver = () => {
                   <div className='h-10 w-full bg-white rounded-full px-2'>
                     <Radio.Group
                       label={
-                        formik.touched.isFreelancer &&
-                        formik.errors.isFreelancer ? (
+                        formik.touched.isFreelance &&
+                        formik.errors.isFreelance ? (
                           <p
                             className='text-md font-[400] text-red-500'
                             style={{ marginTop: '-1rem' }}
                           >
-                            {formik.errors.isFreelancer}
+                            {formik.errors.isFreelance}
                           </p>
                         ) : (
                           <p className='text-md font-[400] text-black'>
@@ -278,11 +278,11 @@ export const AddDriver = () => {
                           </p>
                         )
                       }
-                      name='isFreelancer'
-                      id='isFreelancer'
+                      name='isFreelance'
+                      id='isFreelance'
                       color='warning'
-                      value={formik.values.isFreelancer}
-                      onChange={(e) => formik.setFieldValue('isFreelancer', e)}
+                      value={formik.values.isFreelance}
+                      onChange={(e) => formik.setFieldValue('isFreelance', e)}
                       orientation='horizontal'
                     >
                       <Radio value={'Yes'} isSquared size='sm'>
