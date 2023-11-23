@@ -66,16 +66,16 @@ export const SearchAndFilter = () => {
   }, [drivers])
 
   return (
-    <div className='w-full grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 px-6'>
+    <div className='w-full grid grid-cols-1 gap-6 lg:grid-cols-3 px-6'>
       {/* Date */}
-      <div className='h-10 bg-white rounded-full px-4 relative'>
+      {/* <div className='h-10 bg-white rounded-full px-4 relative'>
         <input
           type='date'
           name='date'
           id='date'
           className='w-fit h-full bg-transparent'
         />
-      </div>
+      </div> */}
 
       {/* Team */}
       <div className='h-10 bg-white rounded-full px-4'>
