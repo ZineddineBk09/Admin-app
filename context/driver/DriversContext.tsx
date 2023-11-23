@@ -19,33 +19,39 @@ export const DriversContextProvider = ({
   const refreshDrivers = async () => {
     setLoading(true)
     // setDrivers([] as Driver[])
-    const records = await getRecords('driver').then((res) =>
-      res.data.map((driver: any) => driver[0])
-    )
+    const records = await getRecords('driver').then((res) => res.data)
     console.log('records: ', records)
     setDrivers(
-      records.map((driver: any) => ({
-        id: driver.pk,
-        username: driver.fields.username,
-        firstName: driver.fields.first_name,
-        lastName: driver.fields.last_name,
-        email: driver.fields.email,
-        team: ['team 01', 'team 02', 'team 03', 'team 04'][
-          Math.floor(Math.random() * 4)
-        ],
-        status: ['available', 'inactive', 'busy'][
-          Math.floor(Math.random() * 3)
-        ],
-        image: faker.image.avatar(),
-        completedTasks: Math.floor(Math.random() * 100),
-        inProgressTasks: Math.floor(Math.random() * 100),
-        location: {
-          latitude: 0,
-          longitude: 0,
-        },
-        phone: driver.fields.phone_number,
-        orders: Math.floor(Math.random() * 100),
-      }))
+      records.map(
+        (driver: any): Driver => ({
+          id: driver.pk,
+          username: driver.fields.username,
+          firstName: driver.fields.first_name,
+          lastName: driver.fields.last_name,
+          email: driver.fields.email,
+          team: driver.fields.team_id,
+          status: ['available', 'inactive', 'busy'][
+            Math.floor(Math.random() * 3)
+          ],
+          image: faker.image.avatar(),
+          completedTasks: Math.floor(Math.random() * 100),
+          inProgressTasks: Math.floor(Math.random() * 100),
+          location: {
+            latitude: driver.fields.latitude,
+            longitude: driver.fields.longitude,
+          },
+          phone: driver.fields.phone_number,
+          orders: Math.floor(Math.random() * 100),
+          vehicleId: driver.fields.vehicle_id,
+          vehicleType: driver.fields.vehicle_type,
+          vehicleLicense: driver.fields.vehicle_license,
+          residencyId: driver.fields.residency_id,
+          isFreelance: driver.fields.is_freelancer,
+          isActive: driver.fields.is_active,
+          isStaff: driver.fields.is_staff,
+          code: driver.fields.code,
+        })
+      )
     )
     setLoading(false)
     // setDrivers(drivers)
@@ -82,9 +88,7 @@ export const DriversContextProvider = ({
       refreshDrivers()
       return
     }
-    const filteredDrivers = drivers.filter(
-      (driver) => driver.team === team
-    )
+    const filteredDrivers = drivers.filter((driver) => driver.team === team)
     setDrivers(filteredDrivers)
   }
 
@@ -94,9 +98,7 @@ export const DriversContextProvider = ({
       return
     }
     console.log('status: ', status)
-    const filteredDrivers = drivers.filter(
-      (driver) => driver.status === status
-    )
+    const filteredDrivers = drivers.filter((driver) => driver.status === status)
     setDrivers(filteredDrivers)
   }
 
