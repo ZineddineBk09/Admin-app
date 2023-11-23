@@ -25,7 +25,7 @@ export interface Driver {
   username: string
   email: string
   image: string
-  status: 'available' | 'inactive' | 'busy'
+  status: 'available' | 'inactive' | 'busy' | string
   team: string
   completedTasks: number
   inProgressTasks: number
@@ -35,6 +35,16 @@ export interface Driver {
   }
   orders: number
   phone: string
+  firstName: string
+  lastName: string
+  vehicleId: string
+  vehicleType: string
+  vehicleLicense: string
+  residencyId: string
+  isFreelance: boolean
+  isActive: boolean
+  isStaff: boolean
+  code: string
 }
 
 export interface Order {
@@ -129,15 +139,21 @@ export interface Team {
     name: string
   }
 }
+
 interface APIDriver {
   id: string
   username: string
-  firstname: string
-  lastname: string
+  first_name: string
+  last_name: string
   email: string
   phone_number: string
   team_id: string
   password: string
   is_freelance: boolean
+  vehicle_id: string
+  vehicle_type: string
+  vehicle_license: string
+  residency_id: string
 }
+
 export type APIRecord = APIDriver | Order | Account | Branch
