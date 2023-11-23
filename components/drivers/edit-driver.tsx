@@ -34,7 +34,7 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
       email: '',
       phone: '',
       team: '',
-      isFreelancer: '',
+      isFreelance: '',
     },
     validationSchema: Yup.object({
       username: Yup.string().required('username is required'),
@@ -43,7 +43,7 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
       email: Yup.string().required('email is required'),
       phone: Yup.string().required('phone is required'),
       team: Yup.string().required('team is required'),
-      isFreelancer: Yup.string().required('isFreelancer is required'),
+      isFreelance: Yup.string().required('isFreelance is required'),
     }),
     onSubmit: async (values) => {
       setLoading(true)
@@ -259,13 +259,13 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
                   <div className='h-10 w-full bg-white rounded-full px-2'>
                     <Radio.Group
                       label={
-                        formik.touched.isFreelancer &&
-                        formik.errors.isFreelancer ? (
+                        formik.touched.isFreelance &&
+                        formik.errors.isFreelance ? (
                           <p
                             className='text-md font-[400] text-red-500'
                             style={{ marginTop: '-1rem' }}
                           >
-                            {formik.errors.isFreelancer}
+                            {formik.errors.isFreelance}
                           </p>
                         ) : (
                           <p className='text-md font-[400] text-black'>
@@ -273,11 +273,11 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
                           </p>
                         )
                       }
-                      name='isFreelancer'
-                      id='isFreelancer'
+                      name='isFreelance'
+                      id='isFreelance'
                       color='warning'
-                      value={formik.values.isFreelancer}
-                      onChange={(e) => formik.setFieldValue('isFreelancer', e)}
+                      value={formik.values.isFreelance}
+                      onChange={(e) => formik.setFieldValue('isFreelance', e)}
                       orientation='horizontal'
                     >
                       <Radio value={'Yes'} isSquared size='sm'>
