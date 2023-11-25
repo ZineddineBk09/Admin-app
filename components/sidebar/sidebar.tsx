@@ -14,6 +14,9 @@ import {
   AreasIcon,
   PricingIcon,
   MapIcon,
+  SupportIcon,
+  OrdersIcon,
+  ReportsIcon,
 } from '../icons/sidebar'
 import { Text } from '@nextui-org/react'
 import Image from 'next/image'
@@ -32,12 +35,26 @@ export const SidebarWrapper = () => {
       subLinks: [],
     },
     {
-      title: 'Settings',
-      icon: <SettingsIcon />,
-      isActive: router.pathname === '/settings',
-      href: '/settings',
+      title: 'Orders',
+      icon: <OrdersIcon />,
+      isActive: router.pathname === '/orders',
+      href: '/orders',
       subLinks: [],
     },
+    {
+      title: 'Reports',
+      icon: <ReportsIcon />,
+      isActive: router.pathname === '/reports',
+      href: '/reports',
+      subLinks: [],
+    },
+    // {
+    //   title: 'Settings',
+    //   icon: <SettingsIcon />,
+    //   isActive: router.pathname === '/settings',
+    //   href: '/settings',
+    //   subLinks: [],
+    // },
     {
       title: 'Clients',
       icon: <ClientsIcon />,
@@ -98,6 +115,13 @@ export const SidebarWrapper = () => {
       icon: <PricingIcon />,
       isActive: router.pathname === '/pricing',
       href: '/pricing',
+      subLinks: [],
+    },
+    {
+      title: 'Support',
+      icon: <SupportIcon />,
+      isActive: router.pathname === '/support',
+      href: '/support',
       subLinks: [],
     },
   ]
