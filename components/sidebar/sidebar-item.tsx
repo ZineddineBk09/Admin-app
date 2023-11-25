@@ -60,7 +60,7 @@ export const SidebarItem = ({
             ...(isActive
               ? {
                   '& svg path': {
-                    stroke: '#FFDB00',
+                    stroke: '#FFDB00 !important',
                   },
                 }
               : { '&:hover': { bg: '$accents2' } }),
