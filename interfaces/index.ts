@@ -47,19 +47,33 @@ export interface Driver {
   code: string
 }
 
+interface Item {
+  id: string
+  name: string
+  quantity: number
+}
+
 export interface Order {
   id: string
-  restaurant: string
-  restaurantId: string
-  restaurantImage: string
-  customer: string
-  customerId: string
-  customerImage: string
-  startTime: number
-  endTime: number
-  driverId: string
+  date: string
+  time: string
+  client: string
+  clientName: string
+  driver: string
+  driverName: string
+  distance: number
+  city: string
+  value: number
+  deliveryFee: number
   status: string
-  duration: number
+  isPaid: boolean
+  location: {
+    latitude: number
+    longitude: number
+  }
+  address: string
+  phone: string
+  items: Item[]
 }
 
 export interface Status {
