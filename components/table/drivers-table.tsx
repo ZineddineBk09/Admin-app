@@ -2,7 +2,7 @@ import { Table } from '@nextui-org/react'
 import React, { useEffect, useState } from 'react'
 import { Box } from '../styles/box'
 import { RenderCell } from './render-drivers-cell'
-import { menuTableColumns } from './data'
+import { driversTableCols } from './data'
 import { useDriversContext } from '@/context/driver/DriversContext'
 import { Sort } from '@/interfaces'
 
@@ -21,6 +21,8 @@ export const DriversTable = () => {
         '& .nextui-table-container': {
           boxShadow: 'none',
           marginBottom: '10px',
+          borderRadius: '0',
+          border: '1px solid #CECECE',
         },
       }}
     >
@@ -29,16 +31,16 @@ export const DriversTable = () => {
         bordered
         sticked
         striped
+        hoverable
         css={{
           height: 'auto',
           minWidth: '100%',
           boxShadow: 'none',
           width: '100%',
           px: 5,
+          backgroundColor: 'white',
         }}
         onSortChange={(sort: any) => {
-          // because the table does not support descending sorting
-          // we need to do it manually
           const { direction } = sorting
           const { column } = sort
           if (direction === 'ascending') {
@@ -51,7 +53,7 @@ export const DriversTable = () => {
           setSorting({ column, direction: 'ascending' })
         }}
       >
-        <Table.Header columns={menuTableColumns}>
+        <Table.Header columns={driversTableCols}>
           {(column) => (
             <Table.Column
               key={column.uid}
