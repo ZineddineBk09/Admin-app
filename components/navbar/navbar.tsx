@@ -31,10 +31,10 @@ export const NavbarWrapper = ({ children }: Props) => {
     >
       <Navbar
         css={{
-          backgroundColor: 'gray',
           shadow: 'none',
           justifyContent: 'space-between',
           width: '100%',
+          bgColor: 'gray',
           '@md': {
             justifyContent: 'space-between',
           },
