@@ -10,6 +10,7 @@ import * as L from 'leaflet'
 import { MapPinIcon } from '../icons/map'
 import { BBox, Driver } from '@/interfaces'
 import { useSession } from 'next-auth/react'
+import axios from 'axios'
 
 // create a custom icon with L.divIcon and reactDOM.renderToString
 const icon = (image?: string, symbol?: string) =>
@@ -53,43 +54,29 @@ const Map = ({ drivers }: { drivers: Driver[] }) => {
         max_lng,
       }
 
-      console.log('bbox: ', bbox)
-
-      // get drivers in bbox from websocket server: NEXT_PUBLIC_WEBSOCKET_URL/map
-      const mapSocket: any = new WebSocket(
-        process.env.NEXT_PUBLIC_WEBSOCKET_URL + '/map'
-      )
-
-      mapSocket.onopen = () => {
-        if (mapSocket.readyState === WebSocket.OPEN) {
-          mapSocket.send(
-            JSON.stringify({
-              bbox,
-            })
-          )
-
-          console.log('map socket opened')
-        } else {
-          console.log('map socket not opened')
-        }
-      }
-
-      mapSocket.onmessage = (event: MessageEvent) => {
-        console.log('map socket message: ', event)
-        const data = JSON.parse(event.data)
-        console.log('map data: ', data)
-        setDriversPositions([...driversPositions, ...data])
-      }
-
-      mapSocket.onclose = () => {
-        //console.log('map socket closed')
-      }
-
-      mapSocket.onerror = (error: any) => {
-        console.log('map socket error: ', error)
-        mapSocket.close()
-      }
-      console.log('driversPositions: ', driversPositions)
+      // send bbox to the backend: GET http://194.233.173.78:2110/api/v1/map?min_lat=&max_lat=&min_lng=&max_lng= with header authorization: Bearer token
+      await axios
+        .get(
+          `http://194.233.173.78:2110/api/v1/map?min_lat=${min_lat}&max_lat=${max_lat}&min_lng=${min_lng}&max_lng=${max_lng}`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.accessToken}`,
+            },
+          }
+        )
+        .then((res) => {
+          console.log('res: ', res.data)
+          // map through res.data ids and request each driver's infos
+          
+        })
+      // const res = await fetch(
+      //   `http://194.233.173.78:2110/api/v1/map?min_lat=${min_lat}&max_lat=${max_lat}&min_lng=${min_lng}&max_lng=${max_lng}`,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${session?.accessToken}`,
+      //     },
+      //   }
+      // )
     })
   }, [map])
 
