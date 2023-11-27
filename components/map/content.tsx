@@ -56,7 +56,7 @@ export const Content = () => {
   }
 
   return (
-    <div className='w-full grid grid-cols-1 gap-x-2 lg:h-[687px] lg:grid-cols-4'>
+    <div className='w-full grid grid-cols-1 gap-x-2 lg:h-[100vh] lg:grid-cols-4'>
       {/* Col 1 */}
       <div
         className={`flex flex-col gap-y-2 h-full overflow-y-auto
@@ -64,7 +64,7 @@ export const Content = () => {
       `}
       >
         {/* Map */}
-        <div className='w-full min-h-[500px] h-full bg-gray-200 rounded-xl relative'>
+        <div className='w-full min-h-[500px] h-full rounded-xl relative'>
           <Map drivers={drivers} />
         </div>
 
