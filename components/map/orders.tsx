@@ -8,11 +8,11 @@ import {
 } from '../icons/orders'
 import { faker } from '@faker-js/faker'
 import { Order, Status } from '@/interfaces'
-import { Checkbox } from '@nextui-org/react'
+import { Button, Checkbox } from '@nextui-org/react'
 import { useMapContext } from '@/context/MapContext'
 
 const OrdersList = () => {
-  const [orders, setOrders] = useState<Order[]>([] as Order[])
+  const [orders, setOrders] = useState<any[]>([] as any[])
   const { showOrders } = useMapContext()
   const [orderStatus, setOrderStatus] = useState<Status[]>([
     { value: 'Assigned', checked: true },
@@ -28,7 +28,7 @@ const OrdersList = () => {
   const fetchOrders = () => {
     const arr = []
     for (let i = 0; i < 20; i++) {
-      const fakeOrder: Order = {
+      const fakeOrder: any = {
         id: faker.string.uuid(),
         restaurant: faker.company.name(),
         restaurantId: faker.string.uuid(),
@@ -54,11 +54,11 @@ const OrdersList = () => {
   if (!showOrders) return null
   return (
     <div className='w-[98%] flex flex-col mx-auto'>
-      {/* Title & filters */}
+      <Tabs />
+
       <div className='w-full flex flex-col items-start justify-between z-[100] mb-4'>
-        <h1 className='font-semibold text-2xl'>Orders</h1>
         {/* Filters */}
-        <div className='w-full grid grid-cols-2 items-start gap-2 bg-white rounded-md p-3 sm:grid-cols-4 lg:grid-cols-2'>
+        {/* <div className='w-full grid grid-cols-2 items-start gap-2 bg-white rounded-md p-3 sm:grid-cols-4 lg:grid-cols-2'>
           {orderStatus.map(({ value, checked }, i) => (
             <div
               key={i}
@@ -85,29 +85,135 @@ const OrdersList = () => {
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
 
       {/* Orders */}
-      <div className='w-full h-full flex flex-col items-center gap-y-3 overflow-y-auto'>
-        {/* Render filtere */}
-        {orders
-          .filter((order) =>
-            orderStatus.some(
-              (status) => status.value === order.status && status.checked
-            )
-          )
-          .map((order) => (
-            <OrderCard key={order.id} order={order} />
-          ))}
-      </div>
     </div>
   )
 }
 
 export default OrdersList
 
-const OrderCard = ({ order }: { order: Order }) => {
+const Tabs = ({ color }: any) => {
+  const [openTab, setOpenTab] = React.useState(1)
+  const [orders, setOrders] = useState<any[]>([] as any[])
+  const { showOrders } = useMapContext()
+  const [orderStatus, setOrderStatus] = useState<Status[]>([
+    { value: 'Assigned', checked: true },
+    { value: 'Cancelled', checked: true },
+    { value: 'New', checked: true },
+    { value: 'Done', checked: true },
+  ])
+
+  const numberOfOrders = (status: string) => {
+    return orders.filter((order) => order.status === status).length
+  }
+
+  const fetchOrders = () => {
+    const arr = []
+    for (let i = 0; i < 20; i++) {
+      const fakeOrder: any = {
+        id: faker.string.uuid(),
+        restaurant: faker.company.name(),
+        restaurantId: faker.string.uuid(),
+        restaurantImage: faker.image.url(),
+        customer: faker.person.firstName(),
+        customerId: faker.string.uuid(),
+        customerImage: faker.image.avatar(),
+        duration: faker.number.int(),
+        startTime: faker.date.past().getTime(),
+        endTime: faker.date.future().getTime(),
+        driverId: faker.string.uuid(),
+        status: orderStatus[faker.number.int({ max: 3, min: 0 })].value,
+      }
+      arr.push(fakeOrder)
+    }
+    setOrders(arr as Order[])
+  }
+
+  useEffect(() => {
+    fetchOrders()
+  }, [])
+
+  return (
+    <>
+      <div className='flex flex-wrap'>
+        <div className='w-full'>
+          <ul className='flex list-none flex-wrap pb-4 flex-row' role='tablist'>
+            <li className='flex-auto text-center'>
+              <a
+                className={
+                  'text-sm font-bold uppercase p-4 shadow-lg rounded-l-xl block leading-normal ' +
+                  (openTab === 1
+                    ? ' bg-primary'
+                    : 'text-' + color + '-600 bg-white')
+                }
+                onClick={(e) => {
+                  e.preventDefault()
+                  setOpenTab(1)
+                }}
+                data-toggle='tab'
+                href='#link1'
+                role='tablist'
+              >
+                Orders
+              </a>
+            </li>
+            <li className='flex-auto text-center'>
+              <a
+                className={
+                  'text-sm font-bold uppercase p-4 shadow-lg rounded-r-xl block leading-normal ' +
+                  (openTab === 2
+                    ? 'bg-primary'
+                    : 'text-' + color + '-600 bg-white')
+                }
+                onClick={(e) => {
+                  e.preventDefault()
+                  setOpenTab(2)
+                }}
+                data-toggle='tab'
+                href='#link2'
+                role='tablist'
+              >
+                Drivers
+              </a>
+            </li>
+          </ul>
+          <div className=''>
+            <div>
+              <div className={openTab === 1 ? 'block' : 'hidden'} id='link1'>
+                <Orders orders={orders} orderStatus={orderStatus} />
+              </div>
+              <div className={openTab === 2 ? 'block' : 'hidden'} id='link2'>
+                <p>Drivers</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+const Orders = ({ orders, orderStatus }: { orders: any; orderStatus: any }) => {
+  return (
+    <div className='w-full h-full flex flex-col items-center gap-y-3 overflow-y-auto'>
+      {/* Render filtere */}
+      {orders
+        .filter((order: any) =>
+          orderStatus.some(
+            (status: any) => status.value === order.status && status.checked
+          )
+        )
+        .map((order: any) => (
+          <OrderCard key={order.id} order={order} />
+        ))}
+    </div>
+  )
+}
+
+const OrderCard = ({ order }: { order: any }) => {
   const {
     restaurant,
     customer,
@@ -134,6 +240,7 @@ const OrderCard = ({ order }: { order: Order }) => {
         <div className='flex items-center gap-x-2'>
           <Image
             src={restaurantImage || '/images/logo.png'}
+            alt='restaurant'
             objectFit='cover'
             className='rounded-md'
             width={40}
@@ -145,6 +252,7 @@ const OrderCard = ({ order }: { order: Order }) => {
           <p className='text-xs'>{customer}</p>
           <Image
             src={customerImage || '/images/logo.png'}
+            alt='customer'
             objectFit='cover'
             className='rounded-md'
             width={40}
@@ -174,6 +282,7 @@ const OrderCard = ({ order }: { order: Order }) => {
 
         <div className='flex flex-col items-center gap-y-1'>
           {
+            //@ts-ignore
             {
               Done: <BagCheckedIcon color={statusColor} />,
               Assigned: <BagCheckedIcon />,
