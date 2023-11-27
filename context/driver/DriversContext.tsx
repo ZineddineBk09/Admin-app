@@ -20,7 +20,6 @@ export const DriversContextProvider = ({
     setLoading(true)
     // setDrivers([] as Driver[])
     const records = await getRecords('driver').then((res) => res.data)
-    console.log('records: ', records)
     setDrivers(
       records.map(
         (driver: any): Driver => ({
