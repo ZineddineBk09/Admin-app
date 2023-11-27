@@ -9,7 +9,7 @@ import {
 import { faker } from '@faker-js/faker'
 import { Driver, Order, Status } from '@/interfaces'
 import { Card } from '@nextui-org/react'
-import { useMapContext } from '@/context/MapContext'
+import { useMapContext } from '@/context/map/MapContext'
 import { DriverInboxIcon, DriverOrdersIcon } from '../icons/drivers'
 import { truncateTxt } from '@/utils'
 
@@ -65,7 +65,6 @@ export default OrdersList
 
 const Tabs = ({ color }: any) => {
   const [openTab, setOpenTab] = React.useState(1)
-  const [orders, setOrders] = useState<any[]>([] as any[])
   const [orderStatus, setOrderStatus] = useState<Status[]>([
     { value: 'Assigned', checked: true },
     { value: 'Cancelled', checked: true },
@@ -73,70 +72,12 @@ const Tabs = ({ color }: any) => {
     { value: 'Done', checked: true },
   ])
 
-  const fetchOrders = () => {
-    const arr = []
-    for (let i = 0; i < 20; i++) {
-      const fakeOrder: any = {
-        id: faker.string.uuid(),
-        restaurant: faker.company.name(),
-        restaurantId: faker.string.uuid(),
-        restaurantImage: faker.image.url(),
-        customer: faker.person.firstName(),
-        customerId: faker.string.uuid(),
-        customerImage: faker.image.avatar(),
-        duration: faker.number.int(),
-        startTime: faker.date.past().getTime(),
-        endTime: faker.date.future().getTime(),
-        driverId: faker.string.uuid(),
-        status: orderStatus[faker.number.int({ max: 3, min: 0 })].value,
-      }
-      arr.push(fakeOrder)
-    }
-    setOrders(arr as Order[])
-  }
-
   const [driverStatus, setDriverStatus] = useState<Status[]>([
     { value: 'Available', checked: true },
     { value: 'Busy', checked: true },
     { value: 'Inactive', checked: true },
   ])
-  const [drivers, setDrivers] = useState<any[]>([] as any[])
-  const { showDrivers } = useMapContext()
-
-  const fetchDrivers = () => {
-    const arr = []
-    for (let i = 0; i < 20; i++) {
-      const fakeDriver: any = {
-        id: faker.string.uuid(),
-        username: faker.person.fullName(),
-        email: faker.internet.email(),
-        team: faker.company.name(),
-        completedTasks: faker.number.int({ max: 100, min: 0 }),
-        inProgressTasks: faker.number.int({ max: 100, min: 0 }),
-        image: faker.image.avatar(),
-        status: driverStatus[faker.number.int({ max: 2, min: 0 })].value as any,
-        location: {
-          latitude: faker.location.latitude({ max: 22, min: 21 }),
-          longitude: faker.location.longitude({
-            max: 40,
-            min: 39,
-          }),
-        },
-        orders: faker.number.int({
-          max: 10,
-          min: 0,
-        }),
-        phone: faker.phone.number(),
-      }
-      arr.push(fakeDriver)
-    }
-    setDrivers(arr as any[])
-  }
-
-  useEffect(() => {
-    fetchOrders()
-    fetchDrivers()
-  }, [])
+  const { drivers, orders } = useMapContext()
 
   return (
     <>
@@ -235,10 +176,16 @@ const OrderCard = ({ order }: { order: any }) => {
       ? '#F04646'
       : '#5E5E5E'
 
+  const { handleSelectOrder, selectedOrder } = useMapContext()
+
   return (
-    <Card isPressable isHoverable className='p-0 shadow-lg'>
-      <Card.Body className='p-0 w-full shadow-none'>
-        <div className='w-full flex flex-col items-center bg-white rounded-md p-2 gap-y-2'>
+    <Card isPressable onClick={() => handleSelectOrder(order.id)}>
+      <Card.Body className='p-0 w-full'>
+        <div
+          className={`w-full flex flex-col items-center rounded-md p-2 gap-y-2 ${
+            selectedOrder === order.id ? 'bg-primary-light' : ''
+          }`}
+        >
           {/* Restaurant and customer */}
           <div className='w-full flex items-center justify-between'>
             <div className='flex items-center gap-x-2'>
@@ -316,7 +263,7 @@ const Drivers = ({
   driverStatus: any
 }) => {
   return (
-    <div className='w-full h-full flex flex-col items-center gap-y-3 overflow-y-auto'>
+    <div className='w-full h-full flex flex-col items-center gap-y-3 overflow-y-auto px-2'>
       {drivers
         .slice(0, drivers.length / 2)
         .filter((dr: any) =>
@@ -333,14 +280,21 @@ const Drivers = ({
 
 const DriverCard = ({ driver }: { driver: Driver }) => {
   const { username, image, status, orders } = driver
+  const { handleSelectDriver, selectedDriver } = useMapContext()
+
   return (
     <Card
       isPressable
       isHoverable
       className='p-0 rounded-l-full overflow-hidden rounded-r-md'
+      onClick={() => handleSelectDriver(driver.id)}
     >
       <Card.Body className='p-0 w-full overflow-hidden'>
-        <div className='h-20 w-full ml-auto flex items-center gap-x-5 p-2 rounded-l-full bg-white'>
+        <div
+          className={`h-20 w-full ml-auto flex items-center gap-x-5 p-2 rounded-l-full bg-white ${
+            selectedDriver === driver.id ? 'bg-primary-light' : ''
+          }`}
+        >
           {/* Image */}
           <Image
             src={image}
@@ -369,9 +323,9 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
                 {
                   <span
                     className={`py-1 px-3 rounded-full text-xs ${
-                      status === 'available'
+                      status === 'Available'
                         ? 'bg-green-400'
-                        : status === 'busy'
+                        : status === 'Busy'
                         ? 'bg-orange-500'
                         : 'bg-gray-400'
                     }`}
