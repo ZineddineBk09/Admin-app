@@ -21,7 +21,7 @@ export const OrdersPage = () => {
       }}
       justify={'center'}
       direction={'column'}
-      className='w-full'
+      className='relative w-full bg-white rounded-lg shadow-lg py-6 px-2 overflow-x-auto'
     >
       <div className='w-full flex justify-between px-6'>
         <h1 className='font-semibold text-2xl'>Orders</h1>
@@ -72,14 +72,14 @@ export const SearchAndFilter = () => {
         name='search'
         id='search'
         type='text'
-        className='bg-white rounded-full px-4 py-2'
+        className='bg-gray-200 rounded-full px-4 py-2'
         placeholder='Search'
         onChange={(e) => handleSearchOrders(e.target.value)}
       />
 
       {/* Date From */}
 
-      <div className='h-10 max-w-xs flex items-center gap-x-4 bg-white rounded px-4 relative lg:mx-auto'>
+      <div className='h-10 max-w-xs flex items-center gap-x-4 bg-gray-200 rounded px-4 relative lg:mx-auto'>
         <span className='text-gray-400'>Date From</span>
         <input
           type='date'
@@ -89,7 +89,7 @@ export const SearchAndFilter = () => {
         />
       </div>
       {/* Date To */}
-      <div className='h-10 max-w-xs flex items-center gap-x-4 bg-white rounded px-4 relative lg:mx-auto'>
+      <div className='h-10 max-w-xs flex items-center gap-x-4 bg-gray-200 rounded px-4 relative lg:mx-auto'>
         <span className='text-gray-400'>Date To</span>
         <input
           type='date'
