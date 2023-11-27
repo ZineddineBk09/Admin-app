@@ -55,28 +55,31 @@ const Map = ({ drivers }: { drivers: Driver[] }) => {
       }
 
       // send bbox to the backend: GET http://194.233.173.78:2110/api/v1/map?min_lat=&max_lat=&min_lng=&max_lng= with header authorization: Bearer token
-      await axios
-        .get(
-          `http://194.233.173.78:2110/api/v1/map?min_lat=${min_lat}&max_lat=${max_lat}&min_lng=${min_lng}&max_lng=${max_lng}`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.accessToken}`,
-            },
-          }
-        )
-        .then((res) => {
-          console.log('res: ', res.data)
-          // map through res.data ids and request each driver's infos
-          
-        })
+      // await axios
+      //   .get(
+      //     `http://194.233.173.78:2110/api/v1/map?min_lat=${min_lat}&max_lat=${max_lat}&min_lng=${min_lng}&max_lng=${max_lng}`,
+      //     {
+      //       headers: {
+      //         Authorization: `Bearer ${session?.accessToken}`,
+      //       },
+      //     }
+      //   )
+      //   .then((res) => {
+      //     console.log('res: ', res.data)
+      //     // map through res.data ids and request each driver's infos
+      //   })
       // const res = await fetch(
       //   `http://194.233.173.78:2110/api/v1/map?min_lat=${min_lat}&max_lat=${max_lat}&min_lng=${min_lng}&max_lng=${max_lng}`,
       //   {
+      //     method: 'GET',
+      //     // mode: 'no-cors',
       //     headers: {
       //       Authorization: `Bearer ${session?.accessToken}`,
       //     },
       //   }
       // )
+      // const data = await res.json()
+      // console.log('data: ', data)
     })
   }, [map])
 
