@@ -10,11 +10,11 @@ const Map = dynamic(() => import('./map'), { ssr: false })
 export const Content = () => {
   const { showOrders } = useMapContext()
   const driverStatus = ['Available', 'Busy', 'Inactive']
-  const drivers: Driver[] = []
-  const orders: Order[] = []
+  const drivers: any[] = []
+  const orders: any[] = []
 
   for (let i = 0; i < 20; i++) {
-    const fakeOrder: Order = {
+    const fakeOrder: any = {
       id: faker.string.uuid(),
       restaurant: faker.company.name(),
       restaurantId: faker.string.uuid(),
@@ -30,7 +30,7 @@ export const Content = () => {
     }
     orders.push(fakeOrder)
 
-    const fakeDriver: Driver = {
+    const fakeDriver: any = {
       id: faker.string.uuid(),
       username: faker.person.fullName(),
       email: faker.internet.email(),
