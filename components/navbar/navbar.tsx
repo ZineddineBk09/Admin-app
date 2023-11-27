@@ -3,7 +3,7 @@ import React from 'react'
 import { Box } from '../styles/box'
 import { BurguerButton } from './burguer-button'
 import { DriversIcon, BagIcon } from '../icons/navbar'
-import { useMapContext } from '@/context/MapContext'
+import { useMapContext } from '@/context/map/MapContext'
 import { useRouter } from 'next/router'
 
 interface Props {
