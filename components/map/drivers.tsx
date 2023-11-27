@@ -179,6 +179,7 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
         {/* Image */}
         <Image
           src={image}
+          alt='Driver Image'
           objectFit='cover'
           width={125}
           height={125}
