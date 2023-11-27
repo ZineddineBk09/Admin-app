@@ -13,13 +13,13 @@ const DriversList = () => {
     { value: 'Busy', checked: true },
     { value: 'Inactive', checked: true },
   ])
-  const [drivers, setDrivers] = useState<Driver[]>([] as Driver[])
+  const [drivers, setDrivers] = useState<any[]>([] as any[])
   const { showDrivers } = useMapContext()
 
   const fetchDrivers = () => {
     const arr = []
     for (let i = 0; i < 20; i++) {
-      const fakeDriver: Driver = {
+      const fakeDriver: any = {
         id: faker.string.uuid(),
         username: faker.person.fullName(),
         email: faker.internet.email(),
