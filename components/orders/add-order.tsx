@@ -88,13 +88,13 @@ export const AddOrder = () => {
   }, [])
 
   return (
-    <div>
+    <div className='fixed right-12 bottom-12 z-[100]'>
       <Button
         auto
         onClick={handler}
-        className='bg-primary text-black rounded-md'
+        className='h-20 w-20 bg-primary text-black rounded-full font-bold text-5xl shadow-md shadow-gray-400'
       >
-        Add Order
+        +
       </Button>
 
       <Modal
