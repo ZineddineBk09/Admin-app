@@ -1,7 +1,13 @@
 import React from 'react'
 import { Svg } from '../../styles/svg'
 
-export const BagIcon = ({ color }: { color?: string }) => {
+export const BagIcon = ({
+  color,
+  width,
+}: {
+  color?: string
+  width?: string
+}) => {
   const fill: string = color ? `!fill-${color}-400` : '!fill-current'
   const stroke: string = color ? `stroke-${color}-400` : 'stroke-current'
 
@@ -13,7 +19,7 @@ export const BagIcon = ({ color }: { color?: string }) => {
       xmlns='http://www.w3.org/2000/svg'
       fill='none'
       stroke={color}
-      className={`${stroke} w-5`}
+      className={`${stroke} ${width ? 'w-' + width : 'w-5'}`}
     >
       <path
         d='M1.95061 22.3198C3.32037 23.9703 5.86974 23.9703 10.9684 23.9703H11.7919C16.8906 23.9703 19.4401 23.9703 20.8098 22.3198M1.95061 22.3198C0.580853 20.6694 1.05067 18.1637 1.9903 13.1523C2.65852 9.58843 2.99265 7.8065 4.26109 6.75377M20.8098 22.3198C22.1796 20.6694 21.7097 18.1637 20.7701 13.1523C20.1019 9.58843 19.7678 7.8065 18.4994 6.75377M18.4994 6.75377C17.2309 5.70105 15.4179 5.70105 11.7919 5.70105H10.9684C7.34252 5.70105 5.52955 5.70105 4.26109 6.75377'
@@ -51,7 +57,13 @@ export const TrajectoryIcon = ({ color }: { color?: string }) => {
   )
 }
 
-export const BagCheckedIcon = ({ color = '#5E5E5E' }: { color?: string }) => {
+export const BagCheckedIcon = ({
+  color = '#5E5E5E',
+  width,
+}: {
+  color?: string
+  width?: string
+}) => {
   const fill: string = color ? `!fill-${color}-400` : '!fill-current'
   const stroke: string = color ? `stroke-${color}-400` : 'stroke-current'
 
@@ -63,7 +75,7 @@ export const BagCheckedIcon = ({ color = '#5E5E5E' }: { color?: string }) => {
       xmlns='http://www.w3.org/2000/svg'
       fill='none'
       stroke={color}
-      className='w-5'
+      className={`${width ? 'w-' + width : 'w-5'}`}
     >
       <path
         d='M2.20598 22.3198C3.57574 23.9703 6.12512 23.9703 11.2238 23.9703H12.0473C17.146 23.9703 19.6955 23.9703 21.0652 22.3198M2.20598 22.3198C0.836224 20.6694 1.30604 18.1637 2.24567 13.1523C2.91389 9.58843 3.24802 7.8065 4.51646 6.75377M21.0652 22.3198C22.4349 20.6694 21.9651 18.1637 21.0255 13.1523C20.3573 9.58843 20.0232 7.8065 18.7547 6.75377M18.7547 6.75377C17.4863 5.70105 15.6733 5.70105 12.0473 5.70105H11.2238C7.59789 5.70105 5.78492 5.70105 4.51646 6.75377'
@@ -117,4 +129,3 @@ export const BagCrossedIcon = ({ color }: { color?: string }) => {
     </Svg>
   )
 }
-
