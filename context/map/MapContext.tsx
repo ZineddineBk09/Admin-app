@@ -4,7 +4,22 @@ import React, { useEffect, useState } from 'react'
 
 export const MapContext = React.createContext({})
 
-export const useMapContext: any = () => React.useContext(MapContext)
+export const useMapContext: {
+  (): {
+    drivers: any[]
+    orders: any[]
+    showOrders: boolean
+    showDrivers: boolean
+    selectedOrder: string
+    selectedDriver: string
+    handleSelectOrder: (id: string) => void
+    handleSelectDriver: (id: string) => void
+    handleToggleOrders: () => void
+    handleToggleDrivers: () => void
+    openTab: number
+    hansleSelectTab: (tab: number) => void
+  }
+} = () => React.useContext(MapContext as any)
 
 export const MapContextProvider = ({
   children,
@@ -17,6 +32,7 @@ export const MapContextProvider = ({
   const [drivers, setDrivers] = useState<any[]>([] as any[])
   const [selectedOrder, setSelectedOrder] = useState<any>(null)
   const [selectedDriver, setSelectedDriver] = useState<any>(null)
+  const [openTab, setOpenTab] = React.useState(1)
   const [orderStatus, setOrderStatus] = useState<Status[]>([
     { value: 'Assigned', checked: true },
     { value: 'Cancelled', checked: true },
@@ -45,6 +61,10 @@ export const MapContextProvider = ({
     setSelectedDriver(id)
   }
 
+  const hansleSelectTab = (tab: number) => {
+    setOpenTab(tab)
+  }
+
   const fetchOrders = () => {
     const arr = []
     for (let i = 0; i < 20; i++) {
@@ -53,14 +73,32 @@ export const MapContextProvider = ({
         restaurant: faker.company.name(),
         restaurantId: faker.string.uuid(),
         restaurantImage: faker.image.url(),
+        restaurantAddress: faker.location.streetAddress(),
+        restaurantPhone: faker.phone.number(),
         customer: faker.person.firstName(),
         customerId: faker.string.uuid(),
         customerImage: faker.image.avatar(),
+        customerAddress: faker.location.streetAddress(),
+        customerPhone: faker.phone.number(),
         duration: faker.number.int(),
         startTime: faker.date.past().getTime(),
         endTime: faker.date.future().getTime(),
         driverId: faker.string.uuid(),
         status: orderStatus[faker.number.int({ max: 3, min: 0 })].value,
+        items: [
+          {
+            name: faker.commerce.productName(),
+            quantity: faker.number.int({ max: 5, min: 1 }),
+          },
+          {
+            name: faker.commerce.productName(),
+            quantity: faker.number.int({ max: 5, min: 1 }),
+          },
+          {
+            name: faker.commerce.productName(),
+            quantity: faker.number.int({ max: 5, min: 1 }),
+          },
+        ],
       }
       arr.push(fakeOrder)
     }
@@ -119,6 +157,8 @@ export const MapContextProvider = ({
         handleSelectDriver,
         handleToggleOrders,
         handleToggleDrivers,
+        openTab,
+        hansleSelectTab,
       }}
     >
       {children}
