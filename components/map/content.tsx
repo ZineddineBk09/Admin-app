@@ -1,12 +1,12 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
-import DriversList from './drivers'
+import { DriverData, OrderData } from './drivers'
 import OrdersList from './orders'
 import { useMapContext } from '@/context/map/MapContext'
 const Map = dynamic(() => import('./map'), { ssr: false })
 
 export const Content = () => {
-  const { showOrders } = useMapContext()
+  const { showOrders, openTab} = useMapContext()
   const { drivers, orders } = useMapContext()
 
   return (
@@ -22,11 +22,12 @@ export const Content = () => {
           <Map drivers={drivers} />
         </div>
 
-        {/* Drivers */}
-        <DriversList />
+        {/* Driver & Order Infos */}
+        {/* {openTab === 1 ? <OrderData /> : <DriverData />} */}
+        <DriverData />
       </div>
 
-      {/* Orders */}
+      {/* Orders & Drivers */}
       <div className='w-full h-full overflow-y-auto bg-gray-200'>
         <OrdersList />
       </div>
