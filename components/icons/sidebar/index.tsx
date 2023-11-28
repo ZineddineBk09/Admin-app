@@ -250,7 +250,7 @@ export const LogoutIcon = () => {
   )
 }
 
-export const MapIcon = () => {
+export const MapIcon = ({ width }: { width?: string }) => {
   return (
     <Svg
       width='26'
@@ -258,6 +258,7 @@ export const MapIcon = () => {
       viewBox='0 0 26 29'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
+      className={`w-${width}`}
     >
       <path
         d='M1.20076 24.0515L10.793 2.54201C11.562 0.817377 13.8608 0.817377 14.6298 2.54201L24.222 24.0515C25.0911 26.0004 23.1613 28.0217 21.3533 27.0565L13.6617 22.9499C13.0634 22.6305 12.3594 22.6305 11.7611 22.9499L4.06952 27.0565C2.2615 28.0217 0.331673 26.0004 1.20076 24.0515Z'
