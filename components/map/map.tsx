@@ -1,16 +1,14 @@
 import React from 'react-dom'
 import { renderToString } from 'react-dom/server'
 import { useEffect, useState } from 'react'
-import { useRef } from 'react'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-easybutton/src/easy-button.js'
 import 'leaflet-easybutton/src/easy-button.css'
 import * as L from 'leaflet'
 import { MapPinIcon } from '../icons/map'
-import { BBox, Driver } from '@/interfaces'
-import { useSession } from 'next-auth/react'
-import axios from 'axios'
+import { Driver } from '@/interfaces'
+import { getDriversInArea } from '@/lib/api/map'
 
 // create a custom icon with L.divIcon and reactDOM.renderToString
 const icon = (image?: string, symbol?: string) =>
@@ -29,13 +27,7 @@ const icon = (image?: string, symbol?: string) =>
   })
 
 const Map = ({ drivers }: { drivers: Driver[] }) => {
-  const { data: session, status } = useSession()
-  const [driversPositions, setDriversPositions] = useState<any>([])
-  const [position, setPosition] = useState<any>()
   const [map, setMap] = useState<any>(null)
-  const [control, setControl] = useState<any>(null)
-  const [changed, setChanged] = useState(false)
-  const markerRef = useRef<any>(null)
 
   // add an event listener on map: load, move, zoom, etc.
   useEffect(() => {
@@ -47,39 +39,20 @@ const Map = ({ drivers }: { drivers: Driver[] }) => {
         .toBBoxString()
         .split(',')
 
-      const bbox: BBox = {
+      console.log('bbox:', {
         min_lat,
         min_lng,
         max_lat,
         max_lng,
-      }
+      })
 
-      // send bbox to the backend: GET http://194.233.173.78:2110/api/v1/map?min_lat=&max_lat=&min_lng=&max_lng= with header authorization: Bearer token
-      // await axios
-      //   .get(
-      //     `http://194.233.173.78:2110/api/v1/map?min_lat=${min_lat}&max_lat=${max_lat}&min_lng=${min_lng}&max_lng=${max_lng}`,
-      //     {
-      //       headers: {
-      //         Authorization: `Bearer ${session?.accessToken}`,
-      //       },
-      //     }
-      //   )
-      //   .then((res) => {
-      //     console.log('res: ', res.data)
-      //     // map through res.data ids and request each driver's infos
-      //   })
-      // const res = await fetch(
-      //   `http://194.233.173.78:2110/api/v1/map?min_lat=${min_lat}&max_lat=${max_lat}&min_lng=${min_lng}&max_lng=${max_lng}`,
-      //   {
-      //     method: 'GET',
-      //     // mode: 'no-cors',
-      //     headers: {
-      //       Authorization: `Bearer ${session?.accessToken}`,
-      //     },
-      //   }
-      // )
-      // const data = await res.json()
-      // console.log('data: ', data)
+      const drivers = await getDriversInArea({
+        min_lat,
+        min_lng,
+        max_lat,
+        max_lng,
+      })
+      console.log('drivers', drivers)
     })
   }, [map])
 
