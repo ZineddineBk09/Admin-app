@@ -1,74 +1,52 @@
 import { BBox } from '@/interfaces'
+import axios from 'axios'
+import { getSession } from 'next-auth/react'
 
 export const getDriversInArea = async (bbox: BBox) => {
-  const drivers: any[] = []
+  const drivers: any = []
+  const { min_lat, max_lat, min_lng, max_lng } = bbox
+  const url = 'http://194.233.173.78:8000/api/v1/map'
+  const session: any = await getSession()
 
-  // get drivers in bbox from websocket server: NEXT_PUBLIC_WEBSOCKET_URL/map
-  const mapSocket: any = new WebSocket(
-    process.env.NEXT_PUBLIC_WEBSOCKET_URL + '/map'
-  )
+  try {
+    //'http://194.233.173.78:2110/api/v1/map?min_lat=16.9&max_lat=30.9&min_lng=38.02&max_lng=50.03
+    await axios
+      .get(process.env.NEXT_PUBLIC_MAP_API_URL + '/map' || '', {
+        params: {
+          min_lat,
+          max_lat,
+          min_lng,
+          max_lng,
+        },
+        headers: {
+          Authorization: `Bearer ${session?.accessToken}`,
+        },
+      })
+      .then((res) => {
+        console.log('res 1: ', res.data)
+        /* {
+		          "id": "1",
+		          "location": {
+			        "lng": 38.026428,
+			        "lat": 16.909683
+		          },
+		        "action": "inside"
+	          } */
+        if (res.data.length > 0) {
+          res.data.map(async (driver: any) => {
+            await axios
+              .get(process.env.NEXT_PUBLIC_API_URL + `/driver/dis/${driver.id}`)
+              .then((res) => {
+                console.log('res 2: ', res.data)
+                drivers.push(res.data)
+              })
+          })
+        }
+      })
 
-  mapSocket.onopen = () => {
-    if (mapSocket.readyState === WebSocket.OPEN) {
-      mapSocket.send(
-        JSON.stringify({
-          min_lat: 37.7,
-          min_lng: 120.5,
-          max_lat: 40.8,
-          max_lng: 122.23,
-        })
-      )
-
-      //  console.log('map socket opened')
-    } else {
-      console.log('map socket not opened')
-    }
-  }
-
-  mapSocket.onmessage = (event: MessageEvent) => {
-    console.log('map socket message: ', event)
-    const data = JSON.parse(event.data)
-    console.log('map data: ', data)
-    return data
-  }
-
-  mapSocket.onclose = () => {
-    //console.log('map socket closed')
-  }
-
-  mapSocket.onerror = (error: any) => {
-    console.log('map socket error: ', error)
-    mapSocket.close()
-  }
-
-  return drivers
-}
-
-export const addDriverToArea = async (bbox: BBox) => {
-  // get a random (lat, lng) using max_lat, min_lat, max_lng, min_lng
-  const lat: number = bbox.min_lat
-  const lng: number = bbox.min_lng
-
-  // send (lat, lng) to websocket server: NEXT_PUBLIC_WEBSOCKET_URL/driver
-  const driverSocket = new WebSocket(
-    process.env.NEXT_PUBLIC_WEBSOCKET_URL + '/driver'
-  )
-
-  driverSocket.onopen = () => {
-    driverSocket.send(JSON.stringify({ lat, lng }))
-    console.log('driver socket opened')
-  }
-
-  driverSocket.onmessage = (event: MessageEvent) => {
-    const data = JSON.parse(event.data)
-    console.log('driver data: ', data)
-  }
-
-  driverSocket.onclose = () => {
-    console.log('driver socket closed')
-  }
-
-  driverSocket.onerror = (error: any) => {
-    console.log('driver socket error: ', error)
+    return drivers
+  } catch (err) {
+    console.log('err: ', err)
+    return drivers
   }
 }
