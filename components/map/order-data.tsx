@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useMapContext } from '@/context/map/MapContext'
-import {
-  BagCheckedIcon,
-  BagIcon,
-  TrajectoryIcon,
-} from '../icons/orders'
+import { BagCheckedIcon, BagIcon, TrajectoryIcon } from '../icons/orders'
 import { MapIcon } from '../icons/sidebar'
 
 export const OrderData = () => {
@@ -23,7 +19,7 @@ export const OrderData = () => {
 
   if (!showOrders) return null
   return (
-    <div className='w-[95%] flex items-start justify-evenly mx-auto h-fit relative p-4'>
+    <div className='w-[95%] flex flex-col items-center justify-evenly mx-auto h-fit relative p-4 lg:items-start lg:flex-row'>
       {/*  Order, Buttons, and Oder Items*/}
       <div className='flex flex-col'>
         <h1 className='text-xl font-bold mb-5'>Order #{order?.id}</h1>
@@ -81,7 +77,7 @@ export const OrderData = () => {
         <div className='w-full flex items-start justify-between'>
           <div className='flex flex-col items-start text-sm gap-y-1'>
             <Image
-              src={order?.customerImage || '/images/logo.png'}
+              src={order?.restaurantImage || '/images/logo.png'}
               alt='customer'
               objectFit='cover'
               className='rounded-md'
