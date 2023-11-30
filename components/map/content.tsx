@@ -24,9 +24,7 @@ export const Content = () => {
         </div>
 
         {/* Driver & Order Infos */}
-        {/* {openTab === 1 ? <OrderData /> : <DriverData />} */}
-        {/* <DriverData /> */}
-        <OrderData />
+        {openTab === 1 ? <OrderData /> : <DriverData />}
       </div>
 
       {/* Orders & Drivers */}
