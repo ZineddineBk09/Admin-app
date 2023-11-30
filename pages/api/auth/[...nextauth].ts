@@ -6,7 +6,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 async function refreshAccessToken(token: any) {
   console.log('Refreshing access token')
   try {
-    const url = process.env.NEXT_PUBLIC_API_URL + '/refresh'
+    const url = process.env.NEXT_PUBLIC_API_URL + '/token/refresh'
 
     const response = await fetch(url, {
       headers: {
@@ -14,7 +14,7 @@ async function refreshAccessToken(token: any) {
       },
       method: 'POST',
       body: JSON.stringify({
-        refreshToken: token.refreshToken,
+        refresh: token.refreshToken,
       }),
     })
 
