@@ -25,3 +25,36 @@ export const ordersTableCols = [
   { name: 'Is Paid', uid: 'isPaid' },
   { name: 'Actions', uid: 'actions' },
 ]
+
+/**interface Report {
+  id: string
+  client: string
+  clientName: string
+  clientPhone: string
+  clientEmail: string
+  paid: number
+  unpaid: number
+}
+
+interface ClientsReport extends Report {
+  branches: string[]
+  areas: string[]
+  countries: string[]
+  orders: number
+  canceledOrders: number
+} */
+export const reportsTableCols = [
+  { name: 'No', uid: 'id' },
+  { name: 'Client', uid: 'client' },
+  { name: 'Name', uid: 'clientName' },
+  { name: 'Phone', uid: 'clientPhone' },
+  { name: 'Email', uid: 'clientEmail' },
+  { name: 'Branches', uid: 'branches' },
+  { name: 'Areas', uid: 'areas' },
+  { name: 'Countries', uid: 'countries' },
+  { name: 'Orders', uid: 'orders' },
+  { name: 'Canceled', uid: 'canceledOrders' },
+  { name: 'Paid', uid: 'paid' },
+  { name: 'Unpaid', uid: 'unpaid' },
+  { name: 'Actions', uid: 'actions' },
+]
