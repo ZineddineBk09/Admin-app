@@ -1,9 +1,10 @@
 import React from 'react'
-import { RenderCell } from './render-orders-cell'
+import { RenderCell } from './render-reports-cell'
 import { reportsTableCols } from './data'
+import { useReportsContext } from '@/context/report/ReportsContext'
 
 export const ReportsTable = () => {
-  const orders: any = []
+  const { reports } = useReportsContext()
 
   return (
     <div className='flex flex-col'>
@@ -21,7 +22,7 @@ export const ReportsTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {orders.map((order: any, index: number) => (
+                {reports.map((order: any, index: number) => (
                   <tr
                     key={order.id}
                     // make table striped by adding bg-gray-50 to odd rows
