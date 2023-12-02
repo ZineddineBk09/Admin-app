@@ -171,3 +171,31 @@ interface APIDriver {
 }
 
 export type APIRecord = APIDriver | Order | Account | Branch
+
+interface Report {
+  id: string
+  client: string
+  clientName: string
+  clientPhone: string
+  clientEmail: string
+  paid: number
+  unpaid: number
+}
+
+export interface ClientsReport extends Report {
+  branches: string[]
+  areas: string[]
+  countries: string[]
+  orders: number
+  canceledOrders: number
+}
+
+export interface OrdersReport extends ClientsReport {}
+
+export interface DriversReport extends ClientsReport {}
+
+export interface AreasReport extends ClientsReport {}
+
+export interface CustomersReport extends ClientsReport {}
+
+export interface TeamsReport extends ClientsReport {}
