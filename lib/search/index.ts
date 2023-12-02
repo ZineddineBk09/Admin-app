@@ -60,3 +60,12 @@ export const searchDrivers = (list: Driver[], pattern: string) => {
 
   return fuse.search(pattern).map((item) => item.item)
 }
+
+export const searchReports = (list: any[], pattern: string) => {
+  const fuse = new Fuse(list, {
+    ...options,
+    keys: ['id', 'clientEmail', 'clientPhone', 'client'],
+  })
+
+  return fuse.search(pattern).map((item) => item.item)
+}
