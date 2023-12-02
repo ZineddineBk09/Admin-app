@@ -1,7 +1,6 @@
-import { Text, Loading } from '@nextui-org/react'
+import { Loading } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../styles/flex'
-import { DriversTable } from '../table/drivers-table'
 import { Team } from '@/interfaces'
 import { ReportsTable } from '../table/reports-table'
 
