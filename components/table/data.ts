@@ -26,23 +26,6 @@ export const ordersTableCols = [
   { name: 'Actions', uid: 'actions' },
 ]
 
-/**interface Report {
-  id: string
-  client: string
-  clientName: string
-  clientPhone: string
-  clientEmail: string
-  paid: number
-  unpaid: number
-}
-
-interface ClientsReport extends Report {
-  branches: string[]
-  areas: string[]
-  countries: string[]
-  orders: number
-  canceledOrders: number
-} */
 export const reportsTableCols = [
   { name: 'No', uid: 'id' },
   { name: 'Client', uid: 'client' },
