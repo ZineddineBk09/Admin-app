@@ -1,6 +1,6 @@
 import { ClientsReport } from '@/interfaces'
 import { getRecords } from '@/lib/api'
-import { searchOrders } from '@/lib/search'
+import { searchReports } from '@/lib/search'
 import { faker } from '@faker-js/faker'
 import React, { useEffect, useState } from 'react'
 
@@ -16,7 +16,7 @@ export const ReportsContextProvider = ({
   const [reports, setReports] = useState<ClientsReport[]>([] as ClientsReport[])
   const [loading, setLoading] = useState(false)
 
-  const refreshOrders = async () => {
+  const refreshReports = async () => {
     setLoading(true)
     // setReports([] as Order[])
     const records = Array.from(
@@ -37,8 +37,12 @@ export const ReportsContextProvider = ({
           branches: ['Branch 1', 'Branch 2'],
           areas: ['Area 1', 'Area 2'],
           countries: ['Country 1', 'Country 2'],
-          orders: faker.datatype.number(),
-          canceledOrders: faker.datatype.number(),
+          orders: faker.number.int({
+            max: 10000,
+          }),
+          canceledOrders: faker.number.int({
+            max: 100,
+          }),
         } as any)
     )
 
@@ -48,18 +52,18 @@ export const ReportsContextProvider = ({
     // setReports(reports)
   }
 
-  const handleSearchOrders = (search: string) => {
+  const handleSearchReports = (search: string) => {
     if (search === '') {
-      refreshOrders()
+      refreshReports()
       return
     }
     // search inside reports array
-    const filteredOrders: any = searchOrders(reports, search)
-    setReports(filteredOrders)
+    const filteredReports: any = searchReports(reports, search)
+    setReports(filteredReports)
   }
 
   useEffect(() => {
-    refreshOrders()
+    refreshReports()
   }, [])
 
   return (
@@ -67,8 +71,8 @@ export const ReportsContextProvider = ({
       value={{
         reports,
         loading,
-        handleSearchOrders,
-        refreshOrders,
+        handleSearchReports,
+        refreshReports,
       }}
     >
       {children}
