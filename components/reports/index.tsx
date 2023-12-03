@@ -1,11 +1,13 @@
-import { Loading } from '@nextui-org/react'
+import { Loading, Text } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../styles/flex'
 import { ReportsTable } from '../table/reports-table'
 import { PrintIcon } from '../icons/table'
+import { exportToExcel } from '@/utils'
+import { useReportsContext } from '@/context/report/ReportsContext'
 
 export const ReportsPage = () => {
-  const drivers = []
+  const { reports } = useReportsContext()
   const loading = false
 
   return (
@@ -47,7 +49,10 @@ export const ReportsPage = () => {
             />
           </div>
 
-          <button className='flex items-center gap-x-2 mt-6 ml-auto col-span-1 row-span-1'>
+          <button
+            className='flex items-center gap-x-2 mt-6 ml-auto col-span-1 row-span-1'
+            onClick={() => exportToExcel({ name: 'reports', data: reports })}
+          >
             <span>Print</span>
             <PrintIcon />
           </button>
@@ -56,21 +61,20 @@ export const ReportsPage = () => {
 
       {loading ? (
         <Loading size='xl' className='mt-24 -mb-24' color='warning' />
-      ) : drivers.length > 0 ? (
+      ) : reports.length > 0 ? (
         <ReportsTable />
       ) : (
-        <ReportsTable />
-        // <Flex
-        //   css={{
-        //     gap: '$6',
-        //     mt: '$6',
-        //     '@sm': { mt: '$10' },
-        //   }}
-        //   direction={'column'}
-        //   align={'center'}
-        // >
-        //   <Text h3>No drivers found</Text>
-        // </Flex>
+        <Flex
+          css={{
+            gap: '$6',
+            mt: '$6',
+            '@sm': { mt: '$10' },
+          }}
+          direction={'column'}
+          align={'center'}
+        >
+          <Text h3>No reports found</Text>
+        </Flex>
       )}
     </Flex>
   )
