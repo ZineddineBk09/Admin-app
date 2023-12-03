@@ -95,6 +95,9 @@ export default NextAuth({
   ],
   callbacks: {
     async jwt({ token, user }: any) {
+      console.log('JWT callback')
+      console.log(token)
+
       if (user) {
         token.accessToken = user.accessToken
         token.refreshToken = user.refreshToken
@@ -104,9 +107,18 @@ export default NextAuth({
       return token
     },
     async session({ session, token }: any) {
+      console.log('Session callback')
+      console.log(session)
+      console.log(token)
       session.accessToken = token.accessToken
       session.refreshToken = token.refreshToken
       session.user.username = token.username
+      session.iat = token.iat
+      session.exp = token.exp
+
+      console.log(
+        'Valid till: ' + new Date(session.exp * 1000).toLocaleString()
+      )
 
       return session
     },
