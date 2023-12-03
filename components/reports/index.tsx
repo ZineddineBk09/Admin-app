@@ -1,4 +1,4 @@
-import { Loading, Text } from '@nextui-org/react'
+import { Loading, Text, Tooltip } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../styles/flex'
 import { ReportsTable } from '../table/reports-table'
@@ -48,14 +48,15 @@ export const ReportsPage = () => {
               placeholder='Select Client'
             />
           </div>
-
-          <button
-            className='flex items-center gap-x-2 mt-6 ml-auto col-span-1 row-span-1'
-            onClick={() => exportToExcel({ name: 'reports', data: reports })}
-          >
-            <span>Print</span>
-            <PrintIcon />
-          </button>
+          <Tooltip content='Export'>
+            <button
+              className='flex items-center gap-x-2 mt-6 ml-auto col-span-1 row-span-1'
+              onClick={() => exportToExcel({ name: 'reports', data: reports })}
+            >
+              <span>Print</span>
+              <PrintIcon />
+            </button>
+          </Tooltip>
         </div>
       </div>
 
