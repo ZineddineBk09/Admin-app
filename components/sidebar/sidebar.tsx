@@ -78,7 +78,23 @@ export const SidebarWrapper = () => {
       icon: <DriversIcon />,
       isActive: router.pathname === '/drivers',
       href: '/drivers',
-      subLinks: [],
+      subLinks: [
+        {
+          title: 'Drivers',
+          isActive: router.pathname === '/drivers/drivers',
+          href: '/drivers/drivers',
+        },
+        {
+          title: 'Teams',
+          isActive: router.pathname === '/drivers/teams',
+          href: '/drivers/teams',
+        },
+        {
+          title: 'Driver Types',
+          isActive: router.pathname === '/drivers/types',
+          href: '/drivers/types',
+        },
+      ],
     },
     {
       title: 'Customers',
