@@ -140,9 +140,12 @@ export const MapContextProvider = ({
   useEffect(() => {
     fetchOrders()
     fetchDrivers()
+  }, [])
+
+  useEffect(() => {
     setSelectedDriver(drivers[0]?.id)
     setSelectedOrder(orders[0]?.id)
-  }, [])
+  }, [drivers, orders])
 
   return (
     <MapContext.Provider
