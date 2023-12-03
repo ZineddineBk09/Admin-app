@@ -26,8 +26,7 @@ export const ReportsTable = () => {
                   <tr
                     key={order.id}
                     // make table striped by adding bg-gray-50 to odd rows
-                    className={`border-b transition duration-200 ease-in-out hover:bg-yellow-100 
-                      ${index % 2 === 0 ? ' bg-gray-200' : ''}
+                    className={`border-b transition duration-200 ease-in-out bg-gray-200 hover:bg-yellow-100 
                     `}
                   >
                     {reportsTableCols.map((col) => (
