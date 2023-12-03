@@ -6,7 +6,7 @@ import {
   BagIcon,
   TrajectoryIcon,
 } from '../icons/orders'
-import { Driver, Order, Status } from '@/interfaces'
+import { Driver } from '@/interfaces'
 import { Card } from '@nextui-org/react'
 import { useMapContext } from '@/context/map/MapContext'
 import { DriverInboxIcon, DriverOrdersIcon } from '../icons/drivers'
@@ -99,7 +99,6 @@ const Tabs = ({ color }: any) => {
 
 export default Lists
 
-
 const Orders = ({ orders, orderStatus }: { orders: any; orderStatus: any }) => {
   return (
     <div className='w-full h-full flex flex-col items-center gap-y-3 overflow-y-auto'>
@@ -141,6 +140,7 @@ const OrderCard = ({ order }: { order: any }) => {
   const [selected, setSelected] = useState(false)
 
   useEffect(() => {
+    console.log('selectedOrder', selectedOrder)
     if (selectedOrder === order.id) setSelected(true)
     else setSelected(false)
   }, [selectedOrder])
@@ -251,6 +251,7 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
   const [selected, setSelected] = useState(false)
 
   useEffect(() => {
+    console.log('selectedDriver', selectedDriver)
     if (selectedDriver === driver.id) setSelected(true)
     else setSelected(false)
   }, [selectedDriver])
