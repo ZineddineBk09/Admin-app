@@ -25,6 +25,7 @@ module.exports = {
       // image background
       backgroundImage: (theme) => ({
         'login-bg': "url('/images/login-bg.png')",
+        'chat-bg': "url('/images/chat-bg.png')",
       }),
     },
   },
