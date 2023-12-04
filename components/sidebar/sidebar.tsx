@@ -81,8 +81,8 @@ export const SidebarWrapper = () => {
       subLinks: [
         {
           title: 'Drivers',
-          isActive: router.pathname === '/drivers/drivers',
-          href: '/drivers/drivers',
+          isActive: router.pathname === '/drivers/list',
+          href: '/drivers/list',
         },
         {
           title: 'Teams',
