@@ -1,10 +1,11 @@
+import { SupportTeamMember } from '@/interfaces'
 import React, { useEffect, useState } from 'react'
 
 export const SupportContext = React.createContext({})
 
 export const useSupportContext: {
   (): {
-    supportChat: any[]
+    supportTeam: SupportTeamMember[]
     loading: boolean
     refreshSupport: () => Promise<void>
   }
@@ -15,7 +16,9 @@ export const SupportContextProvider = ({
 }: {
   children: React.ReactNode
 }) => {
-  const [supportChat, setSupport] = useState<any[]>([] as any[])
+  const [supportTeam, setSupportTeam] = useState<SupportTeamMember[]>(
+    [] as SupportTeamMember[]
+  )
   const support = [
     {
       id: 1,
@@ -95,7 +98,20 @@ export const SupportContextProvider = ({
   const refreshSupport = async () => {
     setLoading(true)
 
-    setSupport(support)
+    const supportTeam: SupportTeamMember[] = [
+      {
+        id: 1,
+        name: 'John Doe',
+        chats: support,
+      },
+      {
+        id: 2,
+        name: 'Jane Doe',
+        chats: support,
+      },
+    ]
+
+    setSupportTeam(supportTeam)
 
     setLoading(false)
   }
@@ -107,7 +123,7 @@ export const SupportContextProvider = ({
   return (
     <SupportContext.Provider
       value={{
-        supportChat,
+        supportTeam,
         loading,
         refreshSupport,
       }}
