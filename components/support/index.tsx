@@ -2,15 +2,21 @@ import { useSupportContext } from '@/context/support/support-context'
 import React, { useEffect } from 'react'
 
 const SupportPage = () => {
-  const el = document.getElementById('messages')
-  // el?.scrollTop = el?.scrollHeight
+  return (
+    <div className='w-full flex items-start justify-between'>
+      <div className='w-[300px]'></div>
+      <Chat />
+    </div>
+  )
+}
+
+const Chat = () => {
   const messagesRef: any = React.useRef(null)
-  const { supportChat } = useSupportContext()
+  const { supportTeam } = useSupportContext()
 
   useEffect(() => {
     messagesRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [])
-
   return (
     <div className='w-[800px] flex-1 justify-between flex flex-col h-screen bg-chat-bg bg-gray-300 relative'>
       <div
@@ -18,29 +24,7 @@ const SupportPage = () => {
         ref={messagesRef}
         className='flex flex-col space-y-4 p-3 overflow-y-auto pb-32'
       >
-        {/* <div>
-          <div className='flex items-end'>
-            <div className='flex flex-col space-y-2 text-sm max-w-2xl mx-2 order-2 items-start'>
-              <span className='px-4 py-2 rounded-lg inline-block rounded-bl-none bg-[#59AFFF] text-black'>
-                Can be verified on any platform using docker
-              </span>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className='flex items-end justify-end'>
-            <div className='flex flex-col space-y-2 text-sm max-w-2xl mx-2 order-1 items-end'>
-              <div>
-                <span className='px-4 py-2 rounded-lg inline-block rounded-br-none bg-gray-100 text-black '>
-                  Your error message says permission denied, npm global installs
-                  must be given root privileges.
-                </span>
-              </div>
-            </div>
-          </div>
-        </div> */}
-
-        {supportChat.map((message: any, index: number) => (
+        {supportTeam[0]?.chats.map((message: any, index: number) => (
           <div
             key={index}
             className={`flex items-end ${
