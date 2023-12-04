@@ -199,3 +199,14 @@ export interface AreasReport extends ClientsReport {}
 export interface CustomersReport extends ClientsReport {}
 
 export interface TeamsReport extends ClientsReport {}
+
+export interface SupportChat {
+  id: number
+  text: string
+}
+
+export interface SupportTeamMember {
+  id: number
+  name: string
+  chats: SupportChat[]
+}
