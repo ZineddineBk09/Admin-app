@@ -1,5 +1,5 @@
 import { ReportsPage } from '@/components/reports'
-import { ReportsContextProvider } from '@/context/report/ReportsContext'
+import { ReportsContextProvider } from '@/context/report'
 import { NextPage } from 'next'
 import React from 'react'
 
