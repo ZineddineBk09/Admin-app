@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const SupportPage = () => {
   const el = document.getElementById('messages')
   // el?.scrollTop = el?.scrollHeight
-
+  const messagesRef: any = React.useRef(null)
   const support = [
     {
       id: 1,
@@ -79,11 +79,16 @@ const SupportPage = () => {
     },
   ]
 
+  useEffect(() => {
+    messagesRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [])
+
   return (
-    <div className='w-[800px] flex-1 p:2 sm:p-6 justify-between flex flex-col h-screen bg-chat-bg bg-gray-300'>
+    <div className='w-[800px] flex-1 justify-between flex flex-col h-screen bg-chat-bg bg-gray-300 relative'>
       <div
         id='messages'
-        className='flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch'
+        ref={messagesRef}
+        className='flex flex-col space-y-4 p-3 overflow-y-auto pb-32'
       >
         {/* <div>
           <div className='flex items-end'>
@@ -131,7 +136,9 @@ const SupportPage = () => {
           </div>
         ))}
       </div>
-      <div className='border-t-2 border-gray-400 px-4 pt-4 mb-2 sm:mb-0'>
+
+      {/* Message Section */}
+      <div className='border-t-2 border-gray-400 px-4 pt-4 mb-2 sm:mb-0 fixed bottom-0 w-[800px] mx-auto'>
         <div className='relative flex flex-col bg-gray-300 rounded-md'>
           <input
             type='text'
