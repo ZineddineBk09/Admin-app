@@ -1,4 +1,4 @@
-import { SupportTeamMember } from '@/interfaces'
+import { SupportChat, SupportTeamMember } from '@/interfaces'
 import React, { useEffect, useState } from 'react'
 
 export const SupportContext = React.createContext({})
@@ -6,8 +6,10 @@ export const SupportContext = React.createContext({})
 export const useSupportContext: {
   (): {
     supportTeam: SupportTeamMember[]
+    selectedMember: SupportTeamMember
     loading: boolean
     refreshSupport: () => Promise<void>
+    handleSelectMember: (id: number) => void
   }
 } = () => React.useContext(SupportContext as any)
 
@@ -19,6 +21,10 @@ export const SupportContextProvider = ({
   const [supportTeam, setSupportTeam] = useState<SupportTeamMember[]>(
     [] as SupportTeamMember[]
   )
+  const [selectedMember, setselectedMember] = useState<SupportTeamMember>(
+    {} as SupportTeamMember
+  )
+
   const support = [
     {
       id: 1,
@@ -93,6 +99,7 @@ export const SupportContextProvider = ({
       text: 'Okay, try running this command: npm install -g @vue/devtools',
     },
   ]
+
   const [loading, setLoading] = useState(false)
 
   const refreshSupport = async () => {
@@ -101,13 +108,27 @@ export const SupportContextProvider = ({
     const supportTeam: SupportTeamMember[] = [
       {
         id: 1,
-        name: 'John Doe',
+        name: 'Samir Khaled',
         chats: support,
+        unread: 8,
       },
       {
         id: 2,
-        name: 'Jane Doe',
+        name: 'Ahmed Mohamed',
         chats: support,
+        unread: 0,
+      },
+      {
+        id: 3,
+        name: 'Mohamed Ahmed',
+        chats: support,
+        unread: 10,
+      },
+      {
+        id: 4,
+        name: 'Nessrine Khaled',
+        chats: support,
+        unread: 1,
       },
     ]
 
@@ -116,16 +137,32 @@ export const SupportContextProvider = ({
     setLoading(false)
   }
 
+  const handleSelectMember = (id: number) => {
+    const member = supportTeam.find((member) => member.id === id)
+
+    if (member) {
+      setselectedMember(member)
+    }
+  }
+
   useEffect(() => {
     refreshSupport()
   }, [])
+
+  useEffect(() => {
+    if (supportTeam.length > 0) {
+      setselectedMember(supportTeam[0])
+    }
+  }, [supportTeam])
 
   return (
     <SupportContext.Provider
       value={{
         supportTeam,
+        selectedMember,
         loading,
         refreshSupport,
+        handleSelectMember,
       }}
     >
       {children}
