@@ -1,5 +1,4 @@
 import { ClientsReport } from '@/interfaces'
-import { getRecords } from '@/lib/api'
 import { searchReports } from '@/lib/search'
 import { faker } from '@faker-js/faker'
 import React, { useEffect, useState } from 'react'
