@@ -4,7 +4,7 @@ import { NextUIProvider } from '@nextui-org/react'
 import { Layout } from '../components/layout/layout'
 import { useRouter } from 'next/router'
 import CheckAuthGuard from '@/components/guards/check-auth-guard'
-import { MapContextProvider } from '@/context/map/MapContext'
+import { MapContextProvider } from '@/context/map'
 import { SessionProvider } from 'next-auth/react'
 
 function MyApp({ Component, pageProps }: AppProps) {
