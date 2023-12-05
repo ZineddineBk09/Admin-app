@@ -47,6 +47,15 @@ export interface Driver {
   code: string
 }
 
+export interface DriverType {
+  id: number
+  name: string
+  fixed: number
+  pricePerKm: number
+  additional: number
+  maxDistance: number
+}
+
 interface Item {
   id: string
   name: string
@@ -209,4 +218,5 @@ export interface SupportTeamMember {
   id: number
   name: string
   chats: SupportChat[]
+  unread: number
 }
