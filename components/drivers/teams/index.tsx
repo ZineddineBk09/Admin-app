@@ -1,7 +1,6 @@
 import { DriverType } from '@/interfaces'
 import { Divider } from '@nextui-org/react'
 import React from 'react'
-import CopyToClipboardButton from '@/components/shared/copy-to-clipboard'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { AddDriverType } from './add-team'
 import { DeleteDriverType } from './delete-team'
