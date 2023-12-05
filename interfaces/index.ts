@@ -56,6 +56,25 @@ export interface DriverType {
   maxDistance: number
 }
 
+export interface DriverTeame {
+  id: number
+  name: string
+  members: DriverTeamMember[]
+  suppervisor: DriverTeamMember
+  fixed: number
+  pricePerKm: number
+  additional: number
+  maxDistance: number
+  areas: string[]
+  city: string
+  country: string
+}
+
+interface DriverTeamMember {
+  id: number
+  name: string
+}
+
 interface Item {
   id: string
   name: string
