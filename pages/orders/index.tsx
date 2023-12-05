@@ -1,5 +1,5 @@
 import { OrdersPage } from '@/components/orders'
-import { OrdersContextProvider } from '@/context/order/OrdersContext'
+import { OrdersContextProvider } from '@/context/order'
 import { NextPage } from 'next'
 import React from 'react'
 
