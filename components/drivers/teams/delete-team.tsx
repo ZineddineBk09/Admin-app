@@ -3,7 +3,7 @@ import React from 'react'
 import { Flex } from '../../styles/flex'
 import { BinIcon } from '@/components/icons/areas'
 
-export const DeleteDriverType = ({ id }: { id: number }) => {
+export const DeleteDriverTeam = ({ id }: { id: number }) => {
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
@@ -14,10 +14,10 @@ export const DeleteDriverType = ({ id }: { id: number }) => {
 
   const handleDelete = async () => {
     setLoading(true)
-    // await deleteDriverType(id)
+    // await deleteDriverTeam(id)
     // closeHandler()
     // setLoading(false)
-    // refreshDriverTypes()
+    // refreshDriverTeams()
     console.log('delete room')
     setLoading(false)
     closeHandler()
@@ -26,7 +26,7 @@ export const DeleteDriverType = ({ id }: { id: number }) => {
   return (
     <div>
       <Tooltip
-        content='Delete Type'
+        content='Delete Team'
         color={'error'}
         className='mr-6'
         onClick={handler}
@@ -44,7 +44,7 @@ export const DeleteDriverType = ({ id }: { id: number }) => {
       >
         <Modal.Header>
           <Text id='modal-title' className='text-xl font-semibold uppercase' h4>
-            Delete Type <span className='text-gray-400'>#{id}</span>
+            Delete Team <span className='text-gray-400'>#{id}</span>
           </Text>
         </Modal.Header>
         {loading ? (
