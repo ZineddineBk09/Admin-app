@@ -11,7 +11,7 @@ import 'leaflet/dist/leaflet.css'
 import 'leaflet-draw/dist/leaflet.draw.css'
 import CopyToClipboardButton from '@/components/shared/copy-to-clipboard'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { useAreasCitiesContext } from '@/context/areas/CitiesContext'
+import { useAreasCitiesContext } from '@/context/areas/cities'
 const CityMap = dynamic(() => import('./map'), { ssr: false })
 
 export const CityCard = ({ city }: { city: City }) => {
