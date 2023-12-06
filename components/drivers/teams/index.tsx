@@ -1,64 +1,43 @@
-import { DriverType } from '@/interfaces'
-import { Divider } from '@nextui-org/react'
+import { DriverTeam } from '@/interfaces'
+import { Divider, Tooltip } from '@nextui-org/react'
 import React from 'react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { AddDriverType } from './add-team'
-import { DeleteDriverType } from './delete-team'
+import Link from 'next/link'
+import { AddDriverTeam } from './add-team'
+import { DeleteDriverTeam } from './delete-team'
+import { useDriversContext } from '@/context/driver'
+import { AddIcon, BinIcon } from '@/components/icons/areas'
 
-const DriversTypes = () => {
-  const types: DriverType[] = [
-    {
-      id: 1296,
-      name: 'Bike',
-      fixed: 20,
-      pricePerKm: 10,
-      additional: 5,
-      maxDistance: 10,
-    },
-    {
-      id: 2351,
-      name: 'Car',
-      fixed: 20,
-      pricePerKm: 10,
-      additional: 5,
-      maxDistance: 10,
-    },
-    {
-      id: 3190,
-      name: 'Van',
-      fixed: 20,
-      pricePerKm: 10,
-      additional: 5,
-      maxDistance: 10,
-    },
-    {
-      id: 4715,
-      name: 'Truck',
-      fixed: 20,
-      pricePerKm: 10,
-      additional: 5,
-      maxDistance: 10,
-    },
-  ]
+const DriversTeams = () => {
+  const { teams } = useDriversContext()
 
   return (
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
-      <SearchTypes />
+      <SearchAccount />
       <div className='w-full flex flex-col items-center gap-y-6'>
-        {types.map((type) => (
-          <CountryCard key={type.id} type={type} />
+        {teams.map((team) => (
+          <DriverTeamCard key={team.id} team={team} />
         ))}
       </div>
-      {/* add type button */}
-      <AddDriverType />
+      {/* add account button */}
+      <AddDriverTeam />
     </div>
   )
 }
 
-const CountryCard = ({ type }: { type: DriverType }) => {
+const DriverTeamCard = ({ team }: { team: DriverTeam }) => {
   const [showInfos, setShowInfos] = React.useState(false)
-  const { id, name, fixed, maxDistance, pricePerKm, additional } = type
-
+  const {
+    id,
+    name,
+    fixed,
+    maxDistance,
+    members,
+    additional,
+    pricePerKm,
+    supervisor,
+    areas,
+  } = team
   const fields = [
     {
       name: 'Fixed',
@@ -115,12 +94,14 @@ const CountryCard = ({ type }: { type: DriverType }) => {
             </h1>
           </div>
         </button>
-        <DeleteDriverType id={id} />
+        <DeleteDriverTeam id={id} />
       </div>
-      {showInfos && <Divider></Divider>}
-      <div className='w-full flex flex-col gap-y-3 items-center lg:flex-row'>
-        {showInfos && (
-          <>
+      {showInfos && (
+        <>
+          <Divider></Divider>
+
+          {/* Fixed, Price, ... */}
+          <div className='w-full flex flex-col gap-y-3 items-center lg:flex-row'>
             {fields.map(({ name, id, defaultValue }: any, index: number) => (
               <>
                 <div key={index} className='w-full flex items-center gap-x-6'>
@@ -145,26 +126,114 @@ const CountryCard = ({ type }: { type: DriverType }) => {
                 </div>
               </>
             ))}
-          </>
-        )}
-      </div>
+          </div>
+          <Divider></Divider>
+
+          {/* Members */}
+          <div className='w-full flex items-start gap-x-6'>
+            <label className='mt-2 text-gray-600 text-sm'>Members</label>
+            {members.length > 0 ? (
+              <div className='w-full flex flex-col items-start gap-y-2'>
+                {members.map((member: any, index: number) => (
+                  <div key={index}>
+                    <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
+                      <label className='text-gray-600 text-sm'>
+                        Member #{index + 1}
+                      </label>
+                      <p className='text-sm'>
+                        {member.name}{' '}
+                        <span className='ml-6 text-sm text-gray-400'>
+                          #{member.id}
+                        </span>
+                      </p>
+                      <BinIcon width={4} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className='text-sm'>No memberes found</p>
+            )}
+          
+            <Tooltip content='Add Area'>
+              <button className='h-10 w-10 flex items-center justify-center text-center text-4xl font-medium rounded-full'>
+                +
+              </button>
+            </Tooltip>
+          </div>
+          <Divider></Divider>
+          {/* Areas */}
+          <div className='w-full flex items-start gap-x-6'>
+            <label className='mt-2 text-gray-600 text-sm'>Areas</label>
+            {areas.length > 0 ? (
+              <div className='w-full flex flex-col items-start gap-y-2'>
+                {areas.map((area: any, index: number) => (
+                  <div key={index}>
+                    <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
+                      <label className='text-gray-600 text-sm'>
+                        Area #{index + 1}
+                      </label>
+                      <p className='text-sm'>
+                        {area.name}{' '}
+                        <span className='ml-6 text-sm text-gray-400'>
+                          #{index}
+                        </span>
+                      </p>
+                      <BinIcon width={4} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className='text-sm'>No memberes found</p>
+            )}
+
+            <Tooltip content='Add Member'>
+              <button className='h-10 w-10 flex items-center justify-center text-center text-4xl font-medium rounded-full'>
+                +
+              </button>
+            </Tooltip>
+          </div>
+          <Divider></Divider>
+          <div className='w-full flex items-center gap-x-6'>
+            <label className='text-gray-600 text-sm w-32 lg:w-fit'>
+              Supervisor
+            </label>
+            <div className='flex items-center justify-between w-60 bg-gray-200 rounded-md p-2 lg:w-40 xl:w-60'>
+              <input
+                name='supervisor'
+                id='supervisor'
+                type='text'
+                value={supervisor.name}
+                onChange={(e) => {
+                  console.log(e.target.value)
+                }}
+                className='text-sm bg-transparent w-full outline-none'
+              />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }
 
-const SearchTypes = () => {
+const SearchAccount = () => {
   return (
     <div className='w-full flex items-center gap-x-6 ml-12'>
-      <div className='w-72 h-10 bg-white rounded-full px-4'>
-        <input
-          name='type'
-          id='type'
-          className='w-full h-full bg-transparent'
-          placeholder='Search'
-        />
-      </div>
+      <label className='text-sm'>Select Country</label>
+      <input
+        name='search'
+        id='search'
+        type='text'
+        className='w-72 bg-white rounded-full px-4 py-2'
+        placeholder='Saudi Arabia'
+        // onChange={(e) => {
+        // handleSearchAccounts(e.target.value)
+        // }}
+      />
     </div>
   )
 }
 
-export default DriversTypes
+export default DriversTeams
