@@ -5,7 +5,7 @@ import { AddGovernorate } from './add-governorate'
 import { DeleteGovernorate } from './delete-governorate'
 import CopyToClipboardButton from '@/components/shared/copy-to-clipboard'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { useAreasGovernoratesContext } from '@/context/areas/GovernoratesContext'
+import { useAreasGovernoratesContext } from '@/context/areas/governorates'
 
 const Governorates = () => {
   const { governorates } = useAreasGovernoratesContext()
