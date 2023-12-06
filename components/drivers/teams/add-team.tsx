@@ -13,7 +13,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { AddIcon } from '@/components/icons/areas'
 
-export const AddDriverType = () => {
+export const AddDriverTeam = () => {
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
@@ -42,7 +42,7 @@ export const AddDriverType = () => {
 
   return (
     <div>
-      <Tooltip content='Add Type'>
+      <Tooltip content='Add Team'>
         <Button auto onClick={handler} className='my-5 h-fit'>
           <AddIcon />
         </Button>
@@ -66,7 +66,7 @@ export const AddDriverType = () => {
                 className='text-xl font-semibold uppercase'
                 h4
               >
-                Add Type
+                Add Team
               </Text>
             </Modal.Header>
             <Divider css={{ my: '$5' }} />
@@ -182,7 +182,7 @@ export const AddDriverType = () => {
             <Divider css={{ my: '$5' }} />
             <Modal.Footer>
               <Button auto type='submit' className='bg-primary text-black'>
-                Add Type
+                Add Team
               </Button>
             </Modal.Footer>
           </form>
