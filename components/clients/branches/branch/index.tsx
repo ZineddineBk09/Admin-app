@@ -8,7 +8,7 @@ import 'leaflet/dist/leaflet.css'
 import 'leaflet-draw/dist/leaflet.draw.css'
 import CopyToClipboardButton from '@/components/shared/copy-to-clipboard'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { useClientsBranchesContext } from '@/context/clients/BranchesContext'
+import { useClientsBranchesContext } from '@/context/clients/branches'
 const BranchMap = dynamic(() => import('./map'), { ssr: false })
 
 export const BranchCard = ({ branch }: { branch: Branch }) => {
