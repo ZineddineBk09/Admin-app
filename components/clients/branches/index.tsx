@@ -4,7 +4,7 @@ import { AddBranch } from './add-branch'
 import { SearchBranch } from './branch'
 import dynamic from 'next/dynamic'
 const BranchCard = dynamic(() => import('./branch'), { ssr: false })
-import { useClientsBranchesContext } from '@/context/clients/BranchesContext'
+import { useClientsBranchesContext } from '@/context/clients/branches'
 import { useRouter } from 'next/router'
 
 const Branches = () => {
