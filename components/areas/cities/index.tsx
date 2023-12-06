@@ -3,7 +3,7 @@ import React from 'react'
 import { AddCity } from './add-city'
 import { SearchCity } from './city'
 import dynamic from 'next/dynamic'
-import { useAreasCitiesContext } from '@/context/areas/CitiesContext'
+import { useAreasCitiesContext } from '@/context/areas/cities'
 const CityCard = dynamic(() => import('./city'), { ssr: false })
 
 const Cities = () => {
