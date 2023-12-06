@@ -5,7 +5,7 @@ import { AddAccount } from './add-account'
 import { DeleteAccount } from './delete-account'
 import CopyToClipboardButton from '@/components/shared/copy-to-clipboard'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { useClientsAccountsContext } from '@/context/clients/AccountsContext'
+import { useClientsAccountsContext } from '@/context/clients/accounts'
 import Link from 'next/link'
 
 const Accounts = () => {
