@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { useMapContext } from '@/context/map/MapContext'
+import { useMapContext } from '@/context/map'
 import { BagCheckedIcon, BagIcon, TrajectoryIcon } from '../icons/orders'
 import { MapIcon } from '../icons/sidebar'
 
