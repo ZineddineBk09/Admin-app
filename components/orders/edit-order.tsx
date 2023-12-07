@@ -16,7 +16,7 @@ import * as Yup from 'yup'
 import { EditIcon } from '../icons/table'
 import { Order, Team } from '@/interfaces'
 import { getRecords, updateRecord } from '@/lib/api'
-import { useOrdersContext } from '@/context/order/OrdersContext'
+import { useOrdersContext } from '@/context/order'
 
 export const EditOrder = ({ order }: { order: Order }) => {
   const [visible, setVisible] = React.useState(false)
