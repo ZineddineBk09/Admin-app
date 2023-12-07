@@ -8,7 +8,7 @@ import {
 } from '../icons/orders'
 import { Driver } from '@/interfaces'
 import { Card } from '@nextui-org/react'
-import { useMapContext } from '@/context/map/MapContext'
+import { useMapContext } from '@/context/map'
 import { DriverInboxIcon, DriverOrdersIcon } from '../icons/drivers'
 import { truncateTxt } from '@/utils'
 
