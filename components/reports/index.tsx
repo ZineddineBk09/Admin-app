@@ -4,7 +4,7 @@ import { Flex } from '../styles/flex'
 import { ReportsTable } from '../table/reports-table'
 import { PrintIcon } from '../icons/table'
 import { exportToExcel } from '@/utils'
-import { useReportsContext } from '@/context/report/ReportsContext'
+import { useReportsContext } from '@/context/report'
 
 export const ReportsPage = () => {
   const { reports } = useReportsContext()
