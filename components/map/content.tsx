@@ -2,7 +2,7 @@ import React from 'react'
 import dynamic from 'next/dynamic'
 import { DriverData } from './driver-data'
 import OrdersAndDriversTabs from './tabs'
-import { useMapContext } from '@/context/map/MapContext'
+import { useMapContext } from '@/context/map'
 import { OrderData } from './order-data'
 const Map = dynamic(() => import('./map'), { ssr: false })
 
