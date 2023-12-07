@@ -3,7 +3,7 @@ import React from 'react'
 import { Flex } from '../styles/flex'
 import { OrdersTable } from '../table/orders-table'
 import { AddOrder } from './add-order'
-import { useOrdersContext } from '@/context/order/OrdersContext'
+import { useOrdersContext } from '@/context/order'
 import { Team } from '@/interfaces'
 import { getRecords } from '@/lib/api'
 
