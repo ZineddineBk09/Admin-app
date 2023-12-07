@@ -13,7 +13,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { createRecord, getRecords } from '@/lib/api'
 import { Team } from '@/interfaces'
-import { useOrdersContext } from '@/context/order/OrdersContext'
+import { useOrdersContext } from '@/context/order'
 
 export const AddOrder = () => {
   const [visible, setVisible] = React.useState(false)
