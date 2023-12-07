@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { useMapContext } from '@/context/map/MapContext'
+import { useMapContext } from '@/context/map'
 
 export const DriverData = () => {
   const { drivers, selectedDriver, showDrivers } = useMapContext()
