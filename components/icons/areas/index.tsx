@@ -1,7 +1,7 @@
 import React from 'react'
 import { Svg } from '../../styles/svg'
 
-export const BinIcon = () => {
+export const BinIcon = ({ width }: { width?: number }) => {
   return (
     <Svg
       width='24'
@@ -9,6 +9,7 @@ export const BinIcon = () => {
       viewBox='0 0 24 25'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
+      className={width ? `w-${width}` : ''}
     >
       <path
         d='M22.3308 4.72754H1.50452'
