@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Box } from '../styles/box'
 import { RenderCell } from './render-orders-cell'
 import { ordersTableCols } from './data'
-import { useOrdersContext } from '@/context/order/OrdersContext'
+import { useOrdersContext } from '@/context/order'
 import { Sort } from '@/interfaces'
 
 export const OrdersTable = () => {
