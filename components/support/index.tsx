@@ -1,10 +1,13 @@
 import { useSupportContext } from '@/context/support/support-context'
+import { SupportTeamMember } from '@/interfaces'
 import React, { useEffect } from 'react'
+import { AttachmentIcon, EmojiIcon, SendIcon } from '../icons/support'
+import { Tooltip } from '@nextui-org/react'
 
 const SupportPage = () => {
   return (
-    <div className='w-full flex items-start justify-between'>
-      <div className='w-[300px]'></div>
+    <div className='w-full flex items-start justify-between overflow-y-hidden h-[92vh]'>
+      <SupportMembers />
       <Chat />
     </div>
   )
@@ -12,19 +15,19 @@ const SupportPage = () => {
 
 const Chat = () => {
   const messagesRef: any = React.useRef(null)
-  const { supportTeam } = useSupportContext()
+  const { selectedMember } = useSupportContext()
 
   useEffect(() => {
     messagesRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [])
   return (
-    <div className='w-[800px] flex-1 justify-between flex flex-col h-screen bg-chat-bg bg-gray-300 relative'>
+    <div className='w-[800px] flex-1 justify-between flex flex-col h-full bg-chat-bg bg-gray-400 relative'>
       <div
         id='messages'
         ref={messagesRef}
-        className='flex flex-col space-y-4 p-3 overflow-y-auto pb-32'
+        className='flex flex-col space-y-4 p-3 overflow-y-auto pb-36'
       >
-        {supportTeam[0]?.chats.map((message: any, index: number) => (
+        {selectedMember?.chats?.map((message: any, index: number) => (
           <div
             key={index}
             className={`flex items-end ${
@@ -39,7 +42,7 @@ const Chat = () => {
               <span className='text-xs'>12:00pm</span>
               <span
                 className={`px-4 py-2 rounded-md inline-block text-black shadow-md ${
-                  index % 2 === 0 ? 'bg-gray-100' : 'bg-[#59AFFF]'
+                  index % 2 === 0 ? 'bg-gray-200' : 'bg-[#59AFFF]'
                 }`}
               >
                 {message.text}
@@ -50,12 +53,12 @@ const Chat = () => {
       </div>
 
       {/* Message Section */}
-      <div className='border-t-2 border-gray-400 px-4 pt-4 mb-2 sm:mb-0 fixed bottom-0 w-[800px] mx-auto'>
+      <div className='z-10 px-4 pt-4 mb-2 sm:mb-0 absolute bottom-4 w-full mx-auto'>
         <div className='relative flex flex-col bg-gray-300 rounded-md'>
           <input
             type='text'
             placeholder='Write your message!'
-            className='w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-4 bg-gray-300 rounded-md py-3'
+            className='w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-4 bg-transparent rounded-md pt-4 pb-6'
           />
           <div className='w-full flex items-center justify-between'>
             <div>
@@ -63,58 +66,73 @@ const Chat = () => {
                 type='button'
                 className='inline-flex items-center justify-center rounded-full h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none'
               >
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                  className='h-6 w-6 text-gray-600'
-                >
-                  <path
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
-                    stroke-width='2'
-                    d='M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13'
-                  ></path>
-                </svg>
+                <Tooltip content='Attach a file' color='primary'>
+                  <AttachmentIcon />
+                </Tooltip>
               </button>
               <button
                 type='button'
                 className='inline-flex items-center justify-center rounded-full h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none'
               >
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                  className='h-6 w-6 text-gray-600'
-                >
-                  <path
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
-                    stroke-width='2'
-                    d='M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-                  ></path>
-                </svg>
+                <Tooltip content='Add an emoji' color='warning'>
+                  <EmojiIcon />
+                </Tooltip>
               </button>
             </div>
             <button
               type='button'
               className='px-4 py-3 text-gray-500 focus:outline-none'
             >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                viewBox='0 0 20 20'
-                fill='currentColor'
-                className='h-6 w-6 ml-2 transform rotate-90'
-              >
-                <path d='M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z'></path>
-              </svg>
+              <Tooltip content='Send' color='success'>
+                <SendIcon />
+              </Tooltip>
             </button>
           </div>
         </div>
       </div>
+      <div className='absolute bottom-0 w-full bg-gradient-to-b from-gray-400/10 to-gray-400/100 inset-x-0 h-36 -z-1'/>
     </div>
+  )
+}
+
+const SupportMembers = () => {
+  const { supportTeam, selectedMember, handleSelectMember } =
+    useSupportContext()
+
+  return (
+    <ul className='w-[300px] h-full list-none bg-gray-200 min-h-full !overflow-y-scroll'>
+      {supportTeam.map(
+        ({ id, name, unread }: SupportTeamMember, index: number) => (
+          <li
+            className='px-4 border-b border-gray-300 relative cursor-pointer'
+            key={index}
+            onClick={() => handleSelectMember(id)}
+          >
+            <div className='flex items-center justify-between relative py-3'>
+              <span
+                className={`${
+                  selectedMember.id === id
+                    ? 'text-black font-bold'
+                    : 'text-gray-400 font-medium'
+                }`}
+              >
+                {name}
+              </span>
+              {unread > 0 ? (
+                <span className='h-6 w-6 flex items-center justify-center text-center text-white font-bold text-xs bg-red-500 rounded-full'>
+                  {unread}
+                </span>
+              ) : (
+                <span className='h-6 w-6' />
+              )}
+            </div>
+            {selectedMember.id === id && (
+              <div className='absolute w-3 h-full top-0 right-0 bg-primary transition-all duration-300' />
+            )}
+          </li>
+        )
+      )}
+    </ul>
   )
 }
 
