@@ -1,5 +1,5 @@
 import Governorates from '@/components/areas/governorates'
-import { AreasGovernoratesContextProvider } from '@/context/areas/GovernoratesContext'
+import { AreasGovernoratesContextProvider } from '@/context/areas/governorates'
 import { NextPage } from 'next'
 import React from 'react'
 
