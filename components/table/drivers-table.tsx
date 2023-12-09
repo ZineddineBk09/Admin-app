@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Box } from '../styles/box'
 import { RenderCell } from './render-drivers-cell'
 import { driversTableCols } from './data'
-import { useDriversContext } from '@/context/driver/DriversContext'
+import { useDriversContext } from '@/context/driver'
 import { Sort } from '@/interfaces'
 
 export const DriversTable = () => {
