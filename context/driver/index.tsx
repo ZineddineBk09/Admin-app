@@ -1,4 +1,4 @@
-import { Driver, Sort } from '@/interfaces'
+import { Driver, DriverTeam, Sort } from '@/interfaces'
 import { getRecords } from '@/lib/api'
 import { searchDrivers } from '@/lib/search'
 import { faker } from '@faker-js/faker'
@@ -6,7 +6,19 @@ import React, { useEffect, useState } from 'react'
 
 export const DriversContext = React.createContext({})
 
-export const useDriversContext: any = () => React.useContext(DriversContext)
+export const useDriversContext: {
+  (): {
+    drivers: Driver[]
+    teams: DriverTeam[]
+    loading: boolean
+    handleSearchDrivers: (search: string) => void
+    handleSortDrivers: (sort: Sort) => void
+    handleSelectTeam: (team: string) => void
+    handleSelectStatus: (status: string) => void
+    refreshDrivers: () => Promise<void>
+    refreshDriverTeams: () => Promise<void>
+  }
+} = () => React.useContext(DriversContext as any)
 
 export const DriversContextProvider = ({
   children,
@@ -14,6 +26,7 @@ export const DriversContextProvider = ({
   children: React.ReactNode
 }) => {
   const [drivers, setDrivers] = useState<Driver[]>([] as Driver[])
+  const [teams, setTeams] = useState<DriverTeam[]>([] as DriverTeam[])
   const [loading, setLoading] = useState(false)
 
   const refreshDrivers = async () => {
@@ -54,6 +67,30 @@ export const DriversContextProvider = ({
     )
     setLoading(false)
     // setDrivers(drivers)
+  }
+
+  const refreshDriverTeams = async () => {
+    const records: DriverTeam[] = Array.from({ length: 10 }, (_, i) => ({
+      id: i,
+      name: 'Team ' + i,
+      members: Array.from({ length: 3 }, (_, i) => ({
+        id: i,
+        name: faker.person.fullName(),
+      })),
+      supervisor: {
+        id: i,
+        name: faker.person.fullName(),
+      },
+      fixed: faker.number.int({ min: 5, max: 100 }),
+      pricePerKm: faker.number.int({ min: 5, max: 100 }),
+      additional: faker.number.int({ min: 5, max: 100 }),
+      maxDistance: faker.number.int({ min: 5, max: 100 }),
+      areas: Array.from({ length: 3 }, (_, i) => 'area ' + i),
+      city: faker.location.city(),
+      country: faker.location.country(),
+    }))
+    console.log(records)
+    setTeams(records)
   }
 
   const handleSearchDrivers = (search: string) => {
@@ -102,19 +139,22 @@ export const DriversContextProvider = ({
   }
 
   useEffect(() => {
-    refreshDrivers()
+    // refreshDrivers()
+    refreshDriverTeams()
   }, [])
 
   return (
     <DriversContext.Provider
       value={{
         drivers,
+        teams,
         loading,
         handleSearchDrivers,
         handleSortDrivers,
         handleSelectTeam,
         handleSelectStatus,
         refreshDrivers,
+        refreshDriverTeams,
       }}
     >
       {children}
