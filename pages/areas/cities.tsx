@@ -1,5 +1,5 @@
 import Cities from '@/components/areas/cities'
-import { AreasCitiesContextProvider } from '@/context/areas/CitiesContext'
+import { AreasCitiesContextProvider } from '@/context/areas/cities'
 import { NextPage } from 'next'
 import React from 'react'
 
