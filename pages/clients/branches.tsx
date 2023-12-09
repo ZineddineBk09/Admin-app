@@ -1,5 +1,5 @@
 import Branches from '@/components/clients/branches'
-import { ClientsBranchesContextProvider } from '@/context/clients/BranchesContext'
+import { ClientsBranchesContextProvider } from '@/context/clients/branches'
 import { NextPage } from 'next'
 import React from 'react'
 
