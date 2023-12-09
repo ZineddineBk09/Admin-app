@@ -1,7 +1,7 @@
 import React from 'react'
 import { RenderCell } from './render-reports-cell'
 import { reportsTableCols } from './data'
-import { useReportsContext } from '@/context/report/ReportsContext'
+import { useReportsContext } from '@/context/report'
 
 export const ReportsTable = () => {
   const { reports } = useReportsContext()
