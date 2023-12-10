@@ -254,7 +254,7 @@ export const AddDriver = () => {
                       onChange={formik.handleChange}
                     >
                       <option value=''>Select Team</option>
-                      {teams.map((team: Team, index: number) => (
+                      {teams?.map((team: Team, index: number) => (
                         <option key={index} value={team.pk}>
                           {team.fields.name}
                         </option>
