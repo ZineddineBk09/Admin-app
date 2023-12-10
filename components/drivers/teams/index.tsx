@@ -2,7 +2,6 @@ import { DriverTeam } from '@/interfaces'
 import { Divider, Tooltip } from '@nextui-org/react'
 import React from 'react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import Link from 'next/link'
 import { AddDriverTeam } from './add-team'
 import { DeleteDriverTeam } from './delete-team'
 import { useDriversContext } from '@/context/driver'
@@ -15,7 +14,7 @@ const DriversTeams = () => {
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <SearchAccount />
       <div className='w-full flex flex-col items-center gap-y-6'>
-        {teams.map((team) => (
+        {teams?.map((team) => (
           <DriverTeamCard key={team.id} team={team} />
         ))}
       </div>
@@ -102,7 +101,7 @@ const DriverTeamCard = ({ team }: { team: DriverTeam }) => {
 
           {/* Fixed, Price, ... */}
           <div className='w-full flex flex-col gap-y-3 items-center lg:flex-row'>
-            {fields.map(({ name, id, defaultValue }: any, index: number) => (
+            {fields?.map(({ name, id, defaultValue }: any, index: number) => (
               <>
                 <div key={index} className='w-full flex items-center gap-x-6'>
                   <label className='text-gray-600 text-sm w-32 lg:w-fit'>
@@ -133,53 +132,30 @@ const DriverTeamCard = ({ team }: { team: DriverTeam }) => {
           <div className='w-full flex items-start gap-x-6'>
             <label className='mt-2 text-gray-600 text-sm'>Members</label>
             {members.length > 0 ? (
-              <div className='w-full flex flex-col items-start gap-y-2'>
-                {members.map((member: any, index: number) => (
+              <div className='w-full flex items-start gap-y-2'>
+                {members?.map((member: any, index: number) => (
                   <div key={index}>
                     <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
-                      <label className='text-gray-600 text-sm'>
+                      {/* <label className='text-gray-600 text-sm'>
                         Member #{index + 1}
-                      </label>
+                      </label> */}
                       <p className='text-sm'>
                         {member.name}{' '}
-                        <span className='ml-6 text-sm text-gray-400'>
+                        {/* <span className='ml-6 text-sm text-gray-400'>
                           #{member.id}
-                        </span>
+                        </span> */}
                       </p>
-                      <BinIcon width={4} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className='text-sm'>No memberes found</p>
-            )}
-          
-            <Tooltip content='Add Area'>
-              <button className='h-10 w-10 flex items-center justify-center text-center text-4xl font-medium rounded-full'>
-                +
-              </button>
-            </Tooltip>
-          </div>
-          <Divider></Divider>
-          {/* Areas */}
-          <div className='w-full flex items-start gap-x-6'>
-            <label className='mt-2 text-gray-600 text-sm'>Areas</label>
-            {areas.length > 0 ? (
-              <div className='w-full flex flex-col items-start gap-y-2'>
-                {areas.map((area: any, index: number) => (
-                  <div key={index}>
-                    <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
-                      <label className='text-gray-600 text-sm'>
-                        Area #{index + 1}
-                      </label>
-                      <p className='text-sm'>
-                        {area.name}{' '}
-                        <span className='ml-6 text-sm text-gray-400'>
-                          #{index}
-                        </span>
-                      </p>
-                      <BinIcon width={4} />
+                      <Tooltip
+                        content={'Delete "' + member.name + '"'}
+                        color='error'
+                      >
+                        <button>
+                          <BinIcon width={4} />
+                        </button>
+                      </Tooltip>
+                      {index < members.length - 1 && (
+                        <span className='-ml-4'>,</span>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -189,7 +165,47 @@ const DriverTeamCard = ({ team }: { team: DriverTeam }) => {
             )}
 
             <Tooltip content='Add Member'>
-              <button className='h-10 w-10 flex items-center justify-center text-center text-4xl font-medium rounded-full'>
+              <button className='h-10 w-16 flex items-center justify-center text-center text-4xl font-medium rounded-full'>
+                +
+              </button>
+            </Tooltip>
+          </div>
+          <Divider></Divider>
+          {/* Areas */}
+          <div className='w-full flex items-start gap-x-6'>
+            <label className='mt-2 text-gray-600 text-sm'>Areas</label>
+            {areas.length > 0 ? (
+              <div className='w-full flex items-start gap-y-2'>
+                {areas?.map((area: any, index: number) => (
+                  <div key={index}>
+                    <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
+                      {/* <label className='text-gray-600 text-sm'>
+                        Area #{index + 1}
+                      </label> */}
+                      <p className='text-sm capitalize'>
+                        {area}{' '}
+                        {/* <span className='ml-6 text-sm text-gray-400'>
+                          #{index}
+                        </span> */}
+                      </p>
+                      <Tooltip content={'Delete "' + area + '"'} color='error'>
+                        <button>
+                          <BinIcon width={4} />
+                        </button>
+                      </Tooltip>
+                      {index < areas.length - 1 && (
+                        <span className='-ml-4'>,</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className='text-sm'>No areas found</p>
+            )}
+
+            <Tooltip content='Add Area'>
+              <button className='h-10 w-16 flex items-center justify-center text-center text-4xl font-medium rounded-full'>
                 +
               </button>
             </Tooltip>
