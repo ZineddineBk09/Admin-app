@@ -1,4 +1,4 @@
-import { Account, Branch, Driver, Governorate } from '@/interfaces'
+import { Account, Branch, Driver, Order } from '@/interfaces'
 import Fuse from 'fuse.js'
 
 const options = {
@@ -23,16 +23,16 @@ export const searchAccounts = (list: Account[], pattern: string) => {
     keys: ['name', 'city', 'phone', 'website'],
   })
 
-  return fuse.search(pattern).map((item) => item.item)
+  return fuse.search(pattern)?.map((item) => item.item)
 }
 
-export const searchOrders = (list: any[], pattern: string) => {
+export const searchOrders = (list: Order[], pattern: string) => {
   const fuse = new Fuse(list, {
     ...options,
-    keys: ['name', 'email', 'phone', 'emirate', 'area', 'location'],
+    keys: ['clientName', 'driverName', 'id', 'phone', 'address'],
   })
 
-  return fuse.search(pattern).map((item) => item.item)
+  return fuse.search(pattern)?.map((item) => item.item)
 }
 
 export const searchBranches = (list: Branch[], pattern: string) => {
@@ -49,7 +49,7 @@ export const searchBranches = (list: Branch[], pattern: string) => {
     ],
   })
 
-  return fuse.search(pattern).map((item) => item.item)
+  return fuse.search(pattern)?.map((item) => item.item)
 }
 
 export const searchDrivers = (list: Driver[], pattern: string) => {
@@ -58,7 +58,7 @@ export const searchDrivers = (list: Driver[], pattern: string) => {
     keys: ['username', 'email', 'team', 'phone'],
   })
 
-  return fuse.search(pattern).map((item) => item.item)
+  return fuse.search(pattern)?.map((item) => item.item)
 }
 
 export const searchReports = (list: any[], pattern: string) => {
@@ -67,5 +67,5 @@ export const searchReports = (list: any[], pattern: string) => {
     keys: ['id', 'clientEmail', 'clientPhone', 'client'],
   })
 
-  return fuse.search(pattern).map((item) => item.item)
+  return fuse.search(pattern)?.map((item) => item.item)
 }
