@@ -46,7 +46,7 @@ const DriversTypes = () => {
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <SearchTypes />
       <div className='w-full flex flex-col items-center gap-y-6'>
-        {types.map((type) => (
+        {types?.map((type) => (
           <CountryCard key={type.id} type={type} />
         ))}
       </div>
@@ -122,7 +122,7 @@ const CountryCard = ({ type }: { type: DriverType }) => {
       <div className='w-full flex flex-col gap-y-3 items-center lg:flex-row'>
         {showInfos && (
           <>
-            {fields.map(({ name, id, defaultValue }: any, index: number) => (
+            {fields?.map(({ name, id, defaultValue }: any, index: number) => (
               <>
                 <div key={index} className='w-full flex items-center gap-x-6'>
                   <label className='text-gray-600 text-sm w-32 lg:w-fit'>
