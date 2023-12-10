@@ -84,7 +84,7 @@ export const AddOrder = () => {
       const uniqueTeams = await getRecords('team').then((res: any) => res.teams)
       setTeams(uniqueTeams)
     }
-    fetchTeams()
+    //fetchTeams()
   }, [])
 
   return (
@@ -254,7 +254,7 @@ export const AddOrder = () => {
                       onChange={formik.handleChange}
                     >
                       <option value=''>Select Team</option>
-                      {teams.map((team: Team, index: number) => (
+                      {teams?.map((team: Team, index: number) => (
                         <option key={index} value={team.pk}>
                           {team.fields.name}
                         </option>
