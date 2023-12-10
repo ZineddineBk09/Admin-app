@@ -2,10 +2,13 @@ import { Text, Loading } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../styles/flex'
 import { OrdersTable } from '../table/orders-table'
-import { AddOrder } from './add-order'
+const AddOrder = dynamic(() =>
+  import('./add-order').then((mod) => mod.AddOrder)
+)
 import { useOrdersContext } from '@/context/order'
 import { Team } from '@/interfaces'
 import { getRecords } from '@/lib/api'
+import dynamic from 'next/dynamic'
 
 export const OrdersPage = () => {
   const { orders, loading } = useOrdersContext()
