@@ -111,7 +111,7 @@ export const EditOrder = ({ order }: { order: Order }) => {
                 className='text-xl font-semibold uppercase'
                 h4
               >
-                Update order
+                Edit order
               </Text>
             </Modal.Header>
             <Divider css={{ my: '$5' }} />
@@ -249,7 +249,7 @@ export const EditOrder = ({ order }: { order: Order }) => {
                       onChange={formik.handleChange}
                     >
                       <option value=''>Select Team</option>
-                      {teams.map((team: Team, index: number) => (
+                      {teams?.map((team: Team, index: number) => (
                         <option key={index} value={team.pk}>
                           {team.fields.name}
                         </option>
@@ -324,7 +324,7 @@ export const EditOrder = ({ order }: { order: Order }) => {
             <Divider css={{ my: '$5' }} />
             <Modal.Footer>
               <Button auto type='submit' className='bg-primary text-black'>
-                Update Order
+                Edit Order
               </Button>
             </Modal.Footer>
           </form>
