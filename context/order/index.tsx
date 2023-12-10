@@ -113,6 +113,25 @@ export const OrdersContextProvider = ({
     setOrders(filteredOrders)
   }
 
+  const handleSelectDate = ({
+    dateFrom,
+    dateTo,
+  }: {
+    dateFrom: Date
+    dateTo: Date
+  }) => {
+    if (dateFrom === null || dateTo === null) {
+      refreshOrders()
+      return
+    }
+    const filteredOrders = orders.filter(
+      (order) =>
+        new Date(order.date).getTime() >= dateFrom.getTime() &&
+        new Date(order.date).getTime() <= dateTo.getTime()
+    )
+    setOrders(filteredOrders)
+  }
+
   useEffect(() => {
     refreshOrders()
   }, [])
