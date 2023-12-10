@@ -88,7 +88,7 @@ export const SearchAndFilter = () => {
           onChange={(e) => handleSelectTeam(e.target.value)}
         >
           <option value=''>Select Team All</option>
-          {teams.map((team: Team, index: number) => (
+          {teams?.map((team: Team, index: number) => (
             <option key={index} value={team.pk}>
               {team.fields.name}
             </option>
