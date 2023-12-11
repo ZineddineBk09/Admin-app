@@ -18,7 +18,6 @@ export const DeleteCountry = ({ id }: { id: string }) => {
     // closeHandler()
     // setLoading(false)
     // refreshCountrys()
-    console.log('delete room')
     setLoading(false)
     closeHandler()
   }
