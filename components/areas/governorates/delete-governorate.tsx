@@ -18,7 +18,6 @@ export const DeleteGovernorate = ({ id }: { id: string }) => {
     // closeHandler()
     // setLoading(false)
     // refreshGovernorates()
-    console.log('delete room')
     setLoading(false)
     closeHandler()
   }
