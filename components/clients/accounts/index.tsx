@@ -15,7 +15,7 @@ const Accounts = () => {
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <SearchAccount />
       <div className='w-full flex flex-col items-center gap-y-6'>
-        {accounts.map((account: Account) => (
+        {accounts?.map((account: Account) => (
           <AccountCard key={account.id} account={account} />
         ))}
       </div>
@@ -76,7 +76,7 @@ const AccountCard = ({ account }: { account: Account }) => {
             <p className='text-sm'>{city}</p>
           </div>
           <Divider></Divider>
-          {fields.map(({ name, id, defaultValue }: any, index: number) => (
+          {fields?.map(({ name, id, defaultValue }: any, index: number) => (
             <>
               <div key={index} className='w-full flex items-center gap-x-6'>
                 <label className='text-gray-600 text-sm'>{name}</label>
@@ -100,7 +100,7 @@ const AccountCard = ({ account }: { account: Account }) => {
             <label className='mt-2 text-gray-600 text-sm'>Branches</label>
             {branches.length > 0 ? (
               <div className='w-full flex flex-col items-start gap-y-2'>
-                {branches.map(
+                {branches?.map(
                   (branch: { id: string; name: string }, index: number) => (
                     <div key={index}>
                       <Link
