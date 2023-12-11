@@ -19,7 +19,6 @@ export const DeleteAccount = ({ id }: { id: string }) => {
     // closeHandler()
     // setLoading(false)
     // refreshAccounts()
-    console.log('delete room')
     setLoading(false)
     closeHandler()
   }
