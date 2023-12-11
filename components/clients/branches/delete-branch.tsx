@@ -19,7 +19,6 @@ export const DeleteBranch = ({ id }: { id: string }) => {
     // closeHandler()
     // setLoading(false)
     // refreshBranchs()
-    console.log('delete room')
     setLoading(false)
     closeHandler()
   }
