@@ -47,7 +47,6 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
     }),
     onSubmit: async (values) => {
       setLoading(true)
-      console.log('errors: ', formik.errors)
       const response = await updateRecord(
         {
           id: driver.id,
@@ -55,7 +54,6 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
         },
         'driver'
       )
-      console.log('response: ', response)
       setVisible(false)
       setLoading(false)
       // if (response.status) {
@@ -70,11 +68,9 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
 
   const closeHandler = () => {
     setVisible(false)
-    console.log('closed')
   }
 
   React.useEffect(() => {
-    console.log('driver: ', driver)
     //set formik values
     formik.setValues({ ...(driver as any) })
 
