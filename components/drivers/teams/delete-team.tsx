@@ -18,7 +18,6 @@ export const DeleteDriverTeam = ({ id }: { id: number }) => {
     // closeHandler()
     // setLoading(false)
     // refreshDriverTeams()
-    console.log('delete room')
     setLoading(false)
     closeHandler()
   }
