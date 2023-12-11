@@ -123,8 +123,8 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
 
             <Divider></Divider>
             {fields
-              .filter(({ hidden }: any) => !hidden)
-              .map((field, index: number) => {
+              ?.filter(({ hidden }: any) => !hidden)
+              ?.map((field, index: number) => {
                 const { name, id, defaultValue, fees, includeNextField }: any =
                   field
                 return (
@@ -227,7 +227,7 @@ export const SearchBranch = () => {
             className='w-full h-full bg-transparent '
           >
             <option value=''>All</option>
-            {countries.map((country: string, index: number) => (
+            {countries?.map((country: string, index: number) => (
               <option key={index} value={country}>
                 {country}
               </option>
@@ -245,7 +245,7 @@ export const SearchBranch = () => {
             className='w-full h-full bg-transparent '
           >
             <option value=''>All</option>
-            {clientAccounts.map((clientAccount: string, index: number) => (
+            {clientAccounts?.map((clientAccount: string, index: number) => (
               <option key={index} value={clientAccount}>
                 {clientAccount}
               </option>
