@@ -18,7 +18,6 @@ export const DeleteDriverType = ({ id }: { id: number }) => {
     // closeHandler()
     // setLoading(false)
     // refreshDriverTypes()
-    console.log('delete room')
     setLoading(false)
     closeHandler()
   }
