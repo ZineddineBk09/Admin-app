@@ -14,7 +14,7 @@ const Governorates = () => {
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <SearchGovernorate />
       <div className='w-full flex flex-col items-center gap-y-6'>
-        {governorates.map((governorate: Governorate) => (
+        {governorates?.map((governorate: Governorate) => (
           <GovernorateCard key={governorate.id} governorate={governorate} />
         ))}
       </div>
@@ -60,7 +60,7 @@ const GovernorateCard = ({ governorate }: { governorate: Governorate }) => {
       {showInfos && (
         <>
           <Divider></Divider>
-          {fields.map(({ name, id, defaultValue }: any, index: number) => (
+          {fields?.map(({ name, id, defaultValue }: any, index: number) => (
             <>
               <div key={index} className='w-full flex items-center gap-x-6'>
                 <label className='text-gray-600 text-sm'>{name}</label>
@@ -97,7 +97,7 @@ const SearchGovernorate = () => {
           className='w-full h-full bg-transparent '
         >
           <option value=''>All</option>
-          {countries.map((country: string, index: number) => (
+          {countries?.map((country: string, index: number) => (
             <option key={index} value={country}>
               {country}
             </option>
