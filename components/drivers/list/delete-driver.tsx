@@ -21,13 +21,11 @@ export const DeleteDriver = ({
 
   const closeHandler = () => {
     setVisible(false)
-    console.log('closed')
   }
 
   const handleDelete = async () => {
     setLoading(true)
     await deleteRecord(id, 'driver')
-    console.log('deleted: ', id)
     closeHandler()
     setLoading(false)
     refreshDrivers()
