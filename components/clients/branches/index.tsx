@@ -26,7 +26,7 @@ const Branches = () => {
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <SearchBranch />
       <div className='w-full flex flex-col items-center gap-y-6'>
-        {branches.map((branch: Branch, index: number) => (
+        {branches?.map((branch: Branch, index: number) => (
           <BranchCard key={index} branch={branch} />
         ))}
       </div>
