@@ -64,7 +64,7 @@ export const CityCard = ({ city }: { city: City }) => {
         {showInfos && (
           <>
             <Divider></Divider>
-            {fields.map(({ name, id, defaultValue }: any, index: number) => (
+            {fields?.map(({ name, id, defaultValue }: any, index: number) => (
               <>
                 <div key={index} className='w-full flex items-center gap-x-6'>
                   <label className='text-gray-600 text-sm'>{name}</label>
@@ -113,7 +113,7 @@ export const SearchCity = () => {
           className='w-full h-full bg-transparent '
         >
           <option value=''>All</option>
-          {countries.map((country: string, index: number) => (
+          {countries?.map((country: string, index: number) => (
             <option key={index} value={country}>
               {country}
             </option>
