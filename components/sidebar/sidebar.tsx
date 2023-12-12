@@ -167,7 +167,7 @@ export const SidebarWrapper = () => {
         </Sidebar.Header>
         <Flex direction={'column'} justify={'between'} css={{ height: '100%' }}>
           <Sidebar.Body className='w-full'>
-            {sidebarLinks.map((link, index) => (
+            {sidebarLinks?.map((link, index) => (
               <div key={index}>
                 {link.subLinks.length > 0 ? (
                   <CollapseItems
