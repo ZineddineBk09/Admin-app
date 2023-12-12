@@ -47,7 +47,6 @@ export const EditOrder = ({ order }: { order: Order }) => {
     }),
     onSubmit: async (values) => {
       setLoading(true)
-      console.log('errors: ', formik.errors)
       const response = await updateRecord(
         {
           id: order.id,
@@ -55,7 +54,6 @@ export const EditOrder = ({ order }: { order: Order }) => {
         },
         'order'
       )
-      console.log('response: ', response)
       setVisible(false)
       setLoading(false)
       // if (response.status) {
@@ -70,11 +68,9 @@ export const EditOrder = ({ order }: { order: Order }) => {
 
   const closeHandler = () => {
     setVisible(false)
-    console.log('closed')
   }
 
   React.useEffect(() => {
-    console.log('order: ', order)
     //set formik values
     formik.setValues({ ...(order as any) })
 
