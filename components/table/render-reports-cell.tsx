@@ -1,6 +1,7 @@
 import { Checkbox, Col, Row, User } from '@nextui-org/react'
 import React from 'react'
 import { Order } from '@/interfaces'
+import { MakePayment } from '../reports/payment'
 
 interface Props {
   order: Order | any
@@ -48,9 +49,7 @@ export const RenderCell = ({ order, columnKey }: Props) => {
       return <p className='text-gray-600 text-sm'>{cellValue.join(', ')}</p>
 
     case 'actions':
-      return (
-        <button>Make Payment</button>
-      )
+      return <MakePayment id={1} />
     default:
       return <p className='text-gray-600 text-sm'>{cellValue}</p>
   }
