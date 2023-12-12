@@ -83,6 +83,7 @@ export default NextAuth({
               accessToken: access,
               refreshToken: refresh,
             }
+
             return token
           } else {
             throw new Error('Invalid credentials')
@@ -96,9 +97,10 @@ export default NextAuth({
   callbacks: {
     async jwt({ token, user }: any) {
       console.log('JWT callback')
-      console.log(token)
+      console.log('token:', token)
 
       if (user) {
+        console.log('user', user)
         token.accessToken = user.accessToken
         token.refreshToken = user.refreshToken
         token.username = user.user.username
@@ -108,8 +110,6 @@ export default NextAuth({
     },
     async session({ session, token }: any) {
       console.log('Session callback')
-      console.log(session)
-      console.log(token)
       session.accessToken = token.accessToken
       session.refreshToken = token.refreshToken
       session.user.username = token.username
@@ -120,6 +120,7 @@ export default NextAuth({
         'Valid till: ' + new Date(session.exp * 1000).toLocaleString()
       )
 
+      console.log(session)
       return session
     },
   },
