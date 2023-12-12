@@ -33,9 +33,7 @@ const LoginForm = () => {
           password: values.password,
           redirect: false,
         })
-        console.log('signin ', signin)
         if (signin?.status === 200) {
-          console.log('signin ', signin)
           router.push('/dashboard')
         } else {
           setError('username or password incorrect, please try again')
