@@ -88,7 +88,7 @@ export const CollapseItems = ({
         showArrow={subLinks.length > 0}
         expanded={open}
       >
-        {subLinks.map(({ title, href, isActive }: any, index: number) => (
+        {subLinks?.map(({ title, href, isActive }: any, index: number) => (
           <div className='pl-8' key={index}>
             <SubItem
               key={index}
