@@ -125,7 +125,7 @@ const Tabs = () => {
 
   return (
     <ul className='flex -mb-3 list-none flex-wrap flex-row' role='tablist'>
-      {tabs.map((tab: any, index: number) => (
+      {tabs?.map((tab: any, index: number) => (
         <li className='flex-auto text-center' key={index}>
           <a
             className={
