@@ -6,7 +6,6 @@ import { useSession } from 'next-auth/react'
 
 const CheckAuthGuard = ({ children }: { children: React.ReactNode }): any => {
   const { data: session, status } = useSession()
-  console.log(session, status)
 
   const router = useRouter()
   const path = useRouter().pathname.split('/')[1]
