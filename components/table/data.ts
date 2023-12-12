@@ -41,3 +41,14 @@ export const reportsTableCols = [
   { name: 'Unpaid', uid: 'unpaid' },
   { name: 'Actions', uid: 'actions' },
 ]
+
+export const paymentTableCols = [
+  { name: 'Order No', uid: 'id' },
+  { name: 'Date', uid: 'date' },
+  { name: 'Time', uid: 'time' },
+  { name: 'Driver', uid: 'driver' },
+  { name: 'Distance', uid: 'distance' },
+  { name: 'City', uid: 'city' },
+  { name: 'Value', uid: 'value' },
+]
+
