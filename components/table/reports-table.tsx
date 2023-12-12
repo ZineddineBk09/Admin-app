@@ -14,7 +14,7 @@ export const ReportsTable = () => {
             <table className='min-w-full text-left text-sm font-light'>
               <thead className='border-b font-medium border-gray-300'>
                 <tr>
-                  {reportsTableCols.map((col) => (
+                  {reportsTableCols?.map((col) => (
                     <th key={col.uid} scope='col' className='px-6 py-4'>
                       {col.name === 'Actions' ? '' : col.name}
                     </th>
@@ -22,14 +22,14 @@ export const ReportsTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {reports.map((order: any, index: number) => (
+                {reports?.map((order: any, index: number) => (
                   <tr
                     key={order.id}
                     // make table striped by adding bg-gray-50 to odd rows
                     className={`border-b transition duration-200 ease-in-out bg-gray-200 hover:bg-yellow-100 
                     `}
                   >
-                    {reportsTableCols.map((col) => (
+                    {reportsTableCols?.map((col) => (
                       <td
                         key={col.uid}
                         className={`whitespace-nowrap px-6 py-4 font-medium border-gray-300 ${
