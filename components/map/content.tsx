@@ -8,7 +8,7 @@ const Map = dynamic(() => import('./map'), { ssr: false })
 
 export const Content = () => {
   const { showOrders, openTab } = useMapContext()
-  const { drivers, orders } = useMapContext()
+  const { drivers } = useMapContext()
 
   return (
     <div className='w-full grid grid-cols-1 gap-x-2 h-[100vh] lg:grid-cols-4'>
@@ -20,7 +20,7 @@ export const Content = () => {
       >
         {/* Map */}
         <div className='w-full h-full rounded-xl relative'>
-          <Map drivers={drivers} />
+          <Map />
         </div>
 
         {/* Driver & Order Infos */}
