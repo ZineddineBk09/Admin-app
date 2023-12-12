@@ -104,12 +104,12 @@ const Orders = ({ orders, orderStatus }: { orders: any; orderStatus: any }) => {
     <div className='w-full h-full flex flex-col items-center gap-y-3 overflow-y-auto'>
       {/* Render filtere */}
       {orders
-        .filter((order: any) =>
+        ?.filter((order: any) =>
           orderStatus.some(
             (status: any) => status.value === order.status && status.checked
           )
         )
-        .map((order: any) => (
+        ?.map((order: any) => (
           <OrderCard key={order.id} order={order} />
         ))}
     </div>
@@ -140,7 +140,6 @@ const OrderCard = ({ order }: { order: any }) => {
   const [selected, setSelected] = useState(false)
 
   useEffect(() => {
-    console.log('selectedOrder', selectedOrder)
     if (selectedOrder === order.id) setSelected(true)
     else setSelected(false)
   }, [selectedOrder])
@@ -232,13 +231,13 @@ const Drivers = ({
   return (
     <div className='w-full h-full flex flex-col items-center gap-y-3 overflow-y-auto px-2'>
       {drivers
-        .slice(0, drivers.length / 2)
-        .filter((dr: any) =>
+        ?.slice(0, drivers.length / 2)
+        ?.filter((dr: any) =>
           driverStatus.some(
             (status: any) => status.value === dr.status && status.checked
           )
         )
-        .map((driver: any) => (
+        ?.map((driver: any) => (
           <DriverCard key={driver.id} driver={driver} />
         ))}
     </div>
@@ -251,7 +250,6 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
   const [selected, setSelected] = useState(false)
 
   useEffect(() => {
-    console.log('selectedDriver', selectedDriver)
     if (selectedDriver === driver.id) setSelected(true)
     else setSelected(false)
   }, [selectedDriver])
