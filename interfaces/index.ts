@@ -45,6 +45,9 @@ export interface Driver {
   isActive: boolean
   isStaff: boolean
   code: string
+  areas: string[]
+  salary: number
+  city: string
 }
 
 export interface DriverType {
