@@ -76,7 +76,6 @@ export const AddOrder = () => {
 
   const closeHandler = () => {
     setVisible(false)
-    console.log('closed')
   }
 
   React.useEffect(() => {
