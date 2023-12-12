@@ -1,6 +1,6 @@
 import { Checkbox, Col, Row, User } from '@nextui-org/react'
 import React from 'react'
-import { DeleteOrder } from '../orders/delete-order'
+import { CancelOrder } from '../orders/cancel-order'
 import { EditOrder } from '../orders/edit-order'
 import { Order } from '@/interfaces'
 
@@ -88,7 +88,7 @@ export const RenderCell = ({ order, columnKey }: Props) => {
             <EditOrder order={order} />
           </Col>
           <Col css={{ d: 'flex' }}>
-            <DeleteOrder id={order.id} />
+            <CancelOrder id={order.id} />
           </Col>
         </Row>
       )
