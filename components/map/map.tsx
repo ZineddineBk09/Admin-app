@@ -9,6 +9,7 @@ import * as L from 'leaflet'
 import { MapPinIcon } from '../icons/map'
 import { Driver } from '@/interfaces'
 import { getDriversInArea } from '@/lib/api/map'
+import { useMapContext } from '@/context/map'
 
 // create a custom icon with L.divIcon and reactDOM.renderToString
 const icon = (image?: string, symbol?: string) =>
@@ -26,8 +27,9 @@ const icon = (image?: string, symbol?: string) =>
     className: 'leaflet-icon',
   })
 
-const Map = ({ drivers }: { drivers: Driver[] }) => {
+const Map = () => {
   const [map, setMap] = useState<any>(null)
+  const { drivers, setDrivers } = useMapContext()
 
   // add an event listener on map: load, move, zoom, etc.
   useEffect(() => {
@@ -39,21 +41,84 @@ const Map = ({ drivers }: { drivers: Driver[] }) => {
         .toBBoxString()
         .split(',')
 
-      console.log('bbox:', {
+      const records = await getDriversInArea({
         min_lat,
         min_lng,
         max_lat,
         max_lng,
       })
 
-      const drivers = await getDriversInArea({
-        min_lat,
-        min_lng,
-        max_lat,
-        max_lng,
-      })
-      console.log('drivers', drivers)
+      if (!records) return
+      setDrivers(
+        records.map((record: any) => {
+          return {
+            id: record.pk,
+            username: record.fields.username,
+            email: record.fields.email,
+            team: record.fields.team_id,
+            completedTasks: record.fields.completed_tasks,
+            inProgressTasks: record.fields.in_progress_tasks,
+            warnings: record.fields.warnings,
+            activeHours: record.fields.active_hours,
+            image: record.fields.image,
+            status: record.fields.status,
+            location: {
+              latitude: record.location.latitude,
+              longitude: record.location.longitude,
+            },
+            orders: record.fields.orders,
+            phone: record.fields.phone_number,
+          }
+        })
+      )
     })
+  }, [map])
+
+  const fetchDriversEachInterval = async () => {
+    const [min_lat, min_lng, max_lat, max_lng] = map
+      .getBounds()
+      .toBBoxString()
+      .split(',')
+
+    const records = await getDriversInArea({
+      min_lat,
+      min_lng,
+      max_lat,
+      max_lng,
+    })
+
+    if (!records) return
+    setDrivers(
+      records.map((record: any) => {
+        return {
+          id: record.pk,
+          username: record.fields.username,
+          email: record.fields.email,
+          team: record.fields.team_id,
+          completedTasks: record.fields.completed_tasks,
+          inProgressTasks: record.fields.in_progress_tasks,
+          warnings: record.fields.warnings,
+          activeHours: record.fields.active_hours,
+          image: record.fields.image,
+          status: record.fields.status,
+          location: {
+            latitude: record.location.latitude,
+            longitude: record.location.longitude,
+          },
+          orders: record.fields.orders,
+          phone: record.fields.phone_number,
+        }
+      })
+    )
+  }
+
+  // launch fetchDriversEachInterval every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!map) return
+      fetchDriversEachInterval()
+    }, 2000)
+    return () => clearInterval(interval)
   }, [map])
 
   return (
@@ -83,16 +148,23 @@ const Map = ({ drivers }: { drivers: Driver[] }) => {
         />
 
         {/* <LocationMarker /> */}
-        <DriversMarkers drivers={drivers} />
+        <DriversMarkers />
       </MapContainer>
     </div>
   )
 }
 
-const DriversMarkers = ({ drivers }: { drivers: Driver[] }) => {
+const DriversMarkers = () => {
+  const { drivers } = useMapContext()
+
+  // re-render the markers when drivers change
+  useEffect(() => {
+    console.log(drivers)
+  }, [drivers])
+
   return (
     <>
-      {drivers.map((driver) => (
+      {drivers?.map((driver) => (
         <Marker
           key={driver.id}
           position={[
@@ -102,9 +174,10 @@ const DriversMarkers = ({ drivers }: { drivers: Driver[] }) => {
           icon={icon(
             driver.image,
             // first 2 letters of first name and last name
-            driver.username.split(' ')[0].slice(0, 1) +
-              driver.username.split(' ')[1].slice(0, 1) +
-              ''
+            // driver.username.split(' ')[0].slice(0, 1) +
+            //   driver.username.split(' ')[1].slice(0, 1) +
+            //   ''
+            driver?.username
           )}
         >
           <Popup>
