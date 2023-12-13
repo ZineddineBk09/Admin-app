@@ -33,8 +33,9 @@ export const DriversContextProvider = ({
     setLoading(true)
     // setDrivers([] as Driver[])
     const records = await getRecords('driver').then((res) => res.data)
+
     setDrivers(
-      records.map(
+      records?.map(
         (driver: any): Driver => ({
           id: driver.pk,
           username: driver.fields.username,
@@ -62,6 +63,9 @@ export const DriversContextProvider = ({
           isActive: driver.fields.is_active,
           isStaff: driver.fields.is_staff,
           code: driver.fields.code,
+          salary: driver.fields.salary || 0,
+          areas: driver.fields.areas || ['area 1', 'area 2', 'area 3'],
+          city: driver.fields.city || 'city',
         })
       )
     )
@@ -70,7 +74,7 @@ export const DriversContextProvider = ({
   }
 
   const refreshDriverTeams = async () => {
-    const records: DriverTeam[] = Array.from({ length: 10 }, (_, i) => ({
+    const records: DriverTeam[] = Array.from({ length: 5 }, (_, i) => ({
       id: i,
       name: 'Team ' + i,
       members: Array.from({ length: 3 }, (_, i) => ({
@@ -89,7 +93,6 @@ export const DriversContextProvider = ({
       city: faker.location.city(),
       country: faker.location.country(),
     }))
-    console.log(records)
     setTeams(records)
   }
 
@@ -133,13 +136,12 @@ export const DriversContextProvider = ({
       refreshDrivers()
       return
     }
-    console.log('status: ', status)
     const filteredDrivers = drivers.filter((driver) => driver.status === status)
     setDrivers(filteredDrivers)
   }
 
   useEffect(() => {
-    // refreshDrivers()
+    refreshDrivers()
     refreshDriverTeams()
   }, [])
 
