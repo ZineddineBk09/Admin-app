@@ -50,12 +50,12 @@ export const ClientsBranchesContextProvider = ({
     setBranches(rows)
     setCountries(
       rows
-        .map((branch: Branch) => branch.country)
+        ?.map((branch: Branch) => branch.country)
         .filter((v, i, a) => a.indexOf(v) === i)
     )
     setClientAccounts(
       rows
-        .map((branch: Branch) => branch.clientAccount)
+        ?.map((branch: Branch) => branch.clientAccount)
         .filter((v, i, a) => a.indexOf(v) === i)
     )
   }
