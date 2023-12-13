@@ -55,6 +55,13 @@ export const CollapseItems = ({
               '&:hover': {
                 bg: '$accents2',
               },
+              ...(isActive
+                ? {
+                    '& svg path': {
+                      stroke: '#FFDB00 !important',
+                    },
+                  }
+                : { '&:hover': { bg: '$accents2' } }),
             }}
             justify={'between'}
             onClick={handleToggle}
