@@ -53,7 +53,7 @@ export const NavbarWrapper = ({ children }: Props) => {
         <Navbar.Content>
           <BurguerButton />
         </Navbar.Content>
-        {isDashboard && (
+        {/* {isDashboard && (
           <div className='w-fit flex items-center gap-x-5'>
             <button onClick={handleToggleDrivers}>
               <DriversIcon isActive={showDrivers} />
@@ -62,7 +62,7 @@ export const NavbarWrapper = ({ children }: Props) => {
               <BagIcon isActive={showOrders} />
             </button>
           </div>
-        )}
+        )} */}
       </Navbar>
       {children}
     </Box>
