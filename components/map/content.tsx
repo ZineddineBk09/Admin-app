@@ -8,14 +8,14 @@ const Map = dynamic(() => import('./map'), { ssr: false })
 
 export const Content = () => {
   const { showOrders, openTab } = useMapContext()
-  const { drivers } = useMapContext()
+  const { drivers, orders } = useMapContext()
 
   return (
-    <div className='w-full grid grid-cols-1 gap-x-2 h-[100vh] lg:grid-cols-4'>
+    <div className='w-full grid grid-cols-1 gap-x-2 h-[100vh] lg:grid-cols-5'>
       {/* Col 1 */}
       <div
         className={`flex flex-col gap-y-2 h-full overflow-y-auto
-      ${showOrders ? 'lg:col-span-3' : 'lg:col-span-4'}
+      ${showOrders ? 'lg:col-span-4' : 'lg:col-span-5'}
       `}
       >
         {/* Map */}
@@ -24,7 +24,17 @@ export const Content = () => {
         </div>
 
         {/* Driver & Order Infos */}
-        {openTab === 1 ? <OrderData /> : <DriverData />}
+        {openTab === 1 ? (
+          orders?.length > 0 ? (
+            <OrderData />
+          ) : (
+            <div />
+          )
+        ) : drivers?.length > 0 ? (
+          <DriverData />
+        ) : (
+          <div />
+        )}
       </div>
 
       {/* Orders & Drivers */}
