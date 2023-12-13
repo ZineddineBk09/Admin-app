@@ -17,6 +17,23 @@ const Chat = () => {
   const messagesRef: any = React.useRef(null)
   const { selectedMember } = useSupportContext()
 
+  // get chat messages and group them by date
+  const chatMessages = selectedMember?.chats?.reduce(
+    (acc: any, message: any) => {
+      const date = new Date(message.date)
+      const dateKey = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
+      if (acc[dateKey]) {
+        acc[dateKey].push(message)
+      } else {
+        acc[dateKey] = [message]
+      }
+      return acc
+    },
+    {}
+  )
+
+  console.log(chatMessages)
+
   useEffect(() => {
     messagesRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [])
@@ -27,29 +44,57 @@ const Chat = () => {
         ref={messagesRef}
         className='flex flex-col space-y-4 p-3 overflow-y-auto pb-36'
       >
-        {selectedMember?.chats?.map((message: any, index: number) => (
-          <div
-            key={index}
-            className={`flex items-end ${
-              index % 2 === 0 ? 'justify-end' : 'justify-start'
-            }`}
-          >
-            <div
-              className={`flex flex-col text-sm max-w-2xl mx-2 ${
-                index % 2 === 0 ? 'order-1 items-end' : 'order-2 items-start'
-              } `}
-            >
-              <span className='text-xs'>12:00pm</span>
-              <span
-                className={`px-4 py-2 rounded-md inline-block text-black shadow-md ${
-                  index % 2 === 0 ? 'bg-gray-200' : 'bg-[#59AFFF]'
-                }`}
-              >
-                {message.text}
+        {chatMessages &&
+          Object.keys(chatMessages).map((dateKey: any, index: number) => (
+            <>
+              <span className='w-28 mx-auto bg-gray-300 py-1 font-medium shadow-lg rounded-full text-center text-gray-600 text-sm md:text-base md:w-32 lg:w-36'>
+                {dateKey}
               </span>
-            </div>
-          </div>
-        ))}
+              {chatMessages[dateKey]?.map((message: any, index: number) => (
+                <div
+                  key={index}
+                  className={`flex items-end ${
+                    index % 2 === 0 ? 'justify-end' : 'justify-start'
+                  }`}
+                >
+                  <div
+                    className={`flex flex-col text-sm max-w-2xl mx-2  ${
+                      index % 2 === 0
+                        ? 'order-1 items-end'
+                        : 'order-2 items-start'
+                    } `}
+                  >
+                    <span
+                      className={`w-full h-5 px-4 text-xs font-bold flex items-center rounded-t-md shadow-md text-white ${
+                        index % 2 === 0
+                          ? 'bg-gray-400 justify-end'
+                          : 'bg-blue-600'
+                      }`}
+                    >
+                      {index % 2 === 0 ? (
+                        <>
+                          Customer <div className='mx-3' />
+                          12:00 PM
+                        </>
+                      ) : (
+                        <>
+                          12:00 PM <div className='mx-3' />
+                          {selectedMember.name}
+                        </>
+                      )}
+                    </span>
+                    <span
+                      className={`w-full px-4 py-2 rounded-b-md inline-block text-black shadow-md ${
+                        index % 2 === 0 ? 'bg-gray-200' : 'bg-[#59AFFF]'
+                      }`}
+                    >
+                      {message.text}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </>
+          ))}
       </div>
 
       {/* Message Section */}
@@ -90,7 +135,7 @@ const Chat = () => {
           </div>
         </div>
       </div>
-      <div className='absolute bottom-0 w-full bg-gradient-to-b from-gray-400/10 to-gray-400/100 inset-x-0 h-36 -z-1'/>
+      <div className='absolute bottom-0 w-full bg-gradient-to-b from-gray-400/10 to-gray-400/100 inset-x-0 h-36 -z-1' />
     </div>
   )
 }
