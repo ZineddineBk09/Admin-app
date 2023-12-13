@@ -125,6 +125,7 @@ const OrderCard = ({ order }: { order: any }) => {
     customerImage,
     restaurantImage,
     status,
+    location
   } = order
   // status color: green ==> done, yellow ==> assigned, red ==> cancelled, gray ==> new
   const statusColor =
@@ -163,10 +164,10 @@ const OrderCard = ({ order }: { order: any }) => {
                 width={40}
                 height={40}
               />
-              <p className='text-xs'>{restaurant}</p>
+              <p className='text-xs font-medium'>{restaurant}</p>
             </div>
             <div className='flex items-center gap-x-2'>
-              <p className='text-xs'>{customer}</p>
+              <p className='text-xs font-medium'>{customer}</p>
               <Image
                 src={customerImage || '/images/logo.png'}
                 alt='customer'
@@ -182,7 +183,7 @@ const OrderCard = ({ order }: { order: any }) => {
           <div className='w-full mx-auto flex items-center justify-center gap-x-2'>
             <div className='flex flex-col items-center gap-y-1'>
               <BagIcon color={statusColor} />
-              <span className='text-xs'>
+              <span className='text-xs font-medium'>
                 {new Date(startTime).toLocaleTimeString([], {
                   hour: '2-digit',
                   minute: '2-digit',
@@ -207,7 +208,7 @@ const OrderCard = ({ order }: { order: any }) => {
                   New: <BagCheckedIcon />,
                 }[status]
               }
-              <span className='text-xs'>
+              <span className='text-xs font-medium'>
                 {new Date(endTime).toLocaleTimeString([], {
                   hour: '2-digit',
                   minute: '2-digit',
