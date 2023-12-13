@@ -48,13 +48,6 @@ export const SidebarWrapper = () => {
       href: '/reports',
       subLinks: [],
     },
-    // {
-    //   title: 'Settings',
-    //   icon: <SettingsIcon />,
-    //   isActive: router.pathname === '/settings',
-    //   href: '/settings',
-    //   subLinks: [],
-    // },
     {
       title: 'Clients',
       icon: <ClientsIcon />,
@@ -140,6 +133,29 @@ export const SidebarWrapper = () => {
       href: '/support',
       subLinks: [],
     },
+    {
+      title: 'Settings',
+      icon: <SettingsIcon />,
+      isActive: router.pathname.includes('/settings'),
+      href: '/settings',
+      subLinks: [
+        {
+          title: 'Access Profiles',
+          isActive: router.pathname === '/settings/access-profiles',
+          href: '/settings/access-profiles',
+        },
+        {
+          title: 'Users Access',
+          isActive: router.pathname === '/settings/users-access',
+          href: '/settings/users-access',
+        },
+        {
+          title: 'Delivery Settings',
+          isActive: router.pathname === '/settings/delivery-settings',
+          href: '/settings/delivery-settings',
+        },
+      ],
+    },
   ]
 
   return (
@@ -163,9 +179,11 @@ export const SidebarWrapper = () => {
             height={50}
             className='object-contain w-full h-full'
           />
-          <p className='text-xl font-medium'>FleetRun</p>
+          <p className='text-2xl font-medium'>
+            <span className='text-primary'>Fleet</span>Run
+          </p>
         </Sidebar.Header>
-        <Flex direction={'column'} justify={'between'} css={{ height: '100%' }}>
+        <Flex direction={'column'} justify={'between'} css={{ height: '95%' }}>
           <Sidebar.Body className='w-full'>
             {sidebarLinks?.map((link, index) => (
               <div key={index}>
