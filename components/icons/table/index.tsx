@@ -1,4 +1,4 @@
-import { Svg } from "@/components/styles/svg"
+import { Svg } from '@/components/styles/svg'
 
 interface Props {
   size?: number
@@ -59,36 +59,19 @@ export const DeleteIcon = ({ fill, size, height, width, ...props }: Props) => {
 export const EditIcon = ({ fill, size, height, width, ...props }: Props) => {
   return (
     <svg
-      width={size || width || 24}
-      height={size || height || 24}
-      viewBox='0 0 20 20'
+      width={size || width || 20}
+      height={size || height || 21}
+      viewBox='0 0 20 21'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
       {...props}
     >
       <path
-        d='M11.05 3.00002L4.20835 10.2417C3.95002 10.5167 3.70002 11.0584 3.65002 11.4334L3.34169 14.1334C3.23335 15.1084 3.93335 15.775 4.90002 15.6084L7.58335 15.15C7.95835 15.0834 8.48335 14.8084 8.74168 14.525L15.5834 7.28335C16.7667 6.03335 17.3 4.60835 15.4583 2.86668C13.625 1.14168 12.2334 1.75002 11.05 3.00002Z'
-        stroke={fill}
-        strokeWidth={1.5}
-        strokeMiterlimit={10}
-        strokeLinecap='round'
-        strokeLinejoin='round'
-      />
-      <path
-        d='M9.90833 4.20831C10.2667 6.50831 12.1333 8.26665 14.45 8.49998'
-        stroke={fill}
-        strokeWidth={1.5}
-        strokeMiterlimit={10}
-        strokeLinecap='round'
-        strokeLinejoin='round'
-      />
-      <path
-        d='M2.5 18.3333H17.5'
-        stroke={fill}
-        strokeWidth={1.5}
-        strokeMiterlimit={10}
-        strokeLinecap='round'
-        strokeLinejoin='round'
+        d='M10.2392 5.93449L1 15.1736V19.7932H5.61958L14.8587 10.554M10.2392 5.93449L13.5521 2.62148L13.5542 2.61952C14.0101 2.16348 14.2386 1.93505 14.5019 1.8495C14.7339 1.77413 14.9837 1.77413 15.2157 1.8495C15.4788 1.93499 15.707 2.16315 16.1624 2.61855L18.1717 4.62784C18.629 5.0852 18.8578 5.31398 18.9435 5.57768C19.0189 5.80963 19.0188 6.05948 18.9435 6.29144C18.8579 6.55494 18.6295 6.78338 18.1727 7.24008L18.1717 7.24106L14.8587 10.554M10.2392 5.93449L14.8587 10.554'
+        stroke='#5E5E5E'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
       />
     </svg>
   )
