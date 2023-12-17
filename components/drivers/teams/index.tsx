@@ -211,21 +211,28 @@ const DriverTeamCard = ({ team }: { team: DriverTeam }) => {
             </Tooltip>
           </div>
           <Divider></Divider>
-          <div className='w-full flex items-center gap-x-6'>
-            <label className='text-gray-600 text-sm w-32 lg:w-fit'>
-              Supervisor
-            </label>
-            <div className='flex items-center justify-between w-60 bg-gray-200 rounded-md p-2 lg:w-40 xl:w-60'>
-              <input
-                name='supervisor'
-                id='supervisor'
-                type='text'
-                value={supervisor.name}
-                onChange={(e) => {
-                  console.log(e.target.value)
-                }}
-                className='text-sm bg-transparent w-full outline-none'
-              />
+          <div className='w-full flex items-center justify-between'>
+            <div className='w-1/2 flex items-center gap-x-6'>
+              <label className='text-gray-600 text-sm w-32 lg:w-fit'>
+                Supervisor
+              </label>
+              <div className='flex items-center justify-between w-60 bg-gray-200 rounded-md p-2 lg:w-40 xl:w-60'>
+                <input
+                  name='supervisor'
+                  id='supervisor'
+                  type='text'
+                  value={supervisor.name}
+                  onChange={(e) => {
+                    console.log(e.target.value)
+                  }}
+                  className='text-sm bg-transparent w-full outline-none'
+                />
+              </div>
+            </div>
+
+            <div className='w-1/2 flex items-center gap-x-6 text-sm'>
+              <label className='text-gray-600'>City</label>
+              <p>Abu Dhabi</p>
             </div>
           </div>
         </>
