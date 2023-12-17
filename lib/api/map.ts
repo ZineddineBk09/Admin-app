@@ -3,15 +3,13 @@ import axios from 'axios'
 import { getSession } from 'next-auth/react'
 
 export const getDriversInArea = async (bbox: BBox) => {
-  const drivers: any = []
   const { min_lat, max_lat, min_lng, max_lng } = bbox
-  const url = 'http://194.233.173.78:8000/api/v1/map'
   const session: any = await getSession()
 
   try {
-    //'http://194.233.173.78:2110/api/v1/map?min_lat=16.9&max_lat=30.9&min_lng=38.02&max_lng=50.03
-    await axios
-      .get(process.env.NEXT_PUBLIC_MAP_API_URL + '/map' || '', {
+    const res = await axios.get(
+      process.env.NEXT_PUBLIC_MAP_API_URL + '/map' || '',
+      {
         params: {
           min_lat,
           max_lat,
@@ -21,32 +19,40 @@ export const getDriversInArea = async (bbox: BBox) => {
         headers: {
           Authorization: `Bearer ${session?.accessToken}`,
         },
-      })
-      .then((res) => {
-        console.log('res 1: ', res.data)
-        /* {
-		          "id": "1",
-		          "location": {
-			        "lng": 38.026428,
-			        "lat": 16.909683
-		          },
-		        "action": "inside"
-	          } */
-        if (res.data.length > 0) {
-          res.data.map(async (driver: any) => {
-            await axios
-              .get(process.env.NEXT_PUBLIC_API_URL + `/driver/dis/${driver.id}`)
-              .then((res) => {
-                console.log('res 2: ', res.data)
-                drivers.push(res.data)
-              })
-          })
+      }
+    )
+
+    if (res.data.length > 0) {
+      const drivers = res.data.map(async (driver: any) => {
+        // Take driver location from the map API
+        const location = {
+          latitude: driver.location.lat || 0,
+          longitude: driver.location.lng || 0,
+        }
+
+        // Get driver details from the driver API
+        const driverRes = await axios.get(
+          process.env.NEXT_PUBLIC_API_URL + `/driver/dis/${driver.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.accessToken}`,
+            },
+          }
+        )
+
+        return {
+          ...driverRes.data.data,
+          location,
         }
       })
 
-    return drivers
+      // Use Promise.all to wait for all Promises to resolve
+      const arrayDrivers = await Promise.all(drivers)
+
+      return arrayDrivers
+    }
   } catch (err) {
-    console.log('err: ', err)
-    return drivers
+    console.log('error in getDriversInArea', err)
+    return [] as any
   }
 }
