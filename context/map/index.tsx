@@ -18,6 +18,7 @@ export const useMapContext: {
     handleToggleDrivers: () => void
     openTab: number
     hansleSelectTab: (tab: number) => void
+    setDrivers: (drivers: any[]) => void
   }
 } = () => React.useContext(MapContext as any)
 
@@ -85,6 +86,16 @@ export const MapContextProvider = ({
         endTime: faker.date.future().getTime(),
         driverId: faker.string.uuid(),
         status: orderStatus[faker.number.int({ max: 3, min: 0 })].value,
+        location:
+          faker.number.int({ max: 2, min: 1 }) == 1
+            ? {
+                latitude: faker.location.latitude({ max: 22, min: 21 }),
+                longitude: faker.location.longitude({
+                  max: 40,
+                  min: 39,
+                }),
+              }
+            : null,
         items: [
           {
             name: faker.commerce.productName(),
@@ -139,7 +150,7 @@ export const MapContextProvider = ({
 
   useEffect(() => {
     fetchOrders()
-    fetchDrivers()
+    // fetchDrivers()
   }, [])
 
   useEffect(() => {
@@ -156,6 +167,7 @@ export const MapContextProvider = ({
         showDrivers,
         selectedOrder,
         selectedDriver,
+        setDrivers,
         handleSelectOrder,
         handleSelectDriver,
         handleToggleOrders,
