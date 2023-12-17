@@ -5,6 +5,7 @@ import { IconButton } from '../table/table.styled'
 import { deleteRecord } from '@/lib/api'
 import { useOrdersContext } from '@/context/order'
 import { CancelIcon } from '../icons/orders'
+import { ConfirmModal } from '../shared/confirm-modal'
 
 export const CancelOrder = ({
   id,
@@ -41,7 +42,7 @@ export const CancelOrder = ({
       <Modal
         closeButton
         aria-labelledby='modal-title'
-        width='400px'
+        width='550px'
         open={visible}
         onClose={closeHandler}
         className='rounded-md'
@@ -70,7 +71,7 @@ export const CancelOrder = ({
               </Text>
 
               {/* Reason & Note */}
-              <Input
+              {/* <Input
                 bordered
                 clearable
                 fullWidth
@@ -78,6 +79,7 @@ export const CancelOrder = ({
                 placeholder='Reason for cancellation'
                 name='reason'
                 id='reason'
+                className=''
                 // value={formik.values.reason}
                 // onChange={formik.handleChange}
                 //   // status={
@@ -86,38 +88,52 @@ export const CancelOrder = ({
                 //       : 'default'
                 //   }
                 // 
-              />
-              <Input
-                bordered
-                clearable
-                fullWidth
-                size='lg'
-                placeholder='Note'
-                name='note'
-                id='note'
-                // value={formik.values.note}
-                // onChange={formik.handleChange}
-                //   // status={
-                //     formik.touched.note && formik.errors.note ? 'error' : 'default'
-                //   }
-              />
+              /> */}
+              <div className='w-full flex flex-col items-start gap-y-2'>
+                <label className='text-gray-500'>Reason</label>
+                <input
+                  type='text'
+                  placeholder='Reason for cancellation'
+                  name='reason'
+                  id='reason'
+                  className='w-full h-11 bg-gray-200 rounded px-4'
+                />
+              </div>
+
+              <div className='w-full flex flex-col items-start gap-y-2'>
+                <label className='text-gray-500'>Note</label>
+                <textarea
+                  placeholder='Note'
+                  name='note'
+                  id='note'
+                  className='w-full bg-gray-200 rounded p-4'
+                  rows={4}
+                />
+              </div>
             </Flex>
           </Modal.Body>
         )}
         <Modal.Footer>
           {!loading && (
-            <Flex justify={'end'}>
-              <Button
-                auto
-                className='bg-red-500 hover:bg-red-600'
-                onClick={() => {
-                  handleDelete()
-                }}
-                
+            <div className='w-full flex items-center justify-center gap-x-4'>
+              <button
+                className='h-11 px-12 bg-gray-400 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'
+                onClick={closeHandler}
               >
-                Delete
-              </Button>
-            </Flex>
+                Cancel
+              </button>
+
+              <ConfirmModal
+                handleConfirm={handleDelete}
+                title='Confirm'
+                text='Are you sure you want to cancel this order?'
+                clickButton={
+                  <button className='h-11 px-12 bg-red-500 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>
+                    Confirm
+                  </button>
+                }
+              />
+            </div>
           )}
         </Modal.Footer>
       </Modal>
