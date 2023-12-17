@@ -15,7 +15,6 @@ export const createRecord = async (record: any, endpoint: string) => {
     }
   )
   const data = await response.data
-  console.log('createRecord data: ', data)
   return data
 }
 
@@ -33,7 +32,6 @@ export const updateRecord = async (record: any, endpoint: string) => {
     }
   )
   const data = await response.data
-  console.log('updateRecord data: ', data)
   return data
 }
 
@@ -50,7 +48,6 @@ export const deleteRecord = async (id: string, endpoint: string) => {
     }
   )
   const data = await response.data
-  console.log('deleteRecord data: ', data)
   return data
 }
 
@@ -70,7 +67,6 @@ export const getRecords = async (endpoint: string) => {
     const data = await response.data
     return data
   } catch (error) {
-    console.log('getRecords error: ', error)
     return []
   }
 }
