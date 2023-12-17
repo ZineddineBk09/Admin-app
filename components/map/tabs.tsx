@@ -100,6 +100,8 @@ const Tabs = ({ color }: any) => {
 export default Lists
 
 const Orders = ({ orders, orderStatus }: { orders: any; orderStatus: any }) => {
+  console.log(orders)
+
   return (
     <div className='w-full h-full flex flex-col items-center gap-y-3 overflow-y-auto'>
       {/* Render filtere */}
@@ -125,7 +127,7 @@ const OrderCard = ({ order }: { order: any }) => {
     customerImage,
     restaurantImage,
     status,
-    location
+    location,
   } = order
   // status color: green ==> done, yellow ==> assigned, red ==> cancelled, gray ==> new
   const statusColor =
@@ -146,13 +148,19 @@ const OrderCard = ({ order }: { order: any }) => {
   }, [selectedOrder])
 
   return (
-    <Card isPressable onClick={() => handleSelectOrder(order.id)}>
+    <Card
+      isPressable
+      onClick={() => handleSelectOrder(order.id)}
+      className={`rounded-md ${
+        selected
+          ? 'bg-primary-light '
+          : '' + location == null
+          ? 'border border-red-500'
+          : ''
+      }`}
+    >
       <Card.Body className='p-0 w-full'>
-        <div
-          className={`w-full flex flex-col items-center rounded-md p-2 gap-y-2 ${
-            selected ? 'bg-primary-light' : ''
-          }`}
-        >
+        <div className={`w-full flex flex-col items-center p-2 gap-y-2`}>
           {/* Restaurant and customer */}
           <div className='w-full flex items-center justify-between'>
             <div className='flex items-center gap-x-2'>
@@ -314,3 +322,4 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
     </Card>
   )
 }
+
