@@ -17,6 +17,7 @@ import { EditIcon } from '../icons/table'
 import { Order, Team } from '@/interfaces'
 import { getRecords, updateRecord } from '@/lib/api'
 import { useOrdersContext } from '@/context/order'
+import { ConfirmModal } from '../shared/confirm-modal'
 
 export const EditOrder = ({ order }: { order: Order }) => {
   const [visible, setVisible] = React.useState(false)
@@ -28,25 +29,18 @@ export const EditOrder = ({ order }: { order: Order }) => {
 
   const formik = useFormik({
     initialValues: {
-      username: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      team: '',
-      isFreelance: '',
+      bonus: 0,
+      deduction: 0,
+      note: '',
     },
     validationSchema: Yup.object({
-      username: Yup.string().required('username is required'),
-      firstName: Yup.string().required('firstname is required'),
-      lastName: Yup.string().required('lastname is required'),
-      email: Yup.string().required('email is required'),
-      phone: Yup.string().required('phone is required'),
-      team: Yup.string().required('team is required'),
-      isFreelance: Yup.string().required('isFreelance is required'),
+      bonus: Yup.number(),
+      deduction: Yup.number(),
+      note: Yup.string(),
     }),
     onSubmit: async (values) => {
-      setLoading(true)
+      // setLoading(true)
+      console.log('submiting')
       const response = await updateRecord(
         {
           id: order.id,
@@ -101,16 +95,16 @@ export const EditOrder = ({ order }: { order: Order }) => {
           <Loading size='xl' className='my-3' color='warning' />
         ) : (
           <form onSubmit={formik.handleSubmit}>
-            <Modal.Header css={{ justifyContent: 'start' }}>
+            <Modal.Header css={{ justifyContent: 'center' }}>
               <Text
                 id='modal-title'
-                className='text-xl font-semibold uppercase'
+                className='text-xl font-semibold capitalize'
                 h4
               >
                 Edit order
               </Text>
             </Modal.Header>
-            <Divider css={{ my: '$5' }} />
+            {/* <Divider css={{ my: '$5' }} /> */}
             <Modal.Body css={{ py: '$10' }}>
               <Flex
                 direction={'column'}
@@ -126,7 +120,7 @@ export const EditOrder = ({ order }: { order: Order }) => {
                     {error}
                   </span>
                 )}
-
+                {/* 
                 <Flex
                   css={{
                     gap: '$10',
@@ -176,152 +170,72 @@ export const EditOrder = ({ order }: { order: Order }) => {
                         : 'default'
                     }
                   />
-                </Flex>
+                </Flex> */}
 
-                <Flex
-                  css={{
-                    gap: '$10',
-                    flexWrap: 'wrap',
-                    '@xl': { flexWrap: 'nowrap' },
-                  }}
-                >
-                  <Input
-                    label={
-                      formik.touched.email && formik.errors.email
-                        ? formik.errors.email
-                        : 'Email'
-                    }
-                    bordered
-                    clearable
-                    fullWidth
-                    size='lg'
-                    placeholder='Email'
-                    name='email'
-                    id='email'
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    status={
-                      formik.touched.email && formik.errors.email
-                        ? 'error'
-                        : 'default'
-                    }
-                  />
-                  <Input
-                    label={
-                      formik.touched.phone && formik.errors.phone
-                        ? formik.errors.phone
-                        : 'Phone'
-                    }
-                    bordered
-                    clearable
-                    fullWidth
-                    size='lg'
-                    placeholder='Phone'
-                    name='phone'
-                    id='phone'
-                    value={formik.values.phone}
-                    onChange={formik.handleChange}
-                    status={
-                      formik.touched.phone && formik.errors.phone
-                        ? 'error'
-                        : 'default'
-                    }
-                  />
-                </Flex>
-
-                <Flex
-                  css={{
-                    gap: '$10',
-                    flexWrap: 'wrap',
-                    '@xl': { flexWrap: 'nowrap' },
-                  }}
-                >
-                  <div className='h-12 w-full bg-white rounded-2xl px-2 border-2 border-gray-300'>
-                    <select
-                      name='team'
-                      id='team'
-                      value={formik.values.team}
-                      className='w-full h-full bg-transparent'
+                <div className='flex items-center justify-between gap-x-5'>
+                  <div className='w-full flex flex-col items-start gap-y-2'>
+                    <label className='text-gray-500'>Bonus</label>
+                    <input
+                      id='bonus'
+                      name='bonus'
+                      type='text'
+                      value={formik.values.bonus}
+                      placeholder='0'
+                      className='w-full h-11 bg-gray-200 rounded px-4'
                       onChange={formik.handleChange}
-                    >
-                      <option value=''>Select Team</option>
-                      {teams?.map((team: Team, index: number) => (
-                        <option key={index} value={team.pk}>
-                          {team.fields.name}
-                        </option>
-                      ))}
-                    </select>
+                    />
                   </div>
-                  <div className='h-10 w-full bg-white rounded-full px-2'>
-                    <Radio.Group
-                      label={
-                        formik.touched.isFreelance &&
-                        formik.errors.isFreelance ? (
-                          <p
-                            className='text-md font-[400] text-red-500'
-                            style={{ marginTop: '-1rem' }}
-                          >
-                            {formik.errors.isFreelance}
-                          </p>
-                        ) : (
-                          <p className='text-md font-[400] text-black'>
-                            Is Freelancer
-                          </p>
-                        )
-                      }
-                      name='isFreelance'
-                      id='isFreelance'
-                      color='warning'
-                      value={formik.values.isFreelance}
-                      onChange={(e) => formik.setFieldValue('isFreelance', e)}
-                      orientation='horizontal'
-                    >
-                      <Radio value={'Yes'} isSquared size='sm'>
-                        Yes
-                      </Radio>
-                      <Radio value={'No'} isSquared size='sm'>
-                        No
-                      </Radio>
-                    </Radio.Group>
-                  </div>
-                </Flex>
 
-                <Flex
-                  css={{
-                    gap: '$10',
-                    flexWrap: 'wrap',
-                    '@xl': { flexWrap: 'nowrap' },
-                  }}
-                >
-                  <Input
-                    label={
-                      formik.touched.username && formik.errors.username
-                        ? formik.errors.username
-                        : 'Username'
-                    }
-                    bordered
-                    clearable
-                    fullWidth
-                    size='lg'
-                    placeholder='Username'
-                    name='username'
-                    id='username'
-                    value={formik.values.username}
-                    onChange={formik.handleChange}
-                    status={
-                      formik.touched.username && formik.errors.username
-                        ? 'error'
-                        : 'default'
-                    }
+                  <div className='w-full flex flex-col items-start gap-y-2'>
+                    <label className='text-gray-500'>Deduction</label>
+                    <input
+                      id='deduction'
+                      name='deduction'
+                      type='text'
+                      value={formik.values.deduction}
+                      placeholder='0'
+                      className='w-full h-11 bg-gray-200 rounded px-4'
+                      onChange={formik.handleChange}
+                    />
+                  </div>
+                </div>
+
+                <div className='w-full flex flex-col items-start gap-y-2'>
+                  <label className='text-gray-500'>Note</label>
+                  <textarea
+                    placeholder='Note'
+                    name='note'
+                    id='note'
+                    className='w-full bg-gray-200 rounded p-4'
+                    rows={4}
                   />
-                </Flex>
+                </div>
               </Flex>
             </Modal.Body>
-            <Divider css={{ my: '$5' }} />
+            {/* <Divider css={{ my: '$5' }} /> */}
             <Modal.Footer>
-              <Button auto type='submit' className='bg-primary text-black'>
-                Edit Order
-              </Button>
+              <div className='w-full flex items-center justify-center gap-x-4'>
+                <button
+                  className='h-11 px-12 bg-gray-400 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'
+                  onClick={closeHandler}
+                >
+                  Cancel
+                </button>
+
+                <ConfirmModal
+                  handleConfirm={formik.handleSubmit}
+                  title='Confirm'
+                  text='Are you sure you want to cancel this order?'
+                  clickButton={
+                    <button
+                      type='button'
+                      className='h-11 px-12 bg-primary rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'
+                    >
+                      Confirm
+                    </button>
+                  }
+                />
+              </div>
             </Modal.Footer>
           </form>
         )}
