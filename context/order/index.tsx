@@ -108,7 +108,6 @@ export const OrdersContextProvider = ({
       refreshOrders()
       return
     }
-    console.log('status: ', status)
     const filteredOrders = orders.filter((driver) => driver.status === status)
     setOrders(filteredOrders)
   }
