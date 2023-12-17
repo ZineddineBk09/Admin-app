@@ -101,7 +101,7 @@ export interface Order {
   location: {
     latitude: number
     longitude: number
-  }
+  } | null
   address: string
   phone: string
   items: Item[]
@@ -234,6 +234,7 @@ export interface TeamsReport extends ClientsReport {}
 export interface SupportChat {
   id: number
   text: string
+  date?: string
 }
 
 export interface SupportTeamMember {
@@ -241,4 +242,10 @@ export interface SupportTeamMember {
   name: string
   chats: SupportChat[]
   unread: number
+}
+
+export interface AccessProfile{
+  id: number
+  name: string
+  permissions: string[]
 }
