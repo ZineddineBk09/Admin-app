@@ -70,16 +70,16 @@ export const AddBranch = () => {
           <Loading size='xl' className='my-3' color='warning' />
         ) : (
           <form onSubmit={formik.handleSubmit}>
-            <Modal.Header css={{ justifyContent: 'start' }}>
+            <Modal.Header css={{ justifyContent: 'center' }}>
               <Text
                 id='modal-title'
-                className='text-xl font-semibold uppercase'
+                className='text-xl font-semibold capitalize'
                 h4
               >
                 Add Branch
               </Text>
             </Modal.Header>
-            <Divider css={{ my: '$5' }} />
+            {/* <Divider css={{ my: '$5' }} /> */}
             <Modal.Body css={{ py: '$10' }}>
               <Flex
                 direction={'column'}
@@ -307,7 +307,7 @@ export const AddBranch = () => {
                 />
               </Flex>
             </Modal.Body>
-            <Divider css={{ my: '$5' }} />
+            {/* <Divider css={{ my: '$5' }} /> */}
             <Modal.Footer>
               <Button auto type='submit' className='bg-primary text-black'>
                 Add Branch
