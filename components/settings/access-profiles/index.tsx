@@ -13,8 +13,7 @@ import React from 'react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { AddDriverProfile } from './add-profile'
 import { DeleteDriverType } from './delete-profile'
-import { EditIcon } from '@/components/icons/table'
-import { spawn } from 'child_process'
+import { NotesIcon as EditIcon } from '@/components/icons/table'
 
 const Profiles = () => {
   const profiles: AccessProfile[] = [
@@ -108,7 +107,7 @@ const CountryCard = ({ profile }: { profile: AccessProfile }) => {
         </button>
         <DeleteDriverType id={id} />
       </div>
-      {showInfos && <Divider></Divider>}
+      {showInfos && <Divider />}
       {showInfos && (
         <div className='w-full flex gap-x-3 items-center'>
           <label className='w-48 text-gray-500'>Access Permissions</label>
@@ -384,6 +383,5 @@ export const SelectPermissions = () => {
     </>
   )
 }
-
 
 export default Profiles
