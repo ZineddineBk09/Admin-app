@@ -35,7 +35,7 @@ export const DeleteDriver = ({
     <div>
       <Tooltip content='Delete' color='error' onClick={handler}>
         <IconButton>
-          <DeleteIcon size={20} fill='#FF0080' />
+          <DeleteIcon size={28} width={5} fill='#FF0080' />
         </IconButton>
       </Tooltip>
       <Modal
