@@ -3,7 +3,6 @@ import { Divider } from '@nextui-org/react'
 import React from 'react'
 import { AddGovernorate } from './add-governorate'
 import { DeleteGovernorate } from './delete-governorate'
-import CopyToClipboardButton from '@/components/shared/copy-to-clipboard'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useAreasGovernoratesContext } from '@/context/areas/governorates'
 
@@ -26,17 +25,19 @@ const Governorates = () => {
 
 const GovernorateCard = ({ governorate }: { governorate: Governorate }) => {
   const [showInfos, setShowInfos] = React.useState(false)
-  const { id, name, driverFee, orderFee } = governorate
+  const { id, name, price, orderFee, countryName, additional } = governorate
   const fields = [
-    {
-      name: 'Driver Fees',
-      id: 'driverFee',
-      defaultValue: driverFee,
-    },
     {
       name: 'Order Fees',
       id: 'orderFee',
       defaultValue: orderFee,
+      unit: 'SAR / Order',
+    },
+    {
+      name: 'Price',
+      id: 'price',
+      defaultValue: price,
+      unit: 'SAR',
     },
   ]
 
@@ -59,26 +60,71 @@ const GovernorateCard = ({ governorate }: { governorate: Governorate }) => {
       </div>
       {showInfos && (
         <>
-          <Divider></Divider>
-          {fields?.map(({ name, id, defaultValue }: any, index: number) => (
-            <>
-              <div key={index} className='w-full flex items-center gap-x-6'>
-                <label className='text-gray-600 text-sm'>{name}</label>
+          <Divider />
+          <div className='flex items-center gap-x-6'>
+            <label className='text-gray-500 capitalize'>Coutry</label>
+            <p className='font-medium'>{countryName}</p>
+          </div>
+          <Divider />
+
+          <div className='flex items-center gap-x-6'>
+            <label className='text-gray-500 capitalize'>Order Fees</label>
+            <div className='h-11 max-w-xs bg-gray-200 rounded px-4 flex justify-between items-center'>
+              <input
+                id='orderFee'
+                name='orderFee'
+                type='text'
+                //@ts-ignore
+                value={orderFee}
+                placeholder='0'
+                className='bg-transparent w-full h-full outline-none'
+                onChange={(e) => {
+                  console.log(e.target.value)
+                }}
+              />
+              <span className='text-gray-500 w-32'>SAR / order</span>
+            </div>
+          </div>
+          <Divider />
+          <div className='w-full flex items-center justify-between'>
+            <div className='flex items-center gap-x-6'>
+              <label className='text-gray-500 capitalize'>Price</label>
+              <div className='h-11 max-w-xs bg-gray-200 rounded px-4 flex justify-between items-center'>
                 <input
-                  name={id}
-                  id={id}
+                  id='price'
+                  name='price'
                   type='text'
-                  value={defaultValue}
+                  //@ts-ignore
+                  value={price}
+                  placeholder='0'
+                  className='bg-transparent w-full h-full outline-none'
                   onChange={(e) => {
                     console.log(e.target.value)
                   }}
-                  className='w-60 bg-gray-200 rounded-md p-2 text-sm'
                 />
-                <CopyToClipboardButton text={defaultValue} />
+                <span className='text-gray-500 w-24'>SAR / km</span>
               </div>
-              {index !== fields.length - 1 && <Divider></Divider>}
-            </>
-          ))}
+            </div>
+            <div className='flex items-center gap-x-6'>
+              <label className='text-gray-500 capitalize'>Additional</label>
+              <div className='h-11 max-w-xs bg-gray-200 rounded px-4 flex justify-between items-center'>
+                <input
+                  id='additional'
+                  name='additional'
+                  type='text'
+                  //@ts-ignore
+                  value={additional}
+                  placeholder='0'
+                  className='bg-transparent w-full h-full outline-none'
+                  onChange={(e) => {
+                    console.log(e.target.value)
+                  }}
+                />
+                <span className='text-gray-500 w-24'>SAR / km</span>
+              </div>
+            </div>
+            <div />
+          </div>
         </>
       )}
     </div>
