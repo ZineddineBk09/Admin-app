@@ -1,8 +1,6 @@
-import { Button, Loading, Modal, Text, Tooltip } from '@nextui-org/react'
+import { Loading, Modal, Text } from '@nextui-org/react'
 import React from 'react'
-import { Flex } from '../styles/flex'
-import { BinIcon } from '@/components/icons/areas'
-import { ordersTableCols, paymentTableCols } from '../table/data'
+import { paymentTableCols } from '../table/data'
 import { PrintIcon } from '../icons/table'
 import { useReactToPrint } from 'react-to-print'
 
