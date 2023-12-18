@@ -98,7 +98,7 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
 
         {showInfos && (
           <>
-            <Divider></Divider>
+            <Divider />
             <div className='w-full grid grid-cols-2 lg:grid-cols-4'>
               <div className='w-full flex items-center gap-x-6 col-span-2'>
                 <label className='text-gray-600 text-sm'>Country</label>
@@ -121,7 +121,7 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
               </div>
             </div>
 
-            <Divider></Divider>
+            <Divider />
             {fields
               ?.filter(({ hidden }: any) => !hidden)
               ?.map((field, index: number) => {
@@ -145,7 +145,6 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
                           }}
                           className='w-60 bg-gray-200 rounded-md p-2 text-sm'
                         />
-                        <CopyToClipboardButton text={defaultValue} />
                       </div>
                       {includeNextField && (
                         <div className='w-full flex items-center gap-x-6 col-span-2 mt-4 lg:mt-0'>
@@ -166,7 +165,6 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
                             }}
                             className='w-60 bg-gray-200 rounded-md p-2 text-sm'
                           />
-                          <CopyToClipboardButton text={defaultValue} />
                         </div>
                       )}
 
@@ -189,7 +187,7 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
                     </div>
                     {index !==
                       fields.filter(({ hidden }: any) => !hidden).length -
-                        1 && <Divider></Divider>}
+                        1 && <Divider />}
                   </div>
                 )
               })}
