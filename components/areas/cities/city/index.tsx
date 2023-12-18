@@ -9,14 +9,13 @@ import { Flex } from '@/components/styles/flex'
 import dynamic from 'next/dynamic'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-draw/dist/leaflet.draw.css'
-import CopyToClipboardButton from '@/components/shared/copy-to-clipboard'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useAreasCitiesContext } from '@/context/areas/cities'
 const CityMap = dynamic(() => import('./map'), { ssr: false })
 
 export const CityCard = ({ city }: { city: City }) => {
   const [showInfos, setShowInfos] = React.useState(false)
-  const { id, name, driverFee, orderFee, governorateName } = city
+  const { id, name, price, orderFee, governorateName, additional } = city
 
   // Input fields that the user can edit
   const fields = [
@@ -24,16 +23,25 @@ export const CityCard = ({ city }: { city: City }) => {
       name: 'Governorate',
       id: 'governorateName',
       defaultValue: governorateName,
-    },
-    {
-      name: 'Driver Fees',
-      id: 'driverFee',
-      defaultValue: driverFee,
+      unit: '',
     },
     {
       name: 'Order Fees',
       id: 'orderFee',
       defaultValue: orderFee,
+      unit: 'SAR / order',
+    },
+    {
+      name: 'Price',
+      id: 'price',
+      defaultValue: price,
+      unit: 'SAR / km',
+    },
+    {
+      name: 'Additional',
+      id: 'additional',
+      defaultValue: additional,
+      unit: 'SAR / km',
     },
   ]
   return (
@@ -63,26 +71,32 @@ export const CityCard = ({ city }: { city: City }) => {
         {/* Display input fields */}
         {showInfos && (
           <>
-            <Divider></Divider>
-            {fields?.map(({ name, id, defaultValue }: any, index: number) => (
-              <>
-                <div key={index} className='w-full flex items-center gap-x-6'>
-                  <label className='text-gray-600 text-sm'>{name}</label>
-                  <input
-                    name={id}
-                    id={id}
-                    type='text'
-                    value={defaultValue}
-                    onChange={(e) => {
-                      console.log(e.target.value)
-                    }}
-                    className='w-60 bg-gray-200 rounded-md p-2 text-sm'
-                  />
-                  <CopyToClipboardButton text={defaultValue} />
-                </div>
-                {index !== fields.length - 1 && <Divider></Divider>}
-              </>
-            ))}
+            <Divider />
+            {fields?.map(
+              ({ name, id, defaultValue, unit }: any, index: number) => (
+                <>
+                  <div className='flex items-center gap-x-6'>
+                    <label className='text-gray-500 capitalize'>{name}</label>
+                    <div className='h-11 max-w-xs bg-gray-200 rounded px-4 flex justify-between items-center'>
+                      <input
+                        name={id}
+                        id={id}
+                        type='text'
+                        //@ts-ignore
+                        value={defaultValue}
+                        placeholder='0'
+                        className='bg-transparent w-full h-full outline-none'
+                        onChange={(e) => {
+                          console.log(e.target.value)
+                        }}
+                      />
+                      <span className='text-gray-500 w-32'>{unit}</span>
+                    </div>
+                  </div>
+                  {index !== fields.length - 1 && <Divider />}
+                </>
+              )
+            )}
           </>
         )}
       </div>
