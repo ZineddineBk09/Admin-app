@@ -5,7 +5,8 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { AddDriverTeam } from './add-team'
 import { DeleteDriverTeam } from './delete-team'
 import { useDriversContext } from '@/context/driver'
-import { AddIcon, BinIcon } from '@/components/icons/areas'
+import { BinIcon } from '@/components/icons/areas'
+import { AddMember } from './add-member'
 
 const DriversTeams = () => {
   const { teams } = useDriversContext()
@@ -97,7 +98,7 @@ const DriverTeamCard = ({ team }: { team: DriverTeam }) => {
       </div>
       {showInfos && (
         <>
-          <Divider></Divider>
+          <Divider />
 
           {/* Fixed, Price, ... */}
           <div className='w-full flex flex-col gap-y-3 items-center lg:flex-row'>
@@ -126,7 +127,7 @@ const DriverTeamCard = ({ team }: { team: DriverTeam }) => {
               </>
             ))}
           </div>
-          <Divider></Divider>
+          <Divider />
 
           {/* Members */}
           <div className='w-full flex items-start gap-x-6'>
@@ -164,13 +165,9 @@ const DriverTeamCard = ({ team }: { team: DriverTeam }) => {
               <p className='text-sm'>No memberes found</p>
             )}
 
-            <Tooltip content='Add Member'>
-              <button className='h-10 w-16 flex items-center justify-center text-center text-4xl font-medium rounded-full'>
-                +
-              </button>
-            </Tooltip>
+            <AddMember members={members} />
           </div>
-          <Divider></Divider>
+          <Divider />
           {/* Areas */}
           <div className='w-full flex items-start gap-x-6'>
             <label className='mt-2 text-gray-600 text-sm'>Areas</label>
@@ -210,7 +207,7 @@ const DriverTeamCard = ({ team }: { team: DriverTeam }) => {
               </button>
             </Tooltip>
           </div>
-          <Divider></Divider>
+          <Divider />
           <div className='w-full flex items-center justify-between'>
             <div className='w-1/2 flex items-center gap-x-6'>
               <label className='text-gray-600 text-sm w-32 lg:w-fit'>
