@@ -118,7 +118,7 @@ const CountryCard = ({ type }: { type: DriverType }) => {
         </button>
         <DeleteDriverType id={id} />
       </div>
-      {showInfos && <Divider></Divider>}
+      {showInfos && <Divider />}
       <div className='w-full flex flex-col gap-y-3 items-center lg:flex-row'>
         {showInfos && (
           <>
