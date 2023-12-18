@@ -83,15 +83,15 @@ export const MakePayment = ({ id }: { id: number }) => {
               <button className='h-11 px-12 bg-gray-400 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>
                 Cancel
               </button>
-              <button className='h-11 px-12 bg-primary rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>
+              <button
+                className='h-11 px-12 bg-primary rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'
+                onClick={() => handlePrint()}
+              >
                 Save
               </button>
               <button
                 className='flex items-center gap-x-2 h-11 px-12 bg-primary rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'
-                onClick={
-                  () => handlePrint()
-                  //exportToExcel({ name: 'reports', data: reports })
-                }
+                onClick={() => handlePrint()}
               >
                 <span>Print</span>
                 <PrintIcon />
