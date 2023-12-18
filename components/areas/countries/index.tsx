@@ -52,16 +52,19 @@ const CountryCard = ({ country }: { country: Country }) => {
       name: 'Price Unit',
       id: 'priceUnit',
       defaultValue: priceUnit,
+      unit: '',
     },
     {
       name: 'Driver Fees',
       id: 'driverFee',
       defaultValue: driverFee,
+      unit: 'SAR',
     },
     {
       name: 'Order Fees',
       id: 'orderFee',
       defaultValue: orderFee,
+      unit: 'SAR / order',
     },
   ]
   return (
@@ -84,26 +87,82 @@ const CountryCard = ({ country }: { country: Country }) => {
 
       {showInfos && (
         <>
-          <Divider></Divider>
-          {fields?.map(({ name, id, defaultValue }: any, index: number) => (
-            <>
-              <div key={index} className='w-full flex items-center gap-x-6'>
-                <label className='text-gray-600 text-sm'>{name}</label>
-                <input
-                  name={id}
-                  id={id}
-                  type='text'
-                  value={defaultValue}
-                  onChange={(e) => {
-                    console.log(e.target.value)
-                  }}
-                  className='w-60 bg-gray-200 rounded-md p-2 text-sm'
-                />
-                <CopyToClipboardButton text={defaultValue} />
-              </div>
-              {index !== fields.length - 1 && <Divider></Divider>}
-            </>
-          ))}
+          <Divider />
+          {fields?.map(({ name, id, defaultValue, unit }: any, index: number) =>
+            id !== 'orderFee' ? (
+              <>
+                <div className='flex items-center gap-x-6'>
+                  <label className='text-gray-500 capitalize'>{name}</label>
+                  <div className='h-11 max-w-xs bg-gray-200 rounded px-4 flex justify-between items-center'>
+                    <input
+                      id='orderFee'
+                      name='orderFee'
+                      type='text'
+                      //@ts-ignore
+                      value={defaultValue}
+                      placeholder='0'
+                      className='bg-transparent w-full h-full outline-none'
+                      onChange={(e) => {
+                        console.log(e.target.value)
+                      }}
+                    />
+                    <span className='text-gray-500 w-10'>{unit}</span>
+                  </div>
+                </div>
+                {index !== fields.length - 1 && <Divider />}
+              </>
+            ) : (
+              <>
+                <div
+                  key={index}
+                  className='w-full flex items-center justify-between'
+                >
+                  <div className='flex items-center gap-x-6'>
+                    <label className='text-gray-500 capitalize'>{name}</label>
+                    <div className='h-11 max-w-xs bg-gray-200 rounded px-4 flex justify-between items-center'>
+                      <input
+                        name={id}
+                        id={id}
+                        type='text'
+                        value={defaultValue}
+                        onChange={(e) => {
+                          console.log(e.target.value)
+                        }}
+                        placeholder='0'
+                        className='bg-transparent w-full h-full outline-none'
+                      />
+                      <span className='text-gray-500 w-32'>{unit}</span>
+                    </div>
+                  </div>
+                  {['price', 'additional'].map(
+                    (type: string, index: number) => (
+                      <div className='flex items-center gap-x-6' key={index}>
+                        <label className='text-gray-500 capitalize'>
+                          {type}
+                        </label>
+                        <div className='h-11 max-w-xs bg-gray-200 rounded px-4 flex justify-between items-center'>
+                          <input
+                            id={type}
+                            name={type}
+                            type='text'
+                            //@ts-ignore
+                            value={0}
+                            placeholder='0'
+                            className='bg-transparent w-full h-full outline-none'
+                            onChange={(e) => {
+                              console.log(e.target.value)
+                            }}
+                          />
+                          <span className='text-gray-500 w-24'>SAR / km</span>
+                        </div>
+                      </div>
+                    )
+                  )}
+                </div>
+                {index !== fields.length - 1 && <Divider />}
+              </>
+            )
+          )}
         </>
       )}
     </div>
