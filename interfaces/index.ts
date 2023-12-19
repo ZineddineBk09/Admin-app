@@ -73,7 +73,7 @@ export interface DriverTeam {
   country: string
 }
 
-interface DriverTeamMember {
+export interface DriverTeamMember {
   id: number
   name: string
 }
@@ -97,7 +97,8 @@ export interface Order {
   value: number
   deliveryFee: number
   status: string
-  isPaid: boolean
+  clientPaid: boolean
+  driverPaid: boolean
   location: {
     latitude: number
     longitude: number
@@ -126,7 +127,8 @@ export interface Governorate {
   countryId: string
   countryName: string
   orderFee: number
-  driverFee: number
+  price: number
+  additional: number
 }
 
 export interface City {
@@ -135,7 +137,8 @@ export interface City {
   governorateId: string
   governorateName: string
   orderFee: number
-  driverFee: number
+  price: number
+  additional: number
 }
 
 export interface Account {
@@ -146,6 +149,8 @@ export interface Account {
   website: string
   phone: string
   branches: { id: string; name: string }[]
+  teams: { id: string; name: string }[]
+  admins: { id: string; name: string }[]
 }
 
 export interface Branch {
@@ -244,8 +249,28 @@ export interface SupportTeamMember {
   unread: number
 }
 
-export interface AccessProfile{
+export interface AccessProfile {
   id: number
   name: string
   permissions: string[]
+}
+
+export interface UserAccess {
+  id: number
+  username: string
+  email: string
+  accessProfile: string
+  clients: string[]
+}
+
+export interface Note {
+  date: string
+  time: string
+  text: string
+}
+
+export interface SubLink {
+  title: string
+  isActive?: boolean
+  href?: string
 }
