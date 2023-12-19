@@ -173,31 +173,27 @@ export const EditOrder = ({ order }: { order: Order }) => {
                 </Flex> */}
 
                 <div className='flex items-center justify-between gap-x-5'>
-                  <div className='w-full flex flex-col items-start gap-y-2'>
-                    <label className='text-gray-500'>Bonus</label>
-                    <input
-                      id='bonus'
-                      name='bonus'
-                      type='text'
-                      value={formik.values.bonus}
-                      placeholder='0'
-                      className='w-full h-11 bg-gray-200 rounded px-4'
-                      onChange={formik.handleChange}
-                    />
-                  </div>
-
-                  <div className='w-full flex flex-col items-start gap-y-2'>
-                    <label className='text-gray-500'>Deduction</label>
-                    <input
-                      id='deduction'
-                      name='deduction'
-                      type='text'
-                      value={formik.values.deduction}
-                      placeholder='0'
-                      className='w-full h-11 bg-gray-200 rounded px-4'
-                      onChange={formik.handleChange}
-                    />
-                  </div>
+                  {['bonus', 'deduction'].map((item: string, index: number) => (
+                    <div
+                      className='w-full flex flex-col items-start gap-y-2'
+                      key={index}
+                    >
+                      <label className='text-gray-500 capitalize'>{item}</label>
+                      <div className='h-11 w-full bg-gray-200 rounded px-4 flex justify-between items-center'>
+                        <input
+                          id={item}
+                          name={item}
+                          type='text'
+                          //@ts-ignore
+                          value={formik.values[item]}
+                          placeholder='0'
+                          className='bg-transparent w-full h-full outline-none'
+                          onChange={formik.handleChange}
+                        />
+                        <span className='text-gray-500'>SAR</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
                 <div className='w-full flex flex-col items-start gap-y-2'>
