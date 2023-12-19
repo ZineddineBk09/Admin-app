@@ -14,7 +14,7 @@ import { Flex } from '../styles/flex'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { NotesIcon } from '../icons/table'
-import { Order, Team } from '@/interfaces'
+import { Note, Order, Team } from '@/interfaces'
 import { getRecords, updateRecord } from '@/lib/api'
 import { useOrdersContext } from '@/context/order'
 
@@ -28,22 +28,10 @@ export const AddNotes = ({ order }: { order: Order }) => {
 
   const formik = useFormik({
     initialValues: {
-      username: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      team: '',
-      isFreelance: '',
+      note: '',
     },
     validationSchema: Yup.object({
-      username: Yup.string().required('username is required'),
-      firstName: Yup.string().required('firstname is required'),
-      lastName: Yup.string().required('lastname is required'),
-      email: Yup.string().required('email is required'),
-      phone: Yup.string().required('phone is required'),
-      team: Yup.string().required('team is required'),
-      isFreelance: Yup.string().required('isFreelance is required'),
+      note: Yup.string().required('Please enter a note'),
     }),
     onSubmit: async (values) => {
       setLoading(true)
@@ -65,6 +53,49 @@ export const AddNotes = ({ order }: { order: Order }) => {
       // }
     },
   })
+
+  const notes: Note[] = [
+    {
+      time: '12:00pm',
+      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
+      date: '12/12/2021',
+    },
+    {
+      time: '12:00pm',
+      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
+      date: '12/12/2021',
+    },
+    {
+      time: '12:00pm',
+      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
+      date: '12/12/2021',
+    },
+    {
+      time: '12:00pm',
+      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
+      date: '12/12/2021',
+    },
+    {
+      time: '12:00pm',
+      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
+      date: '12/12/2021',
+    },
+    {
+      time: '12:00pm',
+      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
+      date: '12/12/2021',
+    },
+    {
+      time: '12:00pm',
+      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
+      date: '12/12/2021',
+    },
+    {
+      time: '12:00pm',
+      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
+      date: '12/12/2021',
+    },
+  ]
 
   const closeHandler = () => {
     setVisible(false)
@@ -107,7 +138,7 @@ export const AddNotes = ({ order }: { order: Order }) => {
                 className='text-xl font-semibold capitalize'
                 h4
               >
-                Edit order
+                Notes
               </Text>
             </Modal.Header>
             {/* <Divider css={{ my: '$5' }} /> */}
@@ -127,201 +158,57 @@ export const AddNotes = ({ order }: { order: Order }) => {
                   </span>
                 )}
 
-                <Flex
-                  css={{
-                    gap: '$10',
-                    flexWrap: 'wrap',
-                    '@xl': { flexWrap: 'nowrap' },
-                  }}
-                >
-                  <Input
-                    label={
-                      formik.touched.firstName && formik.errors.firstName
-                        ? formik.errors.firstName
-                        : 'First Name'
-                    }
-                    bordered
-                    clearable
-                    fullWidth
-                    size='lg'
-                    placeholder='First Name'
-                    name='firstName'
-                    id='firstName'
-                    value={formik.values.firstName}
-                    onChange={formik.handleChange}
-                    status={
-                      formik.touched.firstName && formik.errors.firstName
-                        ? 'error'
-                        : 'default'
-                    }
-                  />
-                  <Input
-                    label={
-                      formik.touched.lastName && formik.errors.lastName
-                        ? formik.errors.lastName
-                        : 'Last Name'
-                    }
-                    bordered
-                    clearable
-                    fullWidth
-                    size='lg'
-                    placeholder='First Name'
-                    name='lastName'
-                    id='lastName'
-                    value={formik.values.lastName}
-                    onChange={formik.handleChange}
-                    status={
-                      formik.touched.lastName && formik.errors.lastName
-                        ? 'error'
-                        : 'default'
-                    }
-                  />
-                </Flex>
-
-                <Flex
-                  css={{
-                    gap: '$10',
-                    flexWrap: 'wrap',
-                    '@xl': { flexWrap: 'nowrap' },
-                  }}
-                >
-                  <Input
-                    label={
-                      formik.touched.email && formik.errors.email
-                        ? formik.errors.email
-                        : 'Email'
-                    }
-                    bordered
-                    clearable
-                    fullWidth
-                    size='lg'
-                    placeholder='Email'
-                    name='email'
-                    id='email'
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    status={
-                      formik.touched.email && formik.errors.email
-                        ? 'error'
-                        : 'default'
-                    }
-                  />
-                  <Input
-                    label={
-                      formik.touched.phone && formik.errors.phone
-                        ? formik.errors.phone
-                        : 'Phone'
-                    }
-                    bordered
-                    clearable
-                    fullWidth
-                    size='lg'
-                    placeholder='Phone'
-                    name='phone'
-                    id='phone'
-                    value={formik.values.phone}
-                    onChange={formik.handleChange}
-                    status={
-                      formik.touched.phone && formik.errors.phone
-                        ? 'error'
-                        : 'default'
-                    }
-                  />
-                </Flex>
-
-                <Flex
-                  css={{
-                    gap: '$10',
-                    flexWrap: 'wrap',
-                    '@xl': { flexWrap: 'nowrap' },
-                  }}
-                >
-                  <div className='h-12 w-full bg-white rounded-2xl px-2 border-2 border-gray-300'>
-                    <select
-                      name='team'
-                      id='team'
-                      value={formik.values.team}
-                      className='w-full h-full bg-transparent'
+                <div className='w-full flex flex-col items-end gap-y-3'>
+                  <div className='w-full flex flex-col items-start gap-y-2'>
+                    <label className='text-gray-500'>Note</label>
+                    <textarea
+                      placeholder='Note'
+                      name='note'
+                      id='note'
+                      className='w-full bg-gray-200 rounded p-4'
+                      rows={4}
+                      value={formik.values.note}
                       onChange={formik.handleChange}
-                    >
-                      <option value=''>Select Team</option>
-                      {teams?.map((team: Team, index: number) => (
-                        <option key={index} value={team.pk}>
-                          {team.fields.name}
-                        </option>
-                      ))}
-                    </select>
+                    />
                   </div>
-                  <div className='h-10 w-full bg-white rounded-full px-2'>
-                    <Radio.Group
-                      label={
-                        formik.touched.isFreelance &&
-                        formik.errors.isFreelance ? (
-                          <p
-                            className='text-md font-[400] text-red-500'
-                            style={{ marginTop: '-1rem' }}
-                          >
-                            {formik.errors.isFreelance}
-                          </p>
-                        ) : (
-                          <p className='text-md font-[400] text-black'>
-                            Is Freelancer
-                          </p>
-                        )
-                      }
-                      name='isFreelance'
-                      id='isFreelance'
-                      color='warning'
-                      value={formik.values.isFreelance}
-                      onChange={(e) => formik.setFieldValue('isFreelance', e)}
-                      orientation='horizontal'
-                    >
-                      <Radio value={'Yes'} isSquared size='sm'>
-                        Yes
-                      </Radio>
-                      <Radio value={'No'} isSquared size='sm'>
-                        No
-                      </Radio>
-                    </Radio.Group>
-                  </div>
-                </Flex>
+                  <button
+                    className='h-11 px-10 bg-primary rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'
+                    type='submit'
+                  >
+                    Add New Note
+                  </button>
+                </div>
 
-                <Flex
-                  css={{
-                    gap: '$10',
-                    flexWrap: 'wrap',
-                    '@xl': { flexWrap: 'nowrap' },
-                  }}
-                >
-                  <Input
-                    label={
-                      formik.touched.username && formik.errors.username
-                        ? formik.errors.username
-                        : 'Username'
-                    }
-                    bordered
-                    clearable
-                    fullWidth
-                    size='lg'
-                    placeholder='Username'
-                    name='username'
-                    id='username'
-                    value={formik.values.username}
-                    onChange={formik.handleChange}
-                    status={
-                      formik.touched.username && formik.errors.username
-                        ? 'error'
-                        : 'default'
-                    }
-                  />
-                </Flex>
+                {/* Notes */}
+                <div className='flex flex-col items-start gap-y-2 max-h-[300px] overflow-y-auto bg-gray-50'>
+                  <Divider css={{ my: '$5' }} />
+                  {notes.map((note: Note, index: number) => (
+                    <div
+                      className='w-full flex flex-col items-start gap-y-2'
+                      key={index}
+                    >
+                      <div className='w-full p-2'>
+                        <div className='flex justify-between items-center'>
+                          <span className='text-gray-600 font-semibold'>
+                            {note.date + ' - ' + note.time}
+                          </span>
+                        </div>
+                        <div className='text-gray-500 text-sm'>{note.text}</div>
+                      </div>
+                      <Divider css={{ my: '$5' }} />
+                    </div>
+                  ))}
+                </div>
               </Flex>
             </Modal.Body>
             {/* <Divider css={{ my: '$5' }} /> */}
             <Modal.Footer>
-              <Button auto type='submit' className='bg-primary text-black'>
-                Edit Order
-              </Button>
+              <button
+                className='h-11 px-12 mx-auto bg-gray-400 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'
+                onClick={closeHandler}
+              >
+                Close
+              </button>
             </Modal.Footer>
           </form>
         )}
