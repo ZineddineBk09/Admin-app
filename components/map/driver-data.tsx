@@ -15,7 +15,6 @@ export const DriverData = () => {
     }
   }, [selectedDriver])
 
-  if (!showDrivers) return null
   return (
     <div className='w-[80%] flex items-start justify-evenly mx-auto h-fit relative p-4'>
       {/* Image & Status */}
@@ -92,4 +91,3 @@ export const DriverData = () => {
     </div>
   )
 }
-
