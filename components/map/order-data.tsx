@@ -28,6 +28,9 @@ export const OrderData = () => {
           {/* Buttons */}
           <div className='h-full flex flex-col justify-center gap-y-5'>
             <button className='h-11 px-12 bg-gray-400 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>
+              Assign Driver
+            </button>
+            <button className='h-11 px-12 bg-gray-400 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>
               Deliver
             </button>
             <button className='h-11 px-12 bg-gray-400 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>
@@ -59,7 +62,7 @@ export const OrderData = () => {
       {/* Order trajectory, Restaurant, and Client */}
       <div className='flex flex-col items-center gap-y-5'>
         {/* Trajectory */}
-        <div className='flex items-center gap-x-3'>
+        <div className='flex items-center gap-x-3 mb-3'>
           <MapIcon width='9 h-9' />
           <div className='flex flex-col items-center -mb-3'>
             <TrajectoryIcon color='gray' />
@@ -81,8 +84,8 @@ export const OrderData = () => {
               alt='customer'
               objectFit='cover'
               className='rounded-md'
-              width={60}
-              height={60}
+              width={70}
+              height={70}
             />
             <span className='font-semibold'>{order?.restaurant}</span>
             <span className='text-gray-500'>{order?.restaurantAddress}</span>
@@ -95,8 +98,8 @@ export const OrderData = () => {
               alt='customer'
               objectFit='cover'
               className='rounded-md'
-              width={60}
-              height={60}
+              width={70}
+              height={70}
             />
             <span className='font-semibold'>{order?.customer}</span>
             <span className='text-gray-500'>{order?.customerAddress}</span>
