@@ -14,6 +14,7 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { AddDriverProfile } from './add-profile'
 import { DeleteDriverType } from './delete-profile'
 import { NotesIcon as EditIcon } from '@/components/icons/table'
+import { ArrowIcon } from '@/components/icons/permissions'
 
 const Profiles = () => {
   const profiles: AccessProfile[] = [
@@ -289,11 +290,11 @@ export const SelectPermissions = () => {
         onClose={closeHandler}
         className='rounded-md'
         css={{
-          backgroundColor: '#cfcfcf !important',
+          backgroundColor: '#EEEEEE !important',
         }}
       >
         <Modal.Header>
-          <Text id='modal-title' className='text-xl font-semibold uppercase' h4>
+          <Text id='modal-title' className='text-xl font-semibold' h4>
             Select Access Permissions
           </Text>
         </Modal.Header>
@@ -312,9 +313,11 @@ export const SelectPermissions = () => {
                       }
                       shadow
                       css={{
-                        backgroundColor: '#fff !important',
+                        backgroundColor: '#FFFFFF !important',
                         width: '800px !important',
+                        shadow: '0px 0px 10px #AEAEAE !important',
                       }}
+                      arrowIcon={<ArrowIcon />}
                     >
                       <div className='w-full'>
                         {permission.list.map((item: any, index: number) => (
