@@ -28,12 +28,12 @@ export const Content = () => {
           orders?.length > 0 ? (
             <OrderData />
           ) : (
-            <div />
+            <NoData />
           )
         ) : drivers?.length > 0 ? (
           <DriverData />
         ) : (
-          <div />
+          <NoData />
         )}
       </div>
 
@@ -41,6 +41,16 @@ export const Content = () => {
       <div className='w-full h-full overflow-y-auto bg-gray-200'>
         <OrdersAndDriversTabs />
       </div>
+    </div>
+  )
+}
+
+const NoData = () => {
+  return (
+    <div className='w-[80%] h-32 flex flex-col items-start justify-evenly mx-auto relative text-center '>
+      <h1 className='text-center'>
+        No data found, please add some drivers and orders to see the results.
+      </h1>
     </div>
   )
 }
