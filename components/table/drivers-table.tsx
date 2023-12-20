@@ -1,4 +1,4 @@
-import { Divider, Table, Tooltip } from '@nextui-org/react'
+import { Checkbox, Divider, Table, Tooltip } from '@nextui-org/react'
 import React, { useEffect, useState } from 'react'
 import { useDriversContext } from '@/context/driver'
 import { Driver, Sort } from '@/interfaces'
@@ -25,127 +25,23 @@ export const DriversTable = () => {
       {/* add driver button */}
       {/* <AddAccount /> */}
     </div>
-    // <div className='flex flex-col'>
-    //   <div className='overflow-x-auto sm:-mx-6 lg:-mx-8'>
-    //     <div className='inline-block min-w-full py-2 sm:px-6 lg:px-8'>
-    //       <div className='overflow-hidden'>
-    //         <table className='min-w-full text-left text-sm font-light'>
-    //           <thead className='border-b font-medium border-gray-300'>
-    //             <tr>
-    //               {driversTableCols?.map((col) => (
-    //                 <th key={col.uid} scope='col' className='px-6 py-4'>
-    //                   {col.name === 'Actions' ? '' : col.name}
-    //                 </th>
-    //               ))}
-    //             </tr>
-    //           </thead>
-    //           <tbody>
-    //             {drivers?.map((driver: any, index: number) => (
-    //               <tr
-    //                 key={driver.id}
-    //                 // make table striped by adding bg-gray-50 to odd rows
-    //                 className={`border-b transition duration-200 ease-in-out hover:bg-yellow-100
-    //                   ${index % 2 === 0 ? ' bg-gray-200' : ''}
-    //                 `}
-    //               >
-    //                 {driversTableCols?.map((col) => (
-    //                   <td
-    //                     key={col.uid}
-    //                     className={`whitespace-nowrap px-6 py-4 font-medium border-gray-300 ${
-    //                       col.uid !== 'isPaid' && 'border-r'
-    //                     } ${col.uid === 'id' && 'border-l'}`}
-    //                   >
-    //                     {RenderCell({ driver: driver, columnKey: col.uid })}
-    //                   </td>
-    //                 ))}
-    //               </tr>
-    //             ))}
-    //           </tbody>
-    //         </table>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
-    // <Box
-    //   css={{
-    //     '& .nextui-table-container': {
-    //       boxShadow: 'none',
-    //       marginBottom: '10px',
-    //       borderRadius: '0',
-    //       border: '1px solid #CECECE',
-    //     },
-    //   }}
-    // >
-    //   <Table
-    //     aria-label='Drivers table'
-    //     bordered
-    //     sticked
-    //     striped
-    //     hoverable
-    //     css={{
-    //       height: 'auto',
-    //       minWidth: '100%',
-    //       boxShadow: 'none',
-    //       width: '100%',
-    //       px: 5,
-    //       backgroundColor: 'white',
-    //     }}
-    //     onSortChange={(sort: any) => {
-    //       const { direction } = sorting
-    //       const { column } = sort
-    //       if (direction === 'ascending') {
-    //         setSorting({
-    //           column,
-    //           direction: 'descending',
-    //         })
-    //         return
-    //       }
-    //       setSorting({ column, direction: 'ascending' })
-    //     }}
-    //   >
-    //     <Table.Header columns={driversTableCols}>
-    //       {(column) => (
-    //         <Table.Column
-    //           key={column.uid}
-    //           hideHeader={column.uid === 'actions'}
-    //           align={column.uid === 'actions' ? 'center' : 'start'}
-    //           allowsSorting={
-    //             column.uid === 'completedTasks' ||
-    //             column.uid === 'inProgressTasks'
-    //           }
-    //         >
-    //           {column.name}
-    //         </Table.Column>
-    //       )}
-    //     </Table.Header>
-    //     <Table.Body items={drivers}>
-    //       {(item) => (
-    //         <Table.Row>
-    //           {(columnKey) => (
-    //             <Table.Cell>
-    //               {RenderCell({ driver: item, columnKey: columnKey })}
-    //             </Table.Cell>
-    //           )}
-    //         </Table.Row>
-    //       )}
-    //     </Table.Body>
-    //     <Table.Pagination
-    //       shadow
-    //       noMargin
-    //       align='center'
-    //       color='warning'
-    //       rowsPerPage={8}
-    //       onPageChange={(page) => console.log({ page })}
-    //     />
-    //   </Table>
-    // </Box>
   )
 }
 
 const DriverCard = ({ driver }: { driver: Driver }) => {
   const [showInfos, setShowInfos] = React.useState(false)
-  const { id, username, team, phone, city, salary, vehicleType, areas } = driver
-  const fields = [
+  const {
+    id,
+    username,
+    team,
+    phone,
+    city,
+    salary,
+    vehicleType,
+    areas,
+    isFreelance,
+  } = driver
+  const fields1 = [
     {
       name: 'Team',
       id: 'team',
@@ -156,6 +52,8 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
       id: 'phone',
       defaultValue: phone,
     },
+  ]
+  const fields2 = [
     {
       name: 'Salary',
       id: 'salary',
@@ -188,19 +86,14 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
       </div>
       {showInfos && (
         <>
-          <Divider></Divider>
-          <div className='w-full flex items-center gap-x-6'>
-            <label className='text-gray-600 text-sm'>Username</label>
-            <p className='text-sm capitalize'>{username}</p>
-          </div>
-          <Divider></Divider>
-          <div className='w-full flex items-center gap-x-6'>
-            <label className='text-gray-600 text-sm'>City</label>
-            <p className='text-sm'>{city}</p>
-          </div>
-          <Divider></Divider>
-          {fields?.map(({ name, id, defaultValue }: any, index: number) => (
-            <>
+          <Divider />
+          <div className='w-full flex items-center justify-between'>
+            <div className='w-full flex items-center gap-x-6'>
+              <label className='text-gray-600 text-sm'>Name</label>
+              <p className='text-sm capitalize'>{username}</p>
+            </div>
+
+            {fields1?.map(({ name, id, defaultValue }: any, index: number) => (
               <div key={index} className='w-full flex items-center gap-x-6'>
                 <label className='text-gray-600 text-sm'>{name}</label>
                 <input
@@ -211,50 +104,96 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
                   onChange={(e) => {
                     console.log(e.target.value)
                   }}
-                  className='w-60 bg-gray-200 rounded-md p-2 text-sm'
+                  className='w-60 h-11 bg-gray-200 rounded-md p-2 text-sm'
                 />
               </div>
-              <Divider></Divider>
-            </>
-          ))}
-
-          <div className='w-full flex items-start gap-x-6'>
-            <label className='mt-2 text-gray-600 text-sm'>Branches</label>
-            {areas.length > 0 ? (
-              <div className='w-full flex items-start gap-y-2'>
-                {areas?.map((area: any, index: number) => (
-                  <div key={index}>
-                    <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
-                      <p className='text-sm capitalize'>{area} </p>
-                      <Tooltip content={'Delete "' + area + '"'} color='error'>
-                        <button>
-                          <BinIcon width={4} />
-                        </button>
-                      </Tooltip>
-                      {index < areas.length - 1 && (
-                        <span className='-ml-4'>,</span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className='text-sm'>No areas found</p>
-            )}
+            ))}
           </div>
-          <Divider></Divider>
+          <Divider />
+          {/* Areas & City */}
+          <div className='w-full grid grid-cols-3 items-center justify-between'>
+            <div className='flex items-center gap-x-6 col-span-1'>
+              <label className='text-gray-600 text-sm'>City</label>
+              <p className='text-sm'>{city}</p>
+            </div>
+            {/* Areas */}
+            <div className='flex items-start gap-x-6 col-span-2'>
+              <label className='mt-2 text-gray-600 text-sm'>Areas</label>
+              {areas.length > 0 ? (
+                <div className='w-full flex items-start gap-y-2'>
+                  {areas?.map((area: any, index: number) => (
+                    <div key={index}>
+                      <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
+                        <p className='text-sm capitalize'>{area}</p>
+                        <Tooltip
+                          content={'Delete "' + area + '"'}
+                          color='error'
+                        >
+                          <button>
+                            <BinIcon width={4} />
+                          </button>
+                        </Tooltip>
+                        {index < areas.length - 1 && (
+                          <span className='-ml-4'>,</span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className='text-sm'>No areas found</p>
+              )}
+
+              <Tooltip content='Add Area'>
+                <button className='h-10 w-16 flex items-center justify-center text-center text-4xl font-medium rounded-full'>
+                  +
+                </button>
+              </Tooltip>
+            </div>
+          </div>
+          <Divider />
+
+          <div className='w-full flex items-center justify-between'>
+            {fields2?.map(({ name, id, defaultValue }: any, index: number) => (
+              <>
+                <div key={index} className='w-full flex items-center gap-x-6'>
+                  <label className='text-gray-600 text-sm'>{name}</label>
+                  <input
+                    name={id}
+                    id={id}
+                    type='text'
+                    value={defaultValue}
+                    onChange={(e) => {
+                      console.log(e.target.value)
+                    }}
+                    className='w-60 h-11 bg-gray-200 rounded-md p-2 text-sm'
+                  />
+                </div>
+              </>
+            ))}
+            <Checkbox
+              defaultChecked={isFreelance}
+              value={isFreelance ? 'freelancer' : ''}
+              color='warning'
+              size='xl'
+              className='rounded-[0]'
+            >
+              <span className='text-sm text-gray-500'>Freelancer</span>
+            </Checkbox>
+          </div>
+          <Divider />
 
           <div className='w-full flex items-center gap-x-6'>
             <label className='text-gray-600 text-sm'>Contract</label>
             <div className='flex items-center gap-x-3'>
-              <Btn>
+              <Btn bg='gray-400'>
                 Upload New
                 <input
                   type='file'
                   className='absolute inset-0 opacity-0 cursor-pointer'
                 />
               </Btn>
-              <Btn>Download</Btn>
+              <Btn bg='gray-400'>Download</Btn>
               <Btn bg='primary'>Print</Btn>
             </div>
           </div>
@@ -273,7 +212,7 @@ const Btn = ({
 }) => {
   return (
     <button
-      className={`min-w-[128px] relative font-medium text-xs shadow-md shadow-black/30 rounded-md text-center py-2 bg-${bg} px-2 transition-all duration-300 hover:bg-opacity-90 cursor-pointer`}
+      className={`min-w-[128px] relative font-medium shadow-md shadow-black/30 rounded-md text-center py-2 bg-${bg} cursor-pointer h-11 px-12 bg-${bg} rounded font-medium text-md hover:bg-opacity-90 transition-all duration-300`}
     >
       {children}
     </button>
