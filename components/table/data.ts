@@ -22,7 +22,8 @@ export const ordersTableCols = [
   { name: 'Value', uid: 'value' },
   { name: 'Delivery', uid: 'deliveryFee' },
   { name: 'Status', uid: 'status' },
-  { name: 'Is Paid', uid: 'isPaid' },
+  { name: 'Client Paid', uid: 'clientPaid' },
+  { name: 'Driver Paid', uid: 'driverPaid' },
   { name: 'Actions', uid: 'actions' },
 ]
 
