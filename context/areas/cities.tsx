@@ -27,7 +27,8 @@ export const AreasCitiesContextProvider = ({
         name: 'البجيري - Al Bujairi',
         governorateId: '215351',
         governorateName: 'Riyadh',
-        driverFee: 25,
+        price: 25,
+        additional: 4,
         orderFee: 10,
       },
       {
@@ -35,7 +36,8 @@ export const AreasCitiesContextProvider = ({
         name: 'الروضة - Ar Rawdah',
         governorateId: '215352',
         governorateName: 'Jeddah',
-        driverFee: 25,
+        price: 25,
+        additional: 4,
         orderFee: 10,
       },
       {
@@ -43,7 +45,8 @@ export const AreasCitiesContextProvider = ({
         name: 'الروضة - Ar Rawdah',
         governorateId: '215353',
         governorateName: 'Riyadh',
-        driverFee: 25,
+        price: 25,
+        additional: 4,
         orderFee: 10,
       },
     ])
