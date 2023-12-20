@@ -18,7 +18,7 @@ import {
   OrdersIcon,
   ReportsIcon,
 } from '../icons/sidebar'
-import { Text } from '@nextui-org/react'
+import { Divider, Text } from '@nextui-org/react'
 import Image from 'next/image'
 import { CollapseItems } from './collapse-items'
 import { signOut } from 'next-auth/react'
@@ -170,8 +170,8 @@ export const SidebarWrapper = () => {
     >
       {collapsed ? <Sidebar.Overlay onClick={setCollapsed} /> : null}
 
-      <Sidebar collapsed={collapsed}>
-        <Sidebar.Header className='w-full flex items-center justify-start'>
+      <Sidebar collapsed={collapsed} className='relative'>
+        <Sidebar.Header className='w-full flex items-center justify-start mb-3'>
           <Image
             src='/images/logo.png'
             alt='Company'
@@ -186,7 +186,8 @@ export const SidebarWrapper = () => {
         <Flex direction={'column'} justify={'between'} css={{ height: '95%' }}>
           <Sidebar.Body className='w-full'>
             {sidebarLinks?.map((link, index) => (
-              <div key={index}>
+              <div key={index} className='w-full flex flex-col'>
+                <Divider className='-mt-3 absolute inset-x-0' />
                 {link.subLinks.length > 0 ? (
                   <CollapseItems
                     title={link.title}
