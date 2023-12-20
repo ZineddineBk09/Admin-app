@@ -3,6 +3,8 @@ import React from 'react'
 import { CancelOrder } from '../orders/cancel-order'
 import { EditOrder } from '../orders/edit-order'
 import { Order } from '@/interfaces'
+import { AddNotes } from '../orders/add-notes'
+import { CheckedIcon } from '../icons/table'
 
 interface Props {
   order: Order | any
@@ -48,18 +50,28 @@ export const RenderCell = ({ order, columnKey }: Props) => {
         </p>
       )
 
-    case 'isPaid':
+    case 'clientPaid':
       // return a checkbox
       return (
-        <Checkbox
-          aria-label='Checkbox-driver-status'
-          color='warning'
-          labelColor='warning'
-          defaultSelected={order.isPaid}
-          //value={order.isPaid}
-          onChange={() => {}}
-          size='md'
-        ></Checkbox>
+        // <Checkbox
+        //   aria-label='Checkbox-driver-status'
+        //   color='warning'
+        //   labelColor='warning'
+        //   defaultSelected={order.isPaid}
+        //   //value={order.isPaid}
+        //   onChange={() => {}}
+        //   size='md'
+        // ></Checkbox>
+        <div className='w-6 h-6 flex items-center justify-center p-1 border-[3px] border-primary rounded-full'>
+          <CheckedIcon />
+        </div>
+      )
+
+    case 'driverPaid':
+      return (
+        <div className='w-6 h-6 flex items-center justify-center p-1 border-[3px] border-primary rounded-full'>
+          <CheckedIcon />
+        </div>
       )
 
     case 'status':
@@ -82,10 +94,13 @@ export const RenderCell = ({ order, columnKey }: Props) => {
         <Row
           justify='center'
           align='center'
-          css={{ gap: '$8', '@md': { gap: 0 } }}
+          css={{ gap: '$8', '@md': { gap: 3 } }}
         >
           <Col css={{ d: 'flex' }}>
             <EditOrder order={order} />
+          </Col>
+          <Col css={{ d: 'flex' }}>
+            <AddNotes order={order} />
           </Col>
           <Col css={{ d: 'flex' }}>
             <CancelOrder id={order.id} />
