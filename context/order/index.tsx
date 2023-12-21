@@ -54,7 +54,8 @@ export const OrdersContextProvider = ({
           status: ['done', 'canceled', 'delivering'][
             faker.number.int({ min: 0, max: 2 })
           ],
-          isPaid: faker.datatype.boolean(),
+          clientPaid: faker.datatype.boolean(),
+          driverPaid: faker.datatype.boolean(),
           location: {
             latitude: faker.location.latitude(),
             longitude: faker.location.longitude(),
