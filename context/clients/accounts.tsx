@@ -34,6 +34,14 @@ export const ClientsAccountsContextProvider = ({
           id: faker.number.bigInt().toString(),
           name: faker.company.name(),
         }),
+        teams: Array(3).fill({
+          id: faker.number.bigInt().toString(),
+          name: faker.company.name(),
+        }),
+        admins: Array(3).fill({
+          id: faker.number.bigInt().toString(),
+          name: faker.company.name(),
+        }),
       },
       {
         id: '215352',
@@ -43,6 +51,14 @@ export const ClientsAccountsContextProvider = ({
         website: 'https://www.kfc.com',
         phone: '920000000',
         branches: Array(3).fill({
+          id: faker.number.bigInt().toString(),
+          name: faker.company.name(),
+        }),
+        teams: Array(3).fill({
+          id: faker.number.bigInt().toString(),
+          name: faker.company.name(),
+        }),
+        admins: Array(3).fill({
           id: faker.number.bigInt().toString(),
           name: faker.company.name(),
         }),
@@ -58,6 +74,14 @@ export const ClientsAccountsContextProvider = ({
           id: faker.number.bigInt().toString(),
           name: faker.company.name(),
         }),
+        teams: Array(3).fill({
+          id: faker.number.bigInt().toString(),
+          name: faker.company.name(),
+        }),
+        admins: Array(3).fill({
+          id: faker.number.bigInt().toString(),
+          name: faker.company.name(),
+        }),
       },
       {
         id: '215354',
@@ -67,6 +91,14 @@ export const ClientsAccountsContextProvider = ({
         website: 'https://www.hardees.com',
         phone: '920000000',
         branches: [],
+        teams: Array(3).fill({
+          id: faker.number.bigInt().toString(),
+          name: faker.company.name(),
+        }),
+        admins: Array(3).fill({
+          id: faker.number.bigInt().toString(),
+          name: faker.company.name(),
+        }),
       },
     ])
   }
