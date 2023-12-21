@@ -77,7 +77,7 @@ export const DriversContextProvider = ({
     const records: DriverTeam[] = Array.from({ length: 5 }, (_, i) => ({
       id: i,
       name: 'Team ' + i,
-      members: Array.from({ length: 3 }, (_, i) => ({
+      members: Array.from({ length: 5 }, (_, i) => ({
         id: i,
         name: faker.person.fullName(),
       })),
