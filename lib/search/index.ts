@@ -69,3 +69,12 @@ export const searchReports = (list: any[], pattern: string) => {
 
   return fuse.search(pattern)?.map((item) => item.item)
 }
+
+export const searchMembers = (list: any[], pattern: string) => {
+  const fuse = new Fuse(list, {
+    ...options,
+    keys: ['id', 'name'],
+  })
+
+  return fuse.search(pattern)?.map((item) => item.item)
+}
