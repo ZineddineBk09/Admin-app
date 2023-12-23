@@ -7,7 +7,7 @@ import { AddNotes } from '../orders/add-notes'
 import { CheckedIcon } from '../icons/table'
 
 interface Props {
-  order: Order | any
+  order: Order
   columnKey: string | React.Key
 }
 
@@ -21,7 +21,7 @@ export const RenderCell = ({ order, columnKey }: Props) => {
       return <p>#{cellValue}</p>
 
     case 'client':
-      return <p>{order.clientName}</p>
+      return <p>{order.client.name}</p>
 
     case 'driver':
       return <p>{order.driverName}</p>
