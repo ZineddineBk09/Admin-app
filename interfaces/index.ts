@@ -78,7 +78,7 @@ export interface DriverTeamMember {
   name: string
 }
 
-interface Item {
+export interface Item {
   id: string
   name: string
   quantity: number
