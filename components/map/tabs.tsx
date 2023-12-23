@@ -35,7 +35,7 @@ const Tabs = ({ color }: any) => {
     { value: 'Busy', checked: true },
     { value: 'Inactive', checked: true },
   ]
-  const { drivers, orders, openTab, hansleSelectTab } = useMapContext()
+  const { openTab, hansleSelectTab } = useMapContext()
 
   return (
     <>
@@ -84,10 +84,10 @@ const Tabs = ({ color }: any) => {
           <div>
             <div>
               <div className={openTab === 1 ? 'block' : 'hidden'} id='link1'>
-                <Orders orders={orders} orderStatus={orderStatus} />
+                <Orders orderStatus={orderStatus} />
               </div>
               <div className={openTab === 2 ? 'block' : 'hidden'} id='link2'>
-                <Drivers drivers={drivers} driverStatus={driverStatus} />
+                <Drivers driverStatus={driverStatus} />
               </div>
             </div>
           </div>
@@ -99,7 +99,8 @@ const Tabs = ({ color }: any) => {
 
 export default Lists
 
-const Orders = ({ orders, orderStatus }: { orders: any; orderStatus: any }) => {
+const Orders = ({ orderStatus }: { orderStatus: any }) => {
+  const { orders } = useMapContext()
   console.log(orders)
 
   return (
@@ -230,13 +231,9 @@ const OrderCard = ({ order }: { order: any }) => {
   )
 }
 
-const Drivers = ({
-  drivers,
-  driverStatus,
-}: {
-  drivers: any
-  driverStatus: any
-}) => {
+const Drivers = ({ driverStatus }: { driverStatus: any }) => {
+  const { drivers } = useMapContext()
+
   return (
     <div className='w-full h-full flex flex-col items-center gap-y-3 overflow-y-auto px-2'>
       {drivers
@@ -322,4 +319,3 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
     </Card>
   )
 }
-
