@@ -6,7 +6,7 @@ import {
   BagIcon,
   TrajectoryIcon,
 } from '../icons/orders'
-import { Driver } from '@/interfaces'
+import { Driver, Order } from '@/interfaces'
 import { Card } from '@nextui-org/react'
 import { useMapContext } from '@/context/map'
 import { DriverInboxIcon, DriverOrdersIcon } from '../icons/drivers'
@@ -101,7 +101,6 @@ export default Lists
 
 const Orders = ({ orderStatus }: { orderStatus: any }) => {
   const { orders } = useMapContext()
-  console.log(orders)
 
   return (
     <div className='w-full h-full flex flex-col items-center gap-y-3 overflow-y-auto'>
@@ -119,14 +118,12 @@ const Orders = ({ orderStatus }: { orderStatus: any }) => {
   )
 }
 
-const OrderCard = ({ order }: { order: any }) => {
+const OrderCard = ({ order }: { order: Order }) => {
   const {
-    restaurant,
+    client,
     customer,
     startTime,
     endTime,
-    customerImage,
-    restaurantImage,
     status,
     location,
   } = order
@@ -166,19 +163,19 @@ const OrderCard = ({ order }: { order: any }) => {
           <div className='w-full flex items-center justify-between'>
             <div className='flex items-center gap-x-2'>
               <Image
-                src={restaurantImage || '/images/logo.png'}
+                src={client.image || '/images/logo.png'}
                 alt='restaurant'
                 objectFit='cover'
                 className='rounded-md'
                 width={40}
                 height={40}
               />
-              <p className='text-xs font-medium'>{restaurant}</p>
+              <p className='text-xs font-medium'>{client.name}</p>
             </div>
             <div className='flex items-center gap-x-2'>
-              <p className='text-xs font-medium'>{customer}</p>
+              <p className='text-xs font-medium'>{customer.name}</p>
               <Image
-                src={customerImage || '/images/logo.png'}
+                src={customer.image || '/images/logo.png'}
                 alt='customer'
                 objectFit='cover'
                 className='rounded-md'
