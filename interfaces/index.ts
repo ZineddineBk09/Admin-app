@@ -84,13 +84,29 @@ interface Item {
   quantity: number
 }
 
+interface Client {
+  id: string
+  name: string
+  image: string
+  address: string
+  phone: string
+}
+
+interface Customer {
+  id: string
+  name: string
+  image: string
+  address: string
+  phone: string
+}
+
 export interface Order {
   id: string
   date: string
   time: string
-  client: string
-  clientName: string
-  driver: string
+  customer: Customer
+  client: Client
+  driverId: string
   driverName: string
   distance: number
   city: string
@@ -103,8 +119,9 @@ export interface Order {
     latitude: number
     longitude: number
   } | null
-  address: string
-  phone: string
+  duration: number
+  startTime: number
+  endTime: number
   items: Item[]
 }
 
