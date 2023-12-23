@@ -1,4 +1,4 @@
-import { Order, Sort } from '@/interfaces'
+import { Order, Sort, Status } from '@/interfaces'
 import { getRecords } from '@/lib/api'
 import { searchOrders } from '@/lib/search'
 import { faker } from '@faker-js/faker'
@@ -15,6 +15,12 @@ export const OrdersContextProvider = ({
 }) => {
   const [orders, setOrders] = useState<Order[]>([] as Order[])
   const [loading, setLoading] = useState(false)
+  const [orderStatus, setOrderStatus] = useState<Status[]>([
+    { value: 'Assigned', checked: true },
+    { value: 'Cancelled', checked: true },
+    { value: 'New', checked: true },
+    { value: 'Done', checked: true },
+  ])
 
   const refreshOrders = async () => {
     setLoading(true)
@@ -23,52 +29,53 @@ export const OrdersContextProvider = ({
       { length: 10 },
       () =>
         ({
-          id: faker.number
-            .int({
-              max: 10000,
-            })
-            .toString(),
+          id: faker.number.int({ min: 1000, max: 10000 }).toString(),
           date: faker.date.past().toLocaleDateString(),
-          time: new Date().toLocaleTimeString('en-US', {
-            hour: 'numeric',
-            minute: 'numeric',
-          }),
-          client: faker.number
-            .int({
-              max: 10000,
+          value: faker.number.int({ max: 1000, min: 0 }),
+          client: {
+            name: faker.company.name(),
+            id: faker.string.uuid(),
+            image: faker.image.url(),
+            address: faker.location.streetAddress(),
+            phone: faker.phone.number(),
+          },
+          customer: {
+            id: faker.string.uuid(),
+            name: faker.person.firstName(),
+            image: faker.image.avatar(),
+            address: faker.location.streetAddress(),
+            phone: faker.phone.number(),
+          },
+          duration: faker.number.int(),
+          startTime: faker.date.past().getTime(),
+          endTime: faker.date.future().getTime(),
+          distance: faker.number.int(),
+          time: faker.date.past().toLocaleTimeString(),
+          driverId: faker.string.uuid(),
+          driverName: faker.person.firstName(),
+          city: faker.address.city(),
+          status: orderStatus[faker.number.int({ max: 3, min: 0 })].value,
+          deliveryFee: faker.number.int({ max: 100, min: 0 }),
+          location:
+            faker.number.int({ max: 2, min: 1 }) == 1
+              ? {
+                  latitude: faker.location.latitude({ max: 22, min: 21 }),
+                  longitude: faker.location.longitude({
+                    max: 40,
+                    min: 39,
+                  }),
+                }
+              : null,
+          items: Array.from(
+            { length: faker.number.int({ max: 5, min: 1 }) },
+            () => ({
+              id: faker.number.int({ min: 1000, max: 10000 }).toString(),
+              name: faker.commerce.productName(),
+              quantity: faker.number.int({ max: 5, min: 1 }),
             })
-            .toString(),
-          clientName: faker.company.name(),
-          driver: faker.string.uuid(),
-          driverName: faker.person.fullName(),
-          distance: faker.number.int({
-            max: 100,
-            min: 1,
-          }),
-          city: faker.location.city(),
-          value: faker.number.int({
-            max: 1000,
-            min: 50,
-          }),
-          deliveryFee: 25,
-          status: ['done', 'canceled', 'delivering'][
-            faker.number.int({ min: 0, max: 2 })
-          ],
+          ),
           clientPaid: faker.datatype.boolean(),
           driverPaid: faker.datatype.boolean(),
-          location: {
-            latitude: faker.location.latitude(),
-            longitude: faker.location.longitude(),
-          },
-          address: faker.location.streetAddress(),
-          phone: faker.phone.number(),
-          items: [
-            {
-              id: faker.number.int().toString(),
-              name: faker.commerce.productName(),
-              quantity: faker.number.int({ min: 1, max: 10 }),
-            },
-          ],
         } as Order)
     )
 
