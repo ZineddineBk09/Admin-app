@@ -3,10 +3,11 @@ import Image from 'next/image'
 import { useMapContext } from '@/context/map'
 import { BagCheckedIcon, BagIcon, TrajectoryIcon } from '../icons/orders'
 import { MapIcon } from '../icons/sidebar'
+import { Item, Order } from '@/interfaces'
 
 export const OrderData = () => {
   const { orders, selectedOrder, showOrders } = useMapContext()
-  const [order, setOrder] = useState<any>(null)
+  const [order, setOrder] = useState<Order>({} as Order)
 
   useEffect(() => {
     if (selectedOrder) {
@@ -46,13 +47,13 @@ export const OrderData = () => {
 
           {/* Order Items */}
           <div className='h-24 flex flex-col justify-between items-start gap-y-2'>
-            {order?.items.map((order: any, index: number) => (
+            {order?.items?.map((item: Item, index: number) => (
               <div
                 key={index}
                 className='flex items-center gap-x-2 text-gray-500 text-sm font-medium'
               >
-                <span>x{order.quantity}</span>
-                <span>{order.name}</span>
+                <span>x{item.quantity}</span>
+                <span>{item.name}</span>
               </div>
             ))}
           </div>
@@ -80,30 +81,30 @@ export const OrderData = () => {
         <div className='w-full flex items-start justify-between'>
           <div className='flex flex-col items-start text-sm gap-y-1'>
             <Image
-              src={order?.restaurantImage || '/images/logo.png'}
+              src={order?.client?.image || '/images/logo.png'}
               alt='customer'
               objectFit='cover'
               className='rounded-md'
               width={70}
               height={70}
             />
-            <span className='font-semibold'>{order?.restaurant}</span>
-            <span className='text-gray-500'>{order?.restaurantAddress}</span>
-            <span className='text-[#59AFFF]'>{order?.restaurantPhone}</span>
+            <span className='font-semibold'>{order?.client?.name}</span>
+            <span className='text-gray-500'>{order?.client?.address}</span>
+            <span className='text-[#59AFFF]'>{order?.client?.phone}</span>
           </div>
 
           <div className='flex flex-col items-end text-sm gap-y-1'>
             <Image
-              src={order?.customerImage || '/images/logo.png'}
+              src={order?.customer?.image || '/images/logo.png'}
               alt='customer'
               objectFit='cover'
               className='rounded-md'
               width={70}
               height={70}
             />
-            <span className='font-semibold'>{order?.customer}</span>
-            <span className='text-gray-500'>{order?.customerAddress}</span>
-            <span className='text-[#59AFFF]'>{order?.customerPhone}</span>
+            <span className='font-semibold'>{order?.customer?.name}</span>
+            <span className='text-gray-500'>{order?.customer?.address}</span>
+            <span className='text-[#59AFFF]'>{order?.customer?.phone}</span>
           </div>
         </div>
       </div>
