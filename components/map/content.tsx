@@ -23,7 +23,7 @@ export const Content = () => {
           <Map />
         </div>
 
-        {/* Driver & Order Infos */}
+        {/* Driver | Order Infos */}
         {openTab === 1 ? (
           orders?.length > 0 ? (
             <OrderData />
