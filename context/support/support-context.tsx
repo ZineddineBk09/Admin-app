@@ -1,6 +1,5 @@
-import { SupportChat, SupportTeamMember } from '@/interfaces'
+import { Chat, ChatMessage, SupportTeamMember } from '@/interfaces'
 import React, { useEffect, useState } from 'react'
-import { date } from 'yup'
 
 export const SupportContext = React.createContext({})
 
@@ -25,6 +24,11 @@ export const SupportContextProvider = ({
   const [selectedMember, setselectedMember] = useState<SupportTeamMember>(
     {} as SupportTeamMember
   )
+  const [chats, setChats] = useState<Chat>()
+  const [supportTeamMembers, setSupportTeamMembers] = useState<
+    SupportTeamMember[]
+  >([])
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
 
   const support = [
     {
