@@ -1,15 +1,15 @@
 import React from 'react-dom'
 import { renderToString } from 'react-dom/server'
 import { useEffect, useState } from 'react'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-easybutton/src/easy-button.js'
 import 'leaflet-easybutton/src/easy-button.css'
 import * as L from 'leaflet'
 import { MapPinIcon } from '../icons/map'
-import { Driver } from '@/interfaces'
 import { getDriversInArea } from '@/lib/api/map'
 import { useMapContext } from '@/context/map'
+
 
 // create a custom icon with L.divIcon and reactDOM.renderToString
 const icon = (image?: string, symbol?: string) =>
@@ -29,7 +29,7 @@ const icon = (image?: string, symbol?: string) =>
 
 const Map = () => {
   const [map, setMap] = useState<any>(null)
-  const { drivers, setDrivers } = useMapContext()
+  const { setDrivers } = useMapContext()
 
   // add an event listener on map: load, move, zoom, etc.
   useEffect(() => {
@@ -122,11 +122,11 @@ const Map = () => {
   }, [map])
 
   return (
-    <div className=''>
+    <>
       <MapContainer
         center={[21.3891, 39.8579]}
-        zoom={13}
-        scrollWheelZoom={true}
+        zoom={10}
+        scrollWheelZoom={false}
         ref={setMap}
         style={{
           height: '100%',
@@ -144,13 +144,13 @@ const Map = () => {
       >
         <TileLayer
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-          className='absolute inset-0'
+          className='absolute inset-0 z-0'
         />
 
         {/* <LocationMarker /> */}
         <DriversMarkers />
       </MapContainer>
-    </div>
+    </>
   )
 }
 
@@ -158,9 +158,9 @@ const DriversMarkers = () => {
   const { drivers } = useMapContext()
 
   // re-render the markers when drivers change
-  useEffect(() => {
-    console.log(drivers)
-  }, [drivers])
+  // useEffect(() => {
+  //   console.log(drivers)
+  // }, [drivers])
 
   return (
     <>
