@@ -28,7 +28,7 @@ const SearchLocation = ({ formik }: { formik: any }) => {
 
   return (
     <div className='max-w-[380px] flex flex-col items-center gap-y-2'>
-      <div className='w-full h-10 flex items-center gap-x-4 bg-gray-200 rounded px-4'>
+      <div className='w-full h-10 flex items-center gap-x-4 bg-gray-200 rounded px-4 shadow-md'>
         <input
           type='text'
           value={search}
@@ -66,8 +66,13 @@ const SearchLocation = ({ formik }: { formik: any }) => {
                     result.raw.lat,
                     result.raw.lon
                   )
-                  formik.setFieldValue('latitude', result.raw.lat)
-                  formik.setFieldValue('longitude', result.raw.lon)
+                  // formik.setFieldValue('latitude', result.raw.lat)
+                  // formik.setFieldValue('longitude', result.raw.lon)
+                  formik.setValues({
+                    ...formik.values,
+                    latitude: result.raw.lat,
+                    longitude: result.raw.lon,
+                  })
                 }}
               >
                 <div className='w-full flex items-center justify-between text-left text-gray-500 rounded-md hover:bg-gray-100 hover:text-black'>

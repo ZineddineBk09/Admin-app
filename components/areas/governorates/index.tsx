@@ -13,8 +13,8 @@ const Governorates = () => {
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <SearchGovernorate />
       <div className='w-full flex flex-col items-center gap-y-6'>
-        {governorates?.map((governorate: Governorate) => (
-          <GovernorateCard key={governorate.id} governorate={governorate} />
+        {governorates?.map((governorate: Governorate, index: number) => (
+          <GovernorateCard key={index} governorate={governorate} />
         ))}
       </div>
       {/* add governorate button */}

@@ -7,7 +7,7 @@ import {
   TrajectoryIcon,
 } from '../icons/orders'
 import { Driver, Order } from '@/interfaces'
-import { Card } from '@nextui-org/react'
+import { Card, Tooltip } from '@nextui-org/react'
 import { useMapContext } from '@/context/map'
 import { DriverInboxIcon, DriverOrdersIcon } from '../icons/drivers'
 import { truncateTxt } from '@/utils'
@@ -111,15 +111,20 @@ const Orders = ({ orderStatus }: { orderStatus: any }) => {
             (status: any) => status.value === order.status && status.checked
           )
         )
-        ?.map((order: any) => (
-          <OrderCard key={order.id} order={order} />
+        ?.map((order: any, index: number) => (
+          <OrderCard key={index} order={order} />
         ))}
     </div>
   )
 }
 
 const OrderCard = ({ order }: { order: Order }) => {
-  const { client, customer, startTime, endTime, status, location } = order
+  const { client, customer, startTime, endTime, status, location, driverName } =
+    order
+  const driverInitials =
+    driverName.split(' ').length > 1
+      ? driverName.split(' ')[0][0] + driverName.split(' ')[1][0]
+      : driverName[0] + driverName[1]
   // status color: green ==> done, yellow ==> assigned, red ==> cancelled, gray ==> new
   const statusColor =
     status === 'Done'
@@ -193,11 +198,13 @@ const OrderCard = ({ order }: { order: Order }) => {
             <div className='relative'>
               <TrajectoryIcon color={statusColor} />
               {location ? (
-                <div className='flex items-center justify-center font-semibold absolute left-[calc(50%-18px)] top-[calc(50%-18px)] bg-gray-300 rounded-full w-9 h-9 z-10'>
-                  NA
+                <div className='flex items-center justify-center font-semibold absolute left-[calc(50%-18px)] top-[calc(50%-18px)] bg-gray-300 rounded-full w-9 h-9 z-10 uppercase'>
+                  <Tooltip content={driverName}>{driverInitials}</Tooltip>
                 </div>
               ) : (
-                <p>No</p>
+                <span className='absolute -bottom-6 left-[35%] mx-auto text-sm font-medium text-center'>
+                  No location
+                </span>
               )}
             </div>
 
@@ -237,8 +244,8 @@ const Drivers = ({ driverStatus }: { driverStatus: any }) => {
             (status: any) => status.value === dr.status && status.checked
           )
         )
-        ?.map((driver: any) => (
-          <DriverCard key={driver.id} driver={driver} />
+        ?.map((driver: any, index: number) => (
+          <DriverCard key={index} driver={driver} />
         ))}
     </div>
   )

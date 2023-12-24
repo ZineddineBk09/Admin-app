@@ -24,7 +24,7 @@ export const ReportsTable = () => {
               <tbody>
                 {reports?.map((order: any, index: number) => (
                   <tr
-                    key={order.id}
+                    key={index}
                     // make table striped by adding bg-gray-50 to odd rows
                     className={`border-b transition duration-200 ease-in-out bg-gray-200 hover:bg-yellow-100 
                     `}

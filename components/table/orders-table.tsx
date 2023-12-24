@@ -31,7 +31,7 @@ export const OrdersTable = () => {
               <tbody>
                 {orders?.map((order: any, index: number) => (
                   <tr
-                    key={order.id}
+                    key={index}
                     // make table striped by adding bg-gray-50 to odd rows
                     className={`border-b transition duration-200 ease-in-out hover:bg-yellow-100 
                       ${index % 2 === 0 ? ' bg-gray-200' : ''}

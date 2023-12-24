@@ -34,8 +34,8 @@ const Countries = () => {
   return (
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <div className='w-full flex flex-col items-center gap-y-6'>
-        {countries?.map((country) => (
-          <CountryCard key={country.id} country={country} />
+        {countries?.map((country:Country,index:number) => (
+          <CountryCard key={index} country={country} />
         ))}
       </div>
       {/* add country button */}

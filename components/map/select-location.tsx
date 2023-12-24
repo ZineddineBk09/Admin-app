@@ -13,16 +13,18 @@ const SelectLocation = () => {
   const formik = useFormik({
     initialValues: {
       latitude: '',
-      logitude: '',
+      longitude: '',
     },
     validationSchema: Yup.object({
       latitude: Yup.string().required('Required'),
-      logitude: Yup.string().required('Required'),
+      longitude: Yup.string().required('Required'),
     }),
     onSubmit: (values) => {
       console.log(values)
     },
   })
+  console.log('errors: ', formik.errors)
+  console.log('values: ', formik.values)
 
   if (selectedOrderData?.location) return null
   return (
@@ -52,7 +54,17 @@ const SelectLocation = () => {
 
         {/* Buttons */}
         <div className='flex items-center gap-x-5'>
-          <button className='h-11 px-5 bg-primary rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>
+          <button
+            className={`h-11 px-5 bg-primary rounded font-medium text-lg shadow-lg 
+          ${
+            formik.isValid 
+              ? 'bg-opacity-100 hover:bg-opacity-90 transition-all duration-300 hover:shadow-xl'
+              : 'bg-opacity-50 cursor-not-allowed'
+          }
+          `}
+            onClick={() => console.log('Submit: ', formik.values)}
+            disabled={!formik.isValid}
+          >
             Confirm Location
           </button>
           <button className='h-11 px-8 bg-red-500 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>

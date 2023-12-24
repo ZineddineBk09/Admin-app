@@ -18,8 +18,8 @@ export const DriversTable = () => {
   return (
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <div className='w-full flex flex-col items-center gap-y-6'>
-        {drivers?.map((driver: Driver) => (
-          <DriverCard key={driver.id} driver={driver} />
+        {drivers?.map((driver: Driver, index: number) => (
+          <DriverCard key={index} driver={driver} />
         ))}
       </div>
       {/* add driver button */}

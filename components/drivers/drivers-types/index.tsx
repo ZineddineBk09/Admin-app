@@ -46,8 +46,8 @@ const DriversTypes = () => {
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <SearchTypes />
       <div className='w-full flex flex-col items-center gap-y-6'>
-        {types?.map((type) => (
-          <CountryCard key={type.id} type={type} />
+        {types?.map((type: DriverType, index: number) => (
+          <CountryCard key={index} type={type} />
         ))}
       </div>
       {/* add type button */}

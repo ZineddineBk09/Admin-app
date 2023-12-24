@@ -77,8 +77,8 @@ const Profiles = () => {
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <SearchTypes />
       <div className='w-full flex flex-col items-center gap-y-6'>
-        {profiles?.map((profile) => (
-          <CountryCard key={profile.id} profile={profile} />
+        {profiles?.map((profile:AccessProfile, index: number) => (
+          <CountryCard key={index} profile={profile} />
         ))}
       </div>
       {/* add profile button */}

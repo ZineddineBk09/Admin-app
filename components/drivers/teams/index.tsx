@@ -15,8 +15,8 @@ const DriversTeams = () => {
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <SearchAccount />
       <div className='w-full flex flex-col items-center gap-y-6'>
-        {teams?.map((team) => (
-          <DriverTeamCard key={team.id} team={team} />
+        {teams?.map((team: DriverTeam, index: number) => (
+          <DriverTeamCard key={index} team={team} />
         ))}
       </div>
       {/* add account button */}

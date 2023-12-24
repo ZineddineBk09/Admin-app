@@ -15,8 +15,8 @@ const Accounts = () => {
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <SearchAccount />
       <div className='w-full flex flex-col items-center gap-y-6'>
-        {accounts?.map((account: Account) => (
-          <AccountCard key={account.id} account={account} />
+        {accounts?.map((account: Account, index: number) => (
+          <AccountCard key={index} account={account} />
         ))}
       </div>
       {/* add account button */}

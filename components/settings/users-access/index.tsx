@@ -35,8 +35,8 @@ const UsersAccess = () => {
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <SearchTypes />
       <div className='w-full flex flex-col items-center gap-y-6'>
-        {users?.map((user) => (
-          <UserAccessCard key={user.id} user={user} />
+        {users?.map((user: UserAccess, index: number) => (
+          <UserAccessCard key={index} user={user} />
         ))}
       </div>
       {/* add user button */}

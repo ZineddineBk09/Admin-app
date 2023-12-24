@@ -1,5 +1,3 @@
-import { Driver } from '@/interfaces'
-
 export const driversTableCols = [
   { name: 'DRIVER', uid: 'name' },
   { name: 'EMAIL', uid: 'email' },

@@ -9,7 +9,7 @@ import * as L from 'leaflet'
 import { MapPinIcon } from '../icons/map'
 import { getDriversInArea } from '@/lib/api/map'
 import { useMapContext } from '@/context/map'
-
+import { Driver } from '@/interfaces'
 
 // create a custom icon with L.divIcon and reactDOM.renderToString
 const icon = (image?: string, symbol?: string) =>
@@ -164,7 +164,7 @@ const DriversMarkers = () => {
 
   return (
     <>
-      {drivers?.map((driver) => (
+      {drivers?.map((driver: Driver, index: number) => (
         <Marker
           key={driver.id}
           position={[
