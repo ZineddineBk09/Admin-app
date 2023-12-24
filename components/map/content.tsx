@@ -4,11 +4,12 @@ import { DriverData } from './driver-data'
 import OrdersAndDriversTabs from './tabs'
 import { useMapContext } from '@/context/map'
 import { OrderData } from './order-data'
+import SelectLocation from './select-location'
 const Map = dynamic(() => import('./map'), { ssr: false })
 
 export const Content = () => {
   const { showOrders, openTab } = useMapContext()
-  const { drivers, orders } = useMapContext()
+  const { drivers, orders, selectedDriver, selectedOrder } = useMapContext()
 
   return (
     <div className='w-full grid grid-cols-1 gap-x-2 h-[100vh] lg:grid-cols-5'>
@@ -21,6 +22,9 @@ export const Content = () => {
         {/* Map */}
         <div className='w-full h-full rounded-xl relative'>
           <Map />
+          {/* Select location */}
+          <SelectLocation />
+          
         </div>
 
         {/* Driver | Order Infos */}
