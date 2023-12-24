@@ -119,14 +119,7 @@ const Orders = ({ orderStatus }: { orderStatus: any }) => {
 }
 
 const OrderCard = ({ order }: { order: Order }) => {
-  const {
-    client,
-    customer,
-    startTime,
-    endTime,
-    status,
-    location,
-  } = order
+  const { client, customer, startTime, endTime, status, location } = order
   // status color: green ==> done, yellow ==> assigned, red ==> cancelled, gray ==> new
   const statusColor =
     status === 'Done'
@@ -151,9 +144,9 @@ const OrderCard = ({ order }: { order: Order }) => {
       onClick={() => handleSelectOrder(order.id)}
       className={`rounded-md ${
         selected
-          ? 'bg-primary-light '
-          : '' + location == null
-          ? 'border border-red-500'
+          ? !location
+            ? ' bg-red-200 border-[3px] border-red-500'
+            : 'bg-primary-light'
           : ''
       }`}
     >
@@ -163,19 +156,19 @@ const OrderCard = ({ order }: { order: Order }) => {
           <div className='w-full flex items-center justify-between'>
             <div className='flex items-center gap-x-2'>
               <Image
-                src={client.image || '/images/logo.png'}
+                src={client?.image || '/images/logo.png'}
                 alt='restaurant'
                 objectFit='cover'
                 className='rounded-md'
                 width={40}
                 height={40}
               />
-              <p className='text-xs font-medium'>{client.name}</p>
+              <p className='text-xs font-medium'>{client?.name}</p>
             </div>
             <div className='flex items-center gap-x-2'>
-              <p className='text-xs font-medium'>{customer.name}</p>
+              <p className='text-xs font-medium'>{customer?.name}</p>
               <Image
-                src={customer.image || '/images/logo.png'}
+                src={customer?.image || '/images/logo.png'}
                 alt='customer'
                 objectFit='cover'
                 className='rounded-md'
@@ -199,9 +192,13 @@ const OrderCard = ({ order }: { order: Order }) => {
 
             <div className='relative'>
               <TrajectoryIcon color={statusColor} />
-              <div className='flex items-center justify-center font-semibold absolute left-[calc(50%-18px)] top-[calc(50%-18px)] bg-gray-300 rounded-full w-9 h-9 z-10'>
-                NA
-              </div>
+              {location ? (
+                <div className='flex items-center justify-center font-semibold absolute left-[calc(50%-18px)] top-[calc(50%-18px)] bg-gray-300 rounded-full w-9 h-9 z-10'>
+                  NA
+                </div>
+              ) : (
+                <p>No</p>
+              )}
             </div>
 
             <div className='flex flex-col items-center gap-y-1'>
