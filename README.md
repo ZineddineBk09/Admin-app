@@ -1,34 +1,13 @@
-# NextJS and NextUI Dashboard Sample
+# NextJS and NextUI Dashboard
 
-You can deploy here directly to vercel [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/chris-trapstar/nextui-dashboard)
-
-This is a sample for NextJS and NextUI. 
-
-[NextJS](https://nextjs.org/) 
-[NextUI](https://nextui.org/)
-
-You can see the demo here: https://nextui-dashboard.vercel.app/
-
-### Dark Mode
-![Dashboard Dark Mode](./public/dark.png)
-
-### Light Mode
-![Dashboard Light Mode](./public/light.png)
-
-
-
-- Dark Mode Support
-- Full Responsive
-- Home Page with Charts
-- Accounts Page
-- More pages coming soon...
+You can see the demo here: https://restaurant-driver-app.vercel.app/
 
 ```
 ├── components
-│   ├── accounts            # Accounts components
-│   ├── charts              # Charts components
-│   ├── breadcrumb          # component
-|   ├── home                # Home components
+│   ├── dashboard           # Dashboard components
+│   ├── clients             # Clients components
+│   ├── drivers             # Drivers components
+|   ├── orders              # Orders components
 |   ├── layout              # Layout components
 |   ├── navbar              # Navbar components
 |   ├── sidebar             # Sidebar components
@@ -36,11 +15,19 @@ You can see the demo here: https://nextui-dashboard.vercel.app/
 |   ├── styles              # Some reusable components
 |   ├── icons               # Icons
 |   ├── hooks               #  Hooks
-├── pages                   # Documentation files 
+├── context                 # Context
+├── firebase                # Firebase config
+├── interfaces              # Typescript interfaces
+├── lib                     # Some reusable functions
+├── pages                   # All pages
 │   ├──  _app.tsx           # Entry point for the app
+│   ├── _document.tsx       # Document for the app
 │   ├──  index.tsx          # Home page
-│   ├── accounts.tsx        # Accounts Page
 │   ├── more...             # Soon
+├── public                  # Public folder
+├── styles                  # Global styles
+├── types                   # Typescript types
+├── utils                   # Some reusable functions
 └──
 
 ```
