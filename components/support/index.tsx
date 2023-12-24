@@ -32,11 +32,10 @@ const Chat = () => {
     {}
   )
 
-  console.log(chatMessages)
-
   useEffect(() => {
     messagesRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [])
+  
   return (
     <div className='w-[800px] flex-1 justify-between flex flex-col h-full bg-chat-bg bg-gray-400 relative'>
       <div
