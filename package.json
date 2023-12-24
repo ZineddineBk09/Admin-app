@@ -25,6 +25,7 @@
     "leaflet": "^1.9.4",
     "leaflet-draw": "^1.0.4",
     "leaflet-easybutton": "^2.4.0",
+    "leaflet-geosearch": "^3.11.0",
     "next": "12.3.0",
     "next-auth": "^4.22.5",
     "next-themes": "^0.2.1",
