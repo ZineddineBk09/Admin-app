@@ -122,6 +122,7 @@ export const MapContextProvider = ({
       arr.push(fakeOrder)
     }
     setOrders(arr)
+    setSelectedOrder(arr[0]?.id)
   }
 
   const fetchDrivers = () => {
@@ -154,6 +155,7 @@ export const MapContextProvider = ({
       arr.push(fakeDriver)
     }
     setDrivers(arr as any[])
+    setSelectedDriver(arr[0]?.id)
   }
 
   useEffect(() => {
@@ -161,10 +163,10 @@ export const MapContextProvider = ({
     // fetchDrivers()
   }, [])
 
-  useEffect(() => {
-    setSelectedDriver(drivers[0]?.id)
-    setSelectedOrder(orders[0]?.id)
-  }, [drivers, orders])
+  // useEffect(() => {
+  //   setSelectedDriver(drivers[0]?.id)
+  //   setSelectedOrder(orders[0]?.id)
+  // }, [drivers, orders])
 
   return (
     <MapContext.Provider
