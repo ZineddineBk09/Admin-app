@@ -56,6 +56,7 @@ export const MapContextProvider = ({
 
   const handleSelectOrder = (id: string) => {
     setSelectedOrder(id)
+    console.log('select driver: ', id)
   }
 
   const handleSelectDriver = (id: string) => {
