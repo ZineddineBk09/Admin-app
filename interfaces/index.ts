@@ -1,3 +1,4 @@
+//------------------------- Auth & Register -------------------------
 export interface AuthUser {
   email: string | null
   uid: string | null
@@ -19,7 +20,9 @@ export interface RegisterUser {
   storePhone: string | null
   status: boolean
 }
+//--------------------------------------------------------------------
 
+//------------------------- Drivers ----------------------------
 export interface Driver {
   id: string
   username: string
@@ -78,18 +81,36 @@ export interface DriverTeamMember {
   name: string
 }
 
+export interface Team {
+  model: string
+  pk: string
+  fields: {
+    name: string
+  }
+}
+
+interface APIDriver {
+  id: string
+  username: string
+  first_name: string
+  last_name: string
+  email: string
+  phone_number: string
+  team_id: string
+  password: string
+  is_freelance: boolean
+  vehicle_id: string
+  vehicle_type: string
+  vehicle_license: string
+  residency_id: string
+}
+//--------------------------------------------------------------------
+
+//------------------------- Customers & Orders ----------------------------
 export interface Item {
   id: string
   name: string
   quantity: number
-}
-
-interface Client {
-  id: string
-  name: string
-  image: string
-  address: string
-  phone: string
 }
 
 interface Customer {
@@ -124,12 +145,9 @@ export interface Order {
   endTime: number
   items: Item[]
 }
+//--------------------------------------------------------------------
 
-export interface Status {
-  value: string
-  checked: boolean
-}
-
+//------------------------- Areas ----------------------------
 export interface Country {
   id: string
   name: string
@@ -156,6 +174,16 @@ export interface City {
   orderFee: number
   price: number
   additional: number
+}
+//--------------------------------------------------------------------
+
+//------------------------- Clients ----------------------------
+interface Client {
+  id: string
+  name: string
+  image: string
+  address: string
+  phone: string
 }
 
 export interface Account {
@@ -186,45 +214,9 @@ export interface Branch {
     longitude: number
   }
 }
+//--------------------------------------------------------------------
 
-export interface Sort {
-  column: string
-  direction: string
-}
-
-export interface BBox {
-  min_lat: number
-  min_lng: number
-  max_lat: number
-  max_lng: number
-}
-
-export interface Team {
-  model: string
-  pk: string
-  fields: {
-    name: string
-  }
-}
-
-interface APIDriver {
-  id: string
-  username: string
-  first_name: string
-  last_name: string
-  email: string
-  phone_number: string
-  team_id: string
-  password: string
-  is_freelance: boolean
-  vehicle_id: string
-  vehicle_type: string
-  vehicle_license: string
-  residency_id: string
-}
-
-export type APIRecord = APIDriver | Order | Account | Branch
-
+//------------------------- Reports --------------------------------
 interface Report {
   id: string
   client: string
@@ -252,20 +244,31 @@ export interface AreasReport extends ClientsReport {}
 export interface CustomersReport extends ClientsReport {}
 
 export interface TeamsReport extends ClientsReport {}
+//--------------------------------------------------------------------
 
-export interface SupportChat {
-  id: number
+//------------------------- Support --------------------------------
+export interface ChatMessage {
+  id: string
+  chatId: string
+  senderId: string
   text: string
-  date?: string
+  timestamp: string
+}
+
+export interface Chat {
+  id: string
+  name: string
+  unread: number
+  lastUpdate: string
 }
 
 export interface SupportTeamMember {
   id: number
   name: string
-  chats: SupportChat[]
-  unread: number
 }
+//--------------------------------------------------------------------
 
+//------------------------- Settings --------------------------------
 export interface AccessProfile {
   id: number
   name: string
@@ -279,7 +282,9 @@ export interface UserAccess {
   accessProfile: string
   clients: string[]
 }
+//--------------------------------------------------------------------
 
+//------------------------- Additional Interfaces --------------------------------
 export interface Note {
   date: string
   time: string
@@ -291,3 +296,23 @@ export interface SubLink {
   isActive?: boolean
   href?: string
 }
+
+export interface Status {
+  value: string
+  checked: boolean
+}
+
+export interface Sort {
+  column: string
+  direction: string
+}
+
+export interface BBox {
+  min_lat: number
+  min_lng: number
+  max_lat: number
+  max_lng: number
+}
+
+export type APIRecord = APIDriver | Order | Account | Branch
+//--------------------------------------------------------------------
