@@ -2,9 +2,6 @@ import { Text, Link } from '@nextui-org/react'
 import NextLink from 'next/link'
 import React from 'react'
 import { Flex } from '../styles/flex'
-import { Box } from '../styles/box'
-import { Sidebar } from './sidebar.styles'
-import { useRouter } from 'next/router'
 import { useSidebarContext } from '../layout/layout-context'
 
 interface SubLink {
