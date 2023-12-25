@@ -1,4 +1,7 @@
+import { firestore } from '@/firebase/support'
 import { Chat, ChatMessage, SupportTeamMember } from '@/interfaces'
+import { fetchChats } from '@/lib/api/support'
+import { collection, doc, onSnapshot } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 
 export const SupportContext = React.createContext({})
@@ -170,6 +173,28 @@ export const SupportContextProvider = ({
 
   useEffect(() => {
     refreshSupport()
+  }, [])
+
+  useEffect(() => {
+    const getChats = () => {
+      const unsub = onSnapshot(collection(firestore, 'chats'), (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === 'added') {
+            console.log('New chat added:', change.doc.data())
+          } else if (change.type === 'modified') {
+            console.log('Chat modified:', change.doc.data())
+          } else if (change.type === 'removed') {
+            console.log('Chat removed:', change.doc.data())
+          }
+        })
+      })
+
+      return () => {
+        unsub()
+      }
+    }
+
+    getChats()
   }, [])
 
   useEffect(() => {
