@@ -11,12 +11,15 @@ const CheckAuthGuard = ({ children }: { children: React.ReactNode }): any => {
   const path = useRouter().pathname.split('/')[1]
   const protectedRoutes = [
     'dashboard',
-    'settings',
+    'orders',
+    'reports',
     'clients',
     'drivers',
     'customers',
     'areas',
     'pricing',
+    'support',
+    'settings',
   ]
 
   useEffect(() => {
