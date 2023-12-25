@@ -1,13 +1,4 @@
-import {
-  Button,
-  Divider,
-  Input,
-  Modal,
-  Text,
-  Tooltip,
-  Loading,
-  Radio,
-} from '@nextui-org/react'
+import { Modal, Text, Tooltip, Loading } from '@nextui-org/react'
 import { IconButton } from '../table/table.styled'
 import React from 'react'
 import { Flex } from '../styles/flex'
@@ -16,7 +7,6 @@ import * as Yup from 'yup'
 import { EditIcon } from '../icons/table'
 import { Order, Team } from '@/interfaces'
 import { getRecords, updateRecord } from '@/lib/api'
-import { useOrdersContext } from '@/context/order'
 import { ConfirmModal } from '../shared/confirm-modal'
 
 export const EditOrder = ({ order }: { order: Order }) => {
@@ -25,7 +15,6 @@ export const EditOrder = ({ order }: { order: Order }) => {
   const [error, setError] = React.useState<string>('')
   const [loading, setLoading] = React.useState<boolean>(false)
   const [teams, setTeams] = React.useState<Team[]>([])
-  const { refreshOrders } = useOrdersContext()
 
   const formik = useFormik({
     initialValues: {
@@ -120,57 +109,6 @@ export const EditOrder = ({ order }: { order: Order }) => {
                     {error}
                   </span>
                 )}
-                {/* 
-                <Flex
-                  css={{
-                    gap: '$10',
-                    flexWrap: 'wrap',
-                    '@xl': { flexWrap: 'nowrap' },
-                  }}
-                >
-                  <Input
-                    label={
-                      formik.touched.firstName && formik.errors.firstName
-                        ? formik.errors.firstName
-                        : 'First Name'
-                    }
-                    bordered
-                    clearable
-                    fullWidth
-                    size='lg'
-                    placeholder='First Name'
-                    name='firstName'
-                    id='firstName'
-                    value={formik.values.firstName}
-                    onChange={formik.handleChange}
-                    status={
-                      formik.touched.firstName && formik.errors.firstName
-                        ? 'error'
-                        : 'default'
-                    }
-                  />
-                  <Input
-                    label={
-                      formik.touched.lastName && formik.errors.lastName
-                        ? formik.errors.lastName
-                        : 'Last Name'
-                    }
-                    bordered
-                    clearable
-                    fullWidth
-                    size='lg'
-                    placeholder='First Name'
-                    name='lastName'
-                    id='lastName'
-                    value={formik.values.lastName}
-                    onChange={formik.handleChange}
-                    status={
-                      formik.touched.lastName && formik.errors.lastName
-                        ? 'error'
-                        : 'default'
-                    }
-                  />
-                </Flex> */}
 
                 <div className='flex items-center justify-between gap-x-5'>
                   {['bonus', 'deduction'].map((item: string, index: number) => (
