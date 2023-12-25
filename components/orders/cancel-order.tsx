@@ -1,4 +1,4 @@
-import { Button, Input, Loading, Modal, Text, Tooltip } from '@nextui-org/react'
+import { Loading, Modal, Text, Tooltip } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../styles/flex'
 import { IconButton } from '../table/table.styled'
@@ -70,25 +70,6 @@ export const CancelOrder = ({
                 order #{id}?
               </Text>
 
-              {/* Reason & Note */}
-              {/* <Input
-                bordered
-                clearable
-                fullWidth
-                size='lg'
-                placeholder='Reason for cancellation'
-                name='reason'
-                id='reason'
-                className=''
-                // value={formik.values.reason}
-                // onChange={formik.handleChange}
-                //   // status={
-                //     formik.touched.reason && formik.errors.reason
-                //       ? 'error'
-                //       : 'default'
-                //   }
-                // 
-              /> */}
               <div className='w-full flex flex-col items-start gap-y-2'>
                 <label className='text-gray-500'>Reason</label>
                 <input
