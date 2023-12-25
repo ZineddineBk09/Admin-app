@@ -1,6 +1,5 @@
 import {
   Button,
-  Divider,
   Input,
   Modal,
   Text,
