@@ -3,10 +3,8 @@ import { Divider } from '@nextui-org/react'
 import React from 'react'
 import { DeleteBranch } from '../delete-branch'
 import dynamic from 'next/dynamic'
-
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-draw/dist/leaflet.draw.css'
-import CopyToClipboardButton from '@/components/shared/copy-to-clipboard'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useClientsBranchesContext } from '@/context/clients/branches'
 const BranchMap = dynamic(() => import('./map'), { ssr: false })
