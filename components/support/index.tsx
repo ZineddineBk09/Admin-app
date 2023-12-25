@@ -3,6 +3,8 @@ import { SupportTeamMember } from '@/interfaces'
 import React, { useEffect } from 'react'
 import { AttachmentIcon, EmojiIcon, SendIcon } from '../icons/support'
 import { Tooltip } from '@nextui-org/react'
+import { useFormik } from 'formik'
+import { useSession } from 'next-auth/react'
 
 const SupportPage = () => {
   return (
@@ -35,7 +37,7 @@ const Chat = () => {
   useEffect(() => {
     messagesRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [])
-  
+
   return (
     <div className='w-[800px] flex-1 justify-between flex flex-col h-full bg-chat-bg bg-gray-400 relative'>
       <div
@@ -98,44 +100,69 @@ const Chat = () => {
 
       {/* Message Section */}
       <div className='z-10 px-4 pt-4 mb-2 sm:mb-0 absolute bottom-4 w-full mx-auto'>
-        <div className='relative flex flex-col bg-gray-300 rounded-md'>
-          <input
-            type='text'
-            placeholder='Write your message!'
-            className='w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-4 bg-transparent rounded-md pt-4 pb-6'
-          />
-          <div className='w-full flex items-center justify-between'>
-            <div>
-              <button
-                type='button'
-                className='inline-flex items-center justify-center rounded-full h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none'
-              >
-                <Tooltip content='Attach a file' color='primary'>
-                  <AttachmentIcon />
-                </Tooltip>
-              </button>
-              <button
-                type='button'
-                className='inline-flex items-center justify-center rounded-full h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none'
-              >
-                <Tooltip content='Add an emoji' color='warning'>
-                  <EmojiIcon />
-                </Tooltip>
-              </button>
-            </div>
-            <button
-              type='button'
-              className='px-4 py-3 text-gray-500 focus:outline-none'
-            >
-              <Tooltip content='Send' color='success'>
-                <SendIcon />
-              </Tooltip>
-            </button>
-          </div>
-        </div>
+        <ChatForm />
       </div>
       <div className='absolute bottom-0 w-full bg-gradient-to-b from-gray-400/10 to-gray-400/100 inset-x-0 h-36 -z-1' />
     </div>
+  )
+}
+
+const ChatForm = () => {
+  const { data: session} = useSession()
+  
+  const formik = useFormik({
+    initialValues: {
+      message: '',
+    },
+    onSubmit: (values) => {
+      console.log(values)
+    },
+  })
+
+  return (
+    <form
+      className='relative flex flex-col bg-gray-300 rounded-md'
+      onSubmit={formik.handleSubmit}
+    >
+      <input
+        id='message'
+        name='message'
+        value={formik.values.message}
+        type='text'
+        placeholder='Write your message!'
+        className='w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-4 bg-transparent rounded-md pt-4 pb-6'
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+      />
+      <div className='w-full flex items-center justify-between'>
+        <div>
+          <button
+            type='button'
+            className='inline-flex items-center justify-center rounded-full h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none'
+          >
+            <Tooltip content='Attach a file' color='primary'>
+              <AttachmentIcon />
+            </Tooltip>
+          </button>
+          <button
+            type='button'
+            className='inline-flex items-center justify-center rounded-full h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none'
+          >
+            <Tooltip content='Add an emoji' color='warning'>
+              <EmojiIcon />
+            </Tooltip>
+          </button>
+        </div>
+        <button
+          type='submit'
+          className='px-4 py-3 text-gray-500 focus:outline-none'
+        >
+          <Tooltip content='Send' color='success'>
+            <SendIcon />
+          </Tooltip>
+        </button>
+      </div>
+    </form>
   )
 }
 
