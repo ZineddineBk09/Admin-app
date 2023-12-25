@@ -1,9 +1,9 @@
-import UsersAccessPage from '@/components/settings/users-access'
+import UserssAccess from '@/components/settings/users-access'
 import { NextPage } from 'next'
 import React from 'react'
 
-const UsersAccess: NextPage = () => {
-  return <UsersAccessPage />
+const UsersAccessPage: NextPage = () => {
+  return <UserssAccess />
 }
 
-export default UsersAccess
+export default UsersAccessPage
