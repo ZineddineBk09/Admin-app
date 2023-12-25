@@ -24,16 +24,16 @@ export const addMessage = async (message: ChatMessage) => {
   return docRef.id
 }
 
-export const uploadImage = async (image: File, id: string) => {
-  if (!image) throw new Error('No image provided')
-  const storageRef = ref(storage, `plates/${id}`)
-  await uploadBytes(storageRef, image)
+export const uploadImage = async (file: File, id: string) => {
+  if (!file) throw new Error('No file provided')
+  const storageRef = ref(storage, `supportFiles/${id}`)
+  await uploadBytes(storageRef, file)
     .then((snapshot) => {
       console.log('Uploaded a blob or file!')
     })
     .catch((error) => {
       console.log(error)
-      throw new Error('Error uploading image')
+      throw new Error('Error uploading file')
     })
 }
 
