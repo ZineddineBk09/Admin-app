@@ -1,8 +1,8 @@
 import { NextPage } from 'next'
 import React from 'react'
 
-const DeliverySettings: NextPage = () => {
+const DeliverySettingsPage: NextPage = () => {
   return <div></div>
 }
 
-export default DeliverySettings
+export default DeliverySettingsPage
