@@ -1,14 +1,14 @@
-import SupportPage from '@/components/support'
+import Support from '@/components/support'
 import { SupportContextProvider } from '@/context/support/support-context'
 import { NextPage } from 'next'
 import React from 'react'
 
-const Support: NextPage = () => {
+const SupportPage: NextPage = () => {
   return (
     <SupportContextProvider>
-      <SupportPage />
+      <Support />
     </SupportContextProvider>
   )
 }
 
-export default Support
+export default SupportPage
