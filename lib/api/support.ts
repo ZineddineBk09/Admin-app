@@ -24,7 +24,7 @@ export const addMessage = async (message: ChatMessage) => {
   return docRef.id
 }
 
-export const uploadImage = async (file: File, id: string) => {
+export const uploadFile = async (file: File, id: string) => {
   if (!file) throw new Error('No file provided')
   const storageRef = ref(storage, `supportFiles/${id}`)
   await uploadBytes(storageRef, file)
