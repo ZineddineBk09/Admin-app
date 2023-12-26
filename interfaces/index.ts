@@ -251,13 +251,17 @@ export interface ChatMessage {
   id: string
   chatId: string
   senderId: string
-  text: string
-  timestamp: string
+  content: string
+  timestamp: {
+    seconds: number
+    nanoseconds: number
+  }
+  type: 'support' | 'customer'
 }
 
 export interface Chat {
   id: string
-  name: string
+  customerName: string
   unread: number
   lastUpdate: string
 }
