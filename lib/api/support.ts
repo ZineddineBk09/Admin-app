@@ -13,11 +13,10 @@ import { firestore, storage, app } from '@/firebase/support'
 import { ChatMessage } from '@/interfaces'
 import { ref, uploadBytes } from 'firebase/storage'
 
-export const addMessage = async (message: ChatMessage) => {
+export const addMessage = async (message: any) => {
   const docRef = await addDoc(collection(firestore, 'messages'), {
     ...message,
     timestamp: new Date(),
-    lastUpdate: new Date(),
   }).then((docRef) => {
     return docRef
   })
