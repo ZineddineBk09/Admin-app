@@ -1,4 +1,4 @@
-import { Checkbox, Col, Row, User } from '@nextui-org/react'
+import { Col, Row } from '@nextui-org/react'
 import React from 'react'
 import { CancelOrder } from '../orders/cancel-order'
 import { EditOrder } from '../orders/edit-order'
