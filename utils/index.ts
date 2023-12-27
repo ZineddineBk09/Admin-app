@@ -1,3 +1,4 @@
+import { Chat, ChatMessage } from '@/interfaces'
 import exportFromJSON from 'export-from-json'
 
 export const truncateTxt = (str: string, n: number) => {
@@ -23,5 +24,11 @@ export const exportToExcel = ({ name, data }: { name: string; data: any }) => {
       orders: 'Orders',
       canceledOrders: 'Canceled Orders',
     },
+  })
+}
+
+export const orderChat = (chatMessages: ChatMessage[]) => {
+  return chatMessages.sort((a, b) => {
+    return a.timestamp.seconds - b.timestamp.seconds
   })
 }
