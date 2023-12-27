@@ -104,6 +104,7 @@ export const SupportContextProvider = ({
         collection(firestore, 'messages'),
         (snapshot) => {
           snapshot.docChanges().forEach((change) => {
+            
             setChatMessages((prevMessages: any) => {
               if (change.type === 'added') {
                 return [
@@ -114,7 +115,9 @@ export const SupportContextProvider = ({
                     id: change.doc.id,
                     ...change.doc.data(),
                   } as ChatMessage,
-                ]
+                ].sort((a: ChatMessage, b: ChatMessage) =>
+                  a.timestamp.seconds > b.timestamp.seconds ? 1 : -1
+                )
               } else if (change.type === 'modified') {
                 return prevMessages.map((message: ChatMessage) =>
                   message.id === change.doc.id
@@ -134,7 +137,7 @@ export const SupportContextProvider = ({
           })
         }
       )
-
+      
       return () => {
         unsub()
       }
