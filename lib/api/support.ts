@@ -9,18 +9,25 @@ import {
   where,
   deleteDoc,
 } from 'firebase/firestore'
-import { firestore, storage, app } from '@/firebase/support'
+import { firestore, storage } from '@/firebase/support'
 import { ChatMessage } from '@/interfaces'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
-export const addMessage = async (message: any) => {
-  const docRef = await addDoc(collection(firestore, 'messages'), {
-    ...message,
-    timestamp: new Date(),
-  }).then((docRef) => {
-    return docRef
-  })
-  return docRef.id
+export const addMessage = async (chatId: string, message: any) => {
+  try {
+    const docRef = doc(firestore, 'chats', chatId)
+    await addDoc(collection(docRef, 'messages'), {
+      ...message,
+      timestamp: new Date(),
+    })
+    await updateDoc(docRef, {
+      lastUpdate: new Date(),
+    })
+
+    return true
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 export const uploadFile = async (
@@ -31,7 +38,7 @@ export const uploadFile = async (
   if (!file) throw new Error('No file provided')
   if (!chatId) throw new Error('No chatId provided')
   if (!senderId) throw new Error('No senderId provided')
-  
+
   const storageRef = ref(storage, `chats/${chatId}/files/${file.name}`)
 
   // Upload file to Firebase Storage
@@ -43,6 +50,7 @@ export const uploadFile = async (
   // Update Firestore message with file URL
   // Example: firestore.collection('messages').doc(messageId).update({ content: fileURL });
 }
+
 export const deleteChatMessage = async (id: string) => {
   const docRef = doc(firestore, 'messages', id)
   await deleteDoc(docRef)
@@ -58,8 +66,7 @@ export const updateChatMessage = async (message: ChatMessage) => {
 
 export const fetchChatMessages = async (chatId: string) => {
   const q = query(
-    collection(firestore, 'messages'),
-    where('chatId', '==', chatId),
+    collection(firestore, 'chats', chatId, 'messages'),
     orderBy('timestamp', 'asc')
   )
   const querySnapshot = await getDocs(q)
@@ -71,11 +78,29 @@ export const fetchChatMessages = async (chatId: string) => {
 }
 
 export const fetchChats = async () => {
-  const q = query(collection(firestore, 'chats'), orderBy('lastUpdate', 'desc'))
+  const q = query(collection(firestore, 'chats'), orderBy('lastUpdate', 'asc'))
   const querySnapshot = await getDocs(q)
   const chats: any[] = []
   querySnapshot.forEach(async (doc) => {
     chats.push({ ...doc.data(), id: doc.id })
   })
   return chats
+}
+
+export const createChat = async (chat: any, messages: any[]) => {
+  const chatRef = await addDoc(collection(firestore, 'chats'), {
+    ...chat,
+    lastUpdate: new Date(),
+  }).then((docRef) => {
+    // add messages to the chat ==> subcollection
+    messages.forEach(async (message) => {
+      await addDoc(collection(docRef, 'messages'), {
+        ...message,
+        timestamp: new Date(),
+      })
+    })
+    return docRef
+  })
+
+  return chatRef.id
 }
