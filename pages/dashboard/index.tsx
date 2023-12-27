@@ -1,8 +1,8 @@
 import type { NextPage } from 'next'
 import { Content } from '../../components/map/content'
 
-const Map: NextPage = () => {
+const MapPage: NextPage = () => {
   return <Content />
 }
 
-export default Map
+export default MapPage
