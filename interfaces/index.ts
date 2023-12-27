@@ -263,7 +263,6 @@ export interface Chat {
   id: string
   customerName: string
   unread: number
-  lastUpdate: string
 }
 
 export interface SupportTeamMember {
