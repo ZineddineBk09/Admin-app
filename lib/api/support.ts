@@ -11,7 +11,7 @@ import {
 } from 'firebase/firestore'
 import { firestore, storage, app } from '@/firebase/support'
 import { ChatMessage } from '@/interfaces'
-import { ref, uploadBytes } from 'firebase/storage'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 export const addMessage = async (message: any) => {
   const docRef = await addDoc(collection(firestore, 'messages'), {
@@ -23,19 +23,26 @@ export const addMessage = async (message: any) => {
   return docRef.id
 }
 
-export const uploadFile = async (file: File, id: string) => {
+export const uploadFile = async (
+  file: File,
+  chatId: string,
+  senderId: string
+) => {
   if (!file) throw new Error('No file provided')
-  const storageRef = ref(storage, `supportFiles/${id}`)
-  await uploadBytes(storageRef, file)
-    .then((snapshot) => {
-      console.log('Uploaded a blob or file!')
-    })
-    .catch((error) => {
-      console.log(error)
-      throw new Error('Error uploading file')
-    })
-}
+  if (!chatId) throw new Error('No chatId provided')
+  if (!senderId) throw new Error('No senderId provided')
+  
+  const storageRef = ref(storage, `chats/${chatId}/files/${file.name}`)
 
+  // Upload file to Firebase Storage
+  await uploadBytes(storageRef, file)
+
+  // Get the download URL of the uploaded file
+  const fileURL = await getDownloadURL(storageRef)
+
+  // Update Firestore message with file URL
+  // Example: firestore.collection('messages').doc(messageId).update({ content: fileURL });
+}
 export const deleteChatMessage = async (id: string) => {
   const docRef = doc(firestore, 'messages', id)
   await deleteDoc(docRef)
