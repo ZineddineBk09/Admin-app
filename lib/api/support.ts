@@ -49,11 +49,34 @@ export const uploadFile = async (
 
   // Update Firestore message with file URL
   // Example: firestore.collection('messages').doc(messageId).update({ content: fileURL });
+  const docRef = doc(firestore, 'chats', chatId)
+  await addDoc(collection(docRef, 'messages'), {
+    senderId,
+    content: fileURL,
+    timestamp: new Date(),
+    type: 'support',
+  })
+
+  await updateDoc(docRef, {
+    lastUpdate: new Date(),
+  })
+
+  return fileURL
 }
 
-export const deleteChatMessage = async (id: string) => {
-  const docRef = doc(firestore, 'messages', id)
-  await deleteDoc(docRef)
+// create uploadFiles function that accepts an array of files and uploads them all one by one to firebase storage using the uploadFile function
+export const uploadFiles = async (
+  files: File[],
+  chatId: string,
+  senderId: string
+) => {
+  // loop through files array and upload each file to firebase storage
+  const filesURLs: string[] = []
+  for (const file of files) {
+    const fileURL = await uploadFile(file, chatId, senderId)
+    filesURLs.push(fileURL)
+  }
+  return filesURLs
 }
 
 export const updateChatMessage = async (message: ChatMessage) => {
