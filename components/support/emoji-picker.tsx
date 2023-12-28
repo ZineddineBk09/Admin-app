@@ -41,7 +41,7 @@ const Emojis = ({
   }, [showEmojiPicker])
 
   return (
-    <Tooltip content={showEmojiPicker ? '' : 'Add an emoji'} color='warning'>
+    <Tooltip content='' color='warning'>
       <button
         type='button'
         onClick={() => setShowEmojiPicker(!showEmojiPicker)}
