@@ -1,4 +1,4 @@
-import { Chat, ChatMessage } from '@/interfaces'
+import { ChatMessage } from '@/interfaces'
 import exportFromJSON from 'export-from-json'
 
 export const truncateTxt = (str: string, n: number) => {
