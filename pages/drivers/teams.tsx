@@ -3,7 +3,7 @@ import { DriversContextProvider } from '@/context/driver'
 import { NextPage } from 'next'
 import React from 'react'
 
-const Drivers: NextPage = () => {
+const DriversTeamsPage: NextPage = () => {
   return (
     <DriversContextProvider>
       <DriversTeams />
@@ -11,4 +11,4 @@ const Drivers: NextPage = () => {
   )
 }
 
-export default Drivers
+export default DriversTeamsPage
