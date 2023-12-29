@@ -6,8 +6,6 @@ import {
   orderBy,
   query,
   updateDoc,
-  where,
-  deleteDoc,
 } from 'firebase/firestore'
 import { firestore, storage } from '@/firebase/support'
 import { ChatMessage } from '@/interfaces'
