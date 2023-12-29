@@ -1,14 +1,14 @@
-import { DriversPage } from '@/components/drivers/list'
+import { DriversPage as DriversList } from '@/components/drivers/list'
 import { DriversContextProvider } from '@/context/driver'
 import { NextPage } from 'next'
 import React from 'react'
 
-const Drivers: NextPage = () => {
+const DriversPage: NextPage = () => {
   return (
     <DriversContextProvider>
-      <DriversPage />
+      <DriversList />
     </DriversContextProvider>
   )
 }
 
-export default Drivers
+export default DriversPage
