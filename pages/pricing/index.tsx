@@ -1,8 +1,8 @@
 import { NextPage } from 'next'
 import React from 'react'
 
-const Pricing: NextPage = () => {
+const PricingPage: NextPage = () => {
   return <div></div>
 }
 
-export default Pricing
+export default PricingPage
