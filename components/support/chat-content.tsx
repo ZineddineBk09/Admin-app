@@ -8,6 +8,8 @@ import { useSession } from 'next-auth/react'
 import Emojis from './emoji-picker'
 import { addMessage } from '@/lib/api/support'
 import DragComponent from './files-upload/drag-files'
+import { DocumentTextIcon } from '@heroicons/react/24/outline'
+import { truncateTxt } from '@/utils'
 
 const renderMessage = (message: string) => {
   const regex = /(https?:\/\/[^\s]+)|(www\.[^\s]+)|(ftp:\/\/[^\s]+)/g
@@ -18,20 +20,47 @@ const renderMessage = (message: string) => {
     const parts = message.split(regex)
 
     // Process each part and add JSX elements
-    const jsxElements = parts.map((part, index) => {
+    const jsxElements = parts?.map((part, index) => {
       if (index % 2 === 1) {
         // Odd indices represent links
-        return (
-          <a
-            key={index}
-            rel='noreferrer'
-            href={part}
-            target='_blank'
-            className='text-blue-700 hover:underline'
-          >
-            {part}
-          </a>
-        )
+        if (part?.includes('firebasestorage.googleapis.com')) {
+          // If it's a Firebase Storage file link
+          const fileName = part
+            .split('support%2F')[1]
+            .split('?alt')[0]
+            .replaceAll('%20', '') // Extract file name from the URL
+
+          return (
+            <>
+              <a
+                rel='noreferrer'
+                href={part}
+                target='_blank'
+                className='w-fit bg-[#357dc0] px-4 py-2 rounded-md flex items-center gap-x-4 text-white'
+              >
+                <DocumentTextIcon className='w-16' />
+                <span className='font-medium'>
+                  {truncateTxt(fileName?.split('.')[0], 40) +
+                    '.' +
+                    fileName?.split('.')[1]}
+                </span>
+              </a>
+            </>
+          )
+        } else {
+          // Regular link
+          return (
+            <a
+              key={index}
+              rel='noreferrer'
+              href={part}
+              target='_blank'
+              className='text-blue-700 hover:underline'
+            >
+              {part}
+            </a>
+          )
+        }
       } else {
         // Even indices represent regular text
         return <span key={index}>{part}</span>
@@ -63,6 +92,7 @@ export const ChatContent = () => {
       acc[date] = []
     }
     acc[date].push(message)
+
     return acc
   }, {})
 
@@ -172,8 +202,6 @@ export const ChatContent = () => {
 const ChatForm = () => {
   const { data: session } = useSession()
   const { selectedChat, handleSelectChat } = useSupportContext()
-  const [file, setFile] = React.useState<File>()
-  const [fileUrl, setFileUrl] = React.useState<string>()
 
   const formik = useFormik({
     initialValues: {
