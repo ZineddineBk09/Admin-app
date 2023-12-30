@@ -1,14 +1,14 @@
-import { ReportsPage } from '@/components/reports'
+import { ReportsPage as Reports } from '@/components/reports'
 import { ReportsContextProvider } from '@/context/report'
 import { NextPage } from 'next'
 import React from 'react'
 
-const Reports: NextPage = () => {
+const ReportsPage: NextPage = () => {
   return (
     <ReportsContextProvider>
-      <ReportsPage />
+      <Reports />
     </ReportsContextProvider>
   )
 }
 
-export default Reports
+export default ReportsPage
