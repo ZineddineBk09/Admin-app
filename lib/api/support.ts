@@ -37,7 +37,10 @@ export const uploadFile = async (
   if (!chatId) throw new Error('No chatId provided')
   if (!senderId) throw new Error('No senderId provided')
 
-  const storageRef = ref(storage, `chats/${chatId}/files/${file.name}`)
+  const storageRef = ref(
+    storage,
+    `chat-files/${chatId}/messages/support/${file.name}`
+  )
 
   // Upload file to Firebase Storage
   await uploadBytes(storageRef, file)
@@ -46,15 +49,16 @@ export const uploadFile = async (
   const fileURL = await getDownloadURL(storageRef)
 
   // Update Firestore message with file URL
-  // Example: firestore.collection('messages').doc(messageId).update({ content: fileURL });
   const docRef = doc(firestore, 'chats', chatId)
   await addDoc(collection(docRef, 'messages'), {
     senderId,
     content: fileURL,
     timestamp: new Date(),
     type: 'support',
+    fileURL, // Include the file URL in the Firestore document
   })
 
+  // Update the lastUpdate field in the chat document
   await updateDoc(docRef, {
     lastUpdate: new Date(),
   })
