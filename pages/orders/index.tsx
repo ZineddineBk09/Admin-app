@@ -1,14 +1,14 @@
-import { OrdersPage } from '@/components/orders'
+import { OrdersPage as OrdersList } from '@/components/orders'
 import { OrdersContextProvider } from '@/context/order'
 import { NextPage } from 'next'
 import React from 'react'
 
-const Orders: NextPage = () => {
+const OrdersPage: NextPage = () => {
   return (
     <OrdersContextProvider>
-      <OrdersPage />
+      <OrdersList />
     </OrdersContextProvider>
   )
 }
 
-export default Orders
+export default OrdersPage
