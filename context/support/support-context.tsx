@@ -79,7 +79,6 @@ export const SupportContextProvider = ({
 
           // set selected chat if it's not set
           if (!selectedChat.id) {
-            console.log('selecting chat')
             handleSelectChat(change.doc.id)
           }
         })
