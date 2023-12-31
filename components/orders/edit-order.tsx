@@ -29,7 +29,6 @@ export const EditOrder = ({ order }: { order: Order }) => {
     }),
     onSubmit: async (values) => {
       // setLoading(true)
-      console.log('submiting')
       const response = await updateRecord(
         {
           id: order.id,
