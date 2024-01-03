@@ -7,7 +7,6 @@ import CheckAuthGuard from '@/components/guards/check-auth-guard'
 import { MapContextProvider } from '@/context/map'
 import { SessionProvider } from 'next-auth/react'
 import { Toaster } from 'react-hot-toast'
-import { useEffect } from 'react'
 
 function MyApp({ Component, pageProps }: AppProps) {
   const path = useRouter().pathname.split('/')[1]
