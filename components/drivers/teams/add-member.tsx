@@ -12,6 +12,7 @@ import React from 'react'
 import { Flex } from '../../styles/flex'
 import { DriverTeamMember } from '@/interfaces'
 import { searchMembers } from '@/lib/search'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 
 export const AddMember = ({ members }: { members: DriverTeamMember[] }) => {
   const [visible, setVisible] = React.useState(false)
@@ -93,7 +94,22 @@ export const AddMember = ({ members }: { members: DriverTeamMember[] }) => {
                 {/* Selected members */}
                 <div className='max-w-full h-fit flex items-center gap-x-2 overflow-x-auto'>
                   {selected.map((member: any, index: number) => (
-                    <Badge key={index}>{member.name}</Badge>
+                    <Badge key={index}>
+                      <span>{member.name}</span>
+                      <XMarkIcon
+                        className='w-4 ml-3 text-white hover:bg-gray-400 transition-all duration-300 rounded-full'
+                        onClick={() => {
+                          setSelected(
+                            selected.filter((item) => item.id !== member.id)
+                          )
+
+                          // uncheck checkbox by triggering onChange
+                          const checkbox = document.getElementById(
+                            member.id
+                          ) as HTMLInputElement
+                        }}
+                      />
+                    </Badge>
                   ))}
                 </div>
 
@@ -104,10 +120,10 @@ export const AddMember = ({ members }: { members: DriverTeamMember[] }) => {
                       <div className='w-full flex items-start justify-between'>
                         <div className='w-full flex flex-col items-start gap-y-1'>
                           <span>{member.name}</span>
-                          <span>{member.id}</span>
+                          <span className='text-gray-500'>#{member.id}</span>
                         </div>
-                        <Checkbox
-                          defaultChecked={selected.includes(member)}
+                        {/* <Checkbox
+                          id={member.id}
                           aria-label='Checkbox'
                           onChange={(e: boolean) => {
                             if (e) {
@@ -121,6 +137,22 @@ export const AddMember = ({ members }: { members: DriverTeamMember[] }) => {
                           value={member.id}
                           size='lg'
                           color='warning'
+                          aria-checked={selected.includes(member)}
+                        /> */}
+                        <input
+                          type='checkbox'
+                          id={member.id}
+                          className='w-5 h-5 border-gray-400 border rounded-full'
+                          checked={selected.includes(member)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelected([...selected, member])
+                            } else {
+                              setSelected(
+                                selected.filter((item) => item.id !== member.id)
+                              )
+                            }
+                          }}
                         />
                       </div>
                       <Divider className='mb-2' />
@@ -129,9 +161,15 @@ export const AddMember = ({ members }: { members: DriverTeamMember[] }) => {
                 </div>
               </Flex>
             </Modal.Body>
-            {/* <Divider css={{ my: '$5' }} /> */}
             <Modal.Footer>
-              <Button auto type='submit' className='bg-primary text-black'>
+              <Button
+                auto
+                type='submit'
+                className={`bg-primary text-black ${
+                  selected.length === 0 && 'opacity-50 cursor-not-allowed'
+                }`}
+                disabled={selected.length === 0}
+              >
                 Add {selected.length > 0 && `(${selected.length})`}
               </Button>
             </Modal.Footer>
