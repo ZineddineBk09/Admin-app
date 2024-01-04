@@ -137,15 +137,7 @@ const DriverTeamCard = ({ team }: { team: DriverTeam }) => {
                 {members?.map((member: any, index: number) => (
                   <div key={index}>
                     <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
-                      {/* <label className='text-gray-600 text-sm'>
-                        Member #{index + 1}
-                      </label> */}
-                      <p className='text-sm'>
-                        {member.name}{' '}
-                        {/* <span className='ml-6 text-sm text-gray-400'>
-                          #{member.id}
-                        </span> */}
-                      </p>
+                      <p className='text-sm'>{member.name} </p>
                       <Tooltip
                         content={'Delete "' + member.name + '"'}
                         color='error'
