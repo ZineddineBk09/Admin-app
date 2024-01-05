@@ -8,7 +8,7 @@ import { truncateTxt } from '@/utils'
 import { uploadFiles } from '@/lib/api/support'
 import { useSupportContext } from '@/context/support/support-context'
 import { useSession } from 'next-auth/react'
-import toast, { Toaster } from 'react-hot-toast'
+import toast from 'react-hot-toast'
 
 const DragDropModal = () => {
   const dropContainer = useRef<any>(null)
@@ -79,13 +79,13 @@ const DragDropModal = () => {
   }, [files])
 
   const handleUploadFiles = async () => {
+    setVisible(false)
+    setFiles([])
     await uploadFiles(files, selectedChat.id, session?.user.username)
       .then((res) => {
         if (res) {
           console.log('res', res)
           toast.success('Files uploaded successfully')
-          setFiles([])
-          setVisible(false)
         }
       })
       .catch((err) => {
