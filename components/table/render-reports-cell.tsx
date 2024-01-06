@@ -1,4 +1,3 @@
-import { Checkbox, Col, Row, User } from '@nextui-org/react'
 import React from 'react'
 import { Order } from '@/interfaces'
 import { MakePayment } from '../reports/payment'
