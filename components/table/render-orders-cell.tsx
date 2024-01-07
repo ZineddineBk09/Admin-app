@@ -77,7 +77,7 @@ export const RenderCell = ({ order, columnKey }: Props) => {
     case 'status':
       return (
         <span
-``          className={`text-xs font-semibold inline-flex px-2 pt-1 pb-[2px] rounded-full text-white capitalize ${
+          className={`text-xs font-semibold inline-flex px-2 pt-1 pb-[2px] rounded-full text-white capitalize ${
             cellValue === 'done'
               ? 'bg-green-400'
               : cellValue === 'delivering'
