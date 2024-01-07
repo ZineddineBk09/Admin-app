@@ -16,10 +16,10 @@ export const OrdersContextProvider = ({
   const [orders, setOrders] = useState<Order[]>([] as Order[])
   const [loading, setLoading] = useState(false)
   const [orderStatus, setOrderStatus] = useState<Status[]>([
-    { value: 'Assigned', checked: true },
-    { value: 'Cancelled', checked: true },
-    { value: 'New', checked: true },
-    { value: 'Done', checked: true },
+    { value: 'assigned', checked: true },
+    { value: 'cancelled', checked: true },
+    { value: 'new', checked: true },
+    { value: 'done', checked: true },
   ])
 
   const refreshOrders = async () => {
