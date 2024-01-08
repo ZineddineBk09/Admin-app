@@ -1,5 +1,5 @@
 import { firestore } from '@/firebase/support'
-import { Chat, ChatMessage, SupportTeamMember } from '@/interfaces'
+import { Chat, ChatMessage } from '@/interfaces'
 import { fetchChatMessages } from '@/lib/api/support'
 import { collection, collectionGroup, onSnapshot } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
