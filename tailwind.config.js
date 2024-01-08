@@ -19,7 +19,6 @@ module.exports = {
           light: '#FFED83',
           500: '#FFDB00',
           600: '#FFDB00',
-          700: '#FFDB00',
         },
       },
       // image background
