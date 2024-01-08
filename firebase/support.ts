@@ -13,7 +13,7 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 }
 
-// Initialize Firebase this way to avoid multiple instances of firebase app being created 
+// Initialize Firebase this way to avoid multiple instances of firebase app being created
 export const app = !getApps().length ? initializeApp(firebaseConfig) : getApp()
 export const firestore = getFirestore(app)
 export const storage = getStorage(app)
