@@ -28,6 +28,9 @@ input:-webkit-autofill {
   appearance: none;
 }
 
+/* 
+  change the default date input placeholder color
+*/
 input[type='date']::-webkit-inner-spin-button,
 input[type='date']::-webkit-calendar-picker-indicator {
   background: transparent;
