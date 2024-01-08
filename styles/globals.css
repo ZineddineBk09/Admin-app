@@ -85,6 +85,7 @@ input:-webkit-autofill {
   -webkit-text-fill-color: white !important;
 }
 
+/* change the default datetime-local input placeholder color */
 input[type='datetime-local']::-webkit-calendar-picker-indicator {
   background: transparent;
   bottom: 0;
