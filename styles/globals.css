@@ -24,7 +24,7 @@ input:-webkit-autofill {
 
 .styled-select select {
   -moz-appearance: none; /* Firefox */
-  -webkit-appearance: none; /* Safari and Chrome */
+  -webkit-appearance: none; /* Safari & Chrome */
   appearance: none;
 }
 
