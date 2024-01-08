@@ -45,6 +45,9 @@ input[type='date']::-webkit-calendar-picker-indicator {
   width: auto;
 }
 
+/* 
+  change the scrollbar color and hide it when not hovered
+*/
 *::-webkit-scrollbar {
   width: 8px;
   display: none;
