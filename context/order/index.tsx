@@ -1,4 +1,5 @@
 import { Order, Sort, Status } from '@/interfaces'
+import { getRecords } from '@/lib/api'
 import { searchOrders } from '@/lib/search'
 import { faker } from '@faker-js/faker'
 import React, { useEffect, useState } from 'react'
