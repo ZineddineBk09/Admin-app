@@ -2,7 +2,6 @@ import { Navbar } from '@nextui-org/react'
 import React from 'react'
 import { Box } from '../styles/box'
 import { BurguerButton } from './burguer-button'
-import { useMapContext } from '@/context/map'
 import { useRouter } from 'next/router'
 
 interface Props {
@@ -10,10 +9,6 @@ interface Props {
 }
 
 export const NavbarWrapper = ({ children }: Props) => {
-  const { showDrivers, showOrders, handleToggleDrivers, handleToggleOrders } =
-    useMapContext()
-  const path = useRouter().pathname.split('/')[1]
-  const isDashboard = path === 'dashboard'
 
   return (
     <Box
