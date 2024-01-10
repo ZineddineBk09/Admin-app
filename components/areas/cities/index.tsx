@@ -4,7 +4,11 @@ import { AddCity } from './add-city'
 import { SearchCity } from './city'
 import dynamic from 'next/dynamic'
 import { useAreasCitiesContext } from '@/context/areas/cities'
-const CityCard = dynamic(() => import('./city'), { ssr: false })
+import Loading from '@/components/shared/loading'
+const CityCard = dynamic(() => import('./city'), {
+  ssr: false,
+  loading: () => <Loading />,
+})
 
 const Cities = () => {
   const { cities } = useAreasCitiesContext()
