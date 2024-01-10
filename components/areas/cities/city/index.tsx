@@ -11,7 +11,11 @@ import 'leaflet/dist/leaflet.css'
 import 'leaflet-draw/dist/leaflet.draw.css'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useAreasCitiesContext } from '@/context/areas/cities'
-const CityMap = dynamic(() => import('./map'), { ssr: false })
+import Loading from '@/components/shared/loading'
+const CityMap = dynamic(() => import('./map'), {
+  ssr: false,
+  loading: () => <Loading />,
+})
 
 export const CityCard = ({ city }: { city: City }) => {
   const [showInfos, setShowInfos] = React.useState(false)
