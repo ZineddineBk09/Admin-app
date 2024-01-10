@@ -4,9 +4,13 @@ import { MapContainer, TileLayer, FeatureGroup } from 'react-leaflet'
 import dynamic from 'next/dynamic'
 const EditControl = dynamic(
   import('react-leaflet-draw').then((mod) => mod.EditControl),
-  { ssr: false }
+  {
+    ssr: false,
+    loading: () => <Loading />,
+  }
 )
 import * as L from 'leaflet'
+import Loading from '@/components/shared/loading'
 
 const CityMap = () => {
   const [map, setMap] = useState<any>(null)
