@@ -178,7 +178,6 @@ export const AddCountry = () => {
                 </Flex>
               </Flex>
             </Modal.Body>
-            {/* <Divider css={{ my: '$5' }} /> */}
             <Modal.Footer>
               <Button auto type='submit' className='bg-primary text-black'>
                 Add Country
