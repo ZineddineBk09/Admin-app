@@ -3,17 +3,20 @@ import React from 'react'
 import { AddBranch } from './add-branch'
 import { SearchBranch } from './branch'
 import dynamic from 'next/dynamic'
-const BranchCard = dynamic(() => import('./branch'), { ssr: false })
+const BranchCard = dynamic(() => import('./branch'), {
+  ssr: false,
+  loading: () => <Loading />,
+})
 import { useClientsBranchesContext } from '@/context/clients/branches'
 import { useRouter } from 'next/router'
+import Loading from '@/components/shared/loading'
 
 const Branches = () => {
   const { branches } = useClientsBranchesContext()
   // get the ?branchId= query param
   const router = useRouter()
   const { branchId } = router.query
-  
-  
+
   // if branches contains the branchId, then scroll to it
   React.useEffect(() => {
     if (branchId && branches.some((branch: Branch) => branch.id === branchId)) {
@@ -21,7 +24,7 @@ const Branches = () => {
       branchElement?.scrollIntoView({ behavior: 'smooth' })
     }
   }, [branchId, branches])
-  
+
   return (
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <SearchBranch />
