@@ -16,6 +16,8 @@ const Cities = () => {
   return (
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <SearchCity />
+
+      {/*  */}
       <div className='w-full flex flex-col items-center gap-y-6'>
         {cities?.map((city: City, index: number) => (
           <CityCard key={index} city={city} />
