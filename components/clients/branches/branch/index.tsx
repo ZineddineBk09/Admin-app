@@ -7,7 +7,11 @@ import 'leaflet/dist/leaflet.css'
 import 'leaflet-draw/dist/leaflet.draw.css'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useClientsBranchesContext } from '@/context/clients/branches'
-const BranchMap = dynamic(() => import('./map'), { ssr: false })
+import Loading from '@/components/shared/loading'
+const BranchMap = dynamic(() => import('./map'), {
+  ssr: false,
+  loading: () => <Loading />,
+})
 
 export const BranchCard = ({ branch }: { branch: Branch }) => {
   const [showInfos, setShowInfos] = React.useState(false)
