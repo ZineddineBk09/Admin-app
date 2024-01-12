@@ -22,7 +22,7 @@ export const CityCard = ({ city }: { city: City }) => {
   const { id, name, price, orderFee, governorateName, additional } = city
 
   // Input fields that the user can edit
-  const fields = [
+  const fields: any[] = [
     {
       name: 'Governorate',
       id: 'governorateName',
@@ -144,7 +144,7 @@ export const SearchCity = () => {
 }
 
 const GovernoratesModal = () => {
-  const [selected, setSelected] = React.useState([])
+  const [selected, setSelected] = React.useState<string[]>([])
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
 
@@ -185,7 +185,7 @@ const GovernoratesModal = () => {
                 label='Governorates'
                 color='warning'
                 value={selected}
-                onChange={(e: any) => setSelected(e)}
+                onChange={(e: string[]) => setSelected(e)}
               >
                 <Checkbox value='riyadh'>Riyadh</Checkbox>
                 <Checkbox value='jeddah'>Jeddah</Checkbox>
