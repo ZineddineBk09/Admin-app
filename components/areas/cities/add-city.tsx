@@ -1,6 +1,5 @@
 import {
   Button,
-  Divider,
   Input,
   Modal,
   Text,
@@ -70,7 +69,6 @@ export const AddCity = () => {
                 Add City
               </Text>
             </Modal.Header>
-            {/* <Divider css={{ my: '$5' }} /> */}
             <Modal.Body css={{ py: '$10' }}>
               <Flex
                 direction={'column'}
@@ -180,7 +178,6 @@ export const AddCity = () => {
                 </Flex>
               </Flex>
             </Modal.Body>
-            {/* <Divider css={{ my: '$5' }} /> */}
             <Modal.Footer>
               <Button auto type='submit' className='bg-primary text-black'>
                 Add City
