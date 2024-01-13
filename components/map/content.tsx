@@ -5,7 +5,11 @@ import OrdersAndDriversTabs from './tabs'
 import { useMapContext } from '@/context/map'
 import { OrderData } from './order-data'
 import SelectLocation from './select-location'
-const Map = dynamic(() => import('./map'), { ssr: false })
+import Loading from '../shared/loading'
+const Map = dynamic(() => import('./map'), {
+  ssr: false,
+  loading: () => <Loading />,
+})
 
 export const Content = () => {
   const { showOrders, openTab } = useMapContext()
@@ -24,7 +28,6 @@ export const Content = () => {
           <Map />
           {/* Select location */}
           <SelectLocation />
-          
         </div>
 
         {/* Driver | Order Infos */}
