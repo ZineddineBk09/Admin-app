@@ -61,7 +61,7 @@ export const SupportContextProvider = ({
                 } as Chat,
               ]
             } else if (change.type === 'modified') {
-              return prevChats.map((chat: Chat) =>
+              return prevChats?.map((chat: Chat) =>
                 chat.id === change.doc.id
                   ? {
                       id: change.doc.id,
@@ -77,10 +77,10 @@ export const SupportContextProvider = ({
             return prevChats
           })
 
-          // set selected chat if it's not set
-          if (!selectedChat.id) {
-            handleSelectChat(change.doc.id)
-          }
+          // // set selected chat if it's not set
+          // if (!selectedChat.id) {
+          //   handleSelectChat(change.doc.id)
+          // }
         })
       })
 
