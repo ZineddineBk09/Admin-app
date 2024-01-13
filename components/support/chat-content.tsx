@@ -116,7 +116,7 @@ export const ChatContent = () => {
           </div>
         ) : (
           dates &&
-          Object.keys(dates).map((dateKey: any, index1: number) => (
+          Object.keys(dates)?.map((dateKey: any, index1: number) => (
             <>
               <span
                 className='w-28 mx-auto bg-gray-300 py-1 font-medium shadow-lg rounded-full text-center text-gray-600 text-xs md:text-base md:w-32 lg:w-36'
@@ -125,7 +125,7 @@ export const ChatContent = () => {
                 {dateKey}
               </span>
 
-              {dates[dateKey].map((message: ChatMessage, index2: number) => (
+              {dates[dateKey]?.map((message: ChatMessage, index2: number) => (
                 <div
                   key={index2}
                   id={
