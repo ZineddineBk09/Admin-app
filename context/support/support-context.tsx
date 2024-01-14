@@ -30,6 +30,7 @@ export const SupportContextProvider = ({
     const chat = chats?.find((chat) => chat.id === id)
 
     if (chat) {
+      setSelectedChat(chat)
       setLoading(true)
       // track adding new messages in chat messages subcollection
       const unsub = onSnapshot(
@@ -40,7 +41,6 @@ export const SupportContextProvider = ({
           setLoading(false)
         }
       )
-      setSelectedChat(chat)
       setLoading(false)
       return unsub
     }
