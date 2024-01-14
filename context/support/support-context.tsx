@@ -51,6 +51,7 @@ export const SupportContextProvider = ({
     const getChats = () => {
       const unsub = onSnapshot(collection(firestore, 'chats'), (snapshot) => {
         snapshot.docChanges().forEach((change) => {
+          handleSelectChat(change.doc.id)
           setChats((prevChats: any) => {
             if (change.type === 'added') {
               return [
@@ -77,10 +78,10 @@ export const SupportContextProvider = ({
             return prevChats
           })
 
-          // // set selected chat if it's not set
-          // if (!selectedChat.id) {
-          //   handleSelectChat(change.doc.id)
-          // }
+          // set selected chat if it's not set
+          if (!selectedChat.id) {
+            handleSelectChat(change.doc.id)
+          }
         })
       })
 
