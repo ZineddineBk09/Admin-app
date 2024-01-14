@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useSupportContext } from '@/context/support/support-context'
 import { ChatMessage } from '@/interfaces'
 import { SendIcon } from '../icons/support'
@@ -79,27 +79,48 @@ export const ChatContent = () => {
   const { loading, chatMessages, selectedChat } = useSupportContext()
 
   //get deferent dates from chatMessages (array of objects categorized by day)
-  const dates = chatMessages?.reduce((acc: any, message: ChatMessage) => {
-    const date = new Date(message.timestamp.seconds * 1000).toLocaleDateString(
-      'en-US',
-      {
+  // const dates = chatMessages?.reduce((acc: any, message: ChatMessage) => {
+  //   const date = new Date(message.timestamp.seconds * 1000).toLocaleDateString(
+  //     'en-US',
+  //     {
+  //       month: 'numeric',
+  //       day: 'numeric',
+  //       year: 'numeric',
+  //     }
+  //   )
+  //   if (!acc[date]) {
+  //     acc[date] = []
+  //   }
+  //   acc[date].push(message)
+
+  //   return acc
+  // }, {})
+  const dates = useMemo(() => {
+    if (!chatMessages) return {}
+
+    return chatMessages.reduce((acc:any, message:any) => {
+      const date = new Date(
+        message.timestamp.seconds * 1000
+      ).toLocaleDateString('en-US', {
         month: 'numeric',
         day: 'numeric',
         year: 'numeric',
-      }
-    )
-    if (!acc[date]) {
-      acc[date] = []
-    }
-    acc[date].push(message)
+      })
 
-    return acc
-  }, {})
+      acc[date] = acc[date] ? [...acc[date], message] : [message]
+      return acc
+    }, {})
+  }, [chatMessages])
 
   useEffect(() => {
     // messagesRef.current?.scrollIntoView({ behavior: 'smooth' })
-    const lastMessage = document.getElementById('last-message')
-    lastMessage?.scrollIntoView({ behavior: 'smooth' })
+    // const lastMessage = document.getElementById('last-message')
+    // lastMessage?.scrollIntoView({ behavior: 'smooth' })
+    //scroll to bottom of messages container
+    messagesRef.current?.scrollTo({
+      top: messagesRef.current?.scrollHeight,
+      behavior: 'smooth',
+    })
   }, [chatMessages])
 
   return (
@@ -128,9 +149,6 @@ export const ChatContent = () => {
               {dates[dateKey]?.map((message: ChatMessage, index2: number) => (
                 <div
                   key={index2}
-                  id={
-                    index2 === dates[dateKey].length - 1 ? 'last-message' : ''
-                  }
                   className={`flex items-end ${
                     message.type === 'customer'
                       ? 'justify-end'
@@ -174,6 +192,11 @@ export const ChatContent = () => {
                       )}
                     </span>
                     <span
+                      id={
+                        index2 === dates[dateKey].length - 1
+                          ? 'last-message'
+                          : index2.toString()
+                      }
                       className={`w-full px-4 py-2 rounded-b-md inline-block shadow-md ${
                         message.type === 'customer'
                           ? 'bg-gray-200'
