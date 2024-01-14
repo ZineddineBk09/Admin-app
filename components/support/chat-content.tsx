@@ -26,9 +26,9 @@ const renderMessage = (message: string) => {
         if (part?.includes('firebasestorage.googleapis.com')) {
           // If it's a Firebase Storage file link
           const fileName = part
-            .split('support%2F')[1]
-            .split('?alt')[0]
-            .replaceAll('%20', '') // Extract file name from the URL
+            ?.split('support%2F')[1]
+            ?.split('?alt')[0]
+            ?.replaceAll('%20', '') // Extract file name from the URL
 
           return (
             <>
@@ -214,7 +214,7 @@ const ChatForm = () => {
         senderId: session?.user?.username,
         type: 'support',
       }).then(() => {
-        handleSelectChat(selectedChat.id)
+        // handleSelectChat(selectedChat.id)
         formik.setFieldValue('message', '')
       })
     },
