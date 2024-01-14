@@ -1,12 +1,47 @@
 import { useSupportContext } from '@/context/support/support-context'
 import { Chat } from '@/interfaces'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 export const Chats = () => {
-  const { chats, selectedChat, handleSelectChat } = useSupportContext()
+  const { chats } = useSupportContext()
+  const [openedChats, setOpenedChats] = React.useState<Chat[]>([])
+  const [closedChats, setClosedChats] = React.useState<Chat[]>([])
+
+  useEffect(() => {
+    // filter chats based on status: opened, and closed
+    const opened = chats?.filter((chat: Chat) => chat.status === 'opened')
+    const closed = chats?.filter((chat: Chat) => chat.status === 'closed')
+
+    // set opened chats
+    setOpenedChats(opened)
+
+    // set closed chats
+    setClosedChats(closed)
+  }, [chats])
 
   return (
-    <ul className='w-[300px] h-full list-none bg-gray-200 min-h-full !overflow-y-scroll'>
+    <div className='w-[300px] h-full'>
+      {/* Opened chats */}
+      <div className='w-full'>
+        {RenderChats(openedChats)}
+      </div>
+
+      {/* Closed chats */}
+      <div className='w-full mt-8'>
+        <h3 className='text-gray-500 text-sm font-medium px-4 mb-4'>
+          Closed Chats
+        </h3>
+        {RenderChats(closedChats)}
+      </div>
+    </div>
+  )
+}
+
+const RenderChats = (chats: Chat[]) => {
+  const { selectedChat, handleSelectChat } = useSupportContext()
+
+  return (
+    <ul className='w-full list-none bg-gray-200 !overflow-y-scroll'>
       {chats?.map(({ id, customerName, unread }: Chat, index: number) => (
         <li
           className='px-4 border-b border-gray-300 relative cursor-pointer'
