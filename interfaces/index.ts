@@ -262,7 +262,9 @@ export interface Chat {
   id: string
   customerName: string
   unread: number
+  status: 'opened' | 'closed'
   messages?: ChatMessage[]
+  lastUpdate: Date
 }
 
 export interface SupportTeamMember {
