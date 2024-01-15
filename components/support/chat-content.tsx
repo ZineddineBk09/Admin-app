@@ -77,28 +77,11 @@ const renderMessage = (message: string) => {
 export const ChatContent = () => {
   const messagesRef: any = React.useRef(null)
   const { loading, chatMessages, selectedChat } = useSupportContext()
-
-  //get deferent dates from chatMessages (array of objects categorized by day)
-  // const dates = chatMessages?.reduce((acc: any, message: ChatMessage) => {
-  //   const date = new Date(message.timestamp.seconds * 1000).toLocaleDateString(
-  //     'en-US',
-  //     {
-  //       month: 'numeric',
-  //       day: 'numeric',
-  //       year: 'numeric',
-  //     }
-  //   )
-  //   if (!acc[date]) {
-  //     acc[date] = []
-  //   }
-  //   acc[date].push(message)
-
-  //   return acc
-  // }, {})
+  
   const dates = useMemo(() => {
     if (!chatMessages) return {}
 
-    return chatMessages.reduce((acc:any, message:any) => {
+    return chatMessages.reduce((acc: any, message: any) => {
       const date = new Date(
         message.timestamp.seconds * 1000
       ).toLocaleDateString('en-US', {
@@ -113,10 +96,7 @@ export const ChatContent = () => {
   }, [chatMessages])
 
   useEffect(() => {
-    // messagesRef.current?.scrollIntoView({ behavior: 'smooth' })
-    // const lastMessage = document.getElementById('last-message')
-    // lastMessage?.scrollIntoView({ behavior: 'smooth' })
-    //scroll to bottom of messages container
+    // scroll to bottom of messages container
     messagesRef.current?.scrollTo({
       top: messagesRef.current?.scrollHeight,
       behavior: 'smooth',
