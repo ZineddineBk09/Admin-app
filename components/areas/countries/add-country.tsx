@@ -68,7 +68,7 @@ export const AddCountry = () => {
                 Add Country
               </Text>
             </Modal.Header>
-            {/* <Divider css={{ my: '$5' }} /> */}
+
             <Modal.Body css={{ py: '$10' }}>
               <Flex
                 direction={'column'}
@@ -178,6 +178,7 @@ export const AddCountry = () => {
                 </Flex>
               </Flex>
             </Modal.Body>
+            
             <Modal.Footer>
               <Button auto type='submit' className='bg-primary text-black'>
                 Add Country
