@@ -14,6 +14,7 @@ const Accounts = () => {
   return (
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <SearchAccount />
+      {/* Accounts list */}
       <div className='w-full flex flex-col items-center gap-y-6'>
         {accounts?.map((account: Account, index: number) => (
           <AccountCard key={index} account={account} />
@@ -103,32 +104,26 @@ const AccountCard = ({ account }: { account: Account }) => {
             <label className='mt-2 text-gray-600 text-sm'>Teams</label>
             {teams.length > 0 ? (
               <div className='w-full flex items-start gap-y-2'>
-                {teams?.map((team: any, index: number) => (
-                  <div key={index}>
-                    <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
-                      {/* <label className='text-gray-600 text-sm'>
-                        Area #{index + 1}
-                      </label> */}
-                      <p className='text-sm capitalize'>
-                        {team.name}{' '}
-                        {/* <span className='ml-6 text-sm text-gray-400'>
-                          #{index}
-                        </span> */}
-                      </p>
-                      <Tooltip
-                        content={'Delete "' + team.name + '"'}
-                        color='error'
-                      >
-                        <button>
-                          <BinIcon width={4} />
-                        </button>
-                      </Tooltip>
-                      {index < teams.length - 1 && (
-                        <span className='-ml-4'>,</span>
-                      )}
+                {teams?.map(
+                  (team: { id: string; name: string }, index: number) => (
+                    <div key={index}>
+                      <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
+                        <p className='text-sm capitalize'>{team.name}</p>
+                        <Tooltip
+                          content={'Delete "' + team.name + '"'}
+                          color='error'
+                        >
+                          <button>
+                            <BinIcon width={4} />
+                          </button>
+                        </Tooltip>
+                        {index < teams.length - 1 && (
+                          <span className='-ml-4'>,</span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                )}
               </div>
             ) : (
               <p className='text-sm'>No teams found</p>
@@ -147,24 +142,26 @@ const AccountCard = ({ account }: { account: Account }) => {
             <label className='mt-2 text-gray-600 text-sm'>Admins</label>
             {admins.length > 0 ? (
               <div className='w-full flex items-start gap-y-2'>
-                {admins?.map((admin: any, index: number) => (
-                  <div key={index}>
-                    <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
-                      <p className='text-sm capitalize'>{admin.name} </p>
-                      <Tooltip
-                        content={'Delete "' + admin.name + '"'}
-                        color='error'
-                      >
-                        <button>
-                          <BinIcon width={4} />
-                        </button>
-                      </Tooltip>
-                      {index < admins.length - 1 && (
-                        <span className='-ml-4'>,</span>
-                      )}
+                {admins?.map(
+                  (admin: { id: string; name: string }, index: number) => (
+                    <div key={index}>
+                      <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
+                        <p className='text-sm capitalize'>{admin.name} </p>
+                        <Tooltip
+                          content={'Delete "' + admin.name + '"'}
+                          color='error'
+                        >
+                          <button>
+                            <BinIcon width={4} />
+                          </button>
+                        </Tooltip>
+                        {index < admins.length - 1 && (
+                          <span className='-ml-4'>,</span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                )}
               </div>
             ) : (
               <p className='text-sm'>No admins found</p>
@@ -256,7 +253,7 @@ const Btn = ({
   children,
   bg = '[#B4B4B4]',
 }: {
-  children: any
+  children: React.ReactNode
   bg?: string
 }) => {
   return (
