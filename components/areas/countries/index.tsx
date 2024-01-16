@@ -3,7 +3,6 @@ import { Divider } from '@nextui-org/react'
 import React from 'react'
 import { AddCountry } from './add-country'
 import { DeleteCountry } from './delete-country'
-import CopyToClipboardButton from '@/components/shared/copy-to-clipboard'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 
 const Countries = () => {
