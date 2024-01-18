@@ -19,11 +19,17 @@ Steps to implement the auto cancelled orders feature (10 hours)
     |__ Create a new file under the (pages/orders) folder called (list.tsx) to contain the orders page UI
     |__ Wrap the orders page with the order context
 05- Create the auto cancelled orders page UI (table, search, switch button...etc)
+    |
+    |__ Add a tab view to separate between the orders with auto cancel feature enabled, and he orders that require a manual cancellation from the admin
 
 06- Create the auto cancelled orders page logic (context, state, variables, ...etc)
 
-07- Integrate the auto cancelled orders page with the backend
+07- Edit the branches page design to add the auto cancel feature
+    |
+    |__ Add a new switch button to enable/disable the auto since we're following global -> branch -> order hierarchy for auto cancellation
+
+08- Integrate the auto cancelled orders page with the backend
     |
     |__ For this task, i will be waiting for the backend to finish the auto cancelled orders API and provide me with the API documentation
 
-08- Testing
+09- Testing
