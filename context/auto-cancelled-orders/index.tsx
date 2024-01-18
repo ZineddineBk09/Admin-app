@@ -5,14 +5,25 @@ import React, { useEffect, useState } from 'react'
 
 export const AutoCancelledOrdersContext = React.createContext({})
 
-export const useAutoCancelledOrdersContext: any = () =>
-  React.useContext(AutoCancelledOrdersContext)
+export const useAutoCancelledOrdersContext: {
+  (): {
+    enabled: boolean
+
+    autoCancelledOrders: AutoCancelledOrder[]
+    loading: boolean
+    handleSearchAutoCancelledOrders: (search: string) => void
+    handleSortAutoCancelledOrders: (sort: Sort) => void
+    refreshAutoCancelledOrders: () => Promise<void>
+    handleEnableAutoCancelledOrders: () => void
+  }
+} = () => React.useContext(AutoCancelledOrdersContext as any)
 
 export const AutoCancelledOrdersContextProvider = ({
   children,
 }: {
   children: React.ReactNode
 }) => {
+  const [enabled, setEnabled] = useState<boolean>(false)
   const [autoCancelledOrders, setAutoCancelledOrders] = useState<
     AutoCancelledOrder[]
   >([] as AutoCancelledOrder[])
@@ -42,6 +53,7 @@ export const AutoCancelledOrdersContextProvider = ({
             address: faker.location.streetAddress(),
             phone: faker.phone.number(),
           },
+          deliveryFee: faker.number.int({ max: 100, min: 0 }),
           distance: faker.number.int(),
           time: faker.date.past().toLocaleTimeString(),
           city: faker.location.city(),
@@ -104,6 +116,10 @@ export const AutoCancelledOrdersContextProvider = ({
     setAutoCancelledOrders(sortedAutoCancelledOrders)
   }
 
+  const handleEnableAutoCancelledOrders = () => {
+    setEnabled(!enabled)
+  }
+
   useEffect(() => {
     refreshAutoCancelledOrders()
   }, [])
@@ -111,11 +127,13 @@ export const AutoCancelledOrdersContextProvider = ({
   return (
     <AutoCancelledOrdersContext.Provider
       value={{
+        enabled,
         autoCancelledOrders,
         loading,
         handleSearchAutoCancelledOrders,
         handleSortAutoCancelledOrders,
         refreshAutoCancelledOrders,
+        handleEnableAutoCancelledOrders,
       }}
     >
       {children}
