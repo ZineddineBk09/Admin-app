@@ -1,0 +1,29 @@
+Steps to implement the auto cancelled orders feature (10 hours)
+01 - Create a new git branch (auto-cancel-orders) to
+
+02- Separate the orders logic fron the auto cancelled orders feature (context, state, variables, ...etc)
+    |
+    |__ Create a new folder under the context folder called (auto-cancelled-orders)
+    |__ Create a new file called (index.ts) under the (auto-cancelled-orders) folder to contain the context logic
+    |__ Add the new types to the (interfaces/index.ts) file
+    
+03- Add a new page to list the auto cancelled orders uner the orders page (/orders/auto-cancel)
+    |
+    |__ Create a new file under the (pages/orders) folder called (auto-cancelled-orders.tsx) to contain the auto cancelled orders page UI
+        |
+        |__ The canceled orders table should inherit from the orders table component with some changes in the columns (remove info related to driver, order status, ...etc)
+    |__ Wrap the auto cancelled orders page with the created context above
+
+04- move the old orders page to (/orders/list)
+    |
+    |__ Create a new file under the (pages/orders) folder called (list.tsx) to contain the orders page UI
+    |__ Wrap the orders page with the order context
+05- Create the auto cancelled orders page UI (table, search, switch button...etc)
+
+06- Create the auto cancelled orders page logic (context, state, variables, ...etc)
+
+07- Integrate the auto cancelled orders page with the backend
+    |
+    |__ For this task, i will be waiting for the backend to finish the auto cancelled orders API and provide me with the API documentation
+
+08- Testing
