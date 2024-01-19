@@ -34,10 +34,10 @@ export const CancelOrder = ({
 
   return (
     <div>
-      <Tooltip content='Cancel' color='error' onClick={handler}>
-        <IconButton>
-          <CancelIcon />
-        </IconButton>
+      <Tooltip content='' color='error' onClick={handler}>
+        <button className='px-3 py-2 bg-red-500 text-white rounded-lg'>
+          Cancel Order
+        </button>
       </Tooltip>
       <Modal
         closeButton
