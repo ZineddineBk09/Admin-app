@@ -1,0 +1,7 @@
+Asana task name: الادمن لازم يظهر له على النظام نوع الدفع بتاع الاوردر | كاش او فيزا كارت 
+
+01- Get all orders from the API, and add the payment type column to the orders table in the UI
+    |
+    |__ The new column will be added in both orders and auto-cancel orders table UI
+
+(since the orders endpoint is not yet fully integrated, with the API, i will use fake data just as an example and it should enough for the task)
