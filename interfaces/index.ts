@@ -143,6 +143,26 @@ export interface Order {
   duration: number
   startTime: number
   endTime: number
+  paymentType: 'cash' | 'visa' | 'mastercard'
+  items: Item[]
+}
+
+export interface AutoCancelledOrder {
+  id: string
+  date: string
+  time: string
+  customer: Customer
+  client: Client
+  distance: number
+  city: string
+  value: number
+  deliveryFee: number
+  location: {
+    latitude: number
+    longitude: number
+  } | null
+  paymentType: 'cash' | 'visa' | 'mastercard'
+  timeLeft: number // the remained time before the order is auto cancelled
   items: Item[]
 }
 //--------------------------------------------------------------------
