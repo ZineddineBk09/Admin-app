@@ -1,6 +1,6 @@
 import { Branch } from '@/interfaces'
-import { Divider } from '@nextui-org/react'
-import React from 'react'
+import { Divider, Input } from '@nextui-org/react'
+import React, { useState } from 'react'
 import { DeleteBranch } from '../delete-branch'
 import dynamic from 'next/dynamic'
 import 'leaflet/dist/leaflet.css'
@@ -122,7 +122,6 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
                 </div>
               </div>
             </div>
-
             <Divider />
             {fields
               ?.filter(({ hidden }: any) => !hidden)
@@ -193,6 +192,8 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
                   </div>
                 )
               })}
+            <Divider />
+            <AutoCancelSwitch />
           </>
         )}
       </div>
@@ -264,6 +265,53 @@ export const SearchBranch = () => {
           placeholder='Search'
           onChange={(e) => handleSearchBranches(e.target.value)}
         />
+      </div>
+    </div>
+  )
+}
+
+const AutoCancelSwitch = () => {
+  const [enabled, setEnabled] = useState(false)
+  const [value, setValue] = useState(10)
+
+  return (
+    <div className='relative flex flex-col items-start justify-center overflow-hidden gap-y-3'>
+      <div className='flex'>
+        <span className='mr-2 font-bold text-gray-900'>Auto Cancel Orders</span>
+        <label className='inline-flex relative items-center mr-5 cursor-pointer'>
+          <input
+            type='checkbox'
+            className='sr-only peer'
+            checked={enabled}
+            readOnly
+          />
+          <div
+            onClick={() => setEnabled(!enabled)}
+            className="w-11 h-6 bg-gray-200 rounded-full peer  peer-focus:ring-primary-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"
+          />
+        </label>
+      </div>
+      <p className='text-gray-500'>
+        enabling this will cancel all orders automatically after{' '}
+        <b>{value} minutes</b> for all orders
+        related to this branch.
+      </p>
+      <div className='flex items-center justify-between gap-x-3'>
+        <Input
+          type='number'
+          min={1}
+          disabled={!enabled}
+          value={value}
+          onChange={(e) => setValue(parseInt(e.target.value))}
+        />
+        <button
+          className={`px-4 py-2 bg-primary text-gray-700 rounded-lg ${
+            !enabled && 'opacity-50 cursor-not-allowed'
+          }`}
+          disabled={!enabled}
+        >
+          Save
+        </button>
       </div>
     </div>
   )
