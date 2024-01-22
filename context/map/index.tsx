@@ -31,19 +31,19 @@ export const MapContextProvider = ({
   const [showDrivers, setShowDrivers] = useState<boolean>(true)
   const [orders, setOrders] = useState<any[]>([] as any[])
   const [drivers, setDrivers] = useState<any[]>([] as any[])
-  const [selectedOrder, setSelectedOrder] = useState<any>(null)
+  const [selectedOrder, setSelectedOrder] = useState<string>()
   const [selectedDriver, setSelectedDriver] = useState<any>(null)
   const [openTab, setOpenTab] = React.useState(1)
   const [orderStatus, setOrderStatus] = useState<Status[]>([
-    { value: 'Assigned', checked: true },
-    { value: 'Cancelled', checked: true },
-    { value: 'New', checked: true },
-    { value: 'Done', checked: true },
+    { value: 'assigned', checked: true },
+    { value: 'cancelled', checked: true },
+    { value: 'new', checked: true },
+    { value: 'done', checked: true },
   ])
   const [driverStatus, setDriverStatus] = useState<Status[]>([
-    { value: 'Available', checked: true },
-    { value: 'Busy', checked: true },
-    { value: 'Inactive', checked: true },
+    { value: 'available', checked: true },
+    { value: 'busy', checked: true },
+    { value: 'inactive', checked: true },
   ])
 
   const handleToggleOrders = () => {
@@ -94,7 +94,7 @@ export const MapContextProvider = ({
         time: faker.date.past().toLocaleTimeString(),
         driverId: faker.string.uuid(),
         driverName: faker.person.firstName(),
-        city: faker.address.city(),
+        city: faker.location.city(),
         status: orderStatus[faker.number.int({ max: 3, min: 0 })].value,
         deliveryFee: faker.number.int({ max: 100, min: 0 }),
         location:
@@ -117,6 +117,7 @@ export const MapContextProvider = ({
         ),
         clientPaid: faker.datatype.boolean(),
         driverPaid: faker.datatype.boolean(),
+        paymentType: ['cash', 'visa', 'mastercard'][faker.number.int({ max: 2, min: 0 })] as any,
       }
       arr.push(fakeOrder)
     }
