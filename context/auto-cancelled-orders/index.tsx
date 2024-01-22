@@ -58,16 +58,14 @@ export const AutoCancelledOrdersContextProvider = ({
           time: faker.date.past().toLocaleTimeString(),
           city: faker.location.city(),
           timeLeft: faker.number.int({ max: 100, min: 0 }),
-          location:
-            faker.number.int({ max: 2, min: 1 }) == 1
-              ? {
-                  latitude: faker.location.latitude({ max: 22, min: 21 }),
-                  longitude: faker.location.longitude({
-                    max: 40,
-                    min: 39,
-                  }),
-                }
-              : null,
+          location: {
+            latitude: faker.location.latitude({ max: 22, min: 21 }),
+            longitude: faker.location.longitude({
+              max: 40,
+              min: 39,
+            }),
+          },
+          paymentType: ['cash', 'visa', 'mastercard'][faker.number.int({ max: 2, min: 0 })],
           items: Array.from(
             { length: faker.number.int({ max: 5, min: 1 }) },
             () => ({
@@ -76,7 +74,7 @@ export const AutoCancelledOrdersContextProvider = ({
               quantity: faker.number.int({ max: 5, min: 1 }),
             })
           ),
-        } as AutoCancelledOrder)
+        } as unknown as AutoCancelledOrder)
     )
 
     setAutoCancelledOrders(records)
