@@ -1,0 +1,27 @@
+Asana task name: الادمن ممكن يحول طلب من علي سواق سائق آخر 
+
+01- To accomplish this task first i thought about implementing a filter on orders list (dashboard page) so that the admin can have the ability to filter the assigned and in progress orders
+    |
+    |__ 01-1- the filters are: new, assigned, in progress, done, canceled
+    |__ 01-2- filters will be modal with a list of filters that the admin can choose from
+
+02- The after filtering the orders list, the admin can click on the order he wants to transfer to another driver and then click on the assign to another driver button
+    |
+    |__ 02-1- the assign to another driver button will be available only to orders with customer location, if not the admin have to add the customer location first
+    |__ 02-2- the assign to another driver button will be disabled on the new, done and canceled orders
+    
+03- After clicking on the assign to another driver button, a modal will appear with a list of drivers that the admin can choose from to assign the order to
+    |
+    |__ 03-1- the list of drivers will be fetched from the API using a special endpoint that returns only close by drivers
+    |__ 03-2- the list of drivers will be sorted by the closest to the customer location
+    |__ 03-3- the admin should have the ability to assign the order to many drivers at the same time, and the 1st one who accepts the order will get it
+   
+04- After choosing the driver, the admin can click on the assign button to assign the order to the driver
+        
+
+
+QUESTIONS I HAVE:
+  - will the admin propose the order to drivers (more logical), or will assign it directly to a driver?
+  - will the admin have the ability to assign the order to many drivers at the same time, and the 1st one who accepts the order will get it?
+  - will the admin have the ability to assign the order to a driver who is not close by the customer location?
+  
