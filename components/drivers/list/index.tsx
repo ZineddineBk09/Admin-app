@@ -1,9 +1,9 @@
 import { Text, Loading } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../../styles/flex'
-import { DriversTable } from '../../table/drivers-table'
+import { DriversTable } from '../../table/drivers/drivers-table'
 import { AddDriver } from './add-driver'
-import { useDriversContext } from '@/context/driver'
+import { useDriversContext } from '@/context/drivers'
 import { Team } from '@/interfaces'
 import { getRecords } from '@/lib/api'
 
@@ -59,26 +59,18 @@ export const SearchAndFilter = () => {
 
   React.useEffect(() => {
     const fetchTeams = async () => {
-      const uniqueTeams = await getRecords('team').then((res: any) => {
-        return res.teams
-      })
-      setTeams(uniqueTeams)
+      await getRecords('team')
+        .then((res: { teams: Team[] }) => setTeams(res.teams))
+        .catch((err: any) => {
+          setTeams([])
+          console.log('Error in fetching teams: ', err)
+        })
     }
     fetchTeams()
   }, [drivers])
 
   return (
     <div className='w-full grid grid-cols-1 gap-6 lg:grid-cols-3 px-6'>
-      {/* Date */}
-      {/* <div className='h-10 bg-white rounded-full px-4 relative'>
-        <input
-          type='date'
-          name='date'
-          id='date'
-          className='w-fit h-full bg-transparent'
-        />
-      </div> */}
-
       {/* Team */}
       <div className='h-10 bg-white rounded-full px-4'>
         <select
