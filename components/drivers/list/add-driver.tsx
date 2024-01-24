@@ -1,18 +1,11 @@
-import {
-  Button,
-  Input,
-  Modal,
-  Text,
-  Loading,
-  Radio,
-} from '@nextui-org/react'
+import { Button, Input, Modal, Text, Loading, Radio } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../../styles/flex'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { createRecord, getRecords } from '@/lib/api'
 import { Team } from '@/interfaces'
-import { useDriversContext } from '@/context/driver'
+import { useDriversContext } from '@/context/drivers'
 
 export const AddDriver = () => {
   const [visible, setVisible] = React.useState(false)
@@ -79,8 +72,12 @@ export const AddDriver = () => {
 
   React.useEffect(() => {
     const fetchTeams = async () => {
-      const uniqueTeams = await getRecords('team').then((res: any) => res.teams)
-      setTeams(uniqueTeams)
+      await getRecords('team')
+        .then((res: { teams: Team[] }) => setTeams(res.teams))
+        .catch((err: any) => {
+          setTeams([])
+          console.log('Error in fetching teams: ', err)
+        })
     }
     fetchTeams()
   }, [])
