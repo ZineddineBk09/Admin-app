@@ -16,7 +16,7 @@ import * as Yup from 'yup'
 import { EditIcon } from '../../icons/table'
 import { Driver, Team } from '@/interfaces'
 import { getRecords, updateRecord } from '@/lib/api'
-import { useDriversContext } from '@/context/driver'
+import { useDriversContext } from '@/context/drivers'
 
 export const EditDriver = ({ driver }: { driver: Driver }) => {
   const [visible, setVisible] = React.useState(false)
@@ -75,8 +75,12 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
     formik.setValues({ ...(driver as any) })
 
     const fetchTeams = async () => {
-      const uniqueTeams = await getRecords('team').then((res: any) => res.teams)
-      setTeams(uniqueTeams)
+      await getRecords('team')
+        .then((res: { teams: Team[] }) => setTeams(res.teams))
+        .catch((err: any) => {
+          setTeams([])
+          console.log('Error in fetching teams: ', err)
+        })
     }
     fetchTeams()
   }, [])
