@@ -4,7 +4,7 @@ import { Flex } from '../../styles/flex'
 import { DeleteIcon } from '../../icons/table'
 import { IconButton } from '../../table/table.styled'
 import { deleteRecord } from '@/lib/api'
-import { useDriversContext } from '@/context/driver'
+import { useDriversContext } from '@/context/drivers'
 
 export const DeleteDriver = ({
   id,
