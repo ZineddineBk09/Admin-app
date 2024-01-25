@@ -1,12 +1,14 @@
 import { Loading, Text, Tooltip } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../styles/flex'
-import { ReportsTable } from '../table/reports-table'
+import { ReportsTable } from '../table/reports/reports-table'
 import { PrintIcon } from '../icons/table'
 import { exportToExcel } from '@/utils'
-import { useReportsContext } from '@/context/report'
+import { useReportsContext } from '@/context/reports'
 
 export const ReportsPage = () => {
+  const [openTab, setOpenTab] = React.useState(1)
+  const tabs = ['Orders', 'Clients', 'Drivers', 'Areas', 'Customers', 'Teams']
   const { reports } = useReportsContext()
   const loading = false
 
@@ -30,7 +32,7 @@ export const ReportsPage = () => {
           </div>
 
           <div className='col-span-3 row-span-1'>
-            <Tabs />
+            <Tabs tabs={tabs} openTab={openTab} setOpenTab={setOpenTab} />
           </div>
         </div>
 
@@ -51,7 +53,16 @@ export const ReportsPage = () => {
           <Tooltip content='Export'>
             <button
               className='flex items-center gap-x-2 mt-6 ml-auto col-span-1 row-span-1'
-              onClick={() => exportToExcel({ name: 'reports', data: reports })}
+              onClick={() =>
+                exportToExcel({
+                  name:
+                    'FleetRun_Reports_' +
+                    tabs[openTab] +
+                    '_' +
+                    new Date().toLocaleDateString(),
+                  data: reports,
+                })
+              }
             >
               <span>Print</span>
               <PrintIcon />
@@ -62,7 +73,7 @@ export const ReportsPage = () => {
 
       {loading ? (
         <Loading size='xl' className='mt-24 -mb-24' color='warning' />
-      ) : reports.length > 0 ? (
+      ) : reports?.length > 0 ? (
         <ReportsTable />
       ) : (
         <Flex
@@ -119,10 +130,15 @@ export const SearchAndFilter = () => {
   )
 }
 
-const Tabs = () => {
-  const [openTab, setOpenTab] = React.useState(1)
-  const tabs = ['Orders', 'Clients', 'Drivers', 'Areas', 'Customers', 'Teams']
-
+const Tabs = ({
+  tabs = ['Orders', 'Clients', 'Drivers', 'Areas', 'Customers', 'Teams'],
+  openTab,
+  setOpenTab,
+}: {
+  tabs?: string[]
+  openTab: number
+  setOpenTab: React.Dispatch<React.SetStateAction<number>>
+}) => {
   return (
     <ul className='flex -mb-3 list-none flex-wrap flex-row' role='tablist'>
       {tabs?.map((tab: any, index: number) => (
@@ -132,7 +148,7 @@ const Tabs = () => {
               'text-sm font-bold uppercase px-4 py-4 block leading-normal ' +
               (openTab === index ? 'bg-primary' : 'bg-gray-200') +
               (index === 0 ? ' rounded-l-xl' : '') +
-              (index === tabs.length - 1 ? ' rounded-r-xl' : '')
+              (index === tabs?.length - 1 ? ' rounded-r-xl' : '')
             }
             onClick={(e) => {
               e.preventDefault()
