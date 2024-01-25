@@ -33,7 +33,7 @@ const DragDropModal = () => {
       setDragging(false)
       filesArr = Array.from(e.dataTransfer.files)
     }
-    if (filesArr && filesArr.length) {
+    if (filesArr && filesArr?.length) {
       setFiles([...files, ...filesArr])
     }
   }
@@ -228,11 +228,11 @@ const DragDropModal = () => {
               </button>
               <button
                 className={`h-11 px-12 bg-primary rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300 ${
-                  files.length === 0 && 'opacity-50 cursor-not-allowed'
+                  files?.length === 0 && 'opacity-50 cursor-not-allowed'
                 }`}
                 onClick={handleUploadFiles}
                 type='button'
-                disabled={files.length === 0}
+                disabled={files?.length === 0}
               >
                 Send
               </button>
