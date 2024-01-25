@@ -1,17 +1,17 @@
-import { City } from '@/interfaces'
+import { City } from '../../../../interfaces'
 import { Divider } from '@nextui-org/react'
 import React from 'react'
 import { Checkbox } from '@nextui-org/react'
 import { DeleteCity } from '../delete-city'
-import { FiltersIcon } from '@/components/icons/areas'
+import { FiltersIcon } from '../../../../components/icons/areas'
 import { Button, Modal } from '@nextui-org/react'
-import { Flex } from '@/components/styles/flex'
+import { Flex } from '../../../../components/styles/flex'
 import dynamic from 'next/dynamic'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-draw/dist/leaflet.draw.css'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { useAreasCitiesContext } from '@/context/areas/cities'
-import Loading from '@/components/shared/loading'
+import { useAreasCitiesContext } from '../../../../context/areas/cities'
+import Loading from '../../../../components/shared/loading'
 const CityMap = dynamic(() => import('./map'), {
   ssr: false,
   loading: () => <Loading />,
@@ -97,7 +97,7 @@ export const CityCard = ({ city }: { city: City }) => {
                       <span className='text-gray-500 w-32'>{unit}</span>
                     </div>
                   </div>
-                  {index !== fields.length - 1 && <Divider />}
+                  {index !== fields?.length - 1 && <Divider />}
                 </>
               )
             )}
