@@ -77,7 +77,7 @@ const Profiles = () => {
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <SearchTypes />
       <div className='w-full flex flex-col items-center gap-y-6'>
-        {profiles?.map((profile:AccessProfile, index: number) => (
+        {profiles?.map((profile: AccessProfile, index: number) => (
           <CountryCard key={index} profile={profile} />
         ))}
       </div>
@@ -145,7 +145,7 @@ const renderPermissions = (permissions: string[]) => {
     if (index < maxPermissions) {
       return (
         <span key={index} className='capitalize text-gray-600'>
-          {permission + (index === permissions.length - 1 ? '' : ',')}
+          {permission + (index === permissions?.length - 1 ? '' : ',')}
         </span>
       )
     } else if (index === maxPermissions) {
@@ -155,7 +155,7 @@ const renderPermissions = (permissions: string[]) => {
           key={index}
         >
           <span className='text-gray-600'>
-            ...+{permissions.length - maxPermissions}
+            ...+{permissions?.length - maxPermissions}
           </span>
 
           <SelectPermissions />
@@ -305,7 +305,7 @@ export const SelectPermissions = () => {
             <Grid.Container gap={2}>
               <Grid>
                 <Collapse.Group splitted animated>
-                  {permissions.map((permission: any, index: number) => (
+                  {permissions?.map((permission: any, index: number) => (
                     <Collapse
                       key={index}
                       title={
@@ -320,7 +320,7 @@ export const SelectPermissions = () => {
                       arrowIcon={<ArrowIcon />}
                     >
                       <div className='w-full'>
-                        {permission.list.map((item: any, index: number) => (
+                        {permission?.list?.map((item: any, index: number) => (
                           <div key={index} className='w-full grid grid-cols-7'>
                             <label className='col-span-3 capitalize'>
                               {item.name}
