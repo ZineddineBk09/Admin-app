@@ -1,10 +1,10 @@
-import { City } from '@/interfaces'
+import { City } from '../../../interfaces'
 import React from 'react'
 import { AddCity } from './add-city'
 import { SearchCity } from './city'
 import dynamic from 'next/dynamic'
-import { useAreasCitiesContext } from '@/context/areas/cities'
-import Loading from '@/components/shared/loading'
+import { useAreasCitiesContext } from '../../../context/areas/cities'
+import Loading from '../../../components/shared/loading'
 const CityCard = dynamic(() => import('./city'), {
   ssr: false,
   loading: () => <Loading />,
