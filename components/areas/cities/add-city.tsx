@@ -10,7 +10,7 @@ import React from 'react'
 import { Flex } from '../../styles/flex'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { AddIcon } from '@/components/icons/areas'
+import { AddIcon } from '../../../components/icons/areas'
 
 export const AddCity = () => {
   const [visible, setVisible] = React.useState(false)
