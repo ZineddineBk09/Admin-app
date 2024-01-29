@@ -1,4 +1,4 @@
-import { Country } from '@/interfaces'
+import { Country } from '../../../interfaces'
 import { Divider } from '@nextui-org/react'
 import React from 'react'
 import { AddCountry } from './add-country'
@@ -33,7 +33,7 @@ const Countries = () => {
   return (
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <div className='w-full flex flex-col items-center gap-y-6'>
-        {countries?.map((country:Country,index:number) => (
+        {countries?.map((country: Country, index: number) => (
           <CountryCard key={index} country={country} />
         ))}
       </div>
@@ -108,7 +108,7 @@ const CountryCard = ({ country }: { country: Country }) => {
                     <span className='text-gray-500 w-10'>{unit}</span>
                   </div>
                 </div>
-                {index !== fields.length - 1 && <Divider />}
+                {index !== fields?.length - 1 && <Divider />}
               </>
             ) : (
               <>
@@ -158,7 +158,7 @@ const CountryCard = ({ country }: { country: Country }) => {
                     )
                   )}
                 </div>
-                {index !== fields.length - 1 && <Divider />}
+                {index !== fields?.length - 1 && <Divider />}
               </>
             )
           )}
