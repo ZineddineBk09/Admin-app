@@ -1,10 +1,10 @@
-import { Governorate } from '@/interfaces'
+import { Governorate } from '../../../interfaces'
 import { Divider } from '@nextui-org/react'
 import React from 'react'
 import { AddGovernorate } from './add-governorate'
 import { DeleteGovernorate } from './delete-governorate'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { useAreasGovernoratesContext } from '@/context/areas/governorates'
+import { useAreasGovernoratesContext } from '../../../context/areas/governorates'
 
 const Governorates = () => {
   const { governorates } = useAreasGovernoratesContext()
