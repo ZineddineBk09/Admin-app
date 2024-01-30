@@ -14,8 +14,8 @@ import * as L from 'leaflet'
 
 import dynamic from 'next/dynamic'
 import { renderToString } from 'react-dom/server'
-import { MapPinIcon } from '@/components/icons/map'
-import Loading from '@/components/shared/loading'
+import { MapPinIcon } from '../../../../components/icons/map'
+import Loading from '../../../../components/shared/loading'
 const EditControl = dynamic(
   import('react-leaflet-draw').then((mod) => mod.EditControl),
   {
