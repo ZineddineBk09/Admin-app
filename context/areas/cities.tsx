@@ -1,4 +1,4 @@
-import { City } from '@/interfaces'
+import { City } from '../../interfaces'
 import React, { useEffect, useState } from 'react'
 
 export const AreasCitiesContext = React.createContext({})
