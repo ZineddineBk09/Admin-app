@@ -1,4 +1,4 @@
-import { Governorate } from '@/interfaces'
+import { Governorate } from '../../interfaces'
 import React, { useEffect, useState } from 'react'
 
 export const AreasGovernoratesContext = React.createContext({})
