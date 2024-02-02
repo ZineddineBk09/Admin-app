@@ -1,11 +1,4 @@
-import {
-  Button,
-  Input,
-  Modal,
-  Text,
-  Loading,
-  Tooltip,
-} from '@nextui-org/react'
+import { Button, Input, Modal, Text, Loading, Tooltip } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../../styles/flex'
 import { useFormik } from 'formik'
@@ -22,14 +15,14 @@ export const AddCity = () => {
     initialValues: {
       name: '',
       country: '',
-      orderFee: 0,
-      driverFee: 0,
+      orderFees: 0,
+      driverFees: 0,
     },
     validationSchema: Yup.object({
       name: Yup.string().required('name is required'),
       country: Yup.string().required('price unit is required'),
-      orderFee: Yup.number().required('order fee is required'),
-      driverFee: Yup.number().required('driver fee is required'),
+      orderFees: Yup.number().required('order fee is required'),
+      driverFees: Yup.number().required('driver fee is required'),
     }),
     onSubmit: (values) => {
       console.log(values)
@@ -136,20 +129,20 @@ export const AddCity = () => {
                 >
                   <Input
                     label={
-                      formik.touched.orderFee && formik.errors.orderFee
-                        ? formik.errors.orderFee
+                      formik.touched.orderFees && formik.errors.orderFees
+                        ? formik.errors.orderFees
                         : 'Order Fees'
                     }
                     clearable
                     fullWidth
                     size='lg'
                     placeholder='Stars'
-                    name='orderFee'
-                    id='orderFee'
-                    value={formik.values.orderFee}
+                    name='orderFees'
+                    id='orderFees'
+                    value={formik.values.orderFees}
                     onChange={formik.handleChange}
                     status={
-                      formik.touched.orderFee && formik.errors.orderFee
+                      formik.touched.orderFees && formik.errors.orderFees
                         ? 'error'
                         : 'default'
                     }
@@ -157,20 +150,20 @@ export const AddCity = () => {
 
                   <Input
                     label={
-                      formik.touched.driverFee && formik.errors.driverFee
-                        ? formik.errors.driverFee
+                      formik.touched.driverFees && formik.errors.driverFees
+                        ? formik.errors.driverFees
                         : 'Driver Fees'
                     }
                     clearable
                     fullWidth
                     size='lg'
                     placeholder='Stars'
-                    name='driverFee'
-                    id='driverFee'
-                    value={formik.values.driverFee}
+                    name='driverFees'
+                    id='driverFees'
+                    value={formik.values.driverFees}
                     onChange={formik.handleChange}
                     status={
-                      formik.touched.driverFee && formik.errors.driverFee
+                      formik.touched.driverFees && formik.errors.driverFees
                         ? 'error'
                         : 'default'
                     }
