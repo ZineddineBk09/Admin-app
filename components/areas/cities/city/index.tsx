@@ -19,7 +19,7 @@ const CityMap = dynamic(() => import('./map'), {
 
 export const CityCard = ({ city }: { city: City }) => {
   const [showInfos, setShowInfos] = React.useState(false)
-  const { id, name, price, orderFee, governorateName, additional } = city
+  const { id, name, price, orderFees, governorateName, additional } = city
 
   // Input fields that the user can edit
   const fields: any[] = [
@@ -31,8 +31,8 @@ export const CityCard = ({ city }: { city: City }) => {
     },
     {
       name: 'Order Fees',
-      id: 'orderFee',
-      defaultValue: orderFee,
+      id: 'orderFees',
+      defaultValue: orderFees,
       unit: 'SAR / order',
     },
     {
