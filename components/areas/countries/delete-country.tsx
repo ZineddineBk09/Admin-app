@@ -2,11 +2,15 @@ import { Button, Loading, Modal, Text, Tooltip } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../../styles/flex'
 import { BinIcon } from '../../../components/icons/areas'
+import { useAreasCountriesContext } from '../../../context/areas/countries'
+import { deleteRecord } from '../../../lib/api'
+import toast from 'react-hot-toast'
 
 export const DeleteCountry = ({ id }: { id: string }) => {
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
+  const { refreshCountries } = useAreasCountriesContext()
 
   const closeHandler = () => {
     setVisible(false)
@@ -14,12 +18,16 @@ export const DeleteCountry = ({ id }: { id: string }) => {
 
   const handleDelete = async () => {
     setLoading(true)
-    // await deleteCountry(id)
-    // closeHandler()
-    // setLoading(false)
-    // refreshCountrys()
-    setLoading(false)
-    closeHandler()
+    await deleteRecord(id, 'country')
+      .then((res: any) => {
+        setLoading(false)
+        closeHandler()
+        toast.success('Country deleted successfully')
+        refreshCountries()
+      })
+      .catch((err) => {
+        toast.error('Error deleting country!')
+      })
   }
 
   return (
