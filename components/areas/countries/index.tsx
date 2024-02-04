@@ -38,7 +38,7 @@ const CountryCard = ({ country }: { country: Country }) => {
       const price_unit = currencies?.find(
         (currency: Currency) => currency.id === formik.values.price_unit
       )
-      console.log('price_unit: ', price_unit)
+      console.log('price_unit: ', ``)
       if (!price_unit) {
         toast.error('Price unit not found!')
         return
