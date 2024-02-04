@@ -25,12 +25,12 @@ const Governorates = () => {
 
 const GovernorateCard = ({ governorate }: { governorate: Governorate }) => {
   const [showInfos, setShowInfos] = React.useState(false)
-  const { id, name, price, orderFee, countryName, additional } = governorate
+  const { id, name, price, orderFees, countryName, additional } = governorate
   const fields = [
     {
       name: 'Order Fees',
-      id: 'orderFee',
-      defaultValue: orderFee,
+      id: 'orderFees',
+      defaultValue: orderFees,
       unit: 'SAR / Order',
     },
     {
@@ -71,11 +71,11 @@ const GovernorateCard = ({ governorate }: { governorate: Governorate }) => {
             <label className='text-gray-500 capitalize'>Order Fees</label>
             <div className='h-11 max-w-xs bg-gray-200 rounded px-4 flex justify-between items-center'>
               <input
-                id='orderFee'
-                name='orderFee'
+                id='orderFees'
+                name='orderFees'
                 type='text'
                 //@ts-ignore
-                value={orderFee}
+                value={orderFees}
                 placeholder='0'
                 className='bg-transparent w-full h-full outline-none'
                 onChange={(e) => {
