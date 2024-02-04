@@ -55,15 +55,24 @@ export interface Driver {
 
 export interface DriverType {
   id: number
-  name: string
-  fixed: number
-  pricePerKm: number
-  additional: number
-  maxDistance: number
+  vehicleType:
+    | 'car'
+    | 'van'
+    | 'motor'
+    | 'taxi'
+    | 'helicopter'
+    | 'truck'
+    | 'bicycle'
+    | 'ship'
+    | 'scooter'
+  priceRatioNominator: number
+  priceRatioDenominator: number
+  additionalRatioNominator: number
+  additionalRatioDenominator: number
 }
 
 export interface DriverTeam {
-  id: number
+  id: string
   name: string
   members: DriverTeamMember[]
   supervisor: DriverTeamMember
@@ -168,32 +177,47 @@ export interface AutoCancelledOrder {
 //--------------------------------------------------------------------
 
 //------------------------- Areas ----------------------------
+export interface Currency {
+  id: string
+  name: string
+  symbol: string
+  symbol_native: string
+  code: string
+  decimal_digits: number
+  rounding: number
+  name_plural: string
+  is_supported: boolean
+}
+
 export interface Country {
   id: string
   name: string
-  priceUnit: string
-  orderFee: number
-  driverFee: number
+  price_unit: Currency
+  order_fees: number
+  driver_fees: number
 }
 
 export interface Governorate {
   id: string
   name: string
-  countryId: string
-  countryName: string
-  orderFee: number
-  price: number
-  additional: number
+  country: Country
+  order_fees: number
+  price_ratio_nominator: number
+  price_ratio_denominator: number
+  additional_ratio_nominator: number
+  additional_ratio_denominator: number
 }
 
 export interface City {
   id: string
   name: string
-  governorateId: string
-  governorateName: string
-  orderFee: number
-  price: number
-  additional: number
+  governorate: Governorate
+  geofence: Geofence
+  order_fees: number
+  price_ratio_nominator: number
+  price_ratio_denominator: number
+  additional_ratio_nominator: number
+  additional_ratio_denominator: number
 }
 //--------------------------------------------------------------------
 
@@ -339,5 +363,22 @@ export interface BBox {
   max_lng: number
 }
 
+export interface Geofence {
+  name: string
+  vertices: GeofenceVertex[]
+}
+
+export interface GeofenceVertex {
+  latitude: number
+  longitude: number
+}
+
 export type APIRecord = APIDriver | Order | Account | Branch
+
+export interface APIResponse {
+  count: number
+  next: string
+  previous: string
+  results: any[]
+}
 //--------------------------------------------------------------------
