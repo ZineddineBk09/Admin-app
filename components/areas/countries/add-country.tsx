@@ -36,7 +36,17 @@ export const AddCountry = () => {
         toast.error('Price unit not found!')
         return
       }
-      await createRecord({ ...values, price_unit }, 'country')
+      console.log({
+        ...values,
+        price_unit: price_unit?.id,
+      })
+      await createRecord(
+        {
+          ...values,
+          price_unit: price_unit,
+        },
+        'country'
+      )
         .then((res) => {
           if (res) {
             setVisible(false)
