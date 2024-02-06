@@ -11,7 +11,7 @@ import React from 'react'
 import { Flex } from '../../styles/flex'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { AddIcon } from '@/components/icons/areas'
+import { AddIcon } from '../../../components/icons/areas'
 
 export const AddBranch = () => {
   const [visible, setVisible] = React.useState(false)
@@ -24,8 +24,8 @@ export const AddBranch = () => {
       country: '',
       governorate: '',
       city: '',
-      orderFee: 0,
-      driverFee: 0,
+      orderFees: 0,
+      driverFees: 0,
       phone: '',
       supervisor: '',
       clientAccount: '',
@@ -35,8 +35,8 @@ export const AddBranch = () => {
       country: Yup.string().required('price unit is required'),
       governorate: Yup.string().required('governorate is required'),
       city: Yup.string().required('city is required'),
-      orderFee: Yup.number().required('order fee is required'),
-      driverFee: Yup.number().required('driver fee is required'),
+      orderFees: Yup.number().required('order fee is required'),
+      driverFees: Yup.number().required('driver fee is required'),
       phone: Yup.string().required('phone is required'),
       supervisor: Yup.string().required('supervisor is required'),
       clientAccount: Yup.string().required('client account is required'),
@@ -189,40 +189,40 @@ export const AddBranch = () => {
               >
                 <Input
                   label={
-                    formik.touched.orderFee && formik.errors.orderFee
-                      ? formik.errors.orderFee
+                    formik.touched.orderFees && formik.errors.orderFees
+                      ? formik.errors.orderFees
                       : 'Order Fee'
                   }
                   clearable
                   fullWidth
                   size='lg'
                   placeholder='e.g: 10'
-                  name='orderFee'
-                  id='orderFee'
-                  value={formik.values.orderFee}
+                  name='orderFees'
+                  id='orderFees'
+                  value={formik.values.orderFees}
                   onChange={formik.handleChange}
                   status={
-                    formik.touched.orderFee && formik.errors.orderFee
+                    formik.touched.orderFees && formik.errors.orderFees
                       ? 'error'
                       : 'default'
                   }
                 />
                 <Input
                   label={
-                    formik.touched.driverFee && formik.errors.driverFee
-                      ? formik.errors.driverFee
+                    formik.touched.driverFees && formik.errors.driverFees
+                      ? formik.errors.driverFees
                       : 'Driver Fee'
                   }
                   clearable
                   fullWidth
                   size='lg'
                   placeholder='e.g: 10'
-                  name='driverFee'
-                  id='driverFee'
-                  value={formik.values.driverFee}
+                  name='driverFees'
+                  id='driverFees'
+                  value={formik.values.driverFees}
                   onChange={formik.handleChange}
                   status={
-                    formik.touched.driverFee && formik.errors.driverFee
+                    formik.touched.driverFees && formik.errors.driverFees
                       ? 'error'
                       : 'default'
                   }
