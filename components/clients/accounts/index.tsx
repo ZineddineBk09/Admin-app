@@ -1,12 +1,12 @@
-import { Account } from '@/interfaces'
+import { Account } from '../../../interfaces'
 import { Divider, Tooltip } from '@nextui-org/react'
 import React from 'react'
 import { AddAccount } from './add-account'
 import { DeleteAccount } from './delete-account'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { useClientsAccountsContext } from '@/context/clients/accounts'
+import { useClientsAccountsContext } from '../../../context/clients/accounts'
 import Link from 'next/link'
-import { BinIcon } from '@/components/icons/areas'
+import { BinIcon } from '../../../components/icons/areas'
 
 const Accounts = () => {
   const { accounts } = useClientsAccountsContext()
@@ -102,7 +102,7 @@ const AccountCard = ({ account }: { account: Account }) => {
           {/* Teams */}
           <div className='w-full flex items-start gap-x-6'>
             <label className='mt-2 text-gray-600 text-sm'>Teams</label>
-            {teams.length > 0 ? (
+            {teams?.length > 0 ? (
               <div className='w-full flex items-start gap-y-2'>
                 {teams?.map(
                   (team: { id: string; name: string }, index: number) => (
@@ -117,7 +117,7 @@ const AccountCard = ({ account }: { account: Account }) => {
                             <BinIcon width={4} />
                           </button>
                         </Tooltip>
-                        {index < teams.length - 1 && (
+                        {index < teams?.length - 1 && (
                           <span className='-ml-4'>,</span>
                         )}
                       </div>
@@ -140,7 +140,7 @@ const AccountCard = ({ account }: { account: Account }) => {
           {/* Admins */}
           <div className='w-full flex items-start gap-x-6'>
             <label className='mt-2 text-gray-600 text-sm'>Admins</label>
-            {admins.length > 0 ? (
+            {admins?.length > 0 ? (
               <div className='w-full flex items-start gap-y-2'>
                 {admins?.map(
                   (admin: { id: string; name: string }, index: number) => (
@@ -155,7 +155,7 @@ const AccountCard = ({ account }: { account: Account }) => {
                             <BinIcon width={4} />
                           </button>
                         </Tooltip>
-                        {index < admins.length - 1 && (
+                        {index < admins?.length - 1 && (
                           <span className='-ml-4'>,</span>
                         )}
                       </div>
@@ -178,7 +178,7 @@ const AccountCard = ({ account }: { account: Account }) => {
 
           <div className='w-full flex items-start gap-x-6'>
             <label className='mt-2 text-gray-600 text-sm'>Branches</label>
-            {branches.length > 0 ? (
+            {branches?.length > 0 ? (
               <div className='w-full flex flex-col items-start gap-y-2'>
                 {branches?.map(
                   (branch: { id: string; name: string }, index: number) => (
