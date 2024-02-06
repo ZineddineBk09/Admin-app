@@ -62,6 +62,9 @@ const CityMap = () => {
             position='bottomleft'
             onCreated={(e: any) => {
               console.log('Created: ', e.layer.editing.latlngs[0][0])
+              // geojson
+              const geojson = e.layer.toGeoJSON()
+              console.log('geojson: ', geojson)
             }}
             onEdited={(e: any) => {
               // e.layers._layers will return an object with only one element (the polygon)
