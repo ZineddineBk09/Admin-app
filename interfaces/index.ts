@@ -32,10 +32,7 @@ export interface Driver {
   team: string
   completedTasks: number
   inProgressTasks: number
-  location?: {
-    latitude: number
-    longitude: number
-  }
+  location?: Location
   orders: number
   phone: string
   firstName: string
@@ -145,10 +142,7 @@ export interface Order {
   status: string
   clientPaid: boolean
   driverPaid: boolean
-  location: {
-    latitude: number
-    longitude: number
-  } | null
+  location: Location | null
   duration: number
   startTime: number
   endTime: number
@@ -166,10 +160,7 @@ export interface AutoCancelledOrder {
   city: string
   value: number
   deliveryFee: number
-  location: {
-    latitude: number
-    longitude: number
-  } | null
+  location: Location | null
   paymentType: 'cash' | 'visa' | 'mastercard'
   timeLeft: number // the remained time before the order is auto cancelled
   items: Item[]
@@ -253,10 +244,7 @@ export interface Branch {
   phone: string
   supervisor: string
   clientAccount: string
-  location: {
-    latitude: number
-    longitude: number
-  }
+  location: Location
 }
 //--------------------------------------------------------------------
 
@@ -334,6 +322,11 @@ export interface UserAccess {
 //--------------------------------------------------------------------
 
 //------------------------- Additional Interfaces --------------------------------
+export interface Location {
+  latitude: number
+  longitude: number
+}
+
 export interface Note {
   date: string
   time: string
@@ -363,14 +356,11 @@ export interface BBox {
   max_lng: number
 }
 
+export interface GeofenceVertex extends Location {}
+
 export interface Geofence {
   name: string
   vertices: GeofenceVertex[]
-}
-
-export interface GeofenceVertex {
-  latitude: number
-  longitude: number
 }
 
 export type APIRecord = APIDriver | Order | Account | Branch
