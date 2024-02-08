@@ -9,7 +9,6 @@ import * as L from 'leaflet'
 import { MapPinIcon } from '../icons/map'
 import { Location } from '../../interfaces'
 
-// create a custom icon with L.divIcon and reactDOM.renderToString
 const icon = () =>
   L.divIcon({
     html: renderToString(
@@ -21,16 +20,68 @@ const icon = () =>
     className: 'leaflet-icon',
   })
 
-const Map = ({ location }: { location: Location }) => {
+const Map = () => {
   const [map, setMap] = useState<any>(null)
+  const [location, setLocation] = useState<Location>({
+    latitude: 0,
+    longitude: 0,
+  })
+
+  // get the user's location with geolocation
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords
+          setLocation({
+            latitude,
+            longitude,
+          })
+
+          if (map) {
+            map.flyTo([latitude, longitude], map.getZoom(), {
+              duration: 1,
+            })
+          }
+        },
+        (error) => {
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              console.error('User denied the request for Geolocation.')
+              break
+            case error.POSITION_UNAVAILABLE:
+              console.error('Location information is unavailable.')
+              break
+            case error.TIMEOUT:
+              console.error('The request to get user location timed out.')
+              break
+          }
+        }
+      )
+    } else {
+      console.error('Geolocation is not supported by this browser.')
+    }
+  }, [map])
+
+  // allow the user to move the marker
+  const handleMapClick = (e: any) => {
+    setLocation({
+      latitude: e.latlng.lat,
+      longitude: e.latlng.lng,
+    })
+  }
 
   useEffect(() => {
     if (map) {
-      map.flyTo([location.latitude, location.longitude], map.getZoom(), {
-        duration: 1,
-      })
+      map.on('click', handleMapClick)
     }
-  }, [map, location.latitude, location.longitude])
+
+    return () => {
+      if (map) {
+        map.off('click', handleMapClick)
+      }
+    }
+  }, [map])
 
   return (
     <>
@@ -70,7 +121,7 @@ const Map = ({ location }: { location: Location }) => {
 
 const LocationMarker = ({ location }: { location: Location }) => {
   const map = useMap()
-  
+
   return (
     <Marker
       position={
