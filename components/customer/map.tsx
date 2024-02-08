@@ -20,12 +20,14 @@ const icon = () =>
     className: 'leaflet-icon',
   })
 
-const Map = () => {
+const Map = ({
+  location,
+  setLocation,
+}: {
+  location: Location
+  setLocation: (location: Location) => void
+}) => {
   const [map, setMap] = useState<any>(null)
-  const [location, setLocation] = useState<Location>({
-    latitude: 0,
-    longitude: 0,
-  })
 
   // get the user's location with geolocation
   useEffect(() => {
@@ -38,7 +40,7 @@ const Map = () => {
             longitude,
           })
 
-          if (map) {
+          if (map && latitude !== 0 && longitude !== 0) {
             map.flyTo([latitude, longitude], map.getZoom(), {
               duration: 1,
             })
@@ -63,6 +65,17 @@ const Map = () => {
     }
   }, [map])
 
+  //handle location change
+  useEffect(() => {
+    if (location.latitude && location.longitude) {
+      if (map) {
+        map.flyTo([location.latitude, location.longitude], map.getZoom(), {
+          duration: 1,
+        })
+      }
+    }
+  }, [location])
+  
   // allow the user to move the marker
   const handleMapClick = (e: any) => {
     setLocation({
@@ -107,6 +120,8 @@ const Map = () => {
           right: '0',
           zIndex: 0,
         }}
+        //remove zoom -/+ buttons
+        zoomControl={false}
       >
         <TileLayer
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
