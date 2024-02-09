@@ -28,6 +28,13 @@ const Countries = () => {
 
 const CountryCard = ({ country }: { country: Country }) => {
   const { currencies, refreshCountries } = useAreasCountriesContext()
+  const [showInfos, setShowInfos] = React.useState(false)
+  const { id, name, price_unit, driver_fees, order_fees } = country
+  const [showSave, setShowSave] = React.useState({
+    price_unit: false,
+    driver_fees: false,
+    order_fees: false,
+  })
   const formik = useFormik({
     initialValues: {
       price_unit: country.price_unit.id,
@@ -56,7 +63,13 @@ const CountryCard = ({ country }: { country: Country }) => {
           if (res) {
             console.log('res: ', res)
             toast.success('Country updated successfully')
+
             refreshCountries()
+            setShowSave({
+              price_unit: false,
+              driver_fees: false,
+              order_fees: false,
+            })
           }
         })
         .catch((err) => {
@@ -64,8 +77,6 @@ const CountryCard = ({ country }: { country: Country }) => {
         })
     },
   })
-  const [showInfos, setShowInfos] = React.useState(false)
-  const { id, name, price_unit, driver_fees, order_fees } = country
 
   return (
     <div className='w-full flex flex-col items-start gap-y-3 bg-white rounded-md p-4 shadow-lg'>
@@ -95,7 +106,10 @@ const CountryCard = ({ country }: { country: Country }) => {
                 <select
                   id='price_unit'
                   name='price_unit'
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    formik.handleChange(e)
+                    setShowSave({ ...showSave, price_unit: true })
+                  }}
                   value={formik.values.price_unit}
                   className={`border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 ${
                     formik.touched.price_unit && formik.errors.price_unit
@@ -103,12 +117,10 @@ const CountryCard = ({ country }: { country: Country }) => {
                       : 'border-gray-300 bg-transparent'
                   }`}
                 >
-                  <option value={price_unit.id}>
-                    {price_unit.symbol} - {price_unit.name}
-                  </option>
+                  <option value={price_unit.id}>{price_unit.symbol}</option>
                   {currencies?.map((currency: Currency) => (
                     <option key={currency.id} value={currency.id}>
-                      {currency.symbol} - {currency.name}
+                      {currency.symbol}
                     </option>
                   ))}
                 </select>
@@ -116,8 +128,7 @@ const CountryCard = ({ country }: { country: Country }) => {
               </div>
               {
                 // Display save button if user changed price unit
-                formik.values.price_unit !== price_unit.id &&
-                  SaveButton(formik.handleSubmit as any)
+                showSave.price_unit && SaveButton(formik.handleSubmit as any)
               }
               <AddCurrency />
             </div>
@@ -131,8 +142,11 @@ const CountryCard = ({ country }: { country: Country }) => {
                   id='driver_fees'
                   name='driver_fees'
                   type='text'
+                  onChange={(e) => {
+                    formik.handleChange(e)
+                    setShowSave({ ...showSave, driver_fees: true })
+                  }}
                   value={formik.values.driver_fees}
-                  onChange={formik.handleChange}
                   placeholder='0'
                   className='bg-transparent w-full h-full outline-none'
                 />
@@ -140,8 +154,7 @@ const CountryCard = ({ country }: { country: Country }) => {
               </div>
               {
                 // Display save button if user changed driver fees
-                formik.values.driver_fees !== driver_fees &&
-                  SaveButton(formik.handleSubmit as any)
+                showSave.driver_fees && SaveButton(formik.handleSubmit as any)
               }
             </div>
             <Divider />
@@ -154,8 +167,10 @@ const CountryCard = ({ country }: { country: Country }) => {
                   id='order_fees'
                   name='order_fees'
                   type='text'
-                  //@ts-ignore
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    formik.handleChange(e)
+                    setShowSave({ ...showSave, order_fees: true })
+                  }}
                   value={formik.values.order_fees}
                   placeholder='0'
                   className='bg-transparent w-full h-full outline-none'
@@ -166,8 +181,7 @@ const CountryCard = ({ country }: { country: Country }) => {
               </div>
               {
                 // Display save button if user changed order fees
-                formik.values.order_fees !== order_fees &&
-                  SaveButton(formik.handleSubmit as any)
+                showSave.order_fees && SaveButton(formik.handleSubmit as any)
               }
             </div>
           </>
