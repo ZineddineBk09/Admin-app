@@ -2,50 +2,40 @@ import React, { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
+import { Location } from '../../interfaces'
 const Map = dynamic(() => import('./map'), { ssr: false })
 const SearchLocation = dynamic(() => import('../map/search-location'), {
   ssr: false,
 })
-const OpenStreetMapProvider = dynamic(
-  () =>
-    import('leaflet-geosearch').then(
-      (module: any) => module.OpenStreetMapProvider
-    ),
-  {
-    ssr: false,
-  }
-)
 
 const LocationForm = () => {
-  const [search, setSearch] = useState('')
-  const [results, setResults] = useState<any[]>([])
   const formik = useFormik({
     initialValues: {
-      latitude: '',
-      longitude: '',
+      search: '',
+      latitude: 0,
+      longitude: 0,
     },
     validationSchema: Yup.object({
-      latitude: Yup.string().required('Required'),
-      longitude: Yup.string().required('Required'),
+      search: Yup.string().required('Required'),
+      latitude: Yup.number().required('Required'),
+      longitude: Yup.number().required('Required'),
     }),
     onSubmit: (values) => {
       console.log(values)
     },
   })
 
-  const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target
-    setSearch(value)
-
-    if (value?.length < 2) return setResults([])
-    const provider = new OpenStreetMapProvider()
-    const results = await provider.search({ query: value })
-    setResults(results)
-  }
-
   return (
-    <div className='max-w-xl mx-auto h-full rounded-xl relative'>
-      <Map />
+    <div className='max-w-xl w-[90%] m-auto h-[95vh] rounded-xl relative'>
+      <Map
+        location={{
+          latitude: formik.values.latitude,
+          longitude: formik.values.longitude,
+        }}
+        setLocation={({ latitude, longitude }: Location) => {
+          formik.setValues({ ...formik.values, latitude, longitude })
+        }}
+      />
       <div className='absolute z-10 flex flex-col items-start gap-y-6 bg-gray-100 w-full inset-x-0 bottom-0 rounded-t-xl p-8 text-sm'>
         <label>Select Location</label>
 
