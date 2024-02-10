@@ -1,4 +1,4 @@
-import { Branch } from '@/interfaces'
+import { Branch } from '../../../../interfaces'
 import { Divider, Input } from '@nextui-org/react'
 import React, { useState } from 'react'
 import { DeleteBranch } from '../delete-branch'
@@ -6,8 +6,8 @@ import dynamic from 'next/dynamic'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-draw/dist/leaflet.draw.css'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { useClientsBranchesContext } from '@/context/clients/branches'
-import Loading from '@/components/shared/loading'
+import { useClientsBranchesContext } from '../../../../context/clients/branches'
+import Loading from '../../../../components/shared/loading'
 const BranchMap = dynamic(() => import('./map'), {
   ssr: false,
   loading: () => <Loading />,
@@ -187,7 +187,7 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
                       )}
                     </div>
                     {index !==
-                      fields.filter(({ hidden }: any) => !hidden).length -
+                      fields.filter(({ hidden }: any) => !hidden)?.length -
                         1 && <Divider />}
                   </div>
                 )
@@ -293,8 +293,7 @@ const AutoCancelSwitch = () => {
       </div>
       <p className='text-gray-500'>
         enabling this will cancel all orders automatically after{' '}
-        <b>{value} minutes</b> for all orders
-        related to this branch.
+        <b>{value} minutes</b> for all orders related to this branch.
       </p>
       <div className='flex items-center justify-between gap-x-3'>
         <Input
