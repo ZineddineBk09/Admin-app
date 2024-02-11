@@ -111,7 +111,7 @@ const Map = ({
           height: '100%',
           width: '100%',
           boxSizing: 'border-box',
-          borderRadius: '10px',
+          borderRadius: '12px',
           margin: 'auto',
           position: 'absolute',
           top: '0',
