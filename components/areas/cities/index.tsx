@@ -19,8 +19,8 @@ const Cities = () => {
 
       {/* Cities list */}
       <div className='w-full flex flex-col items-center gap-y-6'>
-        {cities?.map((city: City, index: number) => (
-          <CityCard key={index} city={city} />
+        {cities?.map((city: City) => (
+          <CityCard key={city.id} city={city} />
         ))}
       </div>
 
