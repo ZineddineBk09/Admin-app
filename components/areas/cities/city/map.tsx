@@ -11,10 +11,126 @@ const EditControl = dynamic(
   }
 )
 import * as L from 'leaflet'
+import { City, GeoJSONCoordinate, GeoJSONObject } from '../../../../interfaces'
+import { createRecord, updateRecord } from '../../../../lib/api'
+import toast from 'react-hot-toast'
+import { useAreasCitiesContext } from '../../../../context/areas/cities'
 
-const CityMap = () => {
+const CityMap = ({ city }: { city: City }) => {
   const [map, setMap] = useState<any>(null)
   const [control, setControl] = useState<any>(null)
+  const { refreshCities } = useAreasCitiesContext()
+  const {
+    id,
+    name,
+    governorate,
+    geofence,
+    order_fees,
+    price_ratio_nominator,
+    price_ratio_denominator,
+    additional_ratio_nominator,
+    additional_ratio_denominator,
+  } = city
+
+  const handleCreated = async (e: any) => {
+    console.log('Created', e.layer.editing.latlngs[0])
+    const geojson: GeoJSONObject = e.layer.toGeoJSON()
+
+    const apiFormat = geojson.geometry.coordinates[0].map(
+      (coord: GeoJSONCoordinate, index: number) => {
+        return {
+          x: coord[0],
+          y: coord[1],
+          order_num: index,
+        }
+      }
+    )
+
+    await createRecord(
+      {
+        name: name,
+        vertices: apiFormat,
+      },
+      'geofence'
+    )
+      .then(async (res) => {
+        if (res) {
+          console.log('res create:', res)
+          console.log({
+            id,
+            name,
+            governorate: governorate?.id,
+            order_fees,
+            price_ratio_nominator,
+            price_ratio_denominator,
+            additional_ratio_nominator,
+            additional_ratio_denominator,
+            geofence: res?.id,
+          })
+          await updateRecord(
+            {
+              id,
+              name,
+              governorate: governorate?.id,
+              order_fees,
+              price_ratio_nominator,
+              price_ratio_denominator,
+              additional_ratio_nominator,
+              additional_ratio_denominator,
+              geofence: res?.id,
+            },
+            'city'
+          )
+            .then((res) => {
+              if (res) {
+                console.log('res update: ', res)
+                toast.success('City geofence added successfully')
+
+                refreshCities()
+              }
+            })
+            .catch((err) => {
+              toast.error('Error assigning city geofence!')
+            })
+        }
+      })
+      .catch((err) => {
+        console.log('Error adding city geofence!: ', err)
+        toast.error('Error adding city geofence!')
+      })
+  }
+
+  const handleEdited = (e: any) => {
+    const editedLayers = Object.values(e.layers._layers)
+    const updatedPolygons: GeoJSONObject[] = editedLayers.map((layer: any) =>
+      layer.toGeoJSON()
+    )
+    console.log('updatedPolygons:', updatedPolygons)
+    // Assuming you have an API endpoint to update city polygons:
+    // const apiUrl = '/api/city-polygons'
+    // const requestOptions = {
+    //   method: 'PUT',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ updatedPolygons }),
+    // }
+
+    // fetch(apiUrl, requestOptions)
+    //   .then((response) => response.json())
+    //   .then((updatedData) => {
+    //     // Update state, map, or other components based on success
+    //     console.log('City polygon updated:', updatedData)
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error updating city polygon:', error)
+    //     // Handle errors here
+    //   })
+
+  }
+
+  const handleDeleted = () => {
+    console.log('Deleted city polygon')
+    // TODO: Implement your logic to delete the selected city polygon
+  }
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -33,6 +149,21 @@ const CityMap = () => {
       control.addTo(map)
     }
   }, [control, map])
+
+// set initial polygon
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (!map) return
+
+      if (geofence) {
+        const polygon = L.polygon(
+          geofence.vertices.map((vertex: any) => [vertex.y, vertex.x])
+        )
+        map.fitBounds(polygon.getBounds())
+        polygon.addTo(map)
+      }
+    }
+  }, [map])
 
   return (
     <div>
@@ -57,24 +188,14 @@ const CityMap = () => {
           zIndex: 0,
         }}
       >
-        <FeatureGroup>
+        <FeatureGroup
+          
+        >
           <EditControl
             position='bottomleft'
-            onCreated={(e: any) => {
-              console.log('Created: ', e.layer.editing.latlngs[0][0])
-              // geojson
-              const geojson = e.layer.toGeoJSON()
-              console.log('geojson: ', geojson)
-            }}
-            onEdited={(e: any) => {
-              // e.layers._layers will return an object with only one element (the polygon)
-              // so we access it using Object.values and then we access the latlngs array
-              const polygon: any = Object.values(e.layers._layers)[0]
-              const latlngs = polygon?.editing.latlngs[0][0]
-            }}
-            onDeleted={() => {
-              console.log('Deleted')
-            }}
+            onCreated={handleCreated}
+            onEdited={handleEdited}
+            onDeleted={handleDeleted}
             draw={{
               rectangle: false,
               circle: false,
