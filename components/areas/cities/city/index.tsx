@@ -16,6 +16,7 @@ import { useFormik } from 'formik'
 import { updateRecord } from '../../../../lib/api'
 import { useAreasCitiesContext } from '../../../../context/areas/cities'
 import toast from 'react-hot-toast'
+import { useAreasGovernoratesContext } from '../../../../context/areas/governorates'
 const CityMap = dynamic(() => import('./map'), {
   ssr: false,
   loading: () => <Loading />,
@@ -56,6 +57,8 @@ export const CityCard = ({ city }: { city: City }) => {
         {
           ...values,
           id: id,
+          governorate: governorate?.id,
+          name,
         },
         'city'
       )
@@ -254,7 +257,7 @@ export const CityCard = ({ city }: { city: City }) => {
             showInfos ? 'col-span-3' : 'hidden'
           }`}
         >
-          <CityMap />
+          <CityMap city={city} />
         </div>
       )}
     </div>
@@ -263,6 +266,20 @@ export const CityCard = ({ city }: { city: City }) => {
 
 export const SearchCity = () => {
   const { countries } = useAreasCountriesContext()
+  const { governorates } = useAreasGovernoratesContext()
+  const { handleFilterCountry,handleFilterGovernorate } = useAreasCitiesContext()
+  const [selectedCountry, setSelectedCountry] = React.useState('all')
+  const [selectedGovernorate, setSelectedGovernorate] = React.useState('all')
+
+  const handleSelectCountry = (country: string) => {
+    setSelectedCountry(country)
+    handleFilterCountry(country)
+  }
+
+  const handleSelectGovernorate = (governorate: string) => {
+    setSelectedGovernorate(governorate)
+    handleFilterGovernorate(governorate)
+  }
 
   return (
     <div className='w-full flex items-center gap-x-6 ml-12'>
@@ -272,17 +289,36 @@ export const SearchCity = () => {
           name='country'
           id='country'
           className='w-72 h-10 bg-white rounded-full text-gray-900 text-sm block  p-2.5'
-          // onChange={(e) => handleFilter(e.target.value)}
+          onChange={(e) => handleSelectCountry(e.target.value)}
         >
           <option value='all'>Select Country (All)</option>
           {countries?.map((country: Country, index: number) => (
-            <option key={index} value={country.id} className='px-2'>
+            <option key={index} value={country.name} className='px-2'>
               {country.name}
             </option>
           ))}
         </select>
       </div>
-      <GovernoratesModal />
+      <div className='w-72 h-10 bg-white rounded-full px-4'>
+        <select
+          name='governorate'
+          id='governorate'
+          className='w-72 h-10 bg-white rounded-full text-gray-900 text-sm block  p-2.5'
+          onChange={(e) => handleSelectGovernorate(e.target.value)}
+        >
+          <option value='all'>Select Governorate (All)</option>
+
+          {governorates
+            ?.filter(
+              (governorate) => governorate.country.name === selectedCountry
+            )
+            .map((governorate: any, index: number) => (
+              <option key={index} value={governorate.name} className='px-2'>
+                {governorate.name}
+              </option>
+            ))}
+        </select>
+      </div>
     </div>
   )
 }
