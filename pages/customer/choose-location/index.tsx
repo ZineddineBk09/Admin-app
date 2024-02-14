@@ -4,7 +4,7 @@ import LocationForm from '../../../components/customer/location-form'
 
 const CustomerPage: NextPage = () => {
   return (
-    <div className='w-screen h-screen'>
+    <div className='w-screen h-[90vh]'>
       <LocationForm />
     </div>
   )

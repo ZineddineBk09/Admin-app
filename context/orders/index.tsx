@@ -1,12 +1,30 @@
-import { Order, Sort, Status } from '@/interfaces'
-import { getRecords } from '@/lib/api'
-import { searchOrders } from '@/lib/search'
+import { Order, Sort, Status } from '../../interfaces'
+import { getRecords } from '../../lib/api'
+import { searchOrders } from '../../lib/search'
 import { faker } from '@faker-js/faker'
 import React, { useEffect, useState } from 'react'
 
 export const OrdersContext = React.createContext({})
 
-export const useOrdersContext: any = () => React.useContext(OrdersContext)
+export const useOrdersContext: {
+  (): {
+    orders: Order[]
+    filteredOrders: Order[]
+    loading: boolean
+    handleSearchOrders: (search: string) => void
+    handleSortOrders: (sort: Sort) => void
+    handleSelectStatus: (status: string) => void
+    handleSelectDate: ({
+      dateFrom,
+      dateTo,
+    }: {
+      dateFrom: Date
+      dateTo: Date
+    }) => void
+    handleSelectPaymentType: (paymentType: string) => void
+    refreshOrders: () => Promise<void>
+  }
+} = () => React.useContext(OrdersContext as any)
 
 export const OrdersContextProvider = ({
   children,
@@ -14,6 +32,7 @@ export const OrdersContextProvider = ({
   children: React.ReactNode
 }) => {
   const [orders, setOrders] = useState<Order[]>([] as Order[])
+  const [filteredOrders, setFilteredOrders] = useState<Order[]>([] as Order[])
   const [loading, setLoading] = useState(false)
   const [orderStatus, setOrderStatus] = useState<Status[]>([
     { value: 'assigned', checked: true },
@@ -53,7 +72,10 @@ export const OrdersContextProvider = ({
           time: faker.date.past().toLocaleTimeString(),
           driverId: faker.string.uuid(),
           driverName: faker.person.firstName(),
-          city: faker.address.city(),
+          city: faker.location.city(),
+          paymentType: ['cash', 'visa', 'mastercard'][
+            faker.number.int({ max: 2, min: 0 })
+          ],
           status: orderStatus[faker.number.int({ max: 3, min: 0 })].value,
           deliveryFee: faker.number.int({ max: 100, min: 0 }),
           location:
@@ -80,6 +102,7 @@ export const OrdersContextProvider = ({
     )
 
     setOrders(records)
+    setFilteredOrders(records)
 
     setLoading(false)
     // setOrders(orders)
@@ -91,8 +114,8 @@ export const OrdersContextProvider = ({
       return
     }
     // search inside orders array
-    const filteredOrders: any = searchOrders(orders, search)
-    setOrders(filteredOrders)
+    const filtered: any = searchOrders(orders, search)
+    setFilteredOrders(filtered)
   }
 
   const handleSortOrders = (sort: Sort) => {
@@ -108,7 +131,7 @@ export const OrdersContextProvider = ({
       return 0
     })
 
-    setOrders(sortedOrders)
+    setFilteredOrders(sortedOrders)
   }
 
   const handleSelectStatus = (status: string) => {
@@ -139,6 +162,15 @@ export const OrdersContextProvider = ({
     setOrders(filteredOrders)
   }
 
+  const handleSelectPaymentType = (paymentType: string) => {
+    if (paymentType === '') {
+      refreshOrders()
+      return
+    }
+    const filtered = orders.filter((order) => order.paymentType === paymentType)
+    setFilteredOrders(filtered)
+  }
+
   useEffect(() => {
     refreshOrders()
   }, [])
@@ -147,10 +179,13 @@ export const OrdersContextProvider = ({
     <OrdersContext.Provider
       value={{
         orders,
+        filteredOrders,
         loading,
         handleSearchOrders,
         handleSortOrders,
         handleSelectStatus,
+        handleSelectDate,
+        handleSelectPaymentType,
         refreshOrders,
       }}
     >

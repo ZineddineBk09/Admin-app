@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Driver, DriverTeam, Sort } from '../../interfaces'
+import {
+  APIResponse,
+  Driver,
+  DriverTeam,
+  DriverType,
+  Sort,
+} from '../../interfaces'
 import { getRecords } from '../../lib/api'
 import { searchDrivers } from '../../lib/search'
 import { faker } from '@faker-js/faker'
@@ -10,6 +16,7 @@ export const useDriversContext: {
   (): {
     drivers: Driver[]
     teams: DriverTeam[]
+    driverTypes: DriverType[]
     loading: boolean
     handleSearchDrivers: (search: string) => void
     handleSortDrivers: (sort: Sort) => void
@@ -17,6 +24,7 @@ export const useDriversContext: {
     handleSelectStatus: (status: string) => void
     refreshDrivers: () => Promise<void>
     refreshDriverTeams: () => Promise<void>
+    refreshDriverTypes: () => Promise<void>
   }
 } = () => React.useContext(DriversContext as any)
 
@@ -26,6 +34,9 @@ export const DriversContextProvider = ({
   children: React.ReactNode
 }) => {
   const [drivers, setDrivers] = useState<Driver[]>([] as Driver[])
+  const [driverTypes, setDriverTypes] = useState<DriverType[]>(
+    [] as DriverType[]
+  )
   const [teams, setTeams] = useState<DriverTeam[]>([] as DriverTeam[])
   const [loading, setLoading] = useState(false)
 
@@ -33,7 +44,6 @@ export const DriversContextProvider = ({
     setLoading(true)
     // setDrivers([] as Driver[])
     const records = await getRecords('driver').then((res) => res.data)
-    console.log('drivers: ', records)
 
     setDrivers(
       records?.map(
@@ -117,6 +127,16 @@ export const DriversContextProvider = ({
     setTeams(records)
   }
 
+  const refreshDriverTypes = async () => {
+    const records = await getRecords('driver_type').then((res: APIResponse) => {
+      return res.results
+    })
+    // check if there are records
+    if (records) {
+      setDriverTypes(records)
+    }
+  }
+
   const handleSearchDrivers = (search: string) => {
     if (search === '') {
       refreshDrivers()
@@ -162,8 +182,9 @@ export const DriversContextProvider = ({
   }
 
   useEffect(() => {
-    refreshDrivers()
-    refreshDriverTeams()
+    // refreshDrivers()
+    // refreshDriverTeams()
+    refreshDriverTypes()
   }, [])
 
   return (
@@ -171,6 +192,7 @@ export const DriversContextProvider = ({
       value={{
         drivers,
         teams,
+        driverTypes,
         loading,
         handleSearchDrivers,
         handleSortDrivers,
@@ -178,6 +200,7 @@ export const DriversContextProvider = ({
         handleSelectStatus,
         refreshDrivers,
         refreshDriverTeams,
+        refreshDriverTypes,
       }}
     >
       {children}

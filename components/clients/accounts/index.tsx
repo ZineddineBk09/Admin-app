@@ -17,7 +17,7 @@ const Accounts = () => {
       {/* Accounts list */}
       <div className='w-full flex flex-col items-center gap-y-6'>
         {accounts?.map((account: Account, index: number) => (
-          <AccountCard key={index} account={account} />
+          <AccountCard key={account.id} account={account} />
         ))}
       </div>
       {/* add account button */}

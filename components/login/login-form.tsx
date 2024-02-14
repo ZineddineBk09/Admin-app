@@ -1,5 +1,5 @@
 import React from 'react'
-import Logo from '@/components/navbar/Logo'
+import Logo from '../../components/navbar/Logo'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'

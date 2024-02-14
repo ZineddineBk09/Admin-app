@@ -1,4 +1,4 @@
-import { BBox } from '@/interfaces'
+import { BBox } from '../../interfaces'
 import axios from 'axios'
 import { getSession } from 'next-auth/react'
 
@@ -22,7 +22,7 @@ export const getDriversInArea = async (bbox: BBox) => {
       }
     )
 
-    if (res.data.length > 0) {
+    if (res.data?.length > 0) {
       const drivers = res.data.map(async (driver: any) => {
         // Take driver location from the map API
         const location = {

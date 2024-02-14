@@ -1,5 +1,5 @@
 import React from 'react'
-import { useMapContext } from '@/context/map'
+import { useMapContext } from '../../context/map'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import dynamic from 'next/dynamic'
@@ -23,8 +23,6 @@ const SelectLocation = () => {
       console.log(values)
     },
   })
-  console.log('errors: ', formik.errors)
-  console.log('values: ', formik.values)
 
   if (selectedOrderData?.location) return null
   return (

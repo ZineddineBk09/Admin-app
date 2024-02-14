@@ -1,9 +1,10 @@
 import { Button, Loading, Modal, Text, Tooltip } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../../styles/flex'
-import { BinIcon } from '@/components/icons/areas'
+import { BinIcon } from '../../../components/icons/areas'
+import { deleteRecord } from '../../../lib/api'
 
-export const DeleteDriverTeam = ({ id }: { id: number }) => {
+export const DeleteDriverTeam = ({ id }: { id: string }) => {
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
@@ -18,6 +19,7 @@ export const DeleteDriverTeam = ({ id }: { id: number }) => {
     // closeHandler()
     // setLoading(false)
     // refreshDriverTeams()
+    await deleteRecord(id, 'team')
     setLoading(false)
     closeHandler()
   }
@@ -58,7 +60,7 @@ export const DeleteDriverTeam = ({ id }: { id: number }) => {
                 '@lg': { flexWrap: 'nowrap', gap: '$12' },
               }}
             >
-              <Text h5>Are you sure you want to delete this country?</Text>
+              <Text h5>Are you sure you want to delete this team?</Text>
               <Text h6 color='error'>
                 This action cannot be undone
               </Text>

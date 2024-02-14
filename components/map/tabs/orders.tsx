@@ -6,8 +6,8 @@ import {
   BagIcon,
   TrajectoryIcon,
 } from '../../icons/orders'
-import { Order } from '@/interfaces'
-import { useMapContext } from '@/context/map'
+import { Order } from '../../../interfaces'
+import { useMapContext } from '../../../context/map'
 import { FilterIcon } from '../../icons/map'
 import {
   Card,
@@ -18,17 +18,17 @@ import {
   Tooltip,
   Checkbox,
 } from '@nextui-org/react'
-import { Flex } from '@/components/styles/flex'
+import { Flex } from '../../../components/styles/flex'
 
 export const Orders = ({ orderStatus }: { orderStatus: any }) => {
-  const { orders } = useMapContext()
+  const { filterOrders } = useMapContext()
 
   return (
     <div className='w-full h-full flex flex-col items-center gap-y-3 overflow-y-auto'>
       {/* Render filter */}
       <OrdersFilter />
-      {orders?.map((order: any, index: number) => (
-        <OrderCard key={index} order={order} />
+      {filterOrders?.map((order: any, index: number) => (
+        <OrderCard key={order.id} order={order} />
       ))}
     </div>
   )
@@ -38,7 +38,7 @@ const OrderCard = ({ order }: { order: Order }) => {
   const { client, customer, startTime, endTime, status, location, driverName } =
     order
   const driverInitials =
-    driverName.split(' ').length > 1
+    driverName.split(' ')?.length > 1
       ? driverName.split(' ')[0][0] + driverName.split(' ')[1][0]
       : driverName[0] + driverName[1]
   // status color: green ==> done, yellow ==> assigned, red ==> cancelled, gray ==> new
@@ -149,8 +149,7 @@ const OrderCard = ({ order }: { order: Order }) => {
 }
 
 const OrdersFilter = () => {
-  // create a modal that contains a list of checkboxes which are the order status to filter
-  // when the user clicks on the filter button, the modal should appear
+  const { handleFilterOrders } = useMapContext()
   const [visible, setVisible] = React.useState(false)
   const [selected, setSelected] = useState<string[]>([])
   const handler = () => setVisible(true)
@@ -229,7 +228,8 @@ const OrdersFilter = () => {
               auto
               className='bg-primary'
               onClick={() => {
-                console.log('delete')
+                handleFilterOrders(selected)
+                closeHandler()
               }}
             >
               Filter

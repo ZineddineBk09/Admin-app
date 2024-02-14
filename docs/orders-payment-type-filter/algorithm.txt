@@ -1,0 +1,7 @@
+Asana task name: الادمن هيكون عنده سجل للطلبات للسواقين اللي استلموا فلوس كاش
+
+01- To acheive this requirement, we need to add a new filter to orders page to filter orders by payment method (cash or credit card)
+    |
+    |__ 1- Create the UI (dropdown list)
+    |__ 2- Implement the filter logic
+

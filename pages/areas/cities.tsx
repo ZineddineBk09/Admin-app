@@ -8,11 +8,17 @@ import { AreasCitiesContextProvider } from '../../context/areas/cities'
 import { NextPage } from 'next'
 import React from 'react'
 import Loading from '../../components/shared/loading'
+import { AreasCountriesContextProvider } from '../../context/areas/countries'
+import { AreasGovernoratesContextProvider } from '../../context/areas/governorates'
 
 const AreasCitiesPage: NextPage = () => {
   return (
     <AreasCitiesContextProvider>
-      <Cities />
+      <AreasGovernoratesContextProvider>
+        <AreasCountriesContextProvider>
+          <Cities />
+        </AreasCountriesContextProvider>
+      </AreasGovernoratesContextProvider>
     </AreasCitiesContextProvider>
   )
 }

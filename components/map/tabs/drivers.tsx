@@ -1,10 +1,10 @@
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
-import { Driver } from '@/interfaces'
+import { Driver } from '../../../interfaces'
 import { Card } from '@nextui-org/react'
-import { useMapContext } from '@/context/map'
+import { useMapContext } from '../../../context/map'
 import { DriverInboxIcon, DriverOrdersIcon } from '../../icons/drivers'
-import { truncateTxt } from '@/utils'
+import { truncateTxt } from '../../../utils'
 
 export const Drivers = ({ driverStatus }: { driverStatus: any }) => {
   const { drivers } = useMapContext()
@@ -12,14 +12,14 @@ export const Drivers = ({ driverStatus }: { driverStatus: any }) => {
   return (
     <div className='w-full h-full flex flex-col items-center gap-y-3 overflow-y-auto px-2'>
       {drivers
-        ?.slice(0, drivers.length / 2)
+        ?.slice(0, drivers?.length / 2)
         ?.filter((dr: any) =>
           driverStatus.some(
             (status: any) => status.value === dr.status && status.checked
           )
         )
         ?.map((driver: any, index: number) => (
-          <DriverCard key={index} driver={driver} />
+          <DriverCard key={driver.id} driver={driver} />
         ))}
     </div>
   )

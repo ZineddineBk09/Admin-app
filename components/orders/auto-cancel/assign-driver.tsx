@@ -9,11 +9,11 @@ import {
 } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../../styles/flex'
-import { Driver } from '@/interfaces'
-import { searchMembers } from '@/lib/search'
+import { Driver } from '../../../interfaces'
+import { searchMembers } from '../../../lib/search'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { useDriversContext } from '@/context/drivers'
-import { calculateDistance } from '@/utils'
+import { useDriversContext } from '../../../context/drivers'
+import { calculateDistance } from '../../../utils'
 
 export const AssignDriver = ({
   orderLocation,
@@ -68,7 +68,7 @@ export const AssignDriver = ({
                 className='text-xl font-semibold capitalize'
                 h4
               >
-                Available Drivers
+                `Available `Drivers
               </Text>
             </Modal.Header>
             {/* <Divider css={{ my: '$5' }} /> */}
@@ -183,11 +183,11 @@ export const AssignDriver = ({
                 auto
                 type='submit'
                 className={`bg-primary text-black ${
-                  selected.length === 0 && 'opacity-50 cursor-not-allowed'
+                  selected?.length === 0 && 'opacity-50 cursor-not-allowed'
                 }`}
-                disabled={selected.length === 0}
+                disabled={selected?.length === 0}
               >
-                Assign {selected.length > 0 && `(${selected.length})`}
+                Assign {selected?.length > 0 && `(${selected?.length})`}
               </Button>
             </Modal.Footer>
           </>

@@ -1,5 +1,5 @@
-import { ClientsReport } from '@/interfaces'
-import { searchReports } from '@/lib/search'
+import { ClientsReport } from '../../interfaces'
+import { searchReports } from '../../lib/search'
 import { faker } from '@faker-js/faker'
 import React, { useEffect, useState } from 'react'
 

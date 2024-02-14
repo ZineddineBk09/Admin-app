@@ -1,70 +1,95 @@
-import { City } from '../../interfaces'
+import { APIResponse, Country, Currency } from '../../interfaces'
 import React, { useEffect, useState } from 'react'
+import { filterRecords, getRecords } from '../../lib/api'
+import axios from '../../lib/axios'
 
-export const AreasCitiesContext = React.createContext({})
+export const AreasCountriesContext = React.createContext({})
 
-export const useAreasCitiesContext: any = () =>
-  React.useContext(AreasCitiesContext)
+export const useAreasCountriesContext: {
+  (): {
+    countries: Country[]
+    currencies: Currency[]
+    loading: boolean
+    hasMore: boolean
+    isFetching: boolean
+    fetchNextPage: () => Promise<void>
+    refreshCountries: () => Promise<void>
+    refreshCurrencies: () => Promise<void>
+  }
+} = () => React.useContext(AreasCountriesContext as any)
 
-export const AreasCitiesContextProvider = ({
+export const AreasCountriesContextProvider = ({
   children,
 }: {
   children: React.ReactNode
 }) => {
-  const [cities, setCities] = useState<City[]>([] as City[])
-  const countries = ['Saudi Arabia', 'United Arab Emirates', 'Egypt']
+  const [countries, setCountries] = useState<Country[]>([] as Country[])
+  const [currencies, setCurrencies] = useState<Currency[]>([] as Currency[])
+  const [hasMore, setHasMore] = useState<boolean>(true)
+  const [isFetching, setIsFetching] = useState<boolean>(false)
   const [loading, setLoading] = useState(true)
 
-  const refreshCities = async () => {
-    // setLoading(true)
-    // setCities([] as City[])
-    // const records = await fetchCities()
-    // setCities(records)
-    // setLoading(false)
-    setCities([
-      {
-        id: '215351',
-        name: 'البجيري - Al Bujairi',
-        governorateId: '215351',
-        governorateName: 'Riyadh',
-        price: 25,
-        additional: 4,
-        orderFee: 10,
-      },
-      {
-        id: '215352',
-        name: 'الروضة - Ar Rawdah',
-        governorateId: '215352',
-        governorateName: 'Jeddah',
-        price: 25,
-        additional: 4,
-        orderFee: 10,
-      },
-      {
-        id: '215353',
-        name: 'الروضة - Ar Rawdah',
-        governorateId: '215353',
-        governorateName: 'Riyadh',
-        price: 25,
-        additional: 4,
-        orderFee: 10,
-      },
-    ])
+  const refreshCountries = async () => {
+    setLoading(true)
+    const records: APIResponse = await getRecords('country')
+    setCountries(records.results)
+
+    // check if there are more cities we can fetch
+    setHasMore(!!records.next)
+
+    setLoading(false)
+  }
+
+  const refreshCurrencies = async () => {
+    setLoading(true)
+    const records: APIResponse = await getRecords('currency')
+    setCurrencies(records.results)
+    setLoading(false)
+  }
+
+  const fetchNextPage = async () => {
+    if (isFetching || !hasMore) {
+      return
+    }
+
+    setIsFetching(true)
+
+    // next url will of format: /city/?limit=10&offset=10
+    try {
+      const response = await axios.get(
+        `/country/?limit=10&offset=${countries.length}`
+      )
+      const newCountries = response.data.results
+      setCountries([...countries, ...newCountries])
+
+      // check if there are more countries we can fetch
+      setHasMore(!!response.data.next)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    } finally {
+      setIsFetching(false)
+    }
   }
 
   useEffect(() => {
-    refreshCities()
+    refreshCountries()
+    refreshCurrencies()
   }, [])
 
   return (
-    <AreasCitiesContext.Provider
+    <AreasCountriesContext.Provider
       value={{
-        cities,
         countries,
+        currencies,
         loading,
+        hasMore,
+        isFetching,
+        fetchNextPage,
+        refreshCountries,
+        refreshCurrencies,
       }}
     >
       {children}
-    </AreasCitiesContext.Provider>
+    </AreasCountriesContext.Provider>
   )
 }

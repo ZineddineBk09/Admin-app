@@ -5,8 +5,8 @@ import { Flex } from '../../styles/flex'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { EditIcon } from '../../icons/table'
-import { AutoCancelledOrder, Order, Team } from '@/interfaces'
-import { getRecords, updateRecord } from '@/lib/api'
+import { AutoCancelledOrder, Order, Team } from '../../../interfaces'
+import { getRecords, updateRecord } from '../../../lib/api'
 import { ConfirmModal } from '../../shared/confirm-modal'
 
 export const AddBonus = ({ order }: { order: AutoCancelledOrder }) => {

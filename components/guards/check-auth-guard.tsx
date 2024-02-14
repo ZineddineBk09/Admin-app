@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import Loading from '@/components/shared/loading'
+import Loading from '../../components/shared/loading'
 import React from 'react'
 import { useSession } from 'next-auth/react'
 

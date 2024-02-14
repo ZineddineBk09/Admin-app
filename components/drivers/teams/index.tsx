@@ -1,11 +1,11 @@
-import { DriverTeam } from '@/interfaces'
+import { DriverTeam } from '../../../interfaces'
 import { Divider, Tooltip } from '@nextui-org/react'
 import React from 'react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { AddDriverTeam } from './add-team'
 import { DeleteDriverTeam } from './delete-team'
-import { useDriversContext } from '@/context/driver'
-import { BinIcon } from '@/components/icons/areas'
+import { useDriversContext } from '../../../context/drivers'
+import { BinIcon } from '../../../components/icons/areas'
 import { AddMember } from './add-member'
 
 const DriversTeams = () => {
@@ -16,7 +16,7 @@ const DriversTeams = () => {
       <SearchAccount />
       <div className='w-full flex flex-col items-center gap-y-6'>
         {teams?.map((team: DriverTeam, index: number) => (
-          <DriverTeamCard key={index} team={team} />
+          <DriverTeamCard key={team.id} team={team} />
         ))}
       </div>
       {/* add account button */}
@@ -27,17 +27,9 @@ const DriversTeams = () => {
 
 const DriverTeamCard = ({ team }: { team: DriverTeam }) => {
   const [showInfos, setShowInfos] = React.useState(false)
-  const {
-    id,
-    name,
-    fixed,
-    maxDistance,
-    members,
-    additional,
-    pricePerKm,
-    supervisor,
-    areas,
-  } = team
+  const { id, name, fixed, supervisor } = team
+  const areas: any = []
+  const members: any = []
   const fields = [
     {
       name: 'Fixed',
@@ -47,17 +39,17 @@ const DriverTeamCard = ({ team }: { team: DriverTeam }) => {
     {
       name: 'Price',
       id: 'pricePerKm',
-      defaultValue: pricePerKm,
+      defaultValue: 0,
     },
     {
       name: 'Additional',
       id: 'additional',
-      defaultValue: additional,
+      defaultValue: 0,
     },
     {
       name: 'Max Distance',
       id: 'maxDistance',
-      defaultValue: maxDistance,
+      defaultValue: 0,
     },
   ]
   const units = [
@@ -132,7 +124,7 @@ const DriverTeamCard = ({ team }: { team: DriverTeam }) => {
           {/* Members */}
           <div className='w-full flex items-start gap-x-6'>
             <label className='mt-2 text-gray-600 text-sm'>Members</label>
-            {members.length > 0 ? (
+            {members?.length > 0 ? (
               <div className='w-full flex items-start gap-y-2'>
                 {members?.map((member: any, index: number) => (
                   <div key={index}>
@@ -146,7 +138,7 @@ const DriverTeamCard = ({ team }: { team: DriverTeam }) => {
                           <BinIcon width={4} />
                         </button>
                       </Tooltip>
-                      {index < members.length - 1 && (
+                      {index < members?.length - 1 && (
                         <span className='-ml-4'>,</span>
                       )}
                     </div>
@@ -163,7 +155,7 @@ const DriverTeamCard = ({ team }: { team: DriverTeam }) => {
           {/* Areas */}
           <div className='w-full flex items-start gap-x-6'>
             <label className='mt-2 text-gray-600 text-sm'>Areas</label>
-            {areas.length > 0 ? (
+            {areas?.length > 0 ? (
               <div className='w-full flex items-start gap-y-2'>
                 {areas?.map((area: any, index: number) => (
                   <div key={index}>
@@ -182,7 +174,7 @@ const DriverTeamCard = ({ team }: { team: DriverTeam }) => {
                           <BinIcon width={4} />
                         </button>
                       </Tooltip>
-                      {index < areas.length - 1 && (
+                      {index < areas?.length - 1 && (
                         <span className='-ml-4'>,</span>
                       )}
                     </div>
@@ -210,7 +202,7 @@ const DriverTeamCard = ({ team }: { team: DriverTeam }) => {
                   name='supervisor'
                   id='supervisor'
                   type='text'
-                  value={supervisor.name}
+                  value={supervisor}
                   onChange={(e) => {
                     console.log(e.target.value)
                   }}

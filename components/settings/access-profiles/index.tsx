@@ -1,4 +1,4 @@
-import { AccessProfile } from '@/interfaces'
+import { AccessProfile } from '../../../interfaces'
 import {
   Divider,
   Tooltip,
@@ -13,8 +13,8 @@ import React from 'react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { AddDriverProfile } from './add-profile'
 import { DeleteDriverType } from './delete-profile'
-import { NotesIcon as EditIcon } from '@/components/icons/table'
-import { ArrowIcon } from '@/components/icons/permissions'
+import { NotesIcon as EditIcon } from '../../../components/icons/table'
+import { ArrowIcon } from '../../../components/icons/permissions'
 
 const Profiles = () => {
   const profiles: AccessProfile[] = [
@@ -78,7 +78,7 @@ const Profiles = () => {
       <SearchTypes />
       <div className='w-full flex flex-col items-center gap-y-6'>
         {profiles?.map((profile: AccessProfile, index: number) => (
-          <CountryCard key={index} profile={profile} />
+          <CountryCard key={profile.id} profile={profile} />
         ))}
       </div>
       {/* add profile button */}

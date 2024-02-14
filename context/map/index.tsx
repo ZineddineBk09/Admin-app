@@ -1,4 +1,4 @@
-import { Order, Status } from '@/interfaces'
+import { Order, Status } from '../../interfaces'
 import { faker } from '@faker-js/faker'
 import React, { useEffect, useState } from 'react'
 
@@ -12,12 +12,14 @@ export const useMapContext: {
     showDrivers: boolean
     selectedOrder: string
     selectedDriver: string
+    openTab: number
+    filterOrders: any[]
     handleSelectOrder: (id: string) => void
     handleSelectDriver: (id: string) => void
     handleToggleOrders: () => void
     handleToggleDrivers: () => void
-    openTab: number
     hansleSelectTab: (tab: number) => void
+    handleFilterOrders: (status: string[]) => void
     setDrivers: (drivers: any[]) => void
   }
 } = () => React.useContext(MapContext as any)
@@ -30,6 +32,7 @@ export const MapContextProvider = ({
   const [showOrders, setShowOrders] = useState<boolean>(true)
   const [showDrivers, setShowDrivers] = useState<boolean>(true)
   const [orders, setOrders] = useState<any[]>([] as any[])
+  const [filteredOrders, setFilteredOrders] = useState<any[]>([] as any[])
   const [drivers, setDrivers] = useState<any[]>([] as any[])
   const [selectedOrder, setSelectedOrder] = useState<string>()
   const [selectedDriver, setSelectedDriver] = useState<any>(null)
@@ -64,6 +67,12 @@ export const MapContextProvider = ({
 
   const hansleSelectTab = (tab: number) => {
     setOpenTab(tab)
+  }
+
+  const handleFilterOrders = (status: string[]) => {
+    if (status?.length === 0) return setFilteredOrders(orders)
+    const filtered = orders.filter((order) => status.includes(order.status))
+    setFilteredOrders(filtered)
   }
 
   const fetchOrders = () => {
@@ -117,11 +126,14 @@ export const MapContextProvider = ({
         ),
         clientPaid: faker.datatype.boolean(),
         driverPaid: faker.datatype.boolean(),
-        paymentType: ['cash', 'visa', 'mastercard'][faker.number.int({ max: 2, min: 0 })] as any,
+        paymentType: ['cash', 'visa', 'mastercard'][
+          faker.number.int({ max: 2, min: 0 })
+        ] as any,
       }
       arr.push(fakeOrder)
     }
     setOrders(arr)
+    setFilteredOrders(arr)
     setSelectedOrder(arr[0]?.id)
   }
 
@@ -177,12 +189,14 @@ export const MapContextProvider = ({
         showDrivers,
         selectedOrder,
         selectedDriver,
+        openTab,
+        filterOrders: filteredOrders,
         setDrivers,
         handleSelectOrder,
         handleSelectDriver,
         handleToggleOrders,
         handleToggleDrivers,
-        openTab,
+        handleFilterOrders,
         hansleSelectTab,
       }}
     >

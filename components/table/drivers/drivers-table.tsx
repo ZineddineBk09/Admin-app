@@ -1,10 +1,10 @@
-import { Checkbox, Divider, Table, Tooltip } from '@nextui-org/react'
+import { Checkbox, Divider, Tooltip } from '@nextui-org/react'
 import React, { useEffect, useState } from 'react'
-import { useDriversContext } from '@/context/driver'
-import { Driver, Sort } from '@/interfaces'
+import { useDriversContext } from '../../../context/drivers'
+import { Driver, Sort } from '../../../interfaces'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { DeleteDriver } from '../drivers/list/delete-driver'
-import { BinIcon } from '../icons/areas'
+import { DeleteDriver } from '../../drivers/list/delete-driver'
+import { BinIcon } from '../../icons/areas'
 
 export const DriversTable = () => {
   const { drivers, handleSortDrivers } = useDriversContext()
@@ -19,11 +19,9 @@ export const DriversTable = () => {
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <div className='w-full flex flex-col items-center gap-y-6'>
         {drivers?.map((driver: Driver, index: number) => (
-          <DriverCard key={index} driver={driver} />
+          <DriverCard key={driver?.id || index} driver={driver} />
         ))}
       </div>
-      {/* add driver button */}
-      {/* <AddAccount /> */}
     </div>
   )
 }
@@ -119,7 +117,7 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
             {/* Areas */}
             <div className='flex items-start gap-x-6 col-span-2'>
               <label className='mt-2 text-gray-600 text-sm'>Areas</label>
-              {areas.length > 0 ? (
+              {areas?.length > 0 ? (
                 <div className='w-full flex items-start gap-y-2'>
                   {areas?.map((area: any, index: number) => (
                     <div key={index}>
@@ -133,7 +131,7 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
                             <BinIcon width={4} />
                           </button>
                         </Tooltip>
-                        {index < areas.length - 1 && (
+                        {index < areas?.length - 1 && (
                           <span className='-ml-4'>,</span>
                         )}
                       </div>

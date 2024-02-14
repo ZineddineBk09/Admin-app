@@ -1,9 +1,10 @@
 import { Col, Row } from '@nextui-org/react'
 import React from 'react'
 import { CancelOrder } from '../../orders/auto-cancel/cancel-order'
-import { EditOrder } from '../../orders/auto-cancel/edit-order'
-import { AutoCancelledOrder } from '@/interfaces'
-import { renderBigNums } from '@/utils'
+import { AutoCancelledOrder } from '../../../interfaces'
+import { renderBigNums } from '../../../utils'
+import { AssignDriver } from '../../../components/orders/auto-cancel/assign-driver'
+import { AddBonus } from '../../../components/orders/auto-cancel/add-bonus'
 
 interface Props {
   order: AutoCancelledOrder
@@ -76,10 +77,31 @@ export const RenderCell = ({ order, columnKey }: Props) => {
     // add column with button to assign order to driver
     case 'assign':
       return (
-        <button className='px-4 py-2 bg-primary text-gray-700 rounded-lg'>
-          Assign to driver
-        </button>
+        <AssignDriver
+          orderLocation={
+            order?.location as {
+              latitude: number
+              longitude: number
+            }
+          }
+        />
       )
+
+    case 'paymentType':
+      // return an icon: cash, visa, mastercard
+      return (
+        // <Image
+        //   src={`/images/icons/${cellValue}.png`}
+        //   width={cellValue === 'visa' ? 30 : 24}
+        //   height={24}
+        //   alt={cellValue}
+        //   className='w-full mx-auto'
+        // />
+        <p className='capitalize text-black font-medium'>{cellValue}</p>
+      )
+
+    case 'bonus':
+      return <AddBonus order={order} />
 
     case 'actions':
       return (
@@ -88,9 +110,6 @@ export const RenderCell = ({ order, columnKey }: Props) => {
           align='center'
           css={{ gap: '$8', '@md': { gap: 3 } }}
         >
-          <Col css={{ d: 'flex' }}>
-            <EditOrder order={order} />
-          </Col>
           <Col css={{ d: 'flex' }}>
             <CancelOrder id={order.id} />
           </Col>

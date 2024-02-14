@@ -7,8 +7,8 @@ import {
   query,
   updateDoc,
 } from 'firebase/firestore'
-import { firestore, storage } from '@/firebase/support'
-import { ChatMessage } from '@/interfaces'
+import { firestore, storage } from '../../firebase/support'
+import { ChatMessage } from '../../interfaces'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 export const addMessage = async (chatId: string, message: any) => {

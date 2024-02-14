@@ -1,10 +1,11 @@
 import { Col, Row } from '@nextui-org/react'
 import React from 'react'
-import { CancelOrder } from '../orders/cancel-order'
-import { EditOrder } from '../orders/edit-order'
-import { Order } from '@/interfaces'
-import { AddNotes } from '../orders/add-notes'
-import { CheckedIcon } from '../icons/table'
+import { CancelOrder } from '../../orders/list/cancel-order'
+import { EditOrder } from '../../orders/list/edit-order'
+import { Order } from '../../../interfaces'
+import { AddNotes } from '../../orders/list/add-notes'
+import { CheckedIcon } from '../../icons/table'
+import Image from 'next/image'
 
 interface Props {
   order: Order
@@ -74,14 +75,31 @@ export const RenderCell = ({ order, columnKey }: Props) => {
         </div>
       )
 
+    case 'paymentType':
+      // return an icon: cash, visa, mastercard
+      return (
+        // <Image
+        //   src={`/images/icons/${cellValue}.png`}
+        //   width={cellValue === 'visa' ? 30 : 24}
+        //   height={24}
+        //   alt={cellValue}
+        //   className='w-full mx-auto'
+        // />
+        <p className='capitalize text-black font-medium'>
+          {cellValue}
+        </p>
+      )
+
     case 'status':
       return (
         <span
           className={`text-xs font-semibold inline-flex px-2 pt-1 pb-[2px] rounded-full text-white capitalize ${
             cellValue === 'done'
               ? 'bg-green-400'
-              : cellValue === 'delivering'
+              : cellValue === 'assigned'
               ? 'bg-yellow-400'
+              : cellValue === 'new'
+              ? 'bg-blue-400'
               : 'bg-red-400'
           }`}
         >

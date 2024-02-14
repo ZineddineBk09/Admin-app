@@ -7,9 +7,9 @@ import 'leaflet-easybutton/src/easy-button.js'
 import 'leaflet-easybutton/src/easy-button.css'
 import * as L from 'leaflet'
 import { MapPinIcon } from '../icons/map'
-import { getDriversInArea } from '@/lib/api/map'
-import { useMapContext } from '@/context/map'
-import { Driver } from '@/interfaces'
+import { getDriversInArea } from '../../lib/api/map'
+import { useMapContext } from '../../context/map'
+import { Driver } from '../../interfaces'
 
 // create a custom icon with L.divIcon and reactDOM.renderToString
 const icon = (image?: string, symbol?: string) =>
@@ -50,7 +50,7 @@ const Map = () => {
 
       if (!records) return
       setDrivers(
-        records.map((record: any) => {
+        records?.map((record: any) => {
           return {
             id: record.pk,
             username: record.fields.username,
@@ -89,7 +89,7 @@ const Map = () => {
 
     if (!records) return
     setDrivers(
-      records.map((record: any) => {
+      records?.map((record: any) => {
         return {
           id: record.pk,
           username: record.fields.username,

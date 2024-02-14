@@ -14,9 +14,9 @@ import { Flex } from '../../styles/flex'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { EditIcon } from '../../icons/table'
-import { Driver, Team } from '@/interfaces'
-import { getRecords, updateRecord } from '@/lib/api'
-import { useDriversContext } from '@/context/drivers'
+import { Driver, Team } from '../../../interfaces'
+import { getRecords, updateRecord } from '../../../lib/api'
+import { useDriversContext } from '../../../context/drivers'
 
 export const EditDriver = ({ driver }: { driver: Driver }) => {
   const [visible, setVisible] = React.useState(false)

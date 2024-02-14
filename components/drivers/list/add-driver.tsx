@@ -3,9 +3,9 @@ import React from 'react'
 import { Flex } from '../../styles/flex'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { createRecord, getRecords } from '@/lib/api'
-import { Team } from '@/interfaces'
-import { useDriversContext } from '@/context/drivers'
+import { createRecord, getRecords } from '../../../lib/api'
+import { Team } from '../../../interfaces'
+import { useDriversContext } from '../../../context/drivers'
 
 export const AddDriver = () => {
   const [visible, setVisible] = React.useState(false)
@@ -40,17 +40,24 @@ export const AddDriver = () => {
     onSubmit: async (values) => {
       // use createRecord function to create a new record
       setLoading(true)
-      console.log(values)
       const response = await createRecord(
         {
           username: values.username,
-          firstname: values.firstName,
-          lastname: values.lastName,
+          first_name: values.firstName,
+          last_name: values.lastName,
           email: values.email,
           phone_number: values.phone,
           team_id: values.team,
           password: values.password,
           is_freelance: values.isFreelance === 'Yes' ? true : false,
+          vehicle_type: 'car',
+          vehicle_license: '12345678',
+          city: 'Cairo',
+          areas: [1, 2, 3],
+          code: '123456',
+          driver_type: 'driver',
+          residency_id: 1,
+          is_idle: false,
         },
         'driver'
       )

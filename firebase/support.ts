@@ -14,7 +14,7 @@ const firebaseConfig = {
 }
 
 // Initialize Firebase this way to avoid multiple instances of firebase app being created
-export const app = !getApps().length ? initializeApp(firebaseConfig) : getApp()
+export const app = !getApps()?.length ? initializeApp(firebaseConfig) : getApp()
 export const firestore = getFirestore(app)
 export const storage = getStorage(app)
 export const auth = getAuth(app)

@@ -1,4 +1,11 @@
-import { Account, Branch, Driver, Order } from '@/interfaces'
+import {
+  Account,
+  AutoCancelledOrder,
+  Branch,
+  Driver,
+  DriverType,
+  Order,
+} from '../../interfaces'
 import Fuse from 'fuse.js'
 
 const options = {
@@ -35,6 +42,18 @@ export const searchOrders = (list: Order[], pattern: string) => {
   return fuse.search(pattern)?.map((item) => item.item)
 }
 
+export const searchAutoCancelledOrders = (
+  list: AutoCancelledOrder[],
+  pattern: string
+) => {
+  const fuse = new Fuse(list, {
+    ...options,
+    keys: ['clientName', 'city', 'id', 'phone', 'address'],
+  })
+
+  return fuse.search(pattern)?.map((item) => item.item)
+}
+
 export const searchBranches = (list: Branch[], pattern: string) => {
   const fuse = new Fuse(list, {
     ...options,
@@ -56,6 +75,15 @@ export const searchDrivers = (list: Driver[], pattern: string) => {
   const fuse = new Fuse(list, {
     ...options,
     keys: ['username', 'email', 'team', 'phone'],
+  })
+
+  return fuse.search(pattern)?.map((item) => item.item)
+}
+
+export const searchDriverTypes = (list: DriverType[], pattern: string) => {
+  const fuse = new Fuse(list, {
+    ...options,
+    keys: ['vehicle_type'],
   })
 
   return fuse.search(pattern)?.map((item) => item.item)

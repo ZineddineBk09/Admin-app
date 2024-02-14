@@ -1,7 +1,7 @@
 import { Button, Loading, Modal, Text, Tooltip } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../../styles/flex'
-import { BinIcon } from '@/components/icons/areas'
+import { BinIcon } from '../../../components/icons/areas'
 
 export const DeleteUserAccess = ({ id }: { id: number }) => {
   const [visible, setVisible] = React.useState(false)

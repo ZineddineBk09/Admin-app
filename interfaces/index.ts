@@ -1,3 +1,5 @@
+import { string } from 'yup'
+
 //------------------------- Auth & Register -------------------------
 export interface AuthUser {
   email: string | null
@@ -51,8 +53,8 @@ export interface Driver {
 }
 
 export interface DriverType {
-  id: number
-  vehicleType:
+  id: string
+  vehicle_type:
     | 'car'
     | 'van'
     | 'motor'
@@ -62,24 +64,28 @@ export interface DriverType {
     | 'bicycle'
     | 'ship'
     | 'scooter'
-  priceRatioNominator: number
-  priceRatioDenominator: number
-  additionalRatioNominator: number
-  additionalRatioDenominator: number
+  price_ratio_nominator: number
+  price_ratio_denominator: number
+  additional_ratio_nominator: number
+  additional_ratio_denominator: number
 }
 
 export interface DriverTeam {
   id: string
   name: string
-  members: DriverTeamMember[]
-  supervisor: DriverTeamMember
   fixed: number
-  pricePerKm: number
-  additional: number
-  maxDistance: number
-  areas: string[]
-  city: string
-  country: string
+  price_ratio_nominator: number
+  price_ratio_denominator: number
+  additional_ratio_nominator: number
+  additional_ratio_denominator: number
+  supervisor: string
+  city: {
+    id: string
+    name: string
+  }
+  areas?: Geofence[]
+  accounts?: string[]
+  parent: string | null
 }
 
 export interface DriverTeamMember {
@@ -371,4 +377,15 @@ export interface APIResponse {
   previous: string
   results: any[]
 }
+
+export interface GeoJSONObject {
+  type: string
+  properties: any
+  geometry: {
+    type: string
+    coordinates: GeoJSONCoordinate[][]
+  }
+}
+
+export type GeoJSONCoordinate = number[]
 //--------------------------------------------------------------------

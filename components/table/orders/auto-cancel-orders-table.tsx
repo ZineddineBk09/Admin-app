@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { RenderCell } from './render-auto-cancel-orders-cell'
 import { autoCancelOrdersTableCols } from '../data'
-import { Sort } from '@/interfaces'
-import { useAutoCancelledOrdersContext } from '@/context/auto-cancelled-orders'
+import { Sort } from '../../../interfaces'
+import { useAutoCancelledOrdersContext } from '../../../context/auto-cancelled-orders'
 
 export const OrdersTable = () => {
-  const { autoCancelledOrders, handleSortAutoCancelledOrders } = useAutoCancelledOrdersContext()
+  const { autoCancelledOrders, handleSortAutoCancelledOrders } =
+    useAutoCancelledOrdersContext()
   const [sorting, setSorting] = useState<Sort>({ column: '', direction: '' })
 
   useEffect(() => {

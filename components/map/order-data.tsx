@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { useMapContext } from '@/context/map'
+import { useMapContext } from '../../context/map'
 import { BagCheckedIcon, BagIcon, TrajectoryIcon } from '../icons/orders'
 import { MapIcon } from '../icons/sidebar'
-import { Item, Order } from '@/interfaces'
+import { Item, Order } from '../../interfaces'
 
 export const OrderData = () => {
   const { orders, selectedOrder, showOrders } = useMapContext()
@@ -27,20 +27,7 @@ export const OrderData = () => {
 
         <div className='flex items-center'>
           {/* Buttons */}
-          <div className='h-full flex flex-col justify-center gap-y-5'>
-            <button className='h-11 px-12 bg-gray-400 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>
-              Assign Driver
-            </button>
-            <button className='h-11 px-12 bg-gray-400 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>
-              Deliver
-            </button>
-            <button className='h-11 px-12 bg-gray-400 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>
-              Edit
-            </button>
-            <button className='h-11 px-12 bg-red-500 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>
-              Cancel
-            </button>
-          </div>
+          <OrderActions />
 
           {/* Vertical devider */}
           <div className='h-40 w-1 bg-gray-300 mx-5' />
@@ -108,6 +95,48 @@ export const OrderData = () => {
           </div>
         </div>
       </div>
+    </div>
+  )
+}
+
+const OrderActions = () => {
+  const { orders, selectedOrder } = useMapContext()
+  const [order, setOrder] = useState<Order>({} as Order)
+
+  useEffect(() => {
+    if (selectedOrder) {
+      const order = orders.find((d: any) => d.id === selectedOrder)
+      setOrder(order)
+    } else {
+      setOrder(orders[0])
+    }
+  }, [selectedOrder])
+
+  return (
+    <div className='h-full flex flex-col justify-center gap-y-5'>
+      {order?.location ? (
+        <>
+          {' '}
+          <button className='h-11 px-12 bg-gray-400 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>
+            Assign Driver
+          </button>
+          <button className='h-11 px-12 bg-gray-400 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>
+            Deliver
+          </button>
+          <button className='h-11 px-12 bg-gray-400 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>
+            Edit
+          </button>
+          <button className='h-11 px-12 bg-red-500 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>
+            Cancel
+          </button>
+        </>
+      ) : (
+        <>
+          <button className='h-11 px-12 bg-red-500 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>
+            Cancel
+          </button>
+        </>
+      )}
     </div>
   )
 }
