@@ -64,7 +64,6 @@ export const CityCard = ({ city }: { city: City }) => {
       )
         .then((res) => {
           if (res) {
-            console.log('res: ', res)
             toast.success('City updated successfully')
 
             refreshCities()
