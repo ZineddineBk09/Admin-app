@@ -55,7 +55,6 @@ const CityMap = ({ city }: { city: City }) => {
     )
       .then(async (res) => {
         if (res) {
-          console.log('res create:', res)
           console.log({
             id,
             name,
