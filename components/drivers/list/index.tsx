@@ -81,8 +81,8 @@ export const SearchAndFilter = () => {
         >
           <option value=''>Select Team All</option>
           {teams?.map((team: Team, index: number) => (
-            <option key={index} value={team.pk}>
-              {team.fields.name}
+            <option key={index} value={team.id}>
+              {team.name}
             </option>
           ))}
         </select>

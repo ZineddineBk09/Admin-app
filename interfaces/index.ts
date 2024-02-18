@@ -22,6 +22,11 @@ export interface RegisterUser {
   storePhone: string | null
   status: boolean
 }
+
+export interface User {
+  id: string
+  username: string
+}
 //--------------------------------------------------------------------
 
 //------------------------- Drivers ----------------------------
@@ -94,11 +99,17 @@ export interface DriverTeamMember {
 }
 
 export interface Team {
-  model: string
-  pk: string
-  fields: {
-    name: string
-  }
+  id: string
+  name: string
+  fixed: number
+  price_ratio_nominator: number
+  price_ratio_denominator: number
+  additional_ratio_nominator: number
+  additional_ratio_denominator: number
+  supervisor?: User
+  city: City
+  areas?: Geofence[]
+  accounts?: string[]
 }
 
 interface APIDriver {

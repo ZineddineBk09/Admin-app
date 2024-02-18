@@ -47,6 +47,7 @@ ENV NODE_ENV production
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
+USER nextjs
 # Copy the entire project (excluding the .env.local file)
 COPY --from=builder --chown=nextjs:nodejs /app/. .
 

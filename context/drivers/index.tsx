@@ -87,16 +87,16 @@ export const DriversContextProvider = ({
   const refreshDriverTeams = async () => {
     const records = await getRecords('team').then((res) =>
       res.teams.map((team: any) => ({
-        id: team.pk,
-        name: team.fields.name,
-        fixed: team.fields.fixed,
-        pricePerKm: team.fields.price_per_km,
-        additional: team.fields.additional,
-        maxDistance: team.fields.max_distance,
-        areas: team.fields.areas,
-        city: team.fields.city,
-        country: team.fields.country,
-        members: team.fields.members,
+        id: team.id,
+        name: team.name,
+        fixed: team.fixed,
+        pricePerKm: team.price_per_km,
+        additional: team.additional,
+        maxDistance: team.max_distance,
+        areas: team.areas,
+        city: team.city,
+        country: team.country,
+        members: team.members,
         supervisor: {
           id: faker.number.int({ min: 1, max: 100 }),
           name: faker.person.fullName(),

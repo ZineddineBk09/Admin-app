@@ -80,10 +80,25 @@ export const AddCity = () => {
     const govern = governorates?.find(
       (govern: Governorate) => govern.id === e.target.value
     )
-    console.log('govern: ', govern)
     if (govern) {
       formik.setFieldValue('order_fees', govern.order_fees)
-      setPriceUnit(govern.country.price_unit.symbol)
+      formik.setFieldValue(
+        'price_ratio_nominator',
+        govern?.price_ratio_nominator
+      )
+      formik.setFieldValue(
+        'price_ratio_denominator',
+        govern?.price_ratio_denominator
+      )
+      formik.setFieldValue(
+        'additional_ratio_nominator',
+        govern?.additional_ratio_nominator
+      )
+      formik.setFieldValue(
+        'additional_ratio_denominator',
+        govern?.additional_ratio_denominator
+      )
+      setPriceUnit(govern?.country.price_unit.symbol)
     }
   }
 

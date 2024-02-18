@@ -3,11 +3,14 @@ import React from 'react'
 import { Flex } from '../../styles/flex'
 import { BinIcon } from '../../../components/icons/areas'
 import { deleteRecord } from '../../../lib/api'
+import toast from 'react-hot-toast'
+import { useTeamsContext } from '../../../context/drivers/teams'
 
 export const DeleteDriverTeam = ({ id }: { id: string }) => {
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
+  const { refreshTeams } = useTeamsContext()
 
   const closeHandler = () => {
     setVisible(false)
@@ -15,13 +18,16 @@ export const DeleteDriverTeam = ({ id }: { id: string }) => {
 
   const handleDelete = async () => {
     setLoading(true)
-    // await deleteDriverTeam(id)
-    // closeHandler()
-    // setLoading(false)
-    // refreshDriverTeams()
     await deleteRecord(id, 'team')
-    setLoading(false)
-    closeHandler()
+      .then((res: any) => {
+        setLoading(false)
+        closeHandler()
+        toast.success('Team deleted successfully')
+        refreshTeams()
+      })
+      .catch((err) => {
+        toast.error('Error deleting team!')
+      })
   }
 
   return (
