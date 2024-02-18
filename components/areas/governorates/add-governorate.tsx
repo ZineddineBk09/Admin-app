@@ -16,6 +16,7 @@ export const AddGovernorate = () => {
   const [loading, setLoading] = React.useState<boolean>(false)
   const { countries } = useAreasCountriesContext()
   const { refreshGovernorates } = useAreasGovernoratesContext()
+  const [priceUnit, setPriceUnit] = React.useState<string>('SAR')
 
   const formik = useFormik({
     initialValues: {
@@ -73,6 +74,17 @@ export const AddGovernorate = () => {
         })
     },
   })
+
+  // wrire a function that handles reating a country, so that the governorate can inherit the values: order_fees, price_unit from the country
+  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const country = countries?.find(
+      (country: Country) => country.id === e.target.value
+    )
+    if (country) {
+      formik.setFieldValue('order_fees', country.order_fees)
+      setPriceUnit(country.price_unit.symbol)
+    }
+  }
 
   const closeHandler = () => {
     setVisible(false)
@@ -154,7 +166,10 @@ export const AddGovernorate = () => {
                   <select
                     id='country'
                     name='country'
-                    onChange={formik.handleChange}
+                    onChange={(e) => {
+                      formik.handleChange(e)
+                      handleCountryChange(e)
+                    }}
                     value={formik.values.country}
                     className={`border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 ${
                       formik.touched.country && formik.errors.country
@@ -212,8 +227,10 @@ export const AddGovernorate = () => {
                     <Input
                       clearable
                       size='lg'
-                      contentRight={<span className='text-gray-500'>SAR</span>}
-                      placeholder='SAR'
+                      contentRight={
+                        <span className='text-gray-500'>{priceUnit}</span>
+                      }
+                      placeholder={priceUnit}
                       name='price_ratio_nominator'
                       id='price_ratio_nominator'
                       value={formik.values.price_ratio_nominator}
@@ -264,8 +281,10 @@ export const AddGovernorate = () => {
                     <Input
                       clearable
                       size='lg'
-                      contentRight={<span className='text-gray-500'>SAR</span>}
-                      placeholder='SAR'
+                      contentRight={
+                        <span className='text-gray-500'>{priceUnit}</span>
+                      }
+                      placeholder={priceUnit}
                       name='additional_ratio_nominator'
                       id='additional_ratio_nominator'
                       value={formik.values.additional_ratio_nominator}
