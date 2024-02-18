@@ -16,6 +16,7 @@ export const AddCity = () => {
   const [loading, setLoading] = React.useState<boolean>(false)
   const { governorates } = useAreasGovernoratesContext()
   const { refreshCities } = useAreasCitiesContext()
+  const [priceUnit, setPriceUnit] = React.useState<string>('')
 
   const formik = useFormik({
     initialValues: {
@@ -73,6 +74,18 @@ export const AddCity = () => {
         })
     },
   })
+
+  // wrire a function that handles reating a country, so that the governorate can inherit the values: order_fees, price_unit from the country
+  const handleGovernorateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const govern = governorates?.find(
+      (govern: Governorate) => govern.id === e.target.value
+    )
+    console.log('govern: ', govern)
+    if (govern) {
+      formik.setFieldValue('order_fees', govern.order_fees)
+      setPriceUnit(govern.country.price_unit.symbol)
+    }
+  }
 
   const closeHandler = () => {
     setVisible(false)
@@ -137,10 +150,10 @@ export const AddCity = () => {
                       : 'default'
                   }
                 />
-                {/* Country */}
+                {/* Governorate */}
                 <div>
                   <label
-                    aria-label='Country'
+                    aria-label='Governorate'
                     className={`block mb-2 ${
                       formik.touched.governorate && formik.errors.governorate
                         ? 'text-red-500'
@@ -154,7 +167,10 @@ export const AddCity = () => {
                   <select
                     id='governorate'
                     name='governorate'
-                    onChange={formik.handleChange}
+                    onChange={(e) => {
+                      formik.handleChange(e)
+                      handleGovernorateChange(e)
+                    }}
                     value={formik.values.governorate}
                     className={`border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 ${
                       formik.touched.governorate && formik.errors.governorate
@@ -212,8 +228,10 @@ export const AddCity = () => {
                     <Input
                       clearable
                       size='lg'
-                      contentRight={<span className='text-gray-500'>SAR</span>}
-                      placeholder='SAR'
+                      contentRight={
+                        <span className='text-gray-500'>{priceUnit}</span>
+                      }
+                      placeholder={priceUnit}
                       name='price_ratio_nominator'
                       id='price_ratio_nominator'
                       value={formik.values.price_ratio_nominator}
@@ -264,8 +282,10 @@ export const AddCity = () => {
                     <Input
                       clearable
                       size='lg'
-                      contentRight={<span className='text-gray-500'>SAR</span>}
-                      placeholder='SAR'
+                      contentRight={
+                        <span className='text-gray-500'>{priceUnit}</span>
+                      }
+                      placeholder={priceUnit}
                       name='additional_ratio_nominator'
                       id='additional_ratio_nominator'
                       value={formik.values.additional_ratio_nominator}
