@@ -125,7 +125,7 @@ export const AddDriverType = () => {
                 {/* Price Ratio Nominator & Denominator */}
                 <div className='flex flex-col items-start'>
                   <label
-                    aria-label='Price Ratio'
+                    aria-label='Price Ratio (tooltip)'
                     className={`block mb-2 ${
                       formik.touched.price_ratio_nominator &&
                       formik.errors.price_ratio_nominator
