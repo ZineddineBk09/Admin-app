@@ -1,4 +1,9 @@
-import { string } from 'yup'
+export interface Pricing {
+  price_ratio_nominator: number
+  price_ratio_denominator: number
+  additional_ratio_nominator: number
+  additional_ratio_denominator: number
+}
 
 //------------------------- Auth & Register -------------------------
 export interface AuthUser {
@@ -57,7 +62,7 @@ export interface Driver {
   city: string
 }
 
-export interface DriverType {
+export interface DriverType extends Pricing {
   id: string
   vehicle_type:
     | 'car'
@@ -69,20 +74,12 @@ export interface DriverType {
     | 'bicycle'
     | 'ship'
     | 'scooter'
-  price_ratio_nominator: number
-  price_ratio_denominator: number
-  additional_ratio_nominator: number
-  additional_ratio_denominator: number
 }
 
-export interface DriverTeam {
+export interface DriverTeam extends Pricing {
   id: string
   name: string
   fixed: number
-  price_ratio_nominator: number
-  price_ratio_denominator: number
-  additional_ratio_nominator: number
-  additional_ratio_denominator: number
   supervisor: string
   city: {
     id: string
@@ -98,14 +95,10 @@ export interface DriverTeamMember {
   name: string
 }
 
-export interface Team {
+export interface Team extends Pricing {
   id: string
   name: string
   fixed: number
-  price_ratio_nominator: number
-  price_ratio_denominator: number
-  additional_ratio_nominator: number
-  additional_ratio_denominator: number
   supervisor?: User
   city: City
   areas?: Geofence[]
@@ -205,27 +198,19 @@ export interface Country {
   driver_fees: number
 }
 
-export interface Governorate {
+export interface Governorate extends Pricing {
   id: string
   name: string
   country: Country
   order_fees: number
-  price_ratio_nominator: number
-  price_ratio_denominator: number
-  additional_ratio_nominator: number
-  additional_ratio_denominator: number
 }
 
-export interface City {
+export interface City extends Pricing {
   id: string
   name: string
   governorate: Governorate
   geofence: Geofence
   order_fees: number
-  price_ratio_nominator: number
-  price_ratio_denominator: number
-  additional_ratio_nominator: number
-  additional_ratio_denominator: number
 }
 //--------------------------------------------------------------------
 
