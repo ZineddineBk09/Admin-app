@@ -68,7 +68,7 @@ export const sidebarLinks = [
         href: '/drivers/teams',
       },
       {
-        title: 'Driver Types',
+        title: 'Vehicle Types',
         isActive: globalThis.window?.location.pathname === '/drivers/types',
         href: '/drivers/types',
       },
@@ -94,7 +94,8 @@ export const sidebarLinks = [
       },
       {
         title: 'Governorates',
-        isActive: globalThis.window?.location.pathname === '/areas/governorates',
+        isActive:
+          globalThis.window?.location.pathname === '/areas/governorates',
         href: '/areas/governorates',
       },
       {
@@ -139,7 +140,8 @@ export const sidebarLinks = [
       {
         title: 'Delivery Settings',
         isActive:
-          globalThis.window?.location.pathname === '/settings/delivery-settings',
+          globalThis.window?.location.pathname ===
+          '/settings/delivery-settings',
         href: '/settings/delivery-settings',
       },
     ],
