@@ -31,7 +31,10 @@ export const AreasCitiesContextProvider = ({
   const refreshCities = async () => {
     setLoading(true)
     const records: APIResponse = await getRecords('city')
-    setCities(records.results)
+
+    if (records.results) {
+      setCities(records.results)
+    }
 
     // check if there are more cities we can fetch
     setHasMore(!!records.next)
@@ -51,7 +54,10 @@ export const AreasCitiesContextProvider = ({
       { governorate__country__name: country },
       'city'
     )
-    setCities(records.results)
+
+    if (records.results) {
+      setCities(records.results)
+    }
 
     // check if there are more cities we can fetch
     setHasMore(!!records.next)
@@ -69,7 +75,10 @@ export const AreasCitiesContextProvider = ({
       { governorate__name: governorate },
       'city'
     )
-    setCities(records.results)
+    
+    if (records.results) {
+      setCities(records.results)
+    }
 
     setHasMore(!!records.next)
 

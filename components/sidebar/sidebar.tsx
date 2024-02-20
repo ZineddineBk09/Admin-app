@@ -94,7 +94,7 @@ export const SidebarWrapper = () => {
           href: '/drivers/teams',
         },
         {
-          title: 'Driver Types',
+          title: 'Vehicle Types',
           isActive: router.pathname === '/drivers/types',
           href: '/drivers/types',
         },

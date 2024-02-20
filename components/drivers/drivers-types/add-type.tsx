@@ -1,4 +1,12 @@
-import { Button, Input, Modal, Text, Loading, Tooltip } from '@nextui-org/react'
+import {
+  Button,
+  Input,
+  Modal,
+  Text,
+  Loading,
+  Tooltip,
+  Popover,
+} from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../../styles/flex'
 import { useFormik } from 'formik'
@@ -7,12 +15,13 @@ import { AddIcon } from '../../../components/icons/areas'
 import { useDriversContext } from '../../../context/drivers'
 import { createRecord } from '../../../lib/api'
 import toast from 'react-hot-toast'
+import { InformationCircleIcon } from '@heroicons/react/24/outline'
 
 export const AddDriverType = () => {
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
-  const { refreshDriverTypes } = useDriversContext()
+  const { refreshDriverTypes, vehicleTypes } = useDriversContext()
 
   const formik = useFormik({
     initialValues: {
@@ -24,18 +33,18 @@ export const AddDriverType = () => {
     },
     validationSchema: Yup.object({
       vehicle_type: Yup.string().required('type is required'),
-      price_ratio_nominator: Yup.number().required(
-        'price ratio nominator is required'
-      ),
-      price_ratio_denominator: Yup.number().required(
-        'price ratio denominator is required'
-      ),
-      additional_ratio_nominator: Yup.number().required(
-        'additional ratio nominator is required'
-      ),
-      additional_ratio_denominator: Yup.number().required(
-        'additional ratio denominator is required'
-      ),
+      price_ratio_nominator: Yup.number()
+        .required('price ratio nominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
+      price_ratio_denominator: Yup.number()
+        .required('price ratio denominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
+      additional_ratio_nominator: Yup.number()
+        .required('additional ratio nominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
+      additional_ratio_denominator: Yup.number()
+        .required('additional ratio denominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
     }),
     onSubmit: async (values) => {
       await createRecord(
@@ -101,7 +110,7 @@ export const AddDriverType = () => {
                 }}
               >
                 {/* Name */}
-                <Input
+                {/* <Input
                   label={
                     formik.touched.vehicle_type && formik.errors.vehicle_type
                       ? formik.errors.vehicle_type
@@ -120,12 +129,47 @@ export const AddDriverType = () => {
                       ? 'error'
                       : 'default'
                   }
-                />
+                /> */}
+                <div>
+                  <label
+                    className={`block mb-2 ${
+                      formik.touched.vehicle_type && formik.errors.vehicle_type
+                        ? 'text-red-500'
+                        : 'text-gray-900'
+                    }`}
+                  >
+                    {formik.touched.vehicle_type && formik.errors.vehicle_type
+                      ? formik.errors.vehicle_type
+                      : 'Name'}
+                  </label>
+                  <select
+                    id='vehicle_type'
+                    name='vehicle_type'
+                    onChange={formik.handleChange}
+                    value={formik.values.vehicle_type}
+                    className={`border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 ${
+                      formik.touched.vehicle_type && formik.errors.vehicle_type
+                        ? 'border-red-500 bg-red-200'
+                        : 'border-gray-300 bg-gray-100'
+                    }`}
+                  >
+                    <option value=''>Select Price Unit</option>
+                    {vehicleTypes?.map((type: string) => (
+                      <option
+                        key={type}
+                        value={type}
+                        className='capitalize h-20'
+                      >
+                        {type}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
                 {/* Price Ratio Nominator & Denominator */}
                 <div className='flex flex-col items-start'>
                   <label
-                    aria-label='Price Ratio (tooltip)'
+                    aria-label='Price Ratio'
                     className={`block mb-2 ${
                       formik.touched.price_ratio_nominator &&
                       formik.errors.price_ratio_nominator
@@ -134,9 +178,34 @@ export const AddDriverType = () => {
                     }`}
                   >
                     {formik.touched.price_ratio_nominator &&
-                    formik.errors.price_ratio_nominator
-                      ? formik.errors.price_ratio_nominator
-                      : 'Price Ratio'}
+                    formik.errors.price_ratio_nominator ? (
+                      formik.errors.price_ratio_nominator
+                    ) : (
+                      <div className='flex gap-x-2'>
+                        Price for
+                        <b className='text-red-500'>
+                          {formik.values.price_ratio_denominator || 0}
+                        </b>
+                        kilometer
+                        {parseInt(formik.values.price_ratio_denominator) > 1 &&
+                          's'}
+                        <Popover>
+                          <Popover.Trigger>
+                            <InformationCircleIcon className='h-5 text-gray-500 hover:text-gray-700 hover:cursor-pointer' />
+                          </Popover.Trigger>
+                          <Popover.Content>
+                            <Text css={{ p: '$5' }}>
+                              Price pe distance of{' '}
+                              <b>
+                                {formik.values.price_ratio_denominator || 0}
+                              </b>{' '}
+                              kilometers that the driver will travel to deliver
+                              the order
+                            </Text>
+                          </Popover.Content>
+                        </Popover>
+                      </div>
+                    )}
                   </label>
                   <div className='flex items-center gap-x-4 bg-gray-100 rounded-xl'>
                     <Input
@@ -186,9 +255,35 @@ export const AddDriverType = () => {
                     }`}
                   >
                     {formik.touched.additional_ratio_nominator &&
-                    formik.errors.additional_ratio_nominator
-                      ? formik.errors.additional_ratio_nominator
-                      : 'Additional Ratio'}
+                    formik.errors.additional_ratio_nominator ? (
+                      formik.errors.additional_ratio_nominator
+                    ) : (
+                      <div className='flex gap-x-2'>
+                        Additional price per
+                        <b className='text-red-500'>
+                          {formik.values.additional_ratio_denominator || 0}
+                        </b>
+                        kilometer
+                        {parseInt(formik.values.additional_ratio_denominator) >
+                          1 && 's'}
+                        <Popover>
+                          <Popover.Trigger>
+                            <InformationCircleIcon className='h-5 text-gray-500 hover:text-gray-700 hover:cursor-pointer' />
+                          </Popover.Trigger>
+                          <Popover.Content>
+                            <Text css={{ p: '$5' }}>
+                              Additional price for the distance of{' '}
+                              <b>
+                                {formik.values.additional_ratio_denominator ||
+                                  0}
+                              </b>{' '}
+                              kilometers that will be added to the initial
+                              distance
+                            </Text>
+                          </Popover.Content>
+                        </Popover>
+                      </div>
+                    )}
                   </label>
                   <div className='flex items-center gap-x-4 bg-gray-100 rounded-xl'>
                     <Input

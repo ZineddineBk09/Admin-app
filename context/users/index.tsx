@@ -29,8 +29,10 @@ export const UsersContextProvider = ({
   const refreshUsers = async () => {
     setLoading(true)
     const records: APIResponse = await getRecords('user')
-    console.log('response', records)
-    setUsers(records.results)
+
+    if (records.results) {
+      setUsers(records.results)
+    }
 
     // check if there are more users we can fetch
     setHasMore(!!records.next)

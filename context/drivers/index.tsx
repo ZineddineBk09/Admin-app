@@ -15,15 +15,14 @@ export const DriversContext = React.createContext({})
 export const useDriversContext: {
   (): {
     drivers: Driver[]
-    teams: DriverTeam[]
     driverTypes: DriverType[]
     loading: boolean
+    vehicleTypes: string[]
     handleSearchDrivers: (search: string) => void
     handleSortDrivers: (sort: Sort) => void
     handleSelectTeam: (team: string) => void
     handleSelectStatus: (status: string) => void
     refreshDrivers: () => Promise<void>
-    refreshDriverTeams: () => Promise<void>
     refreshDriverTypes: () => Promise<void>
   }
 } = () => React.useContext(DriversContext as any)
@@ -37,8 +36,18 @@ export const DriversContextProvider = ({
   const [driverTypes, setDriverTypes] = useState<DriverType[]>(
     [] as DriverType[]
   )
-  const [teams, setTeams] = useState<DriverTeam[]>([] as DriverTeam[])
   const [loading, setLoading] = useState(false)
+  const vehicleTypes = [
+    'car',
+    'van',
+    'motor',
+    'taxi',
+    'helicopter',
+    'truck',
+    'bicycle',
+    'ship',
+    'scooter',
+  ]
 
   const refreshDrivers = async () => {
     setLoading(true)
@@ -84,56 +93,12 @@ export const DriversContextProvider = ({
     // setDrivers(drivers)
   }
 
-  const refreshDriverTeams = async () => {
-    const records = await getRecords('team').then((res) =>
-      res.teams.map((team: any) => ({
-        id: team.id,
-        name: team.name,
-        fixed: team.fixed,
-        pricePerKm: team.price_per_km,
-        additional: team.additional,
-        maxDistance: team.max_distance,
-        areas: team.areas,
-        city: team.city,
-        country: team.country,
-        members: team.members,
-        supervisor: {
-          id: faker.number.int({ min: 1, max: 100 }),
-          name: faker.person.fullName(),
-        },
-      }))
-    )
-
-    // const records: DriverTeam[] = Array.from({ length: 5 }, (_, i) => ({
-    //   id: i,
-    //   name: 'Team ' + i,
-    //   members: Array.from({ length: 5 }, (_, i) => ({
-    //     id: i,
-    //     name: faker.person.fullName(),
-    //   })),
-    //   supervisor: {
-    //     id: i,
-    //     name: faker.person.fullName(),
-    //   },
-    //   fixed: faker.number.int({ min: 5, max: 100 }),
-    //   pricePerKm: faker.number.int({ min: 5, max: 100 }),
-    //   additional: faker.number.int({ min: 5, max: 100 }),
-    //   maxDistance: faker.number.int({ min: 5, max: 100 }),
-    //   areas: Array.from({ length: 3 }, (_, i) => 'area ' + i),
-    //   city: faker.location.city(),
-    //   country: faker.location.country(),
-    // }))
-
-    setTeams(records)
-  }
-
   const refreshDriverTypes = async () => {
-    const records = await getRecords('driver_type').then((res: APIResponse) => {
-      return res.results
-    })
+    const records = await getRecords('driver_type')
+
     // check if there are records
-    if (records) {
-      setDriverTypes(records)
+    if (records.results) {
+      setDriverTypes(records.results)
     }
   }
 
@@ -191,15 +156,14 @@ export const DriversContextProvider = ({
     <DriversContext.Provider
       value={{
         drivers,
-        teams,
         driverTypes,
         loading,
+        vehicleTypes,
         handleSearchDrivers,
         handleSortDrivers,
         handleSelectTeam,
         handleSelectStatus,
         refreshDrivers,
-        refreshDriverTeams,
         refreshDriverTypes,
       }}
     >

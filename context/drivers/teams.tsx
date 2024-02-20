@@ -31,7 +31,10 @@ export const TeamsContextProvider = ({
   const refreshTeams = async () => {
     setLoading(true)
     const records: APIResponse = await getRecords('team')
-    setTeams(records.results)
+    
+    if (records.results) {
+      setTeams(records.results)
+    }
 
     // check if there are more teams we can fetch
     setHasMore(!!records.next)
@@ -72,7 +75,10 @@ export const TeamsContextProvider = ({
       { city__governorate__country__name: country },
       'team'
     )
-    setTeams(records.results)
+    
+    if (records.results) {
+      setTeams(records.results)
+    }
 
     // check if there are more cities we can fetch
     setHasMore(!!records.next)

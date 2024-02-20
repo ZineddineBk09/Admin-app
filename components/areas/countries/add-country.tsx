@@ -1,4 +1,12 @@
-import { Button, Input, Modal, Text, Loading, Tooltip } from '@nextui-org/react'
+import {
+  Button,
+  Input,
+  Modal,
+  Text,
+  Loading,
+  Tooltip,
+  Popover,
+} from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../../styles/flex'
 import { useFormik } from 'formik'
@@ -8,6 +16,7 @@ import { createRecord } from '../../../lib/api'
 import toast from 'react-hot-toast'
 import { useAreasCountriesContext } from '../../../context/areas/countries'
 import { Currency } from '../../../interfaces'
+import { InformationCircleIcon } from '@heroicons/react/24/outline'
 
 export const AddCountry = () => {
   const [visible, setVisible] = React.useState(false)
@@ -21,12 +30,28 @@ export const AddCountry = () => {
       price_unit: '',
       order_fees: 0,
       driver_fees: 0,
+      price_ratio_nominator: 0,
+      price_ratio_denominator: 0,
+      additional_ratio_nominator: 0,
+      additional_ratio_denominator: 0,
     },
     validationSchema: Yup.object({
       name: Yup.string().required('name is required'),
       price_unit: Yup.string().required('price unit is required'),
       order_fees: Yup.number().required('order fee is required'),
       driver_fees: Yup.number().required('driver fee is required'),
+      price_ratio_nominator: Yup.number()
+        .required('price ratio nominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
+      price_ratio_denominator: Yup.number()
+        .required('price ratio denominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
+      additional_ratio_nominator: Yup.number()
+        .required('additional ratio nominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
+      additional_ratio_denominator: Yup.number()
+        .required('additional ratio denominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
     }),
     onSubmit: async (values) => {
       const price_unit = currencies?.find(
@@ -194,6 +219,167 @@ export const AddCountry = () => {
                       : 'default'
                   }
                 />
+                {/* Price Ratio Nominator & Denominator */}
+                <div className='flex flex-col items-start'>
+                  <label
+                    aria-label='Price Ratio'
+                    className={`block mb-2 ${
+                      formik.touched.price_ratio_nominator &&
+                      formik.errors.price_ratio_nominator
+                        ? 'text-red-500'
+                        : 'text-gray-900'
+                    }`}
+                  >
+                    {formik.touched.price_ratio_nominator &&
+                    formik.errors.price_ratio_nominator ? (
+                      formik.errors.price_ratio_nominator
+                    ) : (
+                      <div className='flex gap-x-2'>
+                        Price for
+                        <b className='text-red-500'>
+                          {formik.values.price_ratio_denominator || 0}
+                        </b>
+                        kilometer
+                        {formik.values.price_ratio_denominator > 1 && 's'}
+                        <Popover>
+                          <Popover.Trigger>
+                            <InformationCircleIcon className='h-5 text-gray-500 hover:text-gray-700 hover:cursor-pointer' />
+                          </Popover.Trigger>
+                          <Popover.Content>
+                            <Text css={{ p: '$5' }}>
+                              Price pe distance of{' '}
+                              <b>
+                                {formik.values.price_ratio_denominator || 0}
+                              </b>{' '}
+                              kilometers that the driver will travel to deliver
+                              the order
+                            </Text>
+                          </Popover.Content>
+                        </Popover>
+                      </div>
+                    )}
+                  </label>
+                  <div className='flex items-center gap-x-4 bg-gray-100 rounded-xl'>
+                    <Input
+                      clearable
+                      size='lg'
+                      contentRight={
+                        <span className='text-gray-500'>
+                          {formik.values.price_unit || 'Unit'}
+                        </span>
+                      }
+                      placeholder={formik.values.price_unit || 'Unit'}
+                      name='price_ratio_nominator'
+                      id='price_ratio_nominator'
+                      value={formik.values.price_ratio_nominator}
+                      onChange={formik.handleChange}
+                      status={
+                        formik.touched.price_ratio_nominator &&
+                        formik.errors.price_ratio_nominator
+                          ? 'error'
+                          : 'default'
+                      }
+                    />
+                    <b>/</b>
+                    <Input
+                      clearable
+                      size='lg'
+                      contentRight={<span className='text-gray-500'>KM</span>}
+                      placeholder='KM'
+                      name='price_ratio_denominator'
+                      id='price_ratio_denominator'
+                      value={formik.values.price_ratio_denominator}
+                      onChange={formik.handleChange}
+                      status={
+                        formik.touched.price_ratio_denominator &&
+                        formik.errors.price_ratio_denominator
+                          ? 'error'
+                          : 'default'
+                      }
+                    />
+                  </div>
+                </div>
+                {/* Additional Ratio Nominator & Denominator */}
+                <div className='flex flex-col items-start'>
+                  <label
+                    aria-label='Additional Ratio'
+                    className={`block mb-2 ${
+                      formik.touched.additional_ratio_nominator &&
+                      formik.errors.additional_ratio_nominator
+                        ? 'text-red-500'
+                        : 'text-gray-900'
+                    }`}
+                  >
+                    {formik.touched.additional_ratio_nominator &&
+                    formik.errors.additional_ratio_nominator ? (
+                      formik.errors.additional_ratio_nominator
+                    ) : (
+                      <div className='flex gap-x-2'>
+                        Additional price per
+                        <b className='text-red-500'>
+                          {formik.values.additional_ratio_denominator || 0}
+                        </b>
+                        kilometer
+                        {formik.values.additional_ratio_denominator > 1 && 's'}
+                        <Popover>
+                          <Popover.Trigger>
+                            <InformationCircleIcon className='h-5 text-gray-500 hover:text-gray-700 hover:cursor-pointer' />
+                          </Popover.Trigger>
+                          <Popover.Content>
+                            <Text css={{ p: '$5' }}>
+                              Additional price for the distance of{' '}
+                              <b>
+                                {formik.values.additional_ratio_denominator ||
+                                  0}
+                              </b>{' '}
+                              kilometers that will be added to the initial
+                              distance
+                            </Text>
+                          </Popover.Content>
+                        </Popover>
+                      </div>
+                    )}
+                  </label>
+                  <div className='flex items-center gap-x-4 bg-gray-100 rounded-xl'>
+                    <Input
+                      clearable
+                      size='lg'
+                      contentRight={
+                        <span className='text-gray-500'>
+                          {formik.values.price_unit || 'Unit'}
+                        </span>
+                      }
+                      placeholder={formik.values.price_unit || 'Unit'}
+                      name='additional_ratio_nominator'
+                      id='additional_ratio_nominator'
+                      value={formik.values.additional_ratio_nominator}
+                      onChange={formik.handleChange}
+                      status={
+                        formik.touched.additional_ratio_nominator &&
+                        formik.errors.additional_ratio_nominator
+                          ? 'error'
+                          : 'default'
+                      }
+                    />
+                    <b>/</b>
+                    <Input
+                      clearable
+                      size='lg'
+                      contentRight={<span className='text-gray-500'>KM</span>}
+                      placeholder='KM'
+                      name='additional_ratio_denominator'
+                      id='additional_ratio_denominator'
+                      value={formik.values.additional_ratio_denominator}
+                      onChange={formik.handleChange}
+                      status={
+                        formik.touched.additional_ratio_denominator &&
+                        formik.errors.additional_ratio_denominator
+                          ? 'error'
+                          : 'default'
+                      }
+                    />
+                  </div>
+                </div>
               </Flex>
             </Modal.Body>
 

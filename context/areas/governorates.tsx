@@ -32,7 +32,12 @@ export const AreasGovernoratesContextProvider = ({
   const refreshGovernorates = async () => {
     setLoading(true)
     const records: APIResponse = await getRecords('governorate')
-    setGovernorates(records.results)
+
+    if (records.results) {
+      setGovernorates(records.results)
+    }
+
+    setHasMore(!!records.next)
     setLoading(false)
   }
 
@@ -48,7 +53,10 @@ export const AreasGovernoratesContextProvider = ({
       { country__name: country },
       'governorate'
     )
-    setGovernorates(records.results)
+
+    if (records.results) {
+      setGovernorates(records.results)
+    }
 
     // check if there are more governorates we can fetch
     setHasMore(!!records.next)

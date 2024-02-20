@@ -32,7 +32,10 @@ export const AreasCountriesContextProvider = ({
   const refreshCountries = async () => {
     setLoading(true)
     const records: APIResponse = await getRecords('country')
-    setCountries(records.results)
+
+    if (records.results) {
+      setCountries(records.results)
+    }
 
     // check if there are more cities we can fetch
     setHasMore(!!records.next)
@@ -43,7 +46,11 @@ export const AreasCountriesContextProvider = ({
   const refreshCurrencies = async () => {
     setLoading(true)
     const records: APIResponse = await getRecords('currency')
-    setCurrencies(records.results)
+
+    if (records.results) {
+      setCurrencies(records.results)
+    }
+
     setLoading(false)
   }
 

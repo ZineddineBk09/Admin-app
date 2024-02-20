@@ -1,4 +1,12 @@
-import { Button, Input, Modal, Text, Loading, Tooltip } from '@nextui-org/react'
+import {
+  Button,
+  Input,
+  Modal,
+  Text,
+  Loading,
+  Tooltip,
+  Popover,
+} from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../../styles/flex'
 import { useFormik } from 'formik'
@@ -9,6 +17,7 @@ import { Country, Governorate } from '../../../interfaces'
 import toast from 'react-hot-toast'
 import { createRecord } from '../../../lib/api'
 import { useAreasCitiesContext } from '../../../context/areas/cities'
+import { InformationCircleIcon } from '@heroicons/react/24/outline'
 
 export const AddCity = () => {
   const [visible, setVisible] = React.useState(false)
@@ -32,18 +41,18 @@ export const AddCity = () => {
       name: Yup.string().required('name is required'),
       governorate: Yup.string().required('governorate is required'),
       order_fees: Yup.number().required('order fees is required'),
-      price_ratio_nominator: Yup.number().required(
-        'price ratio nominator is required'
-      ),
-      price_ratio_denominator: Yup.number().required(
-        'price ratio denominator is required'
-      ),
-      additional_ratio_nominator: Yup.number().required(
-        'additional ratio nominator is required'
-      ),
-      additional_ratio_denominator: Yup.number().required(
-        'additional ratio denominator is required'
-      ),
+      price_ratio_nominator: Yup.number()
+        .required('price ratio nominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
+      price_ratio_denominator: Yup.number()
+        .required('price ratio denominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
+      additional_ratio_nominator: Yup.number()
+        .required('additional ratio nominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
+      additional_ratio_denominator: Yup.number()
+        .required('additional ratio denominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
     }),
     onSubmit: async (values) => {
       const governorate = governorates?.find(
@@ -235,18 +244,45 @@ export const AddCity = () => {
                     }`}
                   >
                     {formik.touched.price_ratio_nominator &&
-                    formik.errors.price_ratio_nominator
-                      ? formik.errors.price_ratio_nominator
-                      : 'Price Ratio'}
+                    formik.errors.price_ratio_nominator ? (
+                      formik.errors.price_ratio_nominator
+                    ) : (
+                      <div className='flex gap-x-2'>
+                        Price for
+                        <b className='text-red-500'>
+                          {formik.values.price_ratio_denominator || 0}
+                        </b>
+                        kilometer
+                        {parseInt(formik.values.price_ratio_denominator) > 1 &&
+                          's'}
+                        <Popover>
+                          <Popover.Trigger>
+                            <InformationCircleIcon className='h-5 text-gray-500 hover:text-gray-700 hover:cursor-pointer' />
+                          </Popover.Trigger>
+                          <Popover.Content>
+                            <Text css={{ p: '$5' }}>
+                              Price pe distance of{' '}
+                              <b>
+                                {formik.values.price_ratio_denominator || 0}
+                              </b>{' '}
+                              kilometers that the driver will travel to deliver
+                              the order
+                            </Text>
+                          </Popover.Content>
+                        </Popover>
+                      </div>
+                    )}
                   </label>
                   <div className='flex items-center gap-x-4 bg-gray-100 rounded-xl'>
                     <Input
                       clearable
                       size='lg'
                       contentRight={
-                        <span className='text-gray-500'>{priceUnit}</span>
+                        <span className='text-gray-500'>
+                          {priceUnit || 'Unit'}
+                        </span>
                       }
-                      placeholder={priceUnit}
+                      placeholder={priceUnit || 'Unit'}
                       name='price_ratio_nominator'
                       id='price_ratio_nominator'
                       value={formik.values.price_ratio_nominator}
@@ -289,18 +325,46 @@ export const AddCity = () => {
                     }`}
                   >
                     {formik.touched.additional_ratio_nominator &&
-                    formik.errors.additional_ratio_nominator
-                      ? formik.errors.additional_ratio_nominator
-                      : 'Additional Ratio'}
+                    formik.errors.additional_ratio_nominator ? (
+                      formik.errors.additional_ratio_nominator
+                    ) : (
+                      <div className='flex gap-x-2'>
+                        Additional price per
+                        <b className='text-red-500'>
+                          {formik.values.additional_ratio_denominator || 0}
+                        </b>
+                        kilometer
+                        {parseInt(formik.values.additional_ratio_denominator) >
+                          1 && 's'}
+                        <Popover>
+                          <Popover.Trigger>
+                            <InformationCircleIcon className='h-5 text-gray-500 hover:text-gray-700 hover:cursor-pointer' />
+                          </Popover.Trigger>
+                          <Popover.Content>
+                            <Text css={{ p: '$5' }}>
+                              Additional price for the distance of{' '}
+                              <b>
+                                {formik.values.additional_ratio_denominator ||
+                                  0}
+                              </b>{' '}
+                              kilometers that will be added to the initial
+                              distance
+                            </Text>
+                          </Popover.Content>
+                        </Popover>
+                      </div>
+                    )}
                   </label>
                   <div className='flex items-center gap-x-4 bg-gray-100 rounded-xl'>
                     <Input
                       clearable
                       size='lg'
                       contentRight={
-                        <span className='text-gray-500'>{priceUnit}</span>
+                        <span className='text-gray-500'>
+                          {priceUnit || 'Unit'}
+                        </span>
                       }
-                      placeholder={priceUnit}
+                      placeholder={priceUnit || 'Unit'}
                       name='additional_ratio_nominator'
                       id='additional_ratio_nominator'
                       value={formik.values.additional_ratio_nominator}
