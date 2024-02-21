@@ -220,7 +220,7 @@ export const AddCountry = () => {
                   }
                 />
                 {/* Price Ratio Nominator & Denominator */}
-                {/* <div className='flex flex-col items-start'>
+                <div className='flex flex-col items-start'>
                   <label
                     aria-label='Price Ratio'
                     className={`block mb-2 ${
@@ -298,9 +298,9 @@ export const AddCountry = () => {
                       }
                     />
                   </div>
-                </div> */}
+                </div>
                 {/* Additional Ratio Nominator & Denominator */}
-                {/* <div className='flex flex-col items-start'>
+                <div className='flex flex-col items-start'>
                   <label
                     aria-label='Additional Ratio'
                     className={`block mb-2 ${
@@ -379,7 +379,7 @@ export const AddCountry = () => {
                       }
                     />
                   </div>
-                </div> */}
+                </div>
               </Flex>
             </Modal.Body>
 
