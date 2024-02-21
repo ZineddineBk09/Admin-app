@@ -30,28 +30,28 @@ export const AddCountry = () => {
       price_unit: '',
       order_fees: 0,
       driver_fees: 0,
-      // price_ratio_nominator: 0,
-      // price_ratio_denominator: 0,
-      // additional_ratio_nominator: 0,
-      // additional_ratio_denominator: 0,
+      price_ratio_nominator: 0,
+      price_ratio_denominator: 0,
+      additional_ratio_nominator: 0,
+      additional_ratio_denominator: 0,
     },
     validationSchema: Yup.object({
       name: Yup.string().required('name is required'),
       price_unit: Yup.string().required('price unit is required'),
       order_fees: Yup.number().required('order fee is required'),
       driver_fees: Yup.number().required('driver fee is required'),
-      // price_ratio_nominator: Yup.number()
-      //   .required('price ratio nominator is required')
-      //   .min(1, 'price ratio denominator must be greater than 0'),
-      // price_ratio_denominator: Yup.number()
-      //   .required('price ratio denominator is required')
-      //   .min(1, 'price ratio denominator must be greater than 0'),
-      // additional_ratio_nominator: Yup.number()
-      //   .required('additional ratio nominator is required')
-      //   .min(1, 'price ratio denominator must be greater than 0'),
-      // additional_ratio_denominator: Yup.number()
-      //   .required('additional ratio denominator is required')
-      //   .min(1, 'price ratio denominator must be greater than 0'),
+      price_ratio_nominator: Yup.number()
+        .required('price ratio nominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
+      price_ratio_denominator: Yup.number()
+        .required('price ratio denominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
+      additional_ratio_nominator: Yup.number()
+        .required('additional ratio nominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
+      additional_ratio_denominator: Yup.number()
+        .required('additional ratio denominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
     }),
     onSubmit: async (values) => {
       const price_unit = currencies?.find(
