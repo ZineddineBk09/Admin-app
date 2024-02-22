@@ -25,9 +25,10 @@ export const AddCity = () => {
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
   const { refreshCities } = useAreasCitiesContext()
-  const { governorates } = useAreasGovernoratesContext()
+  const { governorates, handleFilter } = useAreasGovernoratesContext()
   const { countries } = useAreasCountriesContext()
   const [priceUnit, setPriceUnit] = React.useState<string>('')
+  const [selectedContry, setSelectedContry] = React.useState<string>('')
 
   const formik = useFormik({
     initialValues: {
@@ -113,8 +114,6 @@ export const AddCity = () => {
     }
   }
 
-  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {}
-
   const closeHandler = () => {
     setVisible(false)
   }
@@ -182,32 +181,23 @@ export const AddCity = () => {
                 <div>
                   <label
                     aria-label='Country'
-                    className={`block mb-2 ${
-                      formik.touched.governorate && formik.errors.governorate
-                        ? 'text-red-500'
-                        : 'text-gray-900'
-                    }`}
+                    className='block mb-2 text-gray-900'
                   >
-                    {formik.touched.governorate && formik.errors.governorate
-                      ? formik.errors.governorate
-                      : 'Country'}
+                    Country
                   </label>
                   <select
-                    id='governorate'
-                    name='governorate'
-                    onChange={(e) => {
-                      handleCountryChange(e)
+                    id='country'
+                    name='country'
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                      setSelectedContry(e.target.value)
+                      handleFilter(e.target.value)
                     }}
-                    value={formik.values.governorate}
-                    className={`border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 ${
-                      formik.touched.governorate && formik.errors.governorate
-                        ? 'border-red-500 bg-red-200'
-                        : 'border-gray-300 bg-gray-100'
-                    }`}
+                    value={selectedContry}
+                    className='border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 border-gray-300 bg-gray-100'
                   >
                     <option value=''>Select Country</option>
                     {countries?.map((country: Country) => (
-                      <option key={country.id} value={country.id}>
+                      <option key={country.id} value={country.name}>
                         {country.name}
                       </option>
                     ))}
