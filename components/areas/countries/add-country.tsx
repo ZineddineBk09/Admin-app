@@ -83,6 +83,10 @@ export const AddCountry = () => {
     },
   })
 
+  const getCurrencySymbol = (id: string) =>
+    currencies?.find((currency: Currency) => currency.id === id)?.symbol ||
+    'Unit'
+
   const closeHandler = () => {
     setVisible(false)
   }
@@ -265,10 +269,10 @@ export const AddCountry = () => {
                       size='lg'
                       contentRight={
                         <span className='text-gray-500'>
-                          {formik.values.price_unit || 'Unit'}
+                          {getCurrencySymbol(formik.values.price_unit)}
                         </span>
                       }
-                      placeholder={formik.values.price_unit || 'Unit'}
+                      placeholder={getCurrencySymbol(formik.values.price_unit)}
                       name='price_ratio_nominator'
                       id='price_ratio_nominator'
                       value={formik.values.price_ratio_nominator}
@@ -346,10 +350,10 @@ export const AddCountry = () => {
                       size='lg'
                       contentRight={
                         <span className='text-gray-500'>
-                          {formik.values.price_unit || 'Unit'}
+                          {getCurrencySymbol(formik.values.price_unit)}
                         </span>
                       }
-                      placeholder={formik.values.price_unit || 'Unit'}
+                      placeholder={getCurrencySymbol(formik.values.price_unit)}
                       name='additional_ratio_nominator'
                       id='additional_ratio_nominator'
                       value={formik.values.additional_ratio_nominator}
