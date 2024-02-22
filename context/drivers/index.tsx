@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Driver, DriverTeam, Sort } from '../../interfaces'
+import {
+  APIResponse,
+  Driver,
+  DriverTeam,
+  DriverType,
+  Sort,
+} from '../../interfaces'
 import { getRecords } from '../../lib/api'
 import { searchDrivers } from '../../lib/search'
 import { faker } from '@faker-js/faker'
@@ -9,14 +15,15 @@ export const DriversContext = React.createContext({})
 export const useDriversContext: {
   (): {
     drivers: Driver[]
-    teams: DriverTeam[]
+    driverTypes: DriverType[]
     loading: boolean
+    vehicleTypes: string[]
     handleSearchDrivers: (search: string) => void
     handleSortDrivers: (sort: Sort) => void
     handleSelectTeam: (team: string) => void
     handleSelectStatus: (status: string) => void
     refreshDrivers: () => Promise<void>
-    refreshDriverTeams: () => Promise<void>
+    refreshDriverTypes: () => Promise<void>
   }
 } = () => React.useContext(DriversContext as any)
 
@@ -26,14 +33,26 @@ export const DriversContextProvider = ({
   children: React.ReactNode
 }) => {
   const [drivers, setDrivers] = useState<Driver[]>([] as Driver[])
-  const [teams, setTeams] = useState<DriverTeam[]>([] as DriverTeam[])
+  const [driverTypes, setDriverTypes] = useState<DriverType[]>(
+    [] as DriverType[]
+  )
   const [loading, setLoading] = useState(false)
+  const vehicleTypes = [
+    'car',
+    'van',
+    'motor',
+    'taxi',
+    'helicopter',
+    'truck',
+    'bicycle',
+    'ship',
+    'scooter',
+  ]
 
   const refreshDrivers = async () => {
     setLoading(true)
     // setDrivers([] as Driver[])
     const records = await getRecords('driver').then((res) => res.data)
-    console.log('drivers: ', records)
 
     setDrivers(
       records?.map(
@@ -74,47 +93,13 @@ export const DriversContextProvider = ({
     // setDrivers(drivers)
   }
 
-  const refreshDriverTeams = async () => {
-    const records = await getRecords('team').then((res) =>
-      res.teams.map((team: any) => ({
-        id: team.pk,
-        name: team.fields.name,
-        fixed: team.fields.fixed,
-        pricePerKm: team.fields.price_per_km,
-        additional: team.fields.additional,
-        maxDistance: team.fields.max_distance,
-        areas: team.fields.areas,
-        city: team.fields.city,
-        country: team.fields.country,
-        members: team.fields.members,
-        supervisor: {
-          id: faker.number.int({ min: 1, max: 100 }),
-          name: faker.person.fullName(),
-        },
-      }))
-    )
+  const refreshDriverTypes = async () => {
+    const records = await getRecords('driver_type')
 
-    // const records: DriverTeam[] = Array.from({ length: 5 }, (_, i) => ({
-    //   id: i,
-    //   name: 'Team ' + i,
-    //   members: Array.from({ length: 5 }, (_, i) => ({
-    //     id: i,
-    //     name: faker.person.fullName(),
-    //   })),
-    //   supervisor: {
-    //     id: i,
-    //     name: faker.person.fullName(),
-    //   },
-    //   fixed: faker.number.int({ min: 5, max: 100 }),
-    //   pricePerKm: faker.number.int({ min: 5, max: 100 }),
-    //   additional: faker.number.int({ min: 5, max: 100 }),
-    //   maxDistance: faker.number.int({ min: 5, max: 100 }),
-    //   areas: Array.from({ length: 3 }, (_, i) => 'area ' + i),
-    //   city: faker.location.city(),
-    //   country: faker.location.country(),
-    // }))
-
-    setTeams(records)
+    // check if there are records
+    if (records.results) {
+      setDriverTypes(records.results)
+    }
   }
 
   const handleSearchDrivers = (search: string) => {
@@ -162,22 +147,24 @@ export const DriversContextProvider = ({
   }
 
   useEffect(() => {
-    refreshDrivers()
-    refreshDriverTeams()
+    // refreshDrivers()
+    // refreshDriverTeams()
+    refreshDriverTypes()
   }, [])
 
   return (
     <DriversContext.Provider
       value={{
         drivers,
-        teams,
+        driverTypes,
         loading,
+        vehicleTypes,
         handleSearchDrivers,
         handleSortDrivers,
         handleSelectTeam,
         handleSelectStatus,
         refreshDrivers,
-        refreshDriverTeams,
+        refreshDriverTypes,
       }}
     >
       {children}

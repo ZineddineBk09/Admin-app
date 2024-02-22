@@ -1,6 +1,6 @@
 import React from 'react'
-import { Order } from '@/interfaces'
-import { MakePayment } from '../reports/payment'
+import { Order } from '../../../interfaces'
+import { MakePayment } from '../../reports/payment'
 
 interface Props {
   order: Order | any

@@ -3,8 +3,8 @@ import React from 'react'
 import { Flex } from '../styles/flex'
 import { ReportsTable } from '../table/reports/reports-table'
 import { PrintIcon } from '../icons/table'
-import { exportToExcel } from '@/utils'
-import { useReportsContext } from '@/context/reports'
+import { exportToExcel } from '../../utils'
+import { useReportsContext } from '../../context/reports'
 
 export const ReportsPage = () => {
   const [openTab, setOpenTab] = React.useState(1)

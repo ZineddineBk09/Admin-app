@@ -2,11 +2,15 @@ import { Button, Loading, Modal, Text, Tooltip } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../../styles/flex'
 import { BinIcon } from '../../../components/icons/areas'
+import { deleteRecord } from '../../../lib/api'
+import { useAreasGovernoratesContext } from '../../../context/areas/governorates'
+import toast from 'react-hot-toast'
 
 export const DeleteGovernorate = ({ id }: { id: string }) => {
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
+  const { refreshGovernorates } = useAreasGovernoratesContext()
 
   const closeHandler = () => {
     setVisible(false)
@@ -14,14 +18,18 @@ export const DeleteGovernorate = ({ id }: { id: string }) => {
 
   const handleDelete = async () => {
     setLoading(true)
-    // await deleteGovernorate(id)
-    // closeHandler()
-    // setLoading(false)
-    // refreshGovernorates()
-    setLoading(false)
-    closeHandler()
+    await deleteRecord(id, 'governorate')
+      .then((res: any) => {
+        setLoading(false)
+        closeHandler()
+        toast.success('Governorate deleted successfully')
+        refreshGovernorates()
+      })
+      .catch((err) => {
+        toast.error('Error deleting governorate!')
+      })
   }
-
+  
   return (
     <div>
       <Tooltip

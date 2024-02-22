@@ -1,11 +1,11 @@
 import { Loading, Modal, Text, Tooltip } from '@nextui-org/react'
 import React from 'react'
-import { Flex } from '../styles/flex'
-import { IconButton } from '../table/table.styled'
-import { deleteRecord } from '@/lib/api'
-import { useOrdersContext } from '@/context/order'
-import { CancelIcon } from '../icons/orders'
-import { ConfirmModal } from '../shared/confirm-modal'
+import { Flex } from '../../styles/flex'
+import { IconButton } from '../../table/table.styled'
+import { deleteRecord } from '../../../lib/api'
+import { useOrdersContext } from '../../../context/orders'
+import { CancelIcon } from '../../icons/orders'
+import { ConfirmModal } from '../../shared/confirm-modal'
 
 export const CancelOrder = ({
   id,

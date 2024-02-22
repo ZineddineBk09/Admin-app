@@ -1,5 +1,5 @@
-import { Branch } from '@/interfaces'
-import { searchBranches } from '@/lib/search'
+import { Branch } from '../../interfaces'
+import { searchBranches } from '../../lib/search'
 import React, { useEffect, useState } from 'react'
 import { faker } from '@faker-js/faker'
 

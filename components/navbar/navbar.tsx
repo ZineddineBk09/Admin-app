@@ -2,7 +2,6 @@ import { Navbar } from '@nextui-org/react'
 import React from 'react'
 import { Box } from '../styles/box'
 import { BurguerButton } from './burguer-button'
-import { useRouter } from 'next/router'
 
 interface Props {
   children: React.ReactNode

@@ -13,11 +13,13 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { createRecord } from '../../../lib/api'
 import toast from 'react-hot-toast'
+import { useAreasCountriesContext } from '../../../context/areas/countries'
 
 export const AddCurrency = () => {
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
+  const { refreshCurrencies } = useAreasCountriesContext()
 
   const formik = useFormik({
     initialValues: {
@@ -57,6 +59,7 @@ export const AddCurrency = () => {
         .then((res) => {
           if (res) {
             setVisible(false)
+            refreshCurrencies()
             toast.success('Currency added successfully')
           }
         })

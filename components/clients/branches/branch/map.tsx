@@ -125,7 +125,6 @@ const BranchMap = () => {
           <EditControl
             position='bottomleft'
             onCreated={(e: any) => {
-              console.log('Created branch: ', e.layer._latlng)
               setPosition(e.layer._latlng)
             }}
             onEdited={(e: any) => {

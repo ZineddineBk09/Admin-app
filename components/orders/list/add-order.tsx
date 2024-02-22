@@ -1,18 +1,11 @@
-import {
-  Button,
-  Input,
-  Modal,
-  Text,
-  Loading,
-  Radio,
-} from '@nextui-org/react'
+import { Button, Input, Modal, Text, Loading, Radio } from '@nextui-org/react'
 import React from 'react'
-import { Flex } from '../styles/flex'
+import { Flex } from '../../styles/flex'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { createRecord, getRecords } from '@/lib/api'
-import { Team } from '@/interfaces'
-import { useOrdersContext } from '@/context/order'
+import { createRecord, getRecords } from '../../../lib/api'
+import { Team } from '../../../interfaces'
+import { useOrdersContext } from '../../../context/orders'
 
 export const AddOrder = () => {
   const [visible, setVisible] = React.useState(false)
@@ -20,7 +13,6 @@ export const AddOrder = () => {
   const [error, setError] = React.useState<string>('')
   const [loading, setLoading] = React.useState<boolean>(false)
   const [teams, setTeams] = React.useState<Team[]>([])
-  const { handleSelectTeam } = useOrdersContext()
 
   const formik = useFormik({
     initialValues: {
@@ -47,7 +39,7 @@ export const AddOrder = () => {
     onSubmit: async (values) => {
       // use createRecord function to create a new record
       setLoading(true)
-      console.log(values)
+
       const response = await createRecord(
         {
           username: values.username,
@@ -65,7 +57,6 @@ export const AddOrder = () => {
       if (response.status) {
         setVisible(false)
         setLoading(false)
-        handleSelectTeam('')
       } else {
         setError('Something went wrong')
         setLoading(false)
@@ -79,8 +70,12 @@ export const AddOrder = () => {
 
   React.useEffect(() => {
     const fetchTeams = async () => {
-      const uniqueTeams = await getRecords('team').then((res: any) => res.teams)
-      setTeams(uniqueTeams)
+      await getRecords('team')
+        .then((res: { teams: Team[] }) => setTeams(res.teams))
+        .catch((err: any) => {
+          setTeams([])
+          console.log('Error in fetching teams: ', err)
+        })
     }
     //fetchTeams()
   }, [])
@@ -253,8 +248,8 @@ export const AddOrder = () => {
                     >
                       <option value=''>Select Team</option>
                       {teams?.map((team: Team, index: number) => (
-                        <option key={index} value={team.pk}>
-                          {team.fields.name}
+                        <option key={index} value={team.id}>
+                          {team.name}
                         </option>
                       ))}
                     </select>

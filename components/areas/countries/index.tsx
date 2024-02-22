@@ -9,16 +9,29 @@ import { useAreasCountriesContext } from '../../../context/areas/countries'
 import { useFormik } from 'formik'
 import { updateRecord } from '../../../lib/api'
 import toast from 'react-hot-toast'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import Loading from '../../shared/loading'
 
 const Countries = () => {
-  const { countries } = useAreasCountriesContext()
+  const { countries, hasMore, fetchNextPage } = useAreasCountriesContext()
 
   return (
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
-      <div className='w-full flex flex-col items-center gap-y-6'>
-        {countries?.map((country: Country, index: number) => (
-          <CountryCard key={country.id} country={country} />
-        ))}
+      <div className='w-full'>
+        <InfiniteScroll
+          dataLength={countries?.length}
+          hasMore={hasMore}
+          next={fetchNextPage}
+          loader={
+            <span className='font-bold text-lg text-center'>Loading...</span>
+          }
+          endMessage={<div className='w-1/2 h-1 bg-gray-500' />}
+          className='w-full flex flex-col items-center gap-y-6'
+        >
+          {countries?.map((country: Country) => (
+            <CountryCard key={country.id} country={country} />
+          ))}
+        </InfiniteScroll>
       </div>
       {/* add country button */}
       <AddCountry />
@@ -45,7 +58,6 @@ const CountryCard = ({ country }: { country: Country }) => {
       const price_unit = currencies?.find(
         (currency: Currency) => currency.id === formik.values.price_unit
       )
-      console.log('price_unit: ', ``)
       if (!price_unit) {
         toast.error('Price unit not found!')
         return
@@ -55,13 +67,12 @@ const CountryCard = ({ country }: { country: Country }) => {
           ...values,
           id: country.id,
           name: country.name,
-          price_unit,
+          price_unit: price_unit?.id,
         },
         'country'
       )
         .then((res) => {
           if (res) {
-            console.log('res: ', res)
             toast.success('Country updated successfully')
 
             refreshCountries()
@@ -196,6 +207,7 @@ const SaveButton = (submit: MouseEventHandler<HTMLButtonElement>) => {
     <button
       onClick={submit}
       className='bg-primary-500 text-black px-6 py-2 rounded-md hover:bg-primary'
+      type='button'
     >
       Save
     </button>

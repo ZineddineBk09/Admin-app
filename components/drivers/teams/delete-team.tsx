@@ -1,12 +1,16 @@
 import { Button, Loading, Modal, Text, Tooltip } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../../styles/flex'
-import { BinIcon } from '@/components/icons/areas'
+import { BinIcon } from '../../../components/icons/areas'
+import { deleteRecord } from '../../../lib/api'
+import toast from 'react-hot-toast'
+import { useTeamsContext } from '../../../context/drivers/teams'
 
-export const DeleteDriverTeam = ({ id }: { id: number }) => {
+export const DeleteDriverTeam = ({ id }: { id: string }) => {
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
+  const { refreshTeams } = useTeamsContext()
 
   const closeHandler = () => {
     setVisible(false)
@@ -14,12 +18,16 @@ export const DeleteDriverTeam = ({ id }: { id: number }) => {
 
   const handleDelete = async () => {
     setLoading(true)
-    // await deleteDriverTeam(id)
-    // closeHandler()
-    // setLoading(false)
-    // refreshDriverTeams()
-    setLoading(false)
-    closeHandler()
+    await deleteRecord(id, 'team')
+      .then((res: any) => {
+        setLoading(false)
+        closeHandler()
+        toast.success('Team deleted successfully')
+        refreshTeams()
+      })
+      .catch((err) => {
+        toast.error('Error deleting team!')
+      })
   }
 
   return (
@@ -58,7 +66,7 @@ export const DeleteDriverTeam = ({ id }: { id: number }) => {
                 '@lg': { flexWrap: 'nowrap', gap: '$12' },
               }}
             >
-              <Text h5>Are you sure you want to delete this country?</Text>
+              <Text h5>Are you sure you want to delete this team?</Text>
               <Text h6 color='error'>
                 This action cannot be undone
               </Text>

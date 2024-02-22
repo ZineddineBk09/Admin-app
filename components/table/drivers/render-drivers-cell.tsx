@@ -1,8 +1,8 @@
 import { Col, Row, User } from '@nextui-org/react'
 import React from 'react'
-import { DeleteDriver } from '../drivers/list/delete-driver'
-import { EditDriver } from '../drivers/list/edit-driver'
-import { Driver } from '@/interfaces'
+import { DeleteDriver } from '../../drivers/list/delete-driver'
+import { EditDriver } from '../../drivers/list/edit-driver'
+import { Driver } from '../../../interfaces'
 
 interface Props {
   driver: Driver | any

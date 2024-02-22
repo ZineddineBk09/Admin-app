@@ -33,7 +33,6 @@ const CityMap = ({ city }: { city: City }) => {
   } = city
 
   const handleCreated = async (e: any) => {
-    console.log('Created', e.layer.editing.latlngs[0])
     const geojson: GeoJSONObject = e.layer.toGeoJSON()
 
     const apiFormat = geojson.geometry.coordinates[0].map(
@@ -55,17 +54,6 @@ const CityMap = ({ city }: { city: City }) => {
     )
       .then(async (res) => {
         if (res) {
-          console.log({
-            id,
-            name,
-            governorate: governorate?.id,
-            order_fees,
-            price_ratio_nominator,
-            price_ratio_denominator,
-            additional_ratio_nominator,
-            additional_ratio_denominator,
-            geofence: res?.id,
-          })
           await updateRecord(
             {
               id,
@@ -82,7 +70,6 @@ const CityMap = ({ city }: { city: City }) => {
           )
             .then((res) => {
               if (res) {
-                console.log('res update: ', res)
                 toast.success('City geofence added successfully')
 
                 refreshCities()
@@ -104,26 +91,6 @@ const CityMap = ({ city }: { city: City }) => {
     const updatedPolygons: GeoJSONObject[] = editedLayers.map((layer: any) =>
       layer.toGeoJSON()
     )
-    console.log('updatedPolygons:', updatedPolygons)
-    // Assuming you have an API endpoint to update city polygons:
-    // const apiUrl = '/api/city-polygons'
-    // const requestOptions = {
-    //   method: 'PUT',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ updatedPolygons }),
-    // }
-
-    // fetch(apiUrl, requestOptions)
-    //   .then((response) => response.json())
-    //   .then((updatedData) => {
-    //     // Update state, map, or other components based on success
-    //     console.log('City polygon updated:', updatedData)
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error updating city polygon:', error)
-    //     // Handle errors here
-    //   })
-
   }
 
   const handleDeleted = () => {
@@ -149,7 +116,7 @@ const CityMap = ({ city }: { city: City }) => {
     }
   }, [control, map])
 
-// set initial polygon
+  // set initial polygon
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if (!map) return
@@ -187,9 +154,7 @@ const CityMap = ({ city }: { city: City }) => {
           zIndex: 0,
         }}
       >
-        <FeatureGroup
-          
-        >
+        <FeatureGroup>
           <EditControl
             position='bottomleft'
             onCreated={handleCreated}

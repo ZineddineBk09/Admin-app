@@ -1,15 +1,15 @@
 import React, { useEffect, useMemo } from 'react'
-import { useSupportContext } from '@/context/support/support-context'
-import { ChatMessage } from '@/interfaces'
+import { useSupportContext } from '../../context/support/support-context'
+import { ChatMessage } from '../../interfaces'
 import { SendIcon } from '../icons/support'
 import { Tooltip } from '@nextui-org/react'
 import { useFormik } from 'formik'
 import { useSession } from 'next-auth/react'
 import Emojis from './emoji-picker'
-import { addMessage } from '@/lib/api/support'
+import { addMessage } from '../../lib/api/support'
 import DragComponent from './files-upload/drag-files'
 import { DocumentTextIcon } from '@heroicons/react/24/outline'
-import { truncateTxt } from '@/utils'
+import { truncateTxt } from '../../utils'
 
 const renderMessage = (message: string) => {
   const regex = /(https?:\/\/[^\s]+)|(www\.[^\s]+)|(ftp:\/\/[^\s]+)/g
@@ -77,7 +77,7 @@ const renderMessage = (message: string) => {
 export const ChatContent = () => {
   const messagesRef: any = React.useRef(null)
   const { loading, chatMessages, selectedChat } = useSupportContext()
-  
+
   const dates = useMemo(() => {
     if (!chatMessages) return {}
 
@@ -173,7 +173,7 @@ export const ChatContent = () => {
                     </span>
                     <span
                       id={
-                        index2 === dates[dateKey].length - 1
+                        index2 === dates[dateKey]?.length - 1
                           ? 'last-message'
                           : index2.toString()
                       }
@@ -211,7 +211,7 @@ const ChatForm = () => {
       message: '',
     },
     onSubmit: async (values) => {
-      if (!values.message || values.message.length <= 0) return
+      if (!values.message || values.message?.length <= 0) return
       await addMessage(selectedChat.id, {
         content: values.message,
         senderId: session?.user?.username,

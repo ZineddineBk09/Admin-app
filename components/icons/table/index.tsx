@@ -1,4 +1,4 @@
-import { Svg } from '@/components/styles/svg'
+import { Svg } from '../../../components/styles/svg'
 
 interface Props {
   size?: number

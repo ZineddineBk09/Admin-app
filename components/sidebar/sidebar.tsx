@@ -39,7 +39,18 @@ export const SidebarWrapper = () => {
       icon: <OrdersIcon />,
       isActive: router.pathname === '/orders',
       href: '/orders',
-      subLinks: [],
+      subLinks: [
+        {
+          title: 'Orders',
+          isActive: router.pathname === '/orders/list',
+          href: '/orders/list',
+        },
+        {
+          title: 'Auto Cancel',
+          isActive: router.pathname === '/orders/auto-cancel',
+          href: '/orders/auto-cancel',
+        },
+      ],
     },
     {
       title: 'Reports',
@@ -83,7 +94,7 @@ export const SidebarWrapper = () => {
           href: '/drivers/teams',
         },
         {
-          title: 'Driver Types',
+          title: 'Vehicle Types',
           isActive: router.pathname === '/drivers/types',
           href: '/drivers/types',
         },
@@ -188,7 +199,7 @@ export const SidebarWrapper = () => {
             {sidebarLinks?.map((link, index) => (
               <div key={index} className='w-full flex flex-col'>
                 <Divider className='-mt-3 absolute inset-x-0' />
-                {link.subLinks.length > 0 ? (
+                {link.subLinks?.length > 0 ? (
                   <CollapseItems
                     title={link.title}
                     icon={link.icon}

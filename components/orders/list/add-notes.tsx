@@ -14,9 +14,9 @@ import { Flex } from '../../styles/flex'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { NotesIcon } from '../../icons/table'
-import { Note, Order, Team } from '@/interfaces'
-import { getRecords, updateRecord } from '@/lib/api'
-import { useOrdersContext } from '@/context/orders'
+import { Note, Order, Team } from '../../../interfaces'
+import { getRecords, updateRecord } from '../../../lib/api'
+import { useOrdersContext } from '../../../context/orders'
 
 export const AddNotes = ({ order }: { order: Order }) => {
   const [visible, setVisible] = React.useState(false)

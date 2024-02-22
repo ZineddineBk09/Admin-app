@@ -2,9 +2,9 @@ import { Text, Loading, Input } from '@nextui-org/react'
 import React, { useState } from 'react'
 import { Flex } from '../../styles/flex'
 import { OrdersTable } from '../../table/orders/auto-cancel-orders-table'
-import { Team } from '@/interfaces'
-import { getRecords } from '@/lib/api'
-import { useAutoCancelledOrdersContext } from '@/context/auto-cancelled-orders'
+import { Team } from '../../../interfaces'
+import { getRecords } from '../../../lib/api'
+import { useAutoCancelledOrdersContext } from '../../../context/auto-cancelled-orders'
 
 export const OrdersPage = () => {
   const { enabled, autoCancelledOrders, loading } =
@@ -30,11 +30,11 @@ export const OrdersPage = () => {
           tabs={[
             {
               title: 'Pending Auto-Cancellation',
-              count: autoCancelledOrders.length || 0,
+              count: autoCancelledOrders?.length || 0,
             },
             {
               title: 'Unassigned Orders',
-              count: autoCancelledOrders.length || 0,
+              count: autoCancelledOrders?.length || 0,
             },
           ]}
           openTab={openTab}
@@ -45,7 +45,7 @@ export const OrdersPage = () => {
 
       {loading ? (
         <Loading size='xl' className='mt-24 -mb-24' color='warning' />
-      ) : autoCancelledOrders.length > 0 ? (
+      ) : autoCancelledOrders?.length > 0 ? (
         <OrdersTable />
       ) : (
         <Flex
@@ -165,7 +165,7 @@ const Tabs = ({
               'text-sm font-bold uppercase px-4 py-4 block leading-normal ' +
               (openTab === index ? 'bg-primary' : 'bg-gray-200') +
               (index === 0 ? ' rounded-l-xl' : '') +
-              (index === tabs.length - 1 ? ' rounded-r-xl' : '')
+              (index === tabs?.length - 1 ? ' rounded-r-xl' : '')
             }
             onClick={(e) => {
               e.preventDefault()

@@ -1,4 +1,12 @@
-import { Button, Input, Modal, Text, Loading, Tooltip } from '@nextui-org/react'
+import {
+  Button,
+  Input,
+  Modal,
+  Text,
+  Loading,
+  Tooltip,
+  Popover,
+} from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../../styles/flex'
 import { useFormik } from 'formik'
@@ -9,13 +17,18 @@ import { Country, Governorate } from '../../../interfaces'
 import toast from 'react-hot-toast'
 import { createRecord } from '../../../lib/api'
 import { useAreasCitiesContext } from '../../../context/areas/cities'
+import { InformationCircleIcon } from '@heroicons/react/24/outline'
+import { useAreasCountriesContext } from '../../../context/areas/countries'
 
 export const AddCity = () => {
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
-  const { governorates } = useAreasGovernoratesContext()
   const { refreshCities } = useAreasCitiesContext()
+  const { governorates, handleFilter } = useAreasGovernoratesContext()
+  const { countries } = useAreasCountriesContext()
+  const [priceUnit, setPriceUnit] = React.useState<string>('')
+  const [selectedContry, setSelectedContry] = React.useState<string>('')
 
   const formik = useFormik({
     initialValues: {
@@ -31,25 +44,25 @@ export const AddCity = () => {
       name: Yup.string().required('name is required'),
       governorate: Yup.string().required('governorate is required'),
       order_fees: Yup.number().required('order fees is required'),
-      price_ratio_nominator: Yup.number().required(
-        'price ratio nominator is required'
-      ),
-      price_ratio_denominator: Yup.number().required(
-        'price ratio denominator is required'
-      ),
-      additional_ratio_nominator: Yup.number().required(
-        'additional ratio nominator is required'
-      ),
-      additional_ratio_denominator: Yup.number().required(
-        'additional ratio denominator is required'
-      ),
+      price_ratio_nominator: Yup.number()
+        .required('price ratio nominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
+      price_ratio_denominator: Yup.number()
+        .required('price ratio denominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
+      additional_ratio_nominator: Yup.number()
+        .required('additional ratio nominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
+      additional_ratio_denominator: Yup.number()
+        .required('additional ratio denominator is required')
+        .min(1, 'price ratio denominator must be greater than 0'),
     }),
     onSubmit: async (values) => {
       const governorate = governorates?.find(
         (governorate: Governorate) => governorate.id === values.governorate
       )
       if (!governorate) {
-        toast.error('Price unit not found!')
+        toast.error('Governorate not found!')
         return
       }
 
@@ -73,6 +86,33 @@ export const AddCity = () => {
         })
     },
   })
+
+  // wrire a function that handles reating a country, so that the governorate can inherit the values: order_fees, price_unit from the country
+  const handleGovernorateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const govern = governorates?.find(
+      (govern: Governorate) => govern.id === e.target.value
+    )
+    if (govern) {
+      formik.setFieldValue('order_fees', govern.order_fees)
+      formik.setFieldValue(
+        'price_ratio_nominator',
+        govern?.price_ratio_nominator
+      )
+      formik.setFieldValue(
+        'price_ratio_denominator',
+        govern?.price_ratio_denominator
+      )
+      formik.setFieldValue(
+        'additional_ratio_nominator',
+        govern?.additional_ratio_nominator
+      )
+      formik.setFieldValue(
+        'additional_ratio_denominator',
+        govern?.additional_ratio_denominator
+      )
+      setPriceUnit(govern?.country.price_unit.symbol)
+    }
+  }
 
   const closeHandler = () => {
     setVisible(false)
@@ -141,6 +181,32 @@ export const AddCity = () => {
                 <div>
                   <label
                     aria-label='Country'
+                    className='block mb-2 text-gray-900'
+                  >
+                    Country
+                  </label>
+                  <select
+                    id='country'
+                    name='country'
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                      setSelectedContry(e.target.value)
+                      handleFilter(e.target.value)
+                    }}
+                    value={selectedContry}
+                    className='border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 border-gray-300 bg-gray-100'
+                  >
+                    <option value=''>Select Country</option>
+                    {countries?.map((country: Country) => (
+                      <option key={country.id} value={country.name}>
+                        {country.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {/* Governorate */}
+                <div>
+                  <label
+                    aria-label='Governorate'
                     className={`block mb-2 ${
                       formik.touched.governorate && formik.errors.governorate
                         ? 'text-red-500'
@@ -154,7 +220,10 @@ export const AddCity = () => {
                   <select
                     id='governorate'
                     name='governorate'
-                    onChange={formik.handleChange}
+                    onChange={(e) => {
+                      formik.handleChange(e)
+                      handleGovernorateChange(e)
+                    }}
                     value={formik.values.governorate}
                     className={`border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 ${
                       formik.touched.governorate && formik.errors.governorate
@@ -204,16 +273,45 @@ export const AddCity = () => {
                     }`}
                   >
                     {formik.touched.price_ratio_nominator &&
-                    formik.errors.price_ratio_nominator
-                      ? formik.errors.price_ratio_nominator
-                      : 'Price Ratio'}
+                    formik.errors.price_ratio_nominator ? (
+                      formik.errors.price_ratio_nominator
+                    ) : (
+                      <div className='flex gap-x-2'>
+                        Price for
+                        <b className='text-red-500'>
+                          {formik.values.price_ratio_denominator || 0}
+                        </b>
+                        kilometer
+                        {parseInt(formik.values.price_ratio_denominator) > 1 &&
+                          's'}
+                        <Popover>
+                          <Popover.Trigger>
+                            <InformationCircleIcon className='h-5 text-gray-500 hover:text-gray-700 hover:cursor-pointer' />
+                          </Popover.Trigger>
+                          <Popover.Content>
+                            <Text css={{ p: '$5' }}>
+                              Price pe distance of{' '}
+                              <b>
+                                {formik.values.price_ratio_denominator || 0}
+                              </b>{' '}
+                              kilometers that the driver will travel to deliver
+                              the order
+                            </Text>
+                          </Popover.Content>
+                        </Popover>
+                      </div>
+                    )}
                   </label>
                   <div className='flex items-center gap-x-4 bg-gray-100 rounded-xl'>
                     <Input
                       clearable
                       size='lg'
-                      contentRight={<span className='text-gray-500'>SAR</span>}
-                      placeholder='SAR'
+                      contentRight={
+                        <span className='text-gray-500'>
+                          {priceUnit || 'Unit'}
+                        </span>
+                      }
+                      placeholder={priceUnit || 'Unit'}
                       name='price_ratio_nominator'
                       id='price_ratio_nominator'
                       value={formik.values.price_ratio_nominator}
@@ -256,16 +354,46 @@ export const AddCity = () => {
                     }`}
                   >
                     {formik.touched.additional_ratio_nominator &&
-                    formik.errors.additional_ratio_nominator
-                      ? formik.errors.additional_ratio_nominator
-                      : 'Additional Ratio'}
+                    formik.errors.additional_ratio_nominator ? (
+                      formik.errors.additional_ratio_nominator
+                    ) : (
+                      <div className='flex gap-x-2'>
+                        Additional price per
+                        <b className='text-red-500'>
+                          {formik.values.additional_ratio_denominator || 0}
+                        </b>
+                        kilometer
+                        {parseInt(formik.values.additional_ratio_denominator) >
+                          1 && 's'}
+                        <Popover>
+                          <Popover.Trigger>
+                            <InformationCircleIcon className='h-5 text-gray-500 hover:text-gray-700 hover:cursor-pointer' />
+                          </Popover.Trigger>
+                          <Popover.Content>
+                            <Text css={{ p: '$5' }}>
+                              Additional price for the distance of{' '}
+                              <b>
+                                {formik.values.additional_ratio_denominator ||
+                                  0}
+                              </b>{' '}
+                              kilometers that will be added to the initial
+                              distance
+                            </Text>
+                          </Popover.Content>
+                        </Popover>
+                      </div>
+                    )}
                   </label>
                   <div className='flex items-center gap-x-4 bg-gray-100 rounded-xl'>
                     <Input
                       clearable
                       size='lg'
-                      contentRight={<span className='text-gray-500'>SAR</span>}
-                      placeholder='SAR'
+                      contentRight={
+                        <span className='text-gray-500'>
+                          {priceUnit || 'Unit'}
+                        </span>
+                      }
+                      placeholder={priceUnit || 'Unit'}
                       name='additional_ratio_nominator'
                       id='additional_ratio_nominator'
                       value={formik.values.additional_ratio_nominator}

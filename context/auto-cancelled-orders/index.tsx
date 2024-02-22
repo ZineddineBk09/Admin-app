@@ -1,5 +1,5 @@
-import { AutoCancelledOrder, Sort } from '@/interfaces'
-import { searchAutoCancelledOrders } from '@/lib/search'
+import { AutoCancelledOrder, Sort } from '../../interfaces'
+import { searchAutoCancelledOrders } from '../../lib/search'
 import { faker } from '@faker-js/faker'
 import React, { useEffect, useState } from 'react'
 

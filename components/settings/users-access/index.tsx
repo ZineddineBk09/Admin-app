@@ -1,10 +1,10 @@
-import { UserAccess } from '@/interfaces'
+import { UserAccess } from '../../../interfaces'
 import { Divider, Tooltip } from '@nextui-org/react'
 import React from 'react'
 import { AddUserAccess } from './add-user-access'
 import { DeleteUserAccess } from './delete-user-access'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { BinIcon } from '@/components/icons/areas'
+import { BinIcon } from '../../../components/icons/areas'
 
 const UsersAccess = () => {
   const users: UserAccess[] = [
@@ -36,7 +36,7 @@ const UsersAccess = () => {
       <SearchTypes />
       <div className='w-full flex flex-col items-center gap-y-6'>
         {users?.map((user: UserAccess, index: number) => (
-          <UserAccessCard key={index} user={user} />
+          <UserAccessCard key={user.id} user={user} />
         ))}
       </div>
       {/* add user button */}
@@ -117,7 +117,7 @@ const UserAccessCard = ({ user }: { user: UserAccess }) => {
             {/* Clients */}
             <div className='w-full flex items-start gap-x-6'>
               <label className='mt-2 text-gray-600 text-sm'>Clients</label>
-              {clients.length > 0 ? (
+              {clients?.length > 0 ? (
                 <div className='w-full flex items-start gap-y-2'>
                   {clients?.map((client: any, index: number) => (
                     <div key={index}>
@@ -131,7 +131,7 @@ const UserAccessCard = ({ user }: { user: UserAccess }) => {
                             <BinIcon width={4} />
                           </button>
                         </Tooltip>
-                        {index < clients.length - 1 && (
+                        {index < clients?.length - 1 && (
                           <span className='-ml-4'>,</span>
                         )}
                       </div>

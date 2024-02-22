@@ -1,5 +1,5 @@
-import { Account } from '@/interfaces'
-import { searchAccounts } from '@/lib/search'
+import { Account } from '../../interfaces'
+import { searchAccounts } from '../../lib/search'
 import React, { useEffect, useState } from 'react'
 import { faker } from '@faker-js/faker'
 

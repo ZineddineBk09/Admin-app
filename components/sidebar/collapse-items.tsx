@@ -41,8 +41,8 @@ export const CollapseItems = ({
         title={
           <Flex
             css={{
-              bg: open && subLinks.length == 0 ? '$green200' : 'transparent',
-              color: open && subLinks.length == 0 ? '$green600' : '$accents9',
+              bg: open && subLinks?.length == 0 ? '$green200' : 'transparent',
+              color: open && subLinks?.length == 0 ? '$green600' : '$accents9',
               gap: '$6',
               width: '100%',
               py: '$5',
@@ -92,7 +92,7 @@ export const CollapseItems = ({
           },
         }}
         divider={false}
-        showArrow={subLinks.length > 0}
+        showArrow={subLinks?.length > 0}
         expanded={open}
       >
         {subLinks?.map(({ title, href, isActive }: any, index: number) => (

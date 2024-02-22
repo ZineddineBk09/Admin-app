@@ -1,4 +1,4 @@
-import { Branch } from '@/interfaces'
+import { Branch } from '../../../interfaces'
 import React from 'react'
 import { AddBranch } from './add-branch'
 import { SearchBranch } from './branch'
@@ -7,9 +7,9 @@ const BranchCard = dynamic(() => import('./branch'), {
   ssr: false,
   loading: () => <Loading />,
 })
-import { useClientsBranchesContext } from '@/context/clients/branches'
+import { useClientsBranchesContext } from '../../../context/clients/branches'
 import { useRouter } from 'next/router'
-import Loading from '@/components/shared/loading'
+import Loading from '../../../components/shared/loading'
 
 const Branches = () => {
   const { branches } = useClientsBranchesContext()
@@ -30,7 +30,7 @@ const Branches = () => {
       <SearchBranch />
       <div className='w-full flex flex-col items-center gap-y-6'>
         {branches?.map((branch: Branch, index: number) => (
-          <BranchCard key={index} branch={branch} />
+          <BranchCard key={branch.id} branch={branch} />
         ))}
       </div>
       <AddBranch />

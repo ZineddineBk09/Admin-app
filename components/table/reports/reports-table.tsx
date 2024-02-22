@@ -1,7 +1,7 @@
 import React from 'react'
 import { RenderCell } from './render-reports-cell'
-import { reportsTableCols } from './data'
-import { useReportsContext } from '@/context/report'
+import { reportsTableCols } from '../data'
+import { useReportsContext } from '../../../context/reports'
 
 export const ReportsTable = () => {
   const { reports } = useReportsContext()
@@ -25,7 +25,6 @@ export const ReportsTable = () => {
                 {reports?.map((order: any, index: number) => (
                   <tr
                     key={index}
-                    // make table striped by adding bg-gray-50 to odd rows
                     className={`border-b transition duration-200 ease-in-out bg-gray-200 hover:bg-yellow-100 
                     `}
                   >

@@ -19,9 +19,26 @@ export const ordersTableCols = [
   { name: 'City', uid: 'city' },
   { name: 'Value', uid: 'value' },
   { name: 'Delivery', uid: 'deliveryFee' },
+  { name: 'Payment', uid: 'paymentType' },
   { name: 'Status', uid: 'status' },
   { name: 'Client Paid', uid: 'clientPaid' },
   { name: 'Driver Paid', uid: 'driverPaid' },
+  { name: 'Actions', uid: 'actions' },
+]
+
+export const autoCancelOrdersTableCols = [
+  { name: 'Order No', uid: 'id' },
+  { name: 'Date', uid: 'date' },
+  { name: 'Time', uid: 'time' },
+  { name: 'Client', uid: 'client' },
+  { name: 'Distance', uid: 'distance' },
+  { name: 'City', uid: 'city' },
+  { name: 'Value', uid: 'value' },
+  { name: 'Delivery', uid: 'deliveryFee' },
+  { name: 'Payment', uid: 'paymentType' },
+  { name: 'Time Left', uid: 'timeLeft' },
+  { name: 'Assign Driver', uid: 'assign' },
+  { name: 'Bonus', uid: 'bonus' },
   { name: 'Actions', uid: 'actions' },
 ]
 
@@ -50,4 +67,3 @@ export const paymentTableCols = [
   { name: 'City', uid: 'city' },
   { name: 'Value', uid: 'value' },
 ]
-

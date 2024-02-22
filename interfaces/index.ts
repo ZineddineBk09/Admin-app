@@ -1,3 +1,10 @@
+export interface Pricing {
+  price_ratio_nominator: number
+  price_ratio_denominator: number
+  additional_ratio_nominator: number
+  additional_ratio_denominator: number
+}
+
 //------------------------- Auth & Register -------------------------
 export interface AuthUser {
   email: string | null
@@ -19,6 +26,11 @@ export interface RegisterUser {
   storeManager: string | null
   storePhone: string | null
   status: boolean
+}
+
+export interface User {
+  id: string
+  username: string
 }
 //--------------------------------------------------------------------
 
@@ -50,9 +62,9 @@ export interface Driver {
   city: string
 }
 
-export interface DriverType {
-  id: number
-  vehicleType:
+export interface DriverType extends Pricing {
+  id: string
+  vehicle_type:
     | 'car'
     | 'van'
     | 'motor'
@@ -62,24 +74,20 @@ export interface DriverType {
     | 'bicycle'
     | 'ship'
     | 'scooter'
-  priceRatioNominator: number
-  priceRatioDenominator: number
-  additionalRatioNominator: number
-  additionalRatioDenominator: number
 }
 
-export interface DriverTeam {
+export interface DriverTeam extends Pricing {
   id: string
   name: string
-  members: DriverTeamMember[]
-  supervisor: DriverTeamMember
   fixed: number
-  pricePerKm: number
-  additional: number
-  maxDistance: number
-  areas: string[]
-  city: string
-  country: string
+  supervisor: string
+  city: {
+    id: string
+    name: string
+  }
+  areas?: Geofence[]
+  accounts?: string[]
+  parent: string | null
 }
 
 export interface DriverTeamMember {
@@ -87,12 +95,14 @@ export interface DriverTeamMember {
   name: string
 }
 
-export interface Team {
-  model: string
-  pk: string
-  fields: {
-    name: string
-  }
+export interface Team extends Pricing {
+  id: string
+  name: string
+  fixed: number
+  supervisor?: User
+  city: City
+  areas?: Geofence[]
+  accounts?: string[]
 }
 
 interface APIDriver {
@@ -188,27 +198,19 @@ export interface Country {
   driver_fees: number
 }
 
-export interface Governorate {
+export interface Governorate extends Pricing {
   id: string
   name: string
   country: Country
   order_fees: number
-  price_ratio_nominator: number
-  price_ratio_denominator: number
-  additional_ratio_nominator: number
-  additional_ratio_denominator: number
 }
 
-export interface City {
+export interface City extends Pricing {
   id: string
   name: string
   governorate: Governorate
   geofence: Geofence
   order_fees: number
-  price_ratio_nominator: number
-  price_ratio_denominator: number
-  additional_ratio_nominator: number
-  additional_ratio_denominator: number
 }
 //--------------------------------------------------------------------
 
@@ -371,4 +373,15 @@ export interface APIResponse {
   previous: string
   results: any[]
 }
+
+export interface GeoJSONObject {
+  type: string
+  properties: any
+  geometry: {
+    type: string
+    coordinates: GeoJSONCoordinate[][]
+  }
+}
+
+export type GeoJSONCoordinate = number[]
 //--------------------------------------------------------------------

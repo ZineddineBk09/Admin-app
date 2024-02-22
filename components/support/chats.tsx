@@ -1,5 +1,5 @@
-import { useSupportContext } from '@/context/support/support-context'
-import { Chat } from '@/interfaces'
+import { useSupportContext } from '../../context/support/support-context'
+import { Chat } from '../../interfaces'
 import React, { useEffect } from 'react'
 
 export const Chats = () => {

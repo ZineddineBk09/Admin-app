@@ -10,8 +10,8 @@ import {
 } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../../styles/flex'
-import { DriverTeamMember } from '@/interfaces'
-import { searchMembers } from '@/lib/search'
+import { DriverTeamMember } from '../../../interfaces'
+import { searchMembers } from '../../../lib/search'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
 export const AddMember = ({ members }: { members: DriverTeamMember[] }) => {
@@ -87,13 +87,13 @@ export const AddMember = ({ members }: { members: DriverTeamMember[] }) => {
                     placeholder='search'
                     value={search}
                     onChange={handleSearch}
-                    className='w-full bg-gray-100 px-4 py-3 rounded-full'
+                    className='w-full bg-gray-200 px-4 py-3 rounded-lg'
                   />
                 </Flex>
 
                 {/* Selected members */}
                 <div className='max-w-full h-fit flex items-center gap-x-2 overflow-x-auto'>
-                  {selected.map((member: any, index: number) => (
+                  {selected?.map((member: any, index: number) => (
                     <Badge key={index}>
                       <span>{member.name}</span>
                       <XMarkIcon
@@ -115,7 +115,7 @@ export const AddMember = ({ members }: { members: DriverTeamMember[] }) => {
 
                 {/* Search results */}
                 <div className='w-full flex flex-col items-start max-h-64 overflow-y-auto'>
-                  {searchResults.map((member: any, index: number) => (
+                  {searchResults?.map((member: any, index: number) => (
                     <div className='w-full' key={index}>
                       <div className='w-full flex items-start justify-between'>
                         <div className='w-full flex flex-col items-start gap-y-1'>
@@ -166,11 +166,11 @@ export const AddMember = ({ members }: { members: DriverTeamMember[] }) => {
                 auto
                 type='submit'
                 className={`bg-primary text-black ${
-                  selected.length === 0 && 'opacity-50 cursor-not-allowed'
+                  selected?.length === 0 && 'opacity-50 cursor-not-allowed'
                 }`}
-                disabled={selected.length === 0}
+                disabled={selected?.length === 0}
               >
-                Add {selected.length > 0 && `(${selected.length})`}
+                Add {selected?.length > 0 && `(${selected?.length})`}
               </Button>
             </Modal.Footer>
           </>

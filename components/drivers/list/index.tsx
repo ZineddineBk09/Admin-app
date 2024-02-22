@@ -3,9 +3,9 @@ import React from 'react'
 import { Flex } from '../../styles/flex'
 import { DriversTable } from '../../table/drivers/drivers-table'
 import { AddDriver } from './add-driver'
-import { useDriversContext } from '@/context/drivers'
-import { Team } from '@/interfaces'
-import { getRecords } from '@/lib/api'
+import { useDriversContext } from '../../../context/drivers'
+import { Team } from '../../../interfaces'
+import { getRecords } from '../../../lib/api'
 
 export const DriversPage = () => {
   const { drivers, loading } = useDriversContext()
@@ -32,7 +32,7 @@ export const DriversPage = () => {
 
       {loading ? (
         <Loading size='xl' className='mt-24 -mb-24' color='warning' />
-      ) : drivers.length > 0 ? (
+      ) : drivers?.length > 0 ? (
         <DriversTable />
       ) : (
         <Flex
@@ -81,8 +81,8 @@ export const SearchAndFilter = () => {
         >
           <option value=''>Select Team All</option>
           {teams?.map((team: Team, index: number) => (
-            <option key={index} value={team.pk}>
-              {team.fields.name}
+            <option key={index} value={team.id}>
+              {team.name}
             </option>
           ))}
         </select>
