@@ -50,7 +50,6 @@ USER nextjs
 COPY --from=builder --chown=nextjs:nodejs /app/. .
 
 # Set the correct permission for prerender cache
-# RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
 # Automatically leverage output traces to reduce image size
