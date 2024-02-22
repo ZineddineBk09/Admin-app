@@ -18,13 +18,15 @@ import toast from 'react-hot-toast'
 import { createRecord } from '../../../lib/api'
 import { useAreasCitiesContext } from '../../../context/areas/cities'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
+import { useAreasCountriesContext } from '../../../context/areas/countries'
 
 export const AddCity = () => {
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
-  const { governorates } = useAreasGovernoratesContext()
   const { refreshCities } = useAreasCitiesContext()
+  const { governorates } = useAreasGovernoratesContext()
+  const { countries } = useAreasCountriesContext()
   const [priceUnit, setPriceUnit] = React.useState<string>('')
 
   const formik = useFormik({
@@ -59,7 +61,7 @@ export const AddCity = () => {
         (governorate: Governorate) => governorate.id === values.governorate
       )
       if (!governorate) {
-        toast.error('Price unit not found!')
+        toast.error('Governorate not found!')
         return
       }
 
@@ -110,6 +112,8 @@ export const AddCity = () => {
       setPriceUnit(govern?.country.price_unit.symbol)
     }
   }
+
+  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {}
 
   const closeHandler = () => {
     setVisible(false)
@@ -174,6 +178,41 @@ export const AddCity = () => {
                       : 'default'
                   }
                 />
+                {/* Country */}
+                <div>
+                  <label
+                    aria-label='Country'
+                    className={`block mb-2 ${
+                      formik.touched.governorate && formik.errors.governorate
+                        ? 'text-red-500'
+                        : 'text-gray-900'
+                    }`}
+                  >
+                    {formik.touched.governorate && formik.errors.governorate
+                      ? formik.errors.governorate
+                      : 'Country'}
+                  </label>
+                  <select
+                    id='governorate'
+                    name='governorate'
+                    onChange={(e) => {
+                      handleCountryChange(e)
+                    }}
+                    value={formik.values.governorate}
+                    className={`border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 ${
+                      formik.touched.governorate && formik.errors.governorate
+                        ? 'border-red-500 bg-red-200'
+                        : 'border-gray-300 bg-gray-100'
+                    }`}
+                  >
+                    <option value=''>Select Country</option>
+                    {countries?.map((country: Country) => (
+                      <option key={country.id} value={country.id}>
+                        {country.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 {/* Governorate */}
                 <div>
                   <label
