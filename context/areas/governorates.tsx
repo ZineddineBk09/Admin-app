@@ -43,6 +43,7 @@ export const AreasGovernoratesContextProvider = ({
 
   const handleFilter = async (country: string) => {
     // check if the user selected 'all' countries
+    console.log('fitltering governorates on country:', country)
     if (country == 'all') {
       refreshGovernorates()
       return
