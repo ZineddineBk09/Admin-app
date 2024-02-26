@@ -117,7 +117,7 @@ export const CityCard = ({ city }: { city: City }) => {
               >
                 Governorate
               </label>
-              <p className='font-medium'>{governorate.name}</p>
+              <p className='font-medium'>{governorate?.name}</p>
             </div>
             <Divider />
 
@@ -266,7 +266,8 @@ export const CityCard = ({ city }: { city: City }) => {
 export const SearchCity = () => {
   const { countries } = useAreasCountriesContext()
   const { governorates } = useAreasGovernoratesContext()
-  const { handleFilterCountry,handleFilterGovernorate } = useAreasCitiesContext()
+  const { handleFilterCountry, handleFilterGovernorate } =
+    useAreasCitiesContext()
   const [selectedCountry, setSelectedCountry] = React.useState('all')
   const [selectedGovernorate, setSelectedGovernorate] = React.useState('all')
 
@@ -309,74 +310,15 @@ export const SearchCity = () => {
 
           {governorates
             ?.filter(
-              (governorate) => governorate.country.name === selectedCountry
+              (governorate) => governorate?.country.name === selectedCountry
             )
             .map((governorate: any, index: number) => (
-              <option key={index} value={governorate.name} className='px-2'>
-                {governorate.name}
+              <option key={index} value={governorate?.name} className='px-2'>
+                {governorate?.name}
               </option>
             ))}
         </select>
       </div>
-    </div>
-  )
-}
-
-const GovernoratesModal = () => {
-  const [selected, setSelected] = React.useState<string[]>([])
-  const [visible, setVisible] = React.useState(false)
-  const handler = () => setVisible(true)
-
-  const closeHandler = () => {
-    setVisible(false)
-  }
-
-  return (
-    <div>
-      <Button
-        onClick={handler}
-        className='text-[#5e5e5e] flex items-center rounded-full bg-white'
-      >
-        <span className='mr-3'>Governorate</span>
-        <FiltersIcon />
-      </Button>
-
-      <Modal
-        closeButton
-        aria-labelledby='modal-title'
-        width='400px'
-        open={visible}
-        onClose={closeHandler}
-        className='rounded-md'
-      >
-        <Modal.Body>
-          <Flex
-            direction='column'
-            css={{
-              flexWrap: 'wrap',
-              marginTop: '$4',
-              gap: '$6',
-              '@lg': { flexWrap: 'nowrap', gap: '$12' },
-            }}
-          >
-            <div className='flex flex-col gap-3'>
-              <Checkbox.Group
-                label='Governorates'
-                color='warning'
-                value={selected}
-                onChange={(e: string[]) => setSelected(e)}
-              >
-                <Checkbox value='riyadh'>Riyadh</Checkbox>
-                <Checkbox value='jeddah'>Jeddah</Checkbox>
-                <Checkbox value='dammam'>Dammam</Checkbox>
-              </Checkbox.Group>
-              <p className='text-default-500 text-small'>
-                Selected: {selected.join(', ')}
-              </p>
-            </div>
-          </Flex>
-        </Modal.Body>
-      </Modal>
     </div>
   )
 }
