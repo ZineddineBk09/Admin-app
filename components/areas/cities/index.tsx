@@ -31,7 +31,7 @@ const Cities = () => {
           className='w-full flex flex-col items-center gap-y-6'
         >
           {cities?.map((city: City) => (
-            <CityCard key={city.id} city={city} />
+            <CityCard key={city?.id} city={city} />
           ))}
         </InfiniteScroll>
       </div>
