@@ -28,7 +28,7 @@ export const AddCity = () => {
   const { governorates, handleFilter } = useAreasGovernoratesContext()
   const { countries } = useAreasCountriesContext()
   const [priceUnit, setPriceUnit] = React.useState<string>('')
-  const [selectedContry, setSelectedContry] = React.useState<string>('')
+  const [selectedCountry, setSelectedCountry] = React.useState<string>('')
 
   const formik = useFormik({
     initialValues: {
@@ -59,7 +59,7 @@ export const AddCity = () => {
     }),
     onSubmit: async (values) => {
       const governorate = governorates?.find(
-        (governorate: Governorate) => governorate.id === values.governorate
+        (governorate: Governorate) => governorate?.id === values.governorate
       )
       if (!governorate) {
         toast.error('Governorate not found!')
@@ -110,7 +110,7 @@ export const AddCity = () => {
         'additional_ratio_denominator',
         govern?.additional_ratio_denominator
       )
-      setPriceUnit(govern?.country.price_unit.symbol)
+      setPriceUnit(govern?.country?.price_unit.symbol)
     }
   }
 
@@ -189,16 +189,16 @@ export const AddCity = () => {
                     id='country'
                     name='country'
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                      setSelectedContry(e.target.value)
+                      setSelectedCountry(e.target.value)
                       handleFilter(e.target.value)
                     }}
-                    value={selectedContry}
+                    value={selectedCountry}
                     className='border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 border-gray-300 bg-gray-100'
                   >
                     <option value=''>Select Country</option>
                     {countries?.map((country: Country) => (
-                      <option key={country.id} value={country.name}>
-                        {country.name}
+                      <option key={country?.id} value={country?.name}>
+                        {country?.name}
                       </option>
                     ))}
                   </select>
@@ -233,8 +233,8 @@ export const AddCity = () => {
                   >
                     <option value=''>Select Governorate</option>
                     {governorates?.map((governorate: Governorate) => (
-                      <option key={governorate.id} value={governorate.id}>
-                        {governorate.name}
+                      <option key={governorate?.id} value={governorate?.id}>
+                        {governorate?.name}
                       </option>
                     ))}
                   </select>
