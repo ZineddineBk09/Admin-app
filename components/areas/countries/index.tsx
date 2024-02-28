@@ -29,7 +29,7 @@ const Countries = () => {
           className='w-full flex flex-col items-center gap-y-6'
         >
           {countries?.map((country: Country) => (
-            <CountryCard key={country.id} country={country} />
+            <CountryCard key={country?.id} country={country} />
           ))}
         </InfiniteScroll>
       </div>
@@ -50,9 +50,9 @@ const CountryCard = ({ country }: { country: Country }) => {
   })
   const formik = useFormik({
     initialValues: {
-      price_unit: country.price_unit.id,
-      driver_fees: country.driver_fees,
-      order_fees: country.order_fees,
+      price_unit: country?.price_unit.id,
+      driver_fees: country?.driver_fees,
+      order_fees: country?.order_fees,
     },
     onSubmit: async (values) => {
       const price_unit = currencies?.find(
@@ -65,8 +65,8 @@ const CountryCard = ({ country }: { country: Country }) => {
       await updateRecord(
         {
           ...values,
-          id: country.id,
-          name: country.name,
+          id: country?.id,
+          name: country?.name,
           price_unit: price_unit?.id,
         },
         'country'
