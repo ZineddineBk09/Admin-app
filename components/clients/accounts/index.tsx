@@ -108,9 +108,9 @@ const AccountCard = ({ account }: { account: Account }) => {
                   (team: { id: string; name: string }, index: number) => (
                     <div key={index}>
                       <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
-                        <p className='text-sm capitalize'>{team.name}</p>
+                        <p className='text-sm capitalize'>{team?.name}</p>
                         <Tooltip
-                          content={'Delete "' + team.name + '"'}
+                          content={'Delete "' + team?.name + '"'}
                           color='error'
                         >
                           <button>
