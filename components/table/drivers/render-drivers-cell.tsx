@@ -17,8 +17,13 @@ export const RenderCell = ({ driver, columnKey }: Props) => {
   switch (columnKey) {
     case 'name':
       return (
-        <User squared src={driver.image} name={driver.username} css={{ p: 0 }}>
-          #{driver.id}
+        <User
+          squared
+          src={driver?.image}
+          name={driver?.username}
+          css={{ p: 0 }}
+        >
+          #{driver?.id}
         </User>
       )
 
@@ -48,7 +53,7 @@ export const RenderCell = ({ driver, columnKey }: Props) => {
             <EditDriver driver={driver} />
           </Col>
           <Col css={{ d: 'flex' }}>
-            <DeleteDriver id={driver.id} />
+            <DeleteDriver id={driver?.id} />
           </Col>
         </Row>
       )

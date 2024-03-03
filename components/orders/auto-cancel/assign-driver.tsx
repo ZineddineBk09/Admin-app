@@ -103,17 +103,17 @@ export const AssignDriver = ({
                 <div className='max-w-full h-fit flex items-center gap-x-2 overflow-x-auto'>
                   {selected?.map((driver: any, index: number) => (
                     <Badge key={index}>
-                      <span>{driver.username}</span>
+                      <span>{driver?.username}</span>
                       <XMarkIcon
                         className='w-4 ml-3 text-white hover:bg-gray-400 transition-all duration-300 rounded-full'
                         onClick={() => {
                           setSelected(
-                            selected.filter((item) => item.id !== driver.id)
+                            selected.filter((item) => item.id !== driver?.id)
                           )
 
                           // uncheck checkbox by triggering onChange
                           const checkbox = document.getElementById(
-                            driver.id
+                            driver?.id
                           ) as HTMLInputElement
                         }}
                       />
@@ -128,22 +128,22 @@ export const AssignDriver = ({
                       <div className='w-full flex items-center justify-between'>
                         {/* Username + id */}
                         <div className='flex flex-col items-start gap-y-1'>
-                          <span>{driver.username}</span>
+                          <span>{driver?.username}</span>
                           <span className='text-gray-500'>
-                            #{driver.id.split('-')[0]}
+                            #{driver?.id.split('-')[0]}
                           </span>
                         </div>
                         {/* Status */}
                         <span
                           className={`text-xs font-semibold inline-flex px-2 pt-[5px] pb-[2px] rounded-full text-white capitalize ${
-                            driver.status === 'available'
+                            driver?.status === 'available'
                               ? 'bg-green-400'
-                              : driver.status === 'busy'
+                              : driver?.status === 'busy'
                               ? 'bg-orange-500'
                               : 'bg-gray-400'
                           }`}
                         >
-                          {driver.status}
+                          {driver?.status}
                         </span>
                         {/* Distance from order */}
                         <span className='text-xs text-gray-500'>
@@ -158,7 +158,7 @@ export const AssignDriver = ({
                         {/* Select driver */}
                         <input
                           type='checkbox'
-                          id={driver.id}
+                          id={driver?.id}
                           className='w-5 h-5 border-gray-400 border rounded-full'
                           checked={selected.includes(driver)}
                           onChange={(e) => {
@@ -166,7 +166,9 @@ export const AssignDriver = ({
                               setSelected([...selected, driver])
                             } else {
                               setSelected(
-                                selected.filter((item) => item.id !== driver.id)
+                                selected.filter(
+                                  (item) => item.id !== driver?.id
+                                )
                               )
                             }
                           }}

@@ -17,10 +17,10 @@ export const RenderCell = ({ order, columnKey }: Props) => {
       return <p>#{cellValue}</p>
 
     case 'client':
-      return <p>{order.clientName}</p>
+      return <p>{order?.clientName}</p>
 
     case 'driver':
-      return <p>{order.driverName}</p>
+      return <p>{order?.driverName}</p>
 
     case 'unpaid':
       return (

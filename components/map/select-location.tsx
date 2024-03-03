@@ -9,7 +9,7 @@ const SearchLocation = dynamic(() => import('./search-location'), {
 
 const SelectLocation = () => {
   const { orders, selectedOrder } = useMapContext()
-  const selectedOrderData = orders.find((order) => order.id === selectedOrder)
+  const selectedOrderData = orders.find((order) => order?.id === selectedOrder)
   const formik = useFormik({
     initialValues: {
       latitude: '',
@@ -55,7 +55,7 @@ const SelectLocation = () => {
           <button
             className={`h-11 px-5 bg-primary rounded font-medium text-lg shadow-lg 
           ${
-            formik.isValid 
+            formik.isValid
               ? 'bg-opacity-100 hover:bg-opacity-90 transition-all duration-300 hover:shadow-xl'
               : 'bg-opacity-50 cursor-not-allowed'
           }

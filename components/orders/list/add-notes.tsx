@@ -37,7 +37,7 @@ export const AddNotes = ({ order }: { order: Order }) => {
       setLoading(true)
       const response = await updateRecord(
         {
-          id: order.id,
+          id: order?.id,
           ...values,
         },
         'order'

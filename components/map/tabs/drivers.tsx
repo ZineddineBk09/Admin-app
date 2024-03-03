@@ -19,7 +19,7 @@ export const Drivers = ({ driverStatus }: { driverStatus: any }) => {
           )
         )
         ?.map((driver: any, index: number) => (
-          <DriverCard key={driver.id} driver={driver} />
+          <DriverCard key={driver?.id} driver={driver} />
         ))}
     </div>
   )
@@ -31,7 +31,7 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
   const [selected, setSelected] = useState(false)
 
   useEffect(() => {
-    if (selectedDriver === driver.id) setSelected(true)
+    if (selectedDriver === driver?.id) setSelected(true)
     else setSelected(false)
   }, [selectedDriver])
 
@@ -40,7 +40,7 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
       isPressable
       isHoverable
       className='p-0 rounded-l-full overflow-hidden rounded-r-md'
-      onClick={() => handleSelectDriver(driver.id)}
+      onClick={() => handleSelectDriver(driver?.id)}
     >
       <Card.Body className='p-0 w-full overflow-hidden'>
         <div

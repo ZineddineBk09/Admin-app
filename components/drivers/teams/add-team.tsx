@@ -13,21 +13,29 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { AddIcon } from '../../../components/icons/areas'
 import { useAreasCitiesContext } from '../../../context/areas/cities'
-import { Country, City, User } from '../../../interfaces'
+import { Country, City, User, Governorate } from '../../../interfaces'
 import toast from 'react-hot-toast'
 import { createRecord } from '../../../lib/api'
 import { useUsersContext } from '../../../context/users'
 import { useTeamsContext } from '../../../context/drivers/teams'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
+import { useAreasGovernoratesContext } from '../../../context/areas/governorates'
+import { useAreasCountriesContext } from '../../../context/areas/countries'
 
 export const AddTeam = () => {
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
-  const { cities } = useAreasCitiesContext()
+  const { cities, handleFilterCountry, handleFilterGovernorate } =
+    useAreasCitiesContext()
   const { users } = useUsersContext()
   const { refreshTeams } = useTeamsContext()
+  const { governorates, handleFilter } = useAreasGovernoratesContext()
+  const { countries } = useAreasCountriesContext()
   const [priceUnit, setPriceUnit] = React.useState<string>('')
+  const [selectedCountry, setSelectedCountry] = React.useState<string>('')
+  const [selectedGovernorate, setSelectedGovernorate] =
+    React.useState<string>('')
 
   const formik = useFormik({
     initialValues: {
@@ -59,7 +67,7 @@ export const AddTeam = () => {
         .min(1, 'price ratio denominator must be greater than 0'),
     }),
     onSubmit: async (values) => {
-      const city = cities?.find((city: City) => city.id === values.city)
+      const city = cities?.find((city: City) => city?.id === values.city)
       if (!city) {
         toast.error('City not found!')
         return
@@ -88,22 +96,22 @@ export const AddTeam = () => {
 
   // wrire a function that handles reating a country, so that the city can inherit the values: order_fees, price_unit from the country
   const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const city = cities?.find((city: City) => city.id === e.target.value)
+    const city = cities?.find((city: City) => city?.id === e.target.value)
 
     if (city) {
-      formik.setFieldValue('order_fees', city.order_fees)
-      formik.setFieldValue('price_ratio_nominator', city.price_ratio_nominator)
+      formik.setFieldValue('order_fees', city?.order_fees)
+      formik.setFieldValue('price_ratio_nominator', city?.price_ratio_nominator)
       formik.setFieldValue(
         'price_ratio_denominator',
-        city.price_ratio_denominator
+        city?.price_ratio_denominator
       )
       formik.setFieldValue(
         'additional_ratio_nominator',
-        city.additional_ratio_nominator
+        city?.additional_ratio_nominator
       )
       formik.setFieldValue(
         'additional_ratio_denominator',
-        city.additional_ratio_denominator
+        city?.additional_ratio_denominator
       )
     }
   }
@@ -171,6 +179,58 @@ export const AddTeam = () => {
                       : 'default'
                   }
                 />
+                {/* Country */}
+                <div>
+                  <label
+                    aria-label='Country'
+                    className='block mb-2 text-gray-900'
+                  >
+                    Country
+                  </label>
+                  <select
+                    id='country'
+                    name='country'
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                      setSelectedCountry(e.target.value)
+                      handleFilter(e.target.value)
+                    }}
+                    value={selectedCountry}
+                    className='border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 border-gray-300 bg-gray-100'
+                  >
+                    <option value=''>Select Country</option>
+                    {countries?.map((country: Country) => (
+                      <option key={country?.id} value={country?.name}>
+                        {country?.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {/* Governorate */}
+                <div>
+                  <label
+                    aria-label='Governorate'
+                    className='block mb-2 text-gray-900'
+                  >
+                    Governorate
+                  </label>
+                  <select
+                    id='governorate'
+                    name='governorate'
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                      setSelectedGovernorate(e.target.value)
+                      handleFilterGovernorate(e.target.value)
+                    }}
+                    value={selectedGovernorate}
+                    className='border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 border-gray-300 bg-gray-100'
+                  >
+                    <option value=''>Select Governorate</option>
+                    {governorates?.map((governorate: Governorate) => (
+                      <option key={governorate?.id} value={governorate?.name}>
+                        {governorate?.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 {/* City */}
                 <div>
                   <label
@@ -201,8 +261,8 @@ export const AddTeam = () => {
                   >
                     <option value=''>Select City</option>
                     {cities?.map((city: City) => (
-                      <option key={city.id} value={city.id}>
-                        {city.name}
+                      <option key={city?.id} value={city?.id}>
+                        {city?.name}
                       </option>
                     ))}
                   </select>

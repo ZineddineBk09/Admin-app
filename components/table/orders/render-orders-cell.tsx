@@ -22,10 +22,10 @@ export const RenderCell = ({ order, columnKey }: Props) => {
       return <p>#{cellValue}</p>
 
     case 'client':
-      return <p>{order.client.name}</p>
+      return <p>{order?.client.name}</p>
 
     case 'driver':
-      return <p>{order.driverName}</p>
+      return <p>{order?.driverName}</p>
 
     case 'value':
       return (
@@ -58,8 +58,8 @@ export const RenderCell = ({ order, columnKey }: Props) => {
         //   aria-label='Checkbox-driver-status'
         //   color='warning'
         //   labelColor='warning'
-        //   defaultSelected={order.isPaid}
-        //   //value={order.isPaid}
+        //   defaultSelected={order?.isPaid}
+        //   //value={order?.isPaid}
         //   onChange={() => {}}
         //   size='md'
         // ></Checkbox>
@@ -85,9 +85,7 @@ export const RenderCell = ({ order, columnKey }: Props) => {
         //   alt={cellValue}
         //   className='w-full mx-auto'
         // />
-        <p className='capitalize text-black font-medium'>
-          {cellValue}
-        </p>
+        <p className='capitalize text-black font-medium'>{cellValue}</p>
       )
 
     case 'status':
@@ -121,7 +119,7 @@ export const RenderCell = ({ order, columnKey }: Props) => {
             <AddNotes order={order} />
           </Col>
           <Col css={{ d: 'flex' }}>
-            <CancelOrder id={order.id} />
+            <CancelOrder id={order?.id} />
           </Col>
         </Row>
       )
