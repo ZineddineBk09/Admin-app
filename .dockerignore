@@ -1,7 +1,10 @@
-Dockerfile
-.dockerignore
 node_modules
 npm-debug.log
+Dockerfile*
+.dockerignore
+.git
+.gitignore
+.env.example
 README.md
 .next
 .git

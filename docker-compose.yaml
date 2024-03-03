@@ -7,9 +7,8 @@ services:
     volumes:
       - ./package-lock.json:/app/package-lock.json:ro  # Ensure dependency consistency
       - .:/app:ro  # Read-only access to codebase (modify if needed)
-    command: npm run start  # Assuming Next.js production command
+    command: npm run start
     ports:
       - "3000:3000"
     environment:
-      NODE_ENV: production  # Production mode optimizations
-      # Add your production-specific environment variables here (securely)
+      NODE_ENV: production  

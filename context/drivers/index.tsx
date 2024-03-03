@@ -57,12 +57,12 @@ export const DriversContextProvider = ({
     setDrivers(
       records?.map(
         (driver: any): Driver => ({
-          id: driver.pk,
-          username: driver.fields.username,
-          firstName: driver.fields.first_name,
-          lastName: driver.fields.last_name,
-          email: driver.fields.email,
-          team: driver.fields.team_id,
+          id: driver?.pk,
+          username: driver?.fields.username,
+          firstName: driver?.fields.first_name,
+          lastName: driver?.fields.last_name,
+          email: driver?.fields.email,
+          team: driver?.fields.team_id,
           status: ['available', 'inactive', 'busy'][
             Math.floor(Math.random() * 3)
           ],
@@ -70,22 +70,22 @@ export const DriversContextProvider = ({
           completedTasks: Math.floor(Math.random() * 100),
           inProgressTasks: Math.floor(Math.random() * 100),
           location: {
-            latitude: driver.fields.latitude,
-            longitude: driver.fields.longitude,
+            latitude: driver?.fields.latitude,
+            longitude: driver?.fields.longitude,
           },
-          phone: driver.fields.phone_number,
+          phone: driver?.fields.phone_number,
           orders: Math.floor(Math.random() * 100),
-          vehicleId: driver.fields.vehicle_id,
-          vehicleType: driver.fields.vehicle_type,
-          vehicleLicense: driver.fields.vehicle_license,
-          residencyId: driver.fields.residency_id,
-          isFreelance: driver.fields.is_freelancer,
-          isActive: driver.fields.is_active,
-          isStaff: driver.fields.is_staff,
-          code: driver.fields.code,
-          salary: driver.fields.salary || 0,
-          areas: driver.fields.areas || ['area 1', 'area 2', 'area 3'],
-          city: driver.fields.city || 'city',
+          vehicleId: driver?.fields.vehicle_id,
+          vehicleType: driver?.fields.vehicle_type,
+          vehicleLicense: driver?.fields.vehicle_license,
+          residencyId: driver?.fields.residency_id,
+          isFreelance: driver?.fields.is_freelancer,
+          isActive: driver?.fields.is_active,
+          isStaff: driver?.fields.is_staff,
+          code: driver?.fields.code,
+          salary: driver?.fields.salary || 0,
+          areas: driver?.fields.areas || ['area 1', 'area 2', 'area 3'],
+          city: driver?.fields.city || 'city',
         })
       )
     )
@@ -133,7 +133,7 @@ export const DriversContextProvider = ({
       refreshDrivers()
       return
     }
-    const filteredDrivers = drivers.filter((driver) => driver.team === team)
+    const filteredDrivers = drivers.filter((driver) => driver?.team === team)
     setDrivers(filteredDrivers)
   }
 
@@ -142,7 +142,9 @@ export const DriversContextProvider = ({
       refreshDrivers()
       return
     }
-    const filteredDrivers = drivers.filter((driver) => driver.status === status)
+    const filteredDrivers = drivers.filter(
+      (driver) => driver?.status === status
+    )
     setDrivers(filteredDrivers)
   }
 

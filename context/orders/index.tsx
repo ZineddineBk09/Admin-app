@@ -139,7 +139,7 @@ export const OrdersContextProvider = ({
       refreshOrders()
       return
     }
-    const filteredOrders = orders.filter((driver) => driver.status === status)
+    const filteredOrders = orders.filter((driver) => driver?.status === status)
     setOrders(filteredOrders)
   }
 
@@ -156,8 +156,8 @@ export const OrdersContextProvider = ({
     }
     const filteredOrders = orders.filter(
       (order) =>
-        new Date(order.date).getTime() >= dateFrom.getTime() &&
-        new Date(order.date).getTime() <= dateTo.getTime()
+        new Date(order?.date).getTime() >= dateFrom.getTime() &&
+        new Date(order?.date).getTime() <= dateTo.getTime()
     )
     setOrders(filteredOrders)
   }
@@ -167,7 +167,9 @@ export const OrdersContextProvider = ({
       refreshOrders()
       return
     }
-    const filtered = orders.filter((order) => order.paymentType === paymentType)
+    const filtered = orders.filter(
+      (order) => order?.paymentType === paymentType
+    )
     setFilteredOrders(filtered)
   }
 
