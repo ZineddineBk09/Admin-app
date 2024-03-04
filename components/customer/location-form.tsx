@@ -68,6 +68,7 @@ const LocationForm = () => {
                   value={formik.values[item]}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  disabled
                 />
               </div>
             ))}
