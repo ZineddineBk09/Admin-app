@@ -75,7 +75,7 @@ const Map = ({
       }
     }
   }, [location])
-  
+
   // allow the user to move the marker
   const handleMapClick = (e: any) => {
     setLocation({
