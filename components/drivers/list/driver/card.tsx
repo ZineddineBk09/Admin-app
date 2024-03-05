@@ -1,42 +1,21 @@
 import { Checkbox, Divider, Tooltip } from '@nextui-org/react'
-import React, { MouseEventHandler, useEffect, useState } from 'react'
-import { useDriversContext } from '../../../context/drivers'
-import { Driver, Team, Sort, DriverType, Geofence } from '../../../interfaces'
+import React, { MouseEventHandler } from 'react'
+import { useDriversContext } from '../../../../context/drivers'
+import { Driver, Team, DriverType, Geofence } from '../../../../interfaces'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { DeleteDriver } from '../../drivers/list/delete-driver'
-import { BinIcon } from '../../icons/areas'
+import { DeleteDriver } from '../../../drivers/list/delete-driver'
+import { BinIcon } from '../../../icons/areas'
 import { useFormik } from 'formik'
 import toast from 'react-hot-toast'
-import { useTeamsContext } from '../../../context/drivers/teams'
+import { useTeamsContext } from '../../../../context/drivers/teams'
 import * as Yup from 'yup'
-import { AddArea } from '../../drivers/shared/add-area'
+import { AddArea } from '../../shared/add-area'
+import { partialUpdateRecord } from '../../../../lib/api'
 
-export const DriversTable = () => {
-  const { drivers, handleSortDrivers } = useDriversContext()
-  const [sorting, setSorting] = useState<Sort>({ column: '', direction: '' })
-
-  console.log('driver: ', drivers)
-
-  useEffect(() => {
-    if (sorting.column === '') return
-    handleSortDrivers(sorting)
-  }, [sorting])
-
-  return (
-    <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
-      <div className='w-full flex flex-col items-center gap-y-6'>
-        {drivers?.map((driver: Driver, index: number) => (
-          <DriverCard key={driver?.id || index} driver={driver} />
-        ))}
-      </div>
-    </div>
-  )
-}
-
-const DriverCard = ({ driver }: { driver: Driver }) => {
+export const DriverCard = ({ driver }: { driver: Driver }) => {
   const [showInfos, setShowInfos] = React.useState(false)
   const { teams } = useTeamsContext()
-  const { driverTypes } = useDriversContext()
+  const { driverTypes, refreshDrivers } = useDriversContext()
   const {
     id,
     user,
@@ -58,6 +37,7 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
     team: false,
     phone_number: false,
     driver_type: false,
+    is_freelance: false,
   })
   const formik = useFormik({
     initialValues: {
@@ -67,43 +47,39 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
       is_freelance: is_freelance,
     },
     validationSchema: Yup.object({
-      team: Yup.string().required('Required'),
-      phone_number: Yup.string()
-        .matches(/^[0-9]{10}$/, 'Phone number must be 10 digits')
-        .required('Required'),
-      driver_type: Yup.string().required('Required'),
-      is_freelance: Yup.boolean().required('Required'),
+      team: Yup.string(),
+      phone_number: Yup.string().matches(
+        //composed only of digits
+        /^[0-9]*$/,
+        "Phone number can't contain letters"
+      ),
+      driver_type: Yup.string(),
+      is_freelance: Yup.boolean(),
     }),
     onSubmit: async (values) => {
-      // const team = currencies?.find(
-      //   (currency: Currency) => currency.id === formik.values.team
-      // )
-      // if (!team) {
-      //   toast.error('Price unit not found!')
-      //   return
-      // }
-      // await updateRecord(
-      //   {
-      //     ...values,
-      //     id: country?.id,
-      //     name: country?.name,
-      //     team: team?.id,
-      //   },
-      //   'country'
-      // )
-      //   .then((res) => {
-      //     if (res) {
-      //       toast.success('Country updated successfully')
-      //       refreshCountries()
-      //       setShowSave({
-      //         team: false,
-      //         phone_number: false,
-      //       })
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     toast.error('Error updating country!')
-      //   })
+      console.log('values', values)
+      await partialUpdateRecord(
+        {
+          ...values,
+          id,
+        },
+        'driver'
+      )
+        .then((res) => {
+          if (res) {
+            toast.success('Driver updated successfully')
+            refreshDrivers()
+            setShowSave({
+              team: false,
+              phone_number: false,
+              driver_type: false,
+              is_freelance: false,
+            })
+          }
+        })
+        .catch((err) => {
+          toast.error('Error updating driver!')
+        })
     },
   })
 
@@ -159,7 +135,7 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
                         : 'border-gray-300 bg-transparent'
                     }`}
                   >
-                    <option value={team.id}>{team.name}</option>
+                    {/* <option value={team.id}>{team.name}</option> */}
                     {teams?.map((tm: Team) => (
                       <option key={tm.id} value={tm.id}>
                         {tm.name}
@@ -187,7 +163,7 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
                   }}
                   value={formik.values.phone_number}
                   placeholder='Phone Number'
-                  className='bg-transparent w-full h-full outline-none'
+                  className='bg-transparent w-full h-full outline-none text-sm'
                 />
               </div>
               {
@@ -232,12 +208,18 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
                 <></>
               )}
 
+              <AddArea
+                id={id}
+                endpoint='driver'
+                areas={areas.map((a) => a?.id) || []}
+                refreshRecords={refreshDrivers}
+              />
             </div>
           </div>
           <Divider />
           {/* Driver Type & Vehicle License */}
           <div className='w-full flex items-center justify-between'>
-            <div className='w-1/3 flex items-center gap-x-6'>
+            <div className='w-1/2 flex items-center gap-x-6'>
               <label className='text-gray-500 capitalize'>Type</label>
               <div className='h-11 bg-gray-200 rounded px-4 flex justify-between items-center'>
                 <select
@@ -254,9 +236,6 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
                       : 'border-gray-300 bg-transparent'
                   }`}
                 >
-                  <option value={driver_type.id}>
-                    {driver_type.vehicle_type}
-                  </option>
                   {driverTypes?.map((dt: DriverType) => (
                     <option key={dt.id} value={dt.id}>
                       {dt.vehicle_type}
@@ -266,46 +245,29 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
               </div>
               {
                 // Display save button if user changed price unit
-                showSave.team && SaveButton(formik.handleSubmit as any)
+                showSave.driver_type && SaveButton(formik.handleSubmit as any)
               }
             </div>
 
-            <div className='w-1/3 flex items-center gap-x-6'>
-              <label className='text-gray-500 capitalize'>Phone</label>
-              <div className='h-11 bg-gray-200 rounded px-4 flex justify-between items-center'>
-                <input
-                  id='phone_number'
-                  name='phone_number'
-                  type='text'
-                  onChange={(e) => {
-                    formik.handleChange(e)
-                    setShowSave({ ...showSave, phone_number: true })
-                  }}
-                  value={formik.values.phone_number}
-                  placeholder='Phone Number'
-                  className='bg-transparent w-full h-full outline-none'
-                />
-              </div>
-              {
-                // Display save button if user changed driver fees
-                showSave.phone_number && SaveButton(formik.handleSubmit as any)
-              }
-            </div>
-
-            <div className='w-1/3 flex items-center gap-x-6'>
+            <div className='w-1/2 flex items-center gap-x-6'>
               <label className='text-gray-500'>Freelancer</label>
 
               <Checkbox
-                // defaultChecked={true}
                 defaultSelected={is_freelance}
                 value={is_freelance ? 'freelancer' : ''}
+                onChange={(e) => {
+                  formik.setFieldValue('is_freelance', e)
+                  // check if value is different from initial value
+                  e !== is_freelance
+                    ? setShowSave({ ...showSave, is_freelance: true })
+                    : setShowSave({ ...showSave, is_freelance: false })
+                }}
                 color='warning'
                 size='xl'
-                className='rounded-[0]'
-              ></Checkbox>
+              />
               {
                 // Display save button if user changed driver fees
-                showSave.phone_number && SaveButton(formik.handleSubmit as any)
+                showSave.is_freelance && SaveButton(formik.handleSubmit as any)
               }
             </div>
           </div>

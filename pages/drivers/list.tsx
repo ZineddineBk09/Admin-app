@@ -11,11 +11,17 @@ import { DriversContextProvider } from '../../context/drivers'
 import { NextPage } from 'next'
 import React from 'react'
 import Loading from '../../components/shared/loading'
+import { TeamsContextProvider } from '../../context/drivers/teams'
+import { AreasCitiesContextProvider } from '../../context/areas/cities'
 
 const DriversPage: NextPage = () => {
   return (
     <DriversContextProvider>
-      <DriversList />
+      <TeamsContextProvider>
+        <AreasCitiesContextProvider>
+          <DriversList />
+        </AreasCitiesContextProvider>
+      </TeamsContextProvider>
     </DriversContextProvider>
   )
 }

@@ -1,25 +1,31 @@
 import { Button, Modal, Text, Loading, Tooltip, Input } from '@nextui-org/react'
 import React, { useEffect, useState } from 'react'
 import * as L from 'leaflet'
-import {
-  DriverTeamMember,
-  GeoJSONCoordinate,
-  GeoJSONObject,
-} from '../../../interfaces'
-import CityCard from '../../areas/cities/city'
+import { GeoJSONCoordinate, GeoJSONObject } from '../../../interfaces'
+import CityCard from '../../areas/cities/city/card'
 import { FeatureGroup, MapContainer, TileLayer } from 'react-leaflet'
 import { EditControl } from 'react-leaflet-draw'
 import toast from 'react-hot-toast'
-import { createRecord } from '../../../lib/api'
+import { createRecord, partialUpdateRecord } from '../../../lib/api'
 
-const Geofence = () => {
+const Geofence = ({
+  id,
+  geofenceName,
+  endpoint,
+  refreshRecords,
+  areas,
+}: {
+  id: string
+  geofenceName: string
+  endpoint: string
+  refreshRecords: () => void
+  areas: number[]
+}) => {
   const [map, setMap] = useState<any>(null)
   const [control, setControl] = useState<any>(null)
 
-  
   const handleCreated = async (e: any) => {
     const geojson: GeoJSONObject = e.layer.toGeoJSON()
-
     const apiFormat = geojson.geometry.coordinates[0].map(
       (coord: GeoJSONCoordinate, index: number) => {
         return {
@@ -29,35 +35,46 @@ const Geofence = () => {
         }
       }
     )
-
-    await createRecord(
-      {
-        name: 'name',
+    if (geofenceName) {
+      console.log('GEOFENCE:', {
+        geofenceName: geofenceName,
         vertices: apiFormat,
-      },
-      'geofence'
-    )
-      .then(async (res) => {
-        if (res) {
-          toast.success('Area added successfully')
-        }
       })
-      .catch((err) => {
-        console.log('Error adding area!: ', err)
-        toast.error('Error adding area!')
-      })
-  }
 
-  const handleEdited = (e: any) => {
-    const editedLayers = Object.values(e.layers._layers)
-    const updatedPolygons: GeoJSONObject[] = editedLayers.map((layer: any) =>
-      layer.toGeoJSON()
-    )
-  }
+      await createRecord(
+        {
+          name: geofenceName,
+          vertices: apiFormat,
+        },
+        'geofence'
+      )
+        .then(async (res) => {
+          if (res) {
+            console.log('Area added successfully: ', res)
+            await partialUpdateRecord(
+              {
+                id,
+                areas: [...areas, res?.id],
+              },
+              endpoint
+            )
+              .then((res) => {
+                if (res) {
+                  toast.success('Area added successfully')
 
-  const handleDeleted = () => {
-    console.log('Deleted city polygon')
-    // TODO: Implement your logic to delete the selected city polygon
+                  refreshRecords()
+                }
+              })
+              .catch((err) => {
+                toast.error('Error assigning area!')
+              })
+          }
+        })
+        .catch((err) => {
+          console.log('Error adding area!: ', err)
+          toast.error('Error adding area!')
+        })
+    }
   }
 
   useEffect(() => {
@@ -102,20 +119,24 @@ const Geofence = () => {
         <FeatureGroup>
           <EditControl
             position='bottomleft'
-            onCreated={handleCreated}
-            onEdited={handleEdited}
-            onDeleted={handleDeleted}
+            onCreated={
+              geofenceName != ''
+                ? handleCreated
+                : () => {
+                    toast.error('Please enter a name for the area!')
+                  }
+            }
             draw={{
               rectangle: false,
               circle: false,
               circlemarker: false,
               marker: false,
               polyline: false,
-              polygon: true,
+              polygon: geofenceName != '',
             }}
             edit={{
-              edit: true,
-              remove: true,
+              edit: false,
+              remove: false,
             }}
           />
         </FeatureGroup>
@@ -124,10 +145,20 @@ const Geofence = () => {
     </>
   )
 }
-export const AddArea = ({ members }: { members: DriverTeamMember[] }) => {
+export const AddArea = ({
+  id,
+  endpoint,
+  refreshRecords,
+  areas,
+}: {
+  id: string
+  endpoint: string
+  refreshRecords: () => void
+  areas: number[]
+}) => {
   const [visible, setVisible] = React.useState(false)
   const [loading, setLoading] = React.useState<boolean>(false)
-  const [search, setSearch] = React.useState('')
+  const [geofenceName, setGeofenceName] = React.useState<string>('')
 
   const handler = () => setVisible(true)
 
@@ -135,14 +166,10 @@ export const AddArea = ({ members }: { members: DriverTeamMember[] }) => {
     setVisible(false)
   }
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value)
-  }
-
   return (
     <div>
       <Tooltip content='Add Area' onClick={handler}>
-        <button className='h-10 w-16 flex items-center justify-center text-center text-4xl font-medium rounded-full'>
+        <button className='h-10 w-10 flex items-center justify-center text-4xl font-medium rounded-full bg-gray-200 pb-1'>
           +
         </button>
       </Tooltip>
@@ -175,23 +202,31 @@ export const AddArea = ({ members }: { members: DriverTeamMember[] }) => {
                 fullWidth
                 size='lg'
                 placeholder='Name'
-                name='name'
-                id='name'
-                value={''}
-                onChange={() => {}}
+                name='geofenceName'
+                id='geofenceName'
+                value={geofenceName}
+                onChange={(e: any) => {
+                  setGeofenceName(e.target.value.slice(0, 100))
+                }}
               />
               <div className='h-96 flex flex-col items-start bg-gray-200 overflow-hidden rounded-md relative'>
-                <Geofence />
+                <Geofence
+                  id={id}
+                  geofenceName={geofenceName}
+                  endpoint={endpoint}
+                  refreshRecords={refreshRecords}
+                  areas={areas}
+                />
               </div>
               <div className='hidden'>
                 <CityCard city={{} as any} />
               </div>
             </Modal.Body>
-            <Modal.Footer>
+            {/* <Modal.Footer>
               <Button auto type='submit' className='bg-primary text-black'>
                 Add Area
               </Button>
-            </Modal.Footer>
+            </Modal.Footer> */}
           </>
         )}
       </Modal>

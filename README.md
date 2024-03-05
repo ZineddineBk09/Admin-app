@@ -77,7 +77,7 @@ You can see the demo here: https://restaurant-driver-app.vercel.app/
 │   ├── areas
 │   ├── clients
 │   ├── customer
-│   │   └── choose-location
+│   │   └── select-location
 │   ├── customers
 │   ├── dashboard
 │   ├── drivers

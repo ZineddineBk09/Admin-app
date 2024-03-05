@@ -14,10 +14,13 @@ import { useAreasCountriesContext } from '../../../context/areas/countries'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import dynamic from 'next/dynamic'
 import Loading from '../../shared/loading'
-const AddArea = dynamic(() => import('./add-area').then((m) => m.AddArea), {
-  ssr: false,
-  loading: () => <Loading />,
-})
+const AddArea = dynamic(
+  () => import('../shared/add-area').then((m) => m.AddArea),
+  {
+    ssr: false,
+    loading: () => <Loading />,
+  }
+)
 
 const DriversTeams = () => {
   const { teams, hasMore, fetchNextPage } = useTeamsContext()
@@ -336,7 +339,12 @@ const DriverTeamCard = ({ team }: { team: Team }) => {
             ) : (
               <p className='text-sm'>No areas found</p>
             )}
-            <AddArea members={members} />
+            <AddArea
+              id={id}
+              endpoint='team'
+              areas={areas}
+              refreshRecords={refreshTeams}
+            />
           </div>
           <Divider />
           <div className='w-full flex items-center justify-between'>

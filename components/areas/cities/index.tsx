@@ -1,12 +1,12 @@
 import { City } from '../../../interfaces'
 import React from 'react'
 import { AddCity } from './add-city'
-import { SearchCity } from './city'
+import { SearchCity } from './city/card'
 import dynamic from 'next/dynamic'
 import { useAreasCitiesContext } from '../../../context/areas/cities'
 import Loading from '../../../components/shared/loading'
 import InfiniteScroll from 'react-infinite-scroll-component'
-const CityCard = dynamic(() => import('./city'), {
+const CityCard = dynamic(() => import('./city/card'), {
   ssr: false,
   loading: () => <Loading />,
 })

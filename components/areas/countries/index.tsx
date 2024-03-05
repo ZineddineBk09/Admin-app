@@ -42,7 +42,7 @@ const Countries = () => {
 const CountryCard = ({ country }: { country: Country }) => {
   const { currencies, refreshCountries } = useAreasCountriesContext()
   const [showInfos, setShowInfos] = React.useState(false)
-  const { id, name, price_unit, driver_fees, order_fees } = country
+  const { id, name, price_unit } = country
   const [showSave, setShowSave] = React.useState({
     price_unit: false,
     driver_fees: false,

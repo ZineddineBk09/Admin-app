@@ -37,29 +37,19 @@ export interface User {
 //------------------------- Drivers ----------------------------
 export interface Driver {
   id: string
-  username: string
-  email: string
-  image: string
-  status: 'available' | 'inactive' | 'busy' | string
-  team: string
-  completedTasks: number
-  inProgressTasks: number
-  location?: Location
-  orders: number
-  phone: string
-  firstName: string
-  lastName: string
-  vehicleId: string
-  vehicleType: string
-  vehicleLicense: string
-  residencyId: string
-  isFreelance: boolean
-  isActive: boolean
-  isStaff: boolean
+  user: User
+  city: City
+  driver_type: DriverType
+  team: DriverTeam
   code: string
-  areas: string[]
-  salary: number
-  city: string
+  phone_number: string
+  status: string
+  image: string
+  is_freelance: boolean
+  vehicle_license: string
+  residency_id: string
+  is_idle: boolean
+  areas: Geofence[]
 }
 
 export interface DriverType extends Pricing {
@@ -361,6 +351,7 @@ export interface BBox {
 export interface GeofenceVertex extends Location {}
 
 export interface Geofence {
+  id: number
   name: string
   vertices: GeofenceVertex[]
 }

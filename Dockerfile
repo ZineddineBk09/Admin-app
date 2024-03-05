@@ -7,8 +7,8 @@ WORKDIR /app
 # Copy package.json and package-lock.json (or yarn.lock)
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install --production
+# Install dependencies and clean up
+RUN npm install --production --no-optional && npm cache clean --force 
 
 # Copy the rest of your project code
 COPY . .
@@ -24,4 +24,4 @@ RUN npm run build
 EXPOSE 3000
 
 # Entrypoint script allows passing arguments to npm start
-ENTRYPOINT [ "npm", "start" ]
+CMD [ "npm", "start" ]

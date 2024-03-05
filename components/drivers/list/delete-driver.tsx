@@ -5,6 +5,7 @@ import { DeleteIcon } from '../../icons/table'
 import { IconButton } from '../../table/table.styled'
 import { deleteRecord } from '../../../lib/api'
 import { useDriversContext } from '../../../context/drivers'
+import toast from 'react-hot-toast'
 
 export const DeleteDriver = ({
   id,
@@ -26,9 +27,15 @@ export const DeleteDriver = ({
   const handleDelete = async () => {
     setLoading(true)
     await deleteRecord(id, 'driver')
-    closeHandler()
-    setLoading(false)
-    refreshDrivers()
+      .then((res: any) => {
+        setLoading(false)
+        closeHandler()
+        toast.success('Driver deleted successfully')
+        refreshDrivers()
+      })
+      .catch((err) => {
+        toast.error('Error deleting driver!')
+      })
   }
 
   return (
