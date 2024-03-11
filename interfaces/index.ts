@@ -45,11 +45,9 @@ export interface Driver {
   phone_number: string
   status: string
   image: string
-  is_freelance: boolean
   vehicle_license: string
   residency_id: string
   is_idle: boolean
-  areas: Geofence[]
 }
 
 export interface DriverType extends Pricing {
@@ -70,7 +68,7 @@ export interface DriverTeam extends Pricing {
   id: string
   name: string
   fixed: number
-  supervisor: string
+  supervisor: User
   city: {
     id: string
     name: string
@@ -95,6 +93,11 @@ export interface Team extends Pricing {
   accounts?: string[]
 }
 
+export interface TeamMinimal {
+  id: string
+  name: string
+}
+
 interface APIDriver {
   id: string
   username: string
@@ -104,7 +107,6 @@ interface APIDriver {
   phone_number: string
   team_id: string
   password: string
-  is_freelance: boolean
   vehicle_id: string
   vehicle_type: string
   vehicle_license: string
@@ -180,12 +182,24 @@ export interface Currency {
   is_supported: boolean
 }
 
-export interface Country {
+export interface CurrencyMinimal {
+  id: string
+  symbol: string
+}
+
+export interface Country extends Pricing {
+  id: string
+  name: string
+  price_unit: CurrencyMinimal
+  order_fees: number
+  driver_fees: number
+}
+
+export interface CountryMinimal {
   id: string
   name: string
   price_unit: Currency
   order_fees: number
-  driver_fees: number
 }
 
 export interface Governorate extends Pricing {
@@ -195,12 +209,35 @@ export interface Governorate extends Pricing {
   order_fees: number
 }
 
+export interface GovernorateMinimal {
+  id: string
+  name: string
+}
+
 export interface City extends Pricing {
   id: string
   name: string
   governorate: Governorate
   geofence: Geofence
   order_fees: number
+  areas: Geofence[]
+}
+
+export interface CityMinimal {
+  id: string
+  name: string
+  areas: Geofence[]
+}
+
+export interface Address {
+  id: string
+  decoded_address: string
+  country: CountryMinimal
+  governorate: GovernorateMinimal
+  city: CityMinimal
+  longitude: number
+  latitude: number
+  map_link: string
 }
 //--------------------------------------------------------------------
 
@@ -216,27 +253,32 @@ interface Client {
 export interface Account {
   id: string
   name: string
-  city: string
-  discount: number
+  discount_percentage: number
   website: string
-  phone: string
-  branches: { id: string; name: string }[]
-  teams: { id: string; name: string }[]
-  admins: { id: string; name: string }[]
+  phone_number: string
+  teams: TeamMinimal[]
+  branches: BranchMinimal[]
+}
+
+export interface AccountMinimal {
+  id: string
+  name: string
 }
 
 export interface Branch {
   id: string
-  name: string
-  country: string
-  governorate: string
-  city: string
-  customOrderFee: number
-  customDriverFee: number
-  phone: string
-  supervisor: string
-  clientAccount: string
-  location: Location
+  address: Address
+  supervisor: User
+  account: AccountMinimal
+  order_fees: number
+  driver_fees: number
+  phone_number: string
+  main: boolean
+}
+
+export interface BranchMinimal {
+  id: string
+  supervisor: UserAccess
 }
 //--------------------------------------------------------------------
 
