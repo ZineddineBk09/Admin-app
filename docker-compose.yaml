@@ -1,8 +1,11 @@
-version: '3.8'
+version: '3'
+
 services:
-  web:
+  next-app:
+    container_name: fleetrun-frontend
     build:
       context: ./
+
       dockerfile: Dockerfile  # Assuming you have a multi-stage Dockerfile
     volumes:
       - ./package-lock.json:/app/package-lock.json:ro  # Ensure dependency consistency
@@ -12,3 +15,18 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: production  
+      dockerfile: ./Dockerfile
+
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - my_network
+
+  # Add more containers below (nginx, postgres, etc.)
+
+# Define a network, which allows containers to communicate
+# with each other, by using their container name as a hostname
+networks:
+  my_network:
+    external: true
