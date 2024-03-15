@@ -1,14 +1,20 @@
 import { Text, Loading } from '@nextui-org/react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Flex } from '../../styles/flex'
-import { DriversTable } from '../../table/drivers/drivers-table'
 import { AddDriver } from './add-driver'
 import { useDriversContext } from '../../../context/drivers'
-import { Team } from '../../../interfaces'
+import { Driver, Sort, Team } from '../../../interfaces'
 import { getRecords } from '../../../lib/api'
+import { DriverCard } from './driver/card'
 
 export const DriversPage = () => {
-  const { drivers, loading } = useDriversContext()
+  const { drivers, handleSortDrivers, loading } = useDriversContext()
+  const [sorting, setSorting] = useState<Sort>({ column: '', direction: '' })
+
+  useEffect(() => {
+    if (sorting.column === '') return
+    handleSortDrivers(sorting)
+  }, [sorting])
 
   return (
     <Flex
@@ -33,7 +39,13 @@ export const DriversPage = () => {
       {loading ? (
         <Loading size='xl' className='mt-24 -mb-24' color='warning' />
       ) : drivers?.length > 0 ? (
-        <DriversTable />
+        <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
+          <div className='w-full flex flex-col items-center gap-y-6'>
+            {drivers?.map((driver: Driver, index: number) => (
+              <DriverCard key={driver?.id || index} driver={driver} />
+            ))}
+          </div>
+        </div>
       ) : (
         <Flex
           css={{
@@ -81,8 +93,8 @@ export const SearchAndFilter = () => {
         >
           <option value=''>Select Team All</option>
           {teams?.map((team: Team, index: number) => (
-            <option key={index} value={team.id}>
-              {team.name}
+            <option key={index} value={team?.id}>
+              {team?.name}
             </option>
           ))}
         </select>

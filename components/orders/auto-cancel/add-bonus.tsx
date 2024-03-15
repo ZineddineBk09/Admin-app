@@ -26,7 +26,7 @@ export const AddBonus = ({ order }: { order: AutoCancelledOrder }) => {
       // setLoading(true)
       const response = await updateRecord(
         {
-          id: order.id,
+          id: order?.id,
           ...values,
         },
         'order'

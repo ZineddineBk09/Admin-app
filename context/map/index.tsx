@@ -71,7 +71,7 @@ export const MapContextProvider = ({
 
   const handleFilterOrders = (status: string[]) => {
     if (status?.length === 0) return setFilteredOrders(orders)
-    const filtered = orders.filter((order) => status.includes(order.status))
+    const filtered = orders.filter((order) => status.includes(order?.status))
     setFilteredOrders(filtered)
   }
 

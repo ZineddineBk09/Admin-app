@@ -56,7 +56,7 @@ export const AddGovernorate = () => {
     }),
     onSubmit: async (values) => {
       const country = countries?.find(
-        (country: Country) => country.id === values.country
+        (country: Country) => country?.id === values.country
       )
       if (!country) {
         toast.error('Price unit not found!')
@@ -87,11 +87,11 @@ export const AddGovernorate = () => {
   // wrire a function that handles reating a country, so that the governorate can inherit the values: order_fees, price_unit from the country
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const country = countries?.find(
-      (country: Country) => country.id === e.target.value
+      (country: Country) => country?.id === e.target.value
     )
     if (country) {
-      formik.setFieldValue('order_fees', country.order_fees)
-      setPriceUnit(country.price_unit.symbol)
+      formik.setFieldValue('order_fees', country?.order_fees)
+      setPriceUnit(country?.price_unit.symbol)
     }
   }
 

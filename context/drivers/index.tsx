@@ -9,6 +9,7 @@ import {
 import { getRecords } from '../../lib/api'
 import { searchDrivers } from '../../lib/search'
 import { faker } from '@faker-js/faker'
+import axios from '../../lib/axios'
 
 export const DriversContext = React.createContext({})
 
@@ -18,6 +19,9 @@ export const useDriversContext: {
     driverTypes: DriverType[]
     loading: boolean
     vehicleTypes: string[]
+    hasMore: boolean
+    isFetching: boolean
+    fetchNextPage: () => Promise<void>
     handleSearchDrivers: (search: string) => void
     handleSortDrivers: (sort: Sort) => void
     handleSelectTeam: (team: string) => void
@@ -37,6 +41,8 @@ export const DriversContextProvider = ({
     [] as DriverType[]
   )
   const [loading, setLoading] = useState(false)
+  const [hasMore, setHasMore] = useState<boolean>(true)
+  const [isFetching, setIsFetching] = useState<boolean>(false)
   const vehicleTypes = [
     'car',
     'van',
@@ -51,46 +57,16 @@ export const DriversContextProvider = ({
 
   const refreshDrivers = async () => {
     setLoading(true)
-    // setDrivers([] as Driver[])
-    const records = await getRecords('driver').then((res) => res.data)
+    const records: APIResponse = await getRecords('driver')
+console.log('records', records)
+    if (records.results) {
+      setDrivers(records.results)
+    }
 
-    setDrivers(
-      records?.map(
-        (driver: any): Driver => ({
-          id: driver.pk,
-          username: driver.fields.username,
-          firstName: driver.fields.first_name,
-          lastName: driver.fields.last_name,
-          email: driver.fields.email,
-          team: driver.fields.team_id,
-          status: ['available', 'inactive', 'busy'][
-            Math.floor(Math.random() * 3)
-          ],
-          image: faker.image.avatar(),
-          completedTasks: Math.floor(Math.random() * 100),
-          inProgressTasks: Math.floor(Math.random() * 100),
-          location: {
-            latitude: driver.fields.latitude,
-            longitude: driver.fields.longitude,
-          },
-          phone: driver.fields.phone_number,
-          orders: Math.floor(Math.random() * 100),
-          vehicleId: driver.fields.vehicle_id,
-          vehicleType: driver.fields.vehicle_type,
-          vehicleLicense: driver.fields.vehicle_license,
-          residencyId: driver.fields.residency_id,
-          isFreelance: driver.fields.is_freelancer,
-          isActive: driver.fields.is_active,
-          isStaff: driver.fields.is_staff,
-          code: driver.fields.code,
-          salary: driver.fields.salary || 0,
-          areas: driver.fields.areas || ['area 1', 'area 2', 'area 3'],
-          city: driver.fields.city || 'city',
-        })
-      )
-    )
+    // check if there are more drivers we can fetch
+    setHasMore(!!records.next)
+
     setLoading(false)
-    // setDrivers(drivers)
   }
 
   const refreshDriverTypes = async () => {
@@ -133,7 +109,7 @@ export const DriversContextProvider = ({
       refreshDrivers()
       return
     }
-    const filteredDrivers = drivers.filter((driver) => driver.team === team)
+    const filteredDrivers = drivers.filter((driver) => driver?.team.id === team)
     setDrivers(filteredDrivers)
   }
 
@@ -142,12 +118,38 @@ export const DriversContextProvider = ({
       refreshDrivers()
       return
     }
-    const filteredDrivers = drivers.filter((driver) => driver.status === status)
+    const filteredDrivers = drivers.filter(
+      (driver) => driver?.status === status
+    )
     setDrivers(filteredDrivers)
   }
 
+  const fetchNextPage = async () => {
+    if (isFetching || !hasMore) {
+      return
+    }
+
+    setIsFetching(true)
+
+    // next url will of format: /driver/?limit=10&offset=10
+    try {
+      const response = await axios.get(
+        `/driver/?limit=10&offset=${drivers.length}`
+      )
+      const newDrivers = response.data.results
+      setDrivers([...drivers, ...newDrivers])
+
+      // check if there are more drivers we can fetch
+      setHasMore(!!response.data.next)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    } finally {
+      setIsFetching(false)
+    }
+  }
+
   useEffect(() => {
-    // refreshDrivers()
+    refreshDrivers()
     // refreshDriverTeams()
     refreshDriverTypes()
   }, [])
@@ -159,6 +161,9 @@ export const DriversContextProvider = ({
         driverTypes,
         loading,
         vehicleTypes,
+        hasMore,
+        isFetching,
+        fetchNextPage,
         handleSearchDrivers,
         handleSortDrivers,
         handleSelectTeam,

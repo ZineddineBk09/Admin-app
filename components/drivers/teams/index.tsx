@@ -12,6 +12,15 @@ import { updateRecord } from '../../../lib/api'
 import { useFormik } from 'formik'
 import { useAreasCountriesContext } from '../../../context/areas/countries'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import dynamic from 'next/dynamic'
+import Loading from '../../shared/loading'
+const AddArea = dynamic(
+  () => import('../shared/add-area').then((m) => m.AddArea),
+  {
+    ssr: false,
+    loading: () => <Loading />,
+  }
+)
 
 const DriversTeams = () => {
   const { teams, hasMore, fetchNextPage } = useTeamsContext()
@@ -32,7 +41,7 @@ const DriversTeams = () => {
           className='w-full flex flex-col items-center gap-y-6'
         >
           {teams?.map((team: Team, index: number) => (
-            <DriverTeamCard key={team.id} team={team} />
+            <DriverTeamCard key={team?.id} team={team} />
           ))}
         </InfiniteScroll>
       </div>
@@ -330,12 +339,12 @@ const DriverTeamCard = ({ team }: { team: Team }) => {
             ) : (
               <p className='text-sm'>No areas found</p>
             )}
-
-            <Tooltip content='Add Area'>
-              <button className='h-10 w-16 flex items-center justify-center text-center text-4xl font-medium rounded-full'>
-                +
-              </button>
-            </Tooltip>
+            <AddArea
+              id={id}
+              endpoint='team'
+              areas={areas}
+              refreshRecords={refreshTeams}
+            />
           </div>
           <Divider />
           <div className='w-full flex items-center justify-between'>
@@ -385,8 +394,8 @@ const FilterWithCountry = () => {
       >
         <option value='all'>Select Country (All)</option>
         {countries?.map((country: Country, index: number) => (
-          <option key={index} value={country.name} className='px-2'>
-            {country.name}
+          <option key={index} value={country?.name} className='px-2'>
+            {country?.name}
           </option>
         ))}
       </select>

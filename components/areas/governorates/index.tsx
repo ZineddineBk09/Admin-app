@@ -32,7 +32,7 @@ const Governorates = () => {
           className='w-full flex flex-col items-center gap-y-6'
         >
           {governorates?.map((governorate: Governorate, index: number) => (
-            <GovernorateCard key={governorate.id} governorate={governorate} />
+            <GovernorateCard key={governorate?.id} governorate={governorate} />
           ))}
         </InfiniteScroll>
       </div>
@@ -125,7 +125,7 @@ const GovernorateCard = ({ governorate }: { governorate: Governorate }) => {
             <label aria-label='Country' className='text-gray-500 capitalize'>
               Country
             </label>
-            <p className='font-medium'>{country.name}</p>
+            <p className='font-medium'>{country?.name}</p>
           </div>
           <Divider />
 
@@ -271,8 +271,8 @@ const FilterWithCountry = () => {
       >
         <option value='all'>Select Country (All)</option>
         {countries?.map((country: Country, index: number) => (
-          <option key={index} value={country.name} className='px-2'>
-            {country.name}
+          <option key={index} value={country?.name} className='px-2'>
+            {country?.name}
           </option>
         ))}
       </select>

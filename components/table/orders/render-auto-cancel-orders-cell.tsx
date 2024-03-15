@@ -21,7 +21,7 @@ export const RenderCell = ({ order, columnKey }: Props) => {
       return <p>#{cellValue}</p>
 
     case 'client':
-      return <p>{order.client.name}</p>
+      return <p>{order?.client.name}</p>
 
     case 'value':
       return (
@@ -111,7 +111,7 @@ export const RenderCell = ({ order, columnKey }: Props) => {
           css={{ gap: '$8', '@md': { gap: 3 } }}
         >
           <Col css={{ d: 'flex' }}>
-            <CancelOrder id={order.id} />
+            <CancelOrder id={order?.id} />
           </Col>
         </Row>
       )

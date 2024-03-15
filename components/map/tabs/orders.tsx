@@ -28,7 +28,7 @@ export const Orders = ({ orderStatus }: { orderStatus: any }) => {
       {/* Render filter */}
       <OrdersFilter />
       {filterOrders?.map((order: any, index: number) => (
-        <OrderCard key={order.id} order={order} />
+        <OrderCard key={order?.id} order={order} />
       ))}
     </div>
   )
@@ -55,14 +55,14 @@ const OrderCard = ({ order }: { order: Order }) => {
   const [selected, setSelected] = useState(false)
 
   useEffect(() => {
-    if (selectedOrder === order.id) setSelected(true)
+    if (selectedOrder === order?.id) setSelected(true)
     else setSelected(false)
   }, [selectedOrder])
 
   return (
     <Card
       isPressable
-      onClick={() => handleSelectOrder(order.id)}
+      onClick={() => handleSelectOrder(order?.id)}
       className={`rounded-md ${
         selected
           ? !location

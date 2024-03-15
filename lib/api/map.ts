@@ -26,13 +26,13 @@ export const getDriversInArea = async (bbox: BBox) => {
       const drivers = res.data.map(async (driver: any) => {
         // Take driver location from the map API
         const location = {
-          latitude: driver.location.lat || 0,
-          longitude: driver.location.lng || 0,
+          latitude: driver?.location.lat || 0,
+          longitude: driver?.location.lng || 0,
         }
 
         // Get driver details from the driver API
         const driverRes = await axios.get(
-          process.env.NEXT_PUBLIC_API_URL + `/driver/dis/${driver.id}`,
+          process.env.NEXT_PUBLIC_API_URL + `/driver/dis/${driver?.id}`,
           {
             headers: {
               Authorization: `Bearer ${session?.accessToken}`,

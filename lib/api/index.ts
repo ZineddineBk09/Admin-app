@@ -27,6 +27,19 @@ export const updateRecord = async (record: any, endpoint: string) => {
   }
 }
 
+export const partialUpdateRecord = async (record: any, endpoint: string) => {
+  const session: any = await getSession()
+
+  try {
+    const response = await axios.patch(endpoint + '/' + record.id + '/', record)
+    const data = await response.data
+    return data
+  } catch (error) {
+    console.log('Error updating record', error)
+    throw new Error('Error updating record')
+  }
+}
+
 export const deleteRecord = async (id: string, endpoint: string) => {
   const session: any = await getSession()
 

@@ -10,17 +10,20 @@ import { TeamsContextProvider } from '../../context/drivers/teams'
 import { AreasCitiesContextProvider } from '../../context/areas/cities'
 import { UsersContextProvider } from '../../context/users'
 import { AreasCountriesContextProvider } from '../../context/areas/countries'
+import { AreasGovernoratesContextProvider } from '../../context/areas/governorates'
 
 const DriversTeamsPage: NextPage = () => {
   return (
     <TeamsContextProvider>
-      <AreasCitiesContextProvider>
-        <AreasCountriesContextProvider>
-          <UsersContextProvider>
-            <DriversTeams />
-          </UsersContextProvider>
-        </AreasCountriesContextProvider>
-      </AreasCitiesContextProvider>
+      <AreasCountriesContextProvider>
+        <AreasGovernoratesContextProvider>
+          <AreasCitiesContextProvider>
+            <UsersContextProvider>
+              <DriversTeams />
+            </UsersContextProvider>
+          </AreasCitiesContextProvider>
+        </AreasGovernoratesContextProvider>
+      </AreasCountriesContextProvider>
     </TeamsContextProvider>
   )
 }

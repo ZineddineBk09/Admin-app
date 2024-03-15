@@ -49,7 +49,7 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
       setLoading(true)
       const response = await updateRecord(
         {
-          id: driver.id,
+          id: driver?.id,
           ...values,
         },
         'driver'
@@ -250,8 +250,8 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
                     >
                       <option value=''>Select Team</option>
                       {teams?.map((team: Team, index: number) => (
-                        <option key={index} value={team.id}>
-                          {team.name}
+                        <option key={index} value={team?.id}>
+                          {team?.name}
                         </option>
                       ))}
                     </select>
