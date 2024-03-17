@@ -91,6 +91,22 @@ export const AddGovernorate = () => {
     )
     if (country) {
       formik.setFieldValue('order_fees', country?.order_fees)
+      formik.setFieldValue(
+        'price_ratio_nominator',
+        country?.price_ratio_nominator
+      )
+      formik.setFieldValue(
+        'price_ratio_denominator',
+        country?.price_ratio_denominator
+      )
+      formik.setFieldValue(
+        'additional_ratio_nominator',
+        country?.additional_ratio_nominator
+      )
+      formik.setFieldValue(
+        'additional_ratio_denominator',
+        country?.additional_ratio_denominator
+      )
       setPriceUnit(country?.price_unit.symbol)
     }
   }

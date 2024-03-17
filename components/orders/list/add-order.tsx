@@ -49,7 +49,6 @@ export const AddOrder = () => {
           phone_number: values.phone,
           team_id: values.team,
           password: values.password,
-          is_freelance: values.isFreelance === 'Yes' ? true : false,
         },
         'driver'
       )
@@ -85,7 +84,7 @@ export const AddOrder = () => {
       <Button
         auto
         onClick={handler}
-        className='h-20 w-20 bg-primary text-black rounded-full font-bold text-5xl shadow-md shadow-gray-400'
+        className='h-20 w-20 bg-primary bg-opacity-60 text-black rounded-full font-bold text-5xl shadow-md shadow-gray-400'
       >
         +
       </Button>

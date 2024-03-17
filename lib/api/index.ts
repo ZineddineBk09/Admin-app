@@ -40,7 +40,7 @@ export const partialUpdateRecord = async (record: any, endpoint: string) => {
   }
 }
 
-export const deleteRecord = async (id: string, endpoint: string) => {
+export const deleteRecord = async (id: string | number, endpoint: string) => {
   const session: any = await getSession()
 
   const response = await axios.delete(endpoint + '/' + id + '/')

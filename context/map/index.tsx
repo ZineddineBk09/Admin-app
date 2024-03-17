@@ -105,7 +105,7 @@ export const MapContextProvider = ({
         driverName: faker.person.firstName(),
         city: faker.location.city(),
         status: orderStatus[faker.number.int({ max: 3, min: 0 })].value,
-        deliveryFee: faker.number.int({ max: 100, min: 0 }),
+        delivery_fee: faker.number.int({ max: 100, min: 0 }),
         location:
           faker.number.int({ max: 2, min: 1 }) == 1
             ? {
@@ -124,8 +124,8 @@ export const MapContextProvider = ({
             quantity: faker.number.int({ max: 5, min: 1 }),
           })
         ),
-        clientPaid: faker.datatype.boolean(),
-        driverPaid: faker.datatype.boolean(),
+        client_paid: faker.datatype.boolean(),
+        driver_paid: faker.datatype.boolean(),
         paymentType: ['cash', 'visa', 'mastercard'][
           faker.number.int({ max: 2, min: 0 })
         ] as any,

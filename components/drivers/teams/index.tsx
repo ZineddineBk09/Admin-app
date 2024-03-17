@@ -14,6 +14,7 @@ import { useAreasCountriesContext } from '../../../context/areas/countries'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import dynamic from 'next/dynamic'
 import Loading from '../../shared/loading'
+import { DeleteModal } from '../../modals/delete'
 const AddArea = dynamic(
   () => import('../shared/add-area').then((m) => m.AddArea),
   {
@@ -143,7 +144,7 @@ const DriverTeamCard = ({ team }: { team: Team }) => {
             </h1>
           </div>
         </button>
-        <DeleteDriverTeam id={id} />
+        <DeleteModal id={id} name='team' refresh={refreshTeams} />
       </div>
       {showInfos && (
         <>
@@ -171,7 +172,9 @@ const DriverTeamCard = ({ team }: { team: Team }) => {
               />
               <span className='text-gray-500 w-32'>SAR / order</span>
             </div>
-            {showSave.fixed && SaveButton(formik.handleSubmit as any)}
+            {showSave.fixed &&
+              fixed !== formik.values.fixed &&
+              SaveButton(formik.handleSubmit as any)}
           </div>
           <Divider />
           <div className='w-full flex justify-between'>
@@ -220,6 +223,10 @@ const DriverTeamCard = ({ team }: { team: Team }) => {
               </div>
               {(showSave.price_ratio_denominator ||
                 showSave.price_ratio_nominator) &&
+                (price_ratio_denominator !==
+                  formik.values.price_ratio_denominator ||
+                  price_ratio_nominator !==
+                    formik.values.price_ratio_nominator) &&
                 SaveButton(formik.handleSubmit as any)}
             </div>
             <div className='flex items-center gap-x-6'>
@@ -270,6 +277,10 @@ const DriverTeamCard = ({ team }: { team: Team }) => {
               </div>
               {(showSave.additional_ratio_denominator ||
                 showSave.additional_ratio_nominator) &&
+                (additional_ratio_denominator !==
+                  formik.values.additional_ratio_denominator ||
+                  additional_ratio_nominator !==
+                    formik.values.additional_ratio_nominator) &&
                 SaveButton(formik.handleSubmit as any)}
             </div>
             <div />

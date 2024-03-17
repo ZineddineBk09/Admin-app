@@ -25,7 +25,7 @@ export const Drivers = ({ driverStatus }: { driverStatus: any }) => {
   )
 }
 
-const DriverCard = ({ driver }: { driver: Driver }) => {
+const DriverCard = ({ driver }: { driver: any }) => {
   const { username, image, status, orders } = driver
   const { handleSelectDriver, selectedDriver } = useMapContext()
   const [selected, setSelected] = useState(false)

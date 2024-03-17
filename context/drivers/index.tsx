@@ -58,7 +58,6 @@ export const DriversContextProvider = ({
   const refreshDrivers = async () => {
     setLoading(true)
     const records: APIResponse = await getRecords('driver')
-console.log('records', records)
     if (records.results) {
       setDrivers(records.results)
     }

@@ -11,11 +11,14 @@ import 'leaflet/dist/leaflet.css'
 import 'leaflet-easybutton/src/easy-button.js'
 import 'leaflet-easybutton/src/easy-button.css'
 import * as L from 'leaflet'
-
 import dynamic from 'next/dynamic'
 import { renderToString } from 'react-dom/server'
 import { MapPinIcon } from '../../../../components/icons/map'
 import Loading from '../../../../components/shared/loading'
+import { partialUpdateRecord } from '../../../../lib/api'
+import { useClientsBranchesContext } from '../../../../context/clients/branches'
+import toast from 'react-hot-toast'
+import { set, update } from 'lodash'
 const EditControl = dynamic(
   import('react-leaflet-draw').then((mod) => mod.EditControl),
   {
@@ -28,10 +31,18 @@ L.Icon.Default.mergeOptions({
   iconUrl: '/images/marker.png',
 })
 
-const BranchMap = () => {
-  const [position, setPosition] = useState<any>({ lat: 21.3891, lng: 39.8579 })
+const BranchMap = ({
+  id,
+  location,
+}: {
+  id: string
+  location: { lat: number; lng: number }
+}) => {
+  const { refreshBranches } = useClientsBranchesContext()
+  const [position, setPosition] = useState<any>(location)
   const [map, setMap] = useState<any>(null)
   const [control, setControl] = useState<any>(null)
+  const [updateLocation, setUpdateLocation] = useState<boolean>(false)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -55,52 +66,65 @@ const BranchMap = () => {
     const [changed, setChanged] = useState(false)
     const icon = (image?: string, symbol?: string) =>
       L.divIcon({
-        html: renderToString(
-          <div className='relative'>
-            <MapPinIcon />
-
-            <div className='flex items-center justify-center font-semibold absolute top-[10px] left-[10px] bg-gray-400 rounded-full w-10 h-10 z-10'></div>
-          </div>
-        ),
+        html: renderToString(<MapPinIcon />),
         iconSize: [60, 180],
         className: 'leaflet-icon',
       })
 
     const eventHandlers = {
-      dragend() {
+      async dragend() {
         const marker = markerRef?.current
-        if (marker) {
-          if (!changed) setChanged(true)
-          setPosition(marker.getLatLng())
-          // control.state('unloaded')
-        }
+        setPosition(marker.getLatLng())
       },
     }
 
-    if (position) {
-      const { lat, lng } = position
+    return (
+      <Marker
+        draggable={updateLocation}
+        icon={icon()}
+        eventHandlers={eventHandlers}
+        position={position}
+        ref={markerRef}
+      />
+    )
+  }
 
-      return (
-        <Marker
-          draggable
-          icon={icon()}
-          eventHandlers={eventHandlers}
-          position={position}
-          ref={markerRef}
-        >
-          <Popup>
-            {changed
-              ? 'Position: ' + lat.toFixed(4) + ', ' + lng.toFixed(4) + ''
-              : 'Position: ' + lat.toFixed(4) + ', ' + lng.toFixed(4) + ''}
-          </Popup>
-        </Marker>
+  const handleUpdateLocation = async () => {
+    if (updateLocation) {
+      // setPosition(marker.getLatLng())
+      console.log(
+        {
+          latitude: position.lat,
+          longitude: position.lng,
+          id,
+        },
+        'address'
       )
+      await partialUpdateRecord(
+        {
+          latitude: position.lat,
+          longitude: position.lng,
+          id,
+        },
+        'address'
+      )
+        .then((res) => {
+          if (res) {
+            toast.success('Location updated successfully')
+            setUpdateLocation(false)
+            refreshBranches()
+          }
+        })
+        .catch((err) => {
+          toast.error('Error updating location!')
+        })
+    } else {
+      setUpdateLocation(true)
     }
-    return null
   }
 
   return (
-    <div className=''>
+    <>
       <MapContainer
         center={[position.lat, position.lng]}
         zoom={13}
@@ -128,29 +152,33 @@ const BranchMap = () => {
               setPosition(e.layer._latlng)
             }}
             onEdited={(e: any) => {
-              console.log('Edited branch: ', e)
-            }}
-            onDeleted={() => {
-              console.log('Deleted branch')
+              console.log(e.layers.getLayers()[0]._latlng)
+              setPosition(e.layers.getLayers()[0]._latlng)
             }}
             draw={{
               rectangle: false,
               circle: false,
               circlemarker: false,
-              marker: true,
+              marker: false,
               polyline: false,
               polygon: false,
             }}
             edit={{
-              edit: true,
-              remove: true,
+              edit: false,
+              remove: false,
             }}
           />
         </FeatureGroup>
         <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
         <LocationMarker />
       </MapContainer>
-    </div>
+      <button
+        className='px-4 py-2 bg-primary text-gray-700 rounded-lg absolute top-4 right-4 z-10'
+        onClick={handleUpdateLocation}
+      >
+        {updateLocation ? 'Save Location' : 'Update Location'}
+      </button>
+    </>
   )
 }
 

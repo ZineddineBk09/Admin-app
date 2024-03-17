@@ -1,7 +1,7 @@
-import { Order, Sort, Status } from '../../interfaces'
-import { getRecords } from '../../lib/api'
+import { APIResponse, Order, Sort, Status } from '../../interfaces'
+import { filterRecords, getRecords } from '../../lib/api'
+import axios from '../../lib/axios'
 import { searchOrders } from '../../lib/search'
-import { faker } from '@faker-js/faker'
 import React, { useEffect, useState } from 'react'
 
 export const OrdersContext = React.createContext({})
@@ -11,6 +11,9 @@ export const useOrdersContext: {
     orders: Order[]
     filteredOrders: Order[]
     loading: boolean
+    hasMore: boolean
+    isFetching: boolean
+    fetchNextPage: () => Promise<void>
     handleSearchOrders: (search: string) => void
     handleSortOrders: (sort: Sort) => void
     handleSelectStatus: (status: string) => void
@@ -21,7 +24,7 @@ export const useOrdersContext: {
       dateFrom: Date
       dateTo: Date
     }) => void
-    handleSelectPaymentType: (paymentType: string) => void
+    handleFilterPaymentType: (paymentType: string) => void
     refreshOrders: () => Promise<void>
   }
 } = () => React.useContext(OrdersContext as any)
@@ -32,6 +35,8 @@ export const OrdersContextProvider = ({
   children: React.ReactNode
 }) => {
   const [orders, setOrders] = useState<Order[]>([] as Order[])
+  const [hasMore, setHasMore] = useState<boolean>(true)
+  const [isFetching, setIsFetching] = useState<boolean>(false)
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([] as Order[])
   const [loading, setLoading] = useState(false)
   const [orderStatus, setOrderStatus] = useState<Status[]>([
@@ -43,69 +48,39 @@ export const OrdersContextProvider = ({
 
   const refreshOrders = async () => {
     setLoading(true)
-    // setOrders([] as Order[])
-    const records = Array.from(
-      { length: 10 },
-      () =>
-        ({
-          id: faker.number.int({ min: 1000, max: 10000 }).toString(),
-          date: faker.date.past().toLocaleDateString(),
-          value: faker.number.int({ max: 1000, min: 0 }),
-          client: {
-            name: faker.company.name(),
-            id: faker.string.uuid(),
-            image: faker.image.url(),
-            address: faker.location.streetAddress(),
-            phone: faker.phone.number(),
-          },
-          customer: {
-            id: faker.string.uuid(),
-            name: faker.person.firstName(),
-            image: faker.image.avatar(),
-            address: faker.location.streetAddress(),
-            phone: faker.phone.number(),
-          },
-          duration: faker.number.int(),
-          startTime: faker.date.past().getTime(),
-          endTime: faker.date.future().getTime(),
-          distance: faker.number.int(),
-          time: faker.date.past().toLocaleTimeString(),
-          driverId: faker.string.uuid(),
-          driverName: faker.person.firstName(),
-          city: faker.location.city(),
-          paymentType: ['cash', 'visa', 'mastercard'][
-            faker.number.int({ max: 2, min: 0 })
-          ],
-          status: orderStatus[faker.number.int({ max: 3, min: 0 })].value,
-          deliveryFee: faker.number.int({ max: 100, min: 0 }),
-          location:
-            faker.number.int({ max: 2, min: 1 }) == 1
-              ? {
-                  latitude: faker.location.latitude({ max: 22, min: 21 }),
-                  longitude: faker.location.longitude({
-                    max: 40,
-                    min: 39,
-                  }),
-                }
-              : null,
-          items: Array.from(
-            { length: faker.number.int({ max: 5, min: 1 }) },
-            () => ({
-              id: faker.number.int({ min: 1000, max: 10000 }).toString(),
-              name: faker.commerce.productName(),
-              quantity: faker.number.int({ max: 5, min: 1 }),
-            })
-          ),
-          clientPaid: faker.datatype.boolean(),
-          driverPaid: faker.datatype.boolean(),
-        } as Order)
-    )
+    const records: APIResponse = await getRecords('order')
+    if (records.results) {
+      setOrders(records.results)
+    }
 
-    setOrders(records)
-    setFilteredOrders(records)
+    // check if there are more drivers we can fetch
+    setHasMore(!!records.next)
 
     setLoading(false)
-    // setOrders(orders)
+  }
+
+  const fetchNextPage = async () => {
+    if (isFetching || !hasMore) {
+      return
+    }
+
+    setIsFetching(true)
+
+    // next url will of format: /order/?limit=10&offset=10
+    try {
+      const response = await axios.get(
+        `/order/?limit=10&offset=${orders.length}`
+      )
+      const newDrivers = response.data.results
+      setOrders([...orders, ...newDrivers])
+
+      // check if there are more orders we can fetch
+      setHasMore(!!response.data.next)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    } finally {
+      setIsFetching(false)
+    }
   }
 
   const handleSearchOrders = (search: string) => {
@@ -156,21 +131,30 @@ export const OrdersContextProvider = ({
     }
     const filteredOrders = orders.filter(
       (order) =>
-        new Date(order?.date).getTime() >= dateFrom.getTime() &&
-        new Date(order?.date).getTime() <= dateTo.getTime()
+        new Date(order?.added_at).getTime() >= dateFrom.getTime() &&
+        new Date(order?.added_at).getTime() <= dateTo.getTime()
     )
     setOrders(filteredOrders)
   }
 
-  const handleSelectPaymentType = (paymentType: string) => {
-    if (paymentType === '') {
+  const handleFilterPaymentType = async (payment_type: string) => {
+    // check if the user selected 'all' countries
+    if (payment_type == 'all') {
       refreshOrders()
       return
     }
-    const filtered = orders.filter(
-      (order) => order?.paymentType === paymentType
-    )
-    setFilteredOrders(filtered)
+
+    // fetch cities for the selected payment_type
+    const records: APIResponse = await filterRecords({ payment_type }, 'order')
+
+    if (records.results) {
+      setOrders(records.results)
+    }
+
+    // check if there are more cities we can fetch
+    setHasMore(!!records.next)
+
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -183,11 +167,14 @@ export const OrdersContextProvider = ({
         orders,
         filteredOrders,
         loading,
+        hasMore,
+        isFetching,
+        fetchNextPage,
         handleSearchOrders,
         handleSortOrders,
         handleSelectStatus,
         handleSelectDate,
-        handleSelectPaymentType,
+        handleFilterPaymentType,
         refreshOrders,
       }}
     >

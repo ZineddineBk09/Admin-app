@@ -10,6 +10,7 @@ import { useFormik } from 'formik'
 import toast from 'react-hot-toast'
 import { updateRecord } from '../../../lib/api'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { DeleteModal } from '../../modals/delete'
 
 const Governorates = () => {
   const { governorates, hasMore, fetchNextPage, isFetching } =
@@ -116,7 +117,7 @@ const GovernorateCard = ({ governorate }: { governorate: Governorate }) => {
             </h1>
           </div>
         </button>
-        <DeleteGovernorate id={id} />
+        <DeleteModal id={id} name='governorate' refresh={refreshGovernorates} />
       </div>
       {showInfos && (
         <>
@@ -148,7 +149,9 @@ const GovernorateCard = ({ governorate }: { governorate: Governorate }) => {
               />
               <span className='text-gray-500 w-32'>SAR / order</span>
             </div>
-            {showSave.order_fees && SaveButton(formik.handleSubmit as any)}
+            {showSave.order_fees &&
+              order_fees !== formik.values.order_fees &&
+              SaveButton(formik.handleSubmit as any)}
           </div>
           <Divider />
           <div className='w-full flex justify-between'>
@@ -194,6 +197,10 @@ const GovernorateCard = ({ governorate }: { governorate: Governorate }) => {
               </div>
               {(showSave.price_ratio_denominator ||
                 showSave.price_ratio_nominator) &&
+                (price_ratio_nominator !==
+                  formik.values.price_ratio_nominator ||
+                  price_ratio_denominator !==
+                    formik.values.price_ratio_denominator) &&
                 SaveButton(formik.handleSubmit as any)}
             </div>
             <div className='flex items-center gap-x-6'>
@@ -244,6 +251,10 @@ const GovernorateCard = ({ governorate }: { governorate: Governorate }) => {
               </div>
               {(showSave.additional_ratio_denominator ||
                 showSave.additional_ratio_nominator) &&
+                (additional_ratio_nominator !==
+                  formik.values.additional_ratio_nominator ||
+                  additional_ratio_denominator !==
+                    formik.values.additional_ratio_denominator) &&
                 SaveButton(formik.handleSubmit as any)}
             </div>
             <div />

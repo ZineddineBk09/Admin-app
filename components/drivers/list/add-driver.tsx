@@ -37,7 +37,6 @@ export const AddDriver = () => {
       team: '',
       city: '',
       driver_type: '',
-      is_freelance: false,
     },
     validationSchema: Yup.object({
       username: Yup.string().required('Username is required'),
@@ -49,7 +48,6 @@ export const AddDriver = () => {
       team: Yup.string(),
       city: Yup.string().required('City is required'),
       driver_type: Yup.string().required('Driver type is required'),
-      is_freelance: Yup.boolean().required('Is Freelance is required'),
     }),
     onSubmit: async (values) => {
       // use createRecord function to create a new record
@@ -67,7 +65,6 @@ export const AddDriver = () => {
         city: values.city,
         driver_type: values.driver_type,
         image: 'image',
-        is_freelance: values.is_freelance,
       })
       await createRecord(
         {
@@ -83,7 +80,6 @@ export const AddDriver = () => {
           city: values.city,
           driver_type: values.driver_type,
           image: 'image',
-          is_freelance: values.is_freelance,
         },
         'driver'
       )
@@ -311,66 +307,42 @@ export const AddDriver = () => {
                     '@xl': { flexWrap: 'nowrap' },
                   }}
                 >
-                  <div className='w-1/2 flex items-center gap-x-6'>
-                    <label>Freelancer</label>
-                    <Checkbox
-                      defaultChecked={formik.values.is_freelance}
-                      onChange={(e) => {
-                        console.log('e:', e)
-                        formik.setFieldValue('is_freelance', e)
-                      }}
-                      color='warning'
-                    />
+                  <div className='w-1/3'>
+                    <label
+                      className={`block mb-2 ${
+                        formik.touched.team && formik.errors.team
+                          ? 'text-red-500'
+                          : 'text-gray-900'
+                      }`}
+                    >
+                      {formik.touched.team && formik.errors.team
+                        ? formik.errors.team
+                        : 'Team'}
+                    </label>
+                    <select
+                      id='team'
+                      name='team'
+                      onChange={formik.handleChange}
+                      value={formik.values.team}
+                      className={`border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 ${
+                        formik.touched.team && formik.errors.team
+                          ? 'border-red-500 bg-red-200'
+                          : 'border-gray-300 bg-gray-100'
+                      }`}
+                    >
+                      <option value=''>Select Team</option>
+                      {teams?.map((team: Team) => (
+                        <option
+                          key={team.id}
+                          value={team.id}
+                          className='capitalize h-20'
+                        >
+                          {team.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-
-                  {/* Display team only when is freelance is not selected */}
-                  {!formik.values.is_freelance && (
-                    <div className='w-1/2'>
-                      <label
-                        className={`block mb-2 ${
-                          formik.touched.team && formik.errors.team
-                            ? 'text-red-500'
-                            : 'text-gray-900'
-                        }`}
-                      >
-                        {formik.touched.team && formik.errors.team
-                          ? formik.errors.team
-                          : 'Team'}
-                      </label>
-                      <select
-                        id='team'
-                        name='team'
-                        onChange={formik.handleChange}
-                        value={formik.values.team}
-                        className={`border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 ${
-                          formik.touched.team && formik.errors.team
-                            ? 'border-red-500 bg-red-200'
-                            : 'border-gray-300 bg-gray-100'
-                        }`}
-                      >
-                        <option value=''>Select Team</option>
-                        {teams?.map((team: Team) => (
-                          <option
-                            key={team.id}
-                            value={team.id}
-                            className='capitalize h-20'
-                          >
-                            {team.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-                </Flex>
-
-                <Flex
-                  css={{
-                    gap: '$10',
-                    flexWrap: 'wrap',
-                    '@xl': { flexWrap: 'nowrap' },
-                  }}
-                >
-                  <div className='w-1/2'>
+                  <div className='w-1/3'>
                     <label
                       className={`block mb-2 ${
                         formik.touched.city && formik.errors.city
@@ -405,7 +377,7 @@ export const AddDriver = () => {
                       ))}
                     </select>
                   </div>
-                  <div className='w-1/2'>
+                  <div className='w-1/3'>
                     <label
                       className={`block mb-2 ${
                         formik.touched.driver_type && formik.errors.driver_type

@@ -8,11 +8,34 @@ import { ClientsBranchesContextProvider } from '../../context/clients/branches'
 import { NextPage } from 'next'
 import React from 'react'
 import Loading from '../../components/shared/loading'
+import { UsersContextProvider } from '../../context/users'
+import { ClientsAccountsContextProvider } from '../../context/clients/accounts'
+import { AreasGovernoratesContextProvider } from '../../context/areas/governorates'
+import { AreasCitiesContextProvider } from '../../context/areas/cities'
+import { AreasCountriesContextProvider } from '../../context/areas/countries'
 
 const ClientsBranchesPage: NextPage = () => {
   return (
-    <ClientsBranchesContextProvider>
+    <Context>
       <Branches />
+    </Context>
+  )
+}
+
+const Context = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <ClientsBranchesContextProvider>
+      <ClientsAccountsContextProvider>
+        <UsersContextProvider>
+          <AreasCountriesContextProvider>
+            <AreasGovernoratesContextProvider>
+              <AreasCitiesContextProvider>
+                {children}
+              </AreasCitiesContextProvider>
+            </AreasGovernoratesContextProvider>
+          </AreasCountriesContextProvider>
+        </UsersContextProvider>
+      </ClientsAccountsContextProvider>
     </ClientsBranchesContextProvider>
   )
 }

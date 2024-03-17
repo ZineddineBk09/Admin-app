@@ -8,6 +8,7 @@ import { useDriversContext } from '../../../context/drivers'
 import { useFormik } from 'formik'
 import { updateRecord } from '../../../lib/api'
 import toast from 'react-hot-toast'
+import { DeleteModal } from '../../modals/delete'
 
 const DriversTypes = () => {
   const { driverTypes } = useDriversContext()
@@ -93,7 +94,7 @@ const CountryCard = ({ type }: { type: DriverType }) => {
             </h1>
           </div>
         </button>
-        <DeleteDriverType id={id} />
+        <DeleteModal id={id} name='type' refresh={refreshDriverTypes} />
       </div>
       {showInfos && <Divider />}
       <div className='w-full flex flex-col gap-y-3 items-center lg:flex-row'>
@@ -145,6 +146,10 @@ const CountryCard = ({ type }: { type: DriverType }) => {
                 </div>
                 {(showSave.price_ratio_denominator ||
                   showSave.price_ratio_nominator) &&
+                  (price_ratio_denominator !==
+                    formik.values.price_ratio_denominator ||
+                    price_ratio_nominator !==
+                      formik.values.price_ratio_nominator) &&
                   SaveButton(formik.handleSubmit as any)}
               </div>
               <div className='flex items-center gap-x-6'>
@@ -195,6 +200,10 @@ const CountryCard = ({ type }: { type: DriverType }) => {
                 </div>
                 {(showSave.additional_ratio_denominator ||
                   showSave.additional_ratio_nominator) &&
+                  (additional_ratio_denominator !==
+                    formik.values.additional_ratio_denominator ||
+                    additional_ratio_nominator !==
+                      formik.values.additional_ratio_nominator) &&
                   SaveButton(formik.handleSubmit as any)}
               </div>
               <div />

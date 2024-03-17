@@ -8,7 +8,6 @@ interface Props {
 }
 
 export const NavbarWrapper = ({ children }: Props) => {
-
   return (
     <Box
       css={{
@@ -46,16 +45,6 @@ export const NavbarWrapper = ({ children }: Props) => {
         <Navbar.Content>
           <BurguerButton />
         </Navbar.Content>
-        {/* {isDashboard && (
-          <div className='w-fit flex items-center gap-x-5'>
-            <button onClick={handleToggleDrivers}>
-              <DriversIcon isActive={showDrivers} />
-            </button>
-            <button onClick={handleToggleOrders}>
-              <BagIcon isActive={showOrders} />
-            </button>
-          </div>
-        )} */}
       </Navbar>
       {children}
     </Box>

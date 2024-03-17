@@ -22,4 +22,6 @@ const AreasGovernoratesPage: NextPage = () => {
   )
 }
 
+
+
 export default AreasGovernoratesPage

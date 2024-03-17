@@ -10,28 +10,30 @@ const BranchCard = dynamic(() => import('./branch'), {
 import { useClientsBranchesContext } from '../../../context/clients/branches'
 import { useRouter } from 'next/router'
 import Loading from '../../../components/shared/loading'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 const Branches = () => {
-  const { branches } = useClientsBranchesContext()
-  // get the ?branchId= query param
-  const router = useRouter()
-  const { branchId } = router.query
-
-  // if branches contains the branchId, then scroll to it
-  React.useEffect(() => {
-    if (branchId && branches.some((branch: Branch) => branch.id === branchId)) {
-      const branchElement = document.getElementById(branchId as string)
-      branchElement?.scrollIntoView({ behavior: 'smooth' })
-    }
-  }, [branchId, branches])
+  const { branches, hasMore, fetchNextPage } = useClientsBranchesContext()
 
   return (
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
       <SearchBranch />
-      <div className='w-full flex flex-col items-center gap-y-6'>
-        {branches?.map((branch: Branch, index: number) => (
-          <BranchCard key={branch.id} branch={branch} />
-        ))}
+
+      <div className='w-full'>
+        <InfiniteScroll
+          dataLength={branches?.length}
+          hasMore={hasMore}
+          next={fetchNextPage}
+          loader={
+            <span className='font-bold text-lg text-center'>Loading...</span>
+          }
+          endMessage={<div className='w-1/2 h-1 bg-gray-500' />}
+          className='w-full flex flex-col items-center gap-y-6'
+        >
+          {branches?.map((branch: Branch, index: number) => (
+            <BranchCard key={branch.id} branch={branch} />
+          ))}
+        </InfiniteScroll>
       </div>
       <AddBranch />
     </div>

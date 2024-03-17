@@ -11,6 +11,7 @@ import { useTeamsContext } from '../../../../context/drivers/teams'
 import * as Yup from 'yup'
 import { AddArea } from '../../shared/add-area'
 import { partialUpdateRecord } from '../../../../lib/api'
+import { DeleteModal } from '../../../modals/delete'
 
 export const DriverCard = ({ driver }: { driver: Driver }) => {
   const [showInfos, setShowInfos] = React.useState(false)
@@ -26,10 +27,8 @@ export const DriverCard = ({ driver }: { driver: Driver }) => {
     driver_type,
     vehicle_license,
     residency_id,
-    is_freelance,
     is_idle,
     code,
-    areas,
     city,
   } = driver
 
@@ -37,14 +36,12 @@ export const DriverCard = ({ driver }: { driver: Driver }) => {
     team: false,
     phone_number: false,
     driver_type: false,
-    is_freelance: false,
   })
   const formik = useFormik({
     initialValues: {
       team: team ? team.id : '',
       phone_number: phone_number,
       driver_type: driver_type.id,
-      is_freelance: is_freelance,
     },
     validationSchema: Yup.object({
       team: Yup.string(),
@@ -54,7 +51,6 @@ export const DriverCard = ({ driver }: { driver: Driver }) => {
         "Phone number can't contain letters"
       ),
       driver_type: Yup.string(),
-      is_freelance: Yup.boolean(),
     }),
     onSubmit: async (values) => {
       console.log('values', values)
@@ -73,7 +69,6 @@ export const DriverCard = ({ driver }: { driver: Driver }) => {
               team: false,
               phone_number: false,
               driver_type: false,
-              is_freelance: false,
             })
           }
         })
@@ -105,7 +100,7 @@ export const DriverCard = ({ driver }: { driver: Driver }) => {
             </h1>
           </div>
         </button>
-        <DeleteDriver id={id} />
+        <DeleteModal id={id} name='driver' refresh={refreshDrivers} />
       </div>
       {showInfos && (
         <>
@@ -146,7 +141,10 @@ export const DriverCard = ({ driver }: { driver: Driver }) => {
               )}
               {
                 // Display save button if user changed price unit
-                team && showSave.team && SaveButton(formik.handleSubmit as any)
+                team &&
+                  showSave.team &&
+                  team.id !== formik.values.team &&
+                  SaveButton(formik.handleSubmit as any)
               }
             </div>
 
@@ -168,7 +166,9 @@ export const DriverCard = ({ driver }: { driver: Driver }) => {
               </div>
               {
                 // Display save button if user changed driver fees
-                showSave.phone_number && SaveButton(formik.handleSubmit as any)
+                showSave.phone_number &&
+                  phone_number !== formik.values.phone_number &&
+                  SaveButton(formik.handleSubmit as any)
               }
             </div>
           </div>
@@ -183,9 +183,9 @@ export const DriverCard = ({ driver }: { driver: Driver }) => {
             {/* Areas */}
             <div className='flex items-start gap-x-6 col-span-2'>
               <label className='mt-2 text-gray-600 text-sm'>Areas</label>
-              {areas?.length > 0 ? (
-                <div className='flex items-start gap-y-2'>
-                  {areas?.map((area: Geofence, index: number) => (
+              {city.areas?.length > 0 ? (
+                <div className='flex items-start gap-y-2 flex-wrap'>
+                  {city.areas?.map((area: Geofence, index: number) => (
                     <div key={index}>
                       <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
                         <p className='text-sm capitalize'>{area?.name}</p>
@@ -197,7 +197,7 @@ export const DriverCard = ({ driver }: { driver: Driver }) => {
                             <BinIcon width={4} />
                           </button>
                         </Tooltip>
-                        {index < areas?.length - 1 && (
+                        {index < city.areas?.length - 1 && (
                           <span className='-ml-4'>,</span>
                         )}
                       </div>
@@ -207,13 +207,6 @@ export const DriverCard = ({ driver }: { driver: Driver }) => {
               ) : (
                 <></>
               )}
-
-              <AddArea
-                id={id}
-                endpoint='driver'
-                areas={areas.map((a) => a?.id) || []}
-                refreshRecords={refreshDrivers}
-              />
             </div>
           </div>
           <Divider />
@@ -245,29 +238,9 @@ export const DriverCard = ({ driver }: { driver: Driver }) => {
               </div>
               {
                 // Display save button if user changed price unit
-                showSave.driver_type && SaveButton(formik.handleSubmit as any)
-              }
-            </div>
-
-            <div className='w-1/2 flex items-center gap-x-6'>
-              <label className='text-gray-500'>Freelancer</label>
-
-              <Checkbox
-                defaultSelected={is_freelance}
-                value={is_freelance ? 'freelancer' : ''}
-                onChange={(e) => {
-                  formik.setFieldValue('is_freelance', e)
-                  // check if value is different from initial value
-                  e !== is_freelance
-                    ? setShowSave({ ...showSave, is_freelance: true })
-                    : setShowSave({ ...showSave, is_freelance: false })
-                }}
-                color='warning'
-                size='xl'
-              />
-              {
-                // Display save button if user changed driver fees
-                showSave.is_freelance && SaveButton(formik.handleSubmit as any)
+                showSave.driver_type &&
+                  driver_type.id !== formik.values.driver_type &&
+                  SaveButton(formik.handleSubmit as any)
               }
             </div>
           </div>

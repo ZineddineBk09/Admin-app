@@ -1,3 +1,5 @@
+import { number } from 'yup'
+
 export interface Pricing {
   price_ratio_nominator: number
   price_ratio_denominator: number
@@ -48,6 +50,11 @@ export interface Driver {
   vehicle_license: string
   residency_id: string
   is_idle: boolean
+}
+
+export interface DriverMinimal {
+  id: string
+  user: User
 }
 
 export interface DriverType extends Pricing {
@@ -124,32 +131,45 @@ export interface Item {
 interface Customer {
   id: string
   name: string
-  image: string
-  address: string
-  phone: string
+  number: string
 }
 
 export interface Order {
   id: string
-  date: string
-  time: string
+  serial_number: number
+  external_id: string
+  COD: boolean
+  currently_assigned_driver: Driver | null
+  delivery_address: Address
+  pickup_address: Address
   customer: Customer
-  client: Client
-  driverId: string
-  driverName: string
-  distance: number
-  city: string
-  value: number
-  deliveryFee: number
-  status: string
-  clientPaid: boolean
-  driverPaid: boolean
-  location: Location | null
-  duration: number
-  startTime: number
-  endTime: number
-  paymentType: 'cash' | 'visa' | 'mastercard'
-  items: Item[]
+  total_order_value: number
+  delivery: string
+  distance: number | null
+  status:
+    | 'new'
+    | 'searching_drivers'
+    | 'prompting_driver'
+    | 'assigned'
+    | 'failed'
+    | 'order_failed'
+    | 'client_reached'
+    | 'transitioning'
+    | 'delivering'
+    | 'driver_reached'
+    | 'customer_reached'
+    | 'paid'
+    | 'settled'
+    | 'cancelled'
+    | 'acquired'
+    | 'deposited'
+  added_at: string
+  reached_client_at: string
+  delivered_at: string
+  client_is_paid_at: string
+  paid_driver: string
+  added_by: User | null
+  payment_type: 'cash' | 'visa' | 'mastercard'
 }
 
 export interface AutoCancelledOrder {
@@ -161,7 +181,7 @@ export interface AutoCancelledOrder {
   distance: number
   city: string
   value: number
-  deliveryFee: number
+  delivery_fee: number
   location: Location | null
   paymentType: 'cash' | 'visa' | 'mastercard'
   timeLeft: number // the remained time before the order is auto cancelled
@@ -278,7 +298,9 @@ export interface Branch {
 
 export interface BranchMinimal {
   id: string
+  account: AccountMinimal
   supervisor: UserAccess
+  address: Address
 }
 //--------------------------------------------------------------------
 

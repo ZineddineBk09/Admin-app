@@ -10,7 +10,7 @@ import { DriverCard } from './driver/card'
 export const DriversPage = () => {
   const { drivers, handleSortDrivers, loading } = useDriversContext()
   const [sorting, setSorting] = useState<Sort>({ column: '', direction: '' })
-
+  
   useEffect(() => {
     if (sorting.column === '') return
     handleSortDrivers(sorting)

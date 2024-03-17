@@ -58,18 +58,11 @@ export const AddCity = () => {
         .min(1, 'price ratio denominator must be greater than 0'),
     }),
     onSubmit: async (values) => {
-      const governorate = governorates?.find(
-        (governorate: Governorate) => governorate?.id === values.governorate
-      )
-      if (!governorate) {
-        toast.error('Governorate not found!')
-        return
-      }
-
+      console.log('Values: ', values)
       await createRecord(
         {
           ...values,
-          governorate: governorate?.id,
+          // areas: [],
         },
         'city'
       )

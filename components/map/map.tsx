@@ -167,23 +167,20 @@ const DriversMarkers = () => {
       {drivers?.map((driver: Driver, index: number) => (
         <Marker
           key={driver?.id}
-          position={[
-            driver?.location?.latitude || 0,
-            driver?.location?.longitude || 0,
-          ]}
+          position={[0, 0]}
           icon={icon(
             driver?.image,
             // first 2 letters of first name and last name
             // driver?.username.split(' ')[0].slice(0, 1) +
             //   driver?.username.split(' ')[1].slice(0, 1) +
             //   ''
-            driver?.username
+            driver?.user.username
           )}
         >
           <Popup>
             <div className='flex flex-col items-center gap-y-1'>
-              <p className=''>{driver?.username}</p>
-              <p className=''>{driver?.phone}</p>
+              <p className=''>{driver?.user.username}</p>
+              <p className=''>{driver?.phone_number}</p>
             </div>
           </Popup>
         </Marker>

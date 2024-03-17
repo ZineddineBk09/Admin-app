@@ -55,22 +55,8 @@ export const OrdersPage = () => {
 }
 
 export const SearchAndFilter = () => {
-  const { orders, handleSearchOrders, handleSelectPaymentType } =
+  const { orders, handleSearchOrders, handleFilterPaymentType } =
     useOrdersContext()
-  // get unique teams
-  const [teams, setTeams] = React.useState<Team[]>([])
-
-  React.useEffect(() => {
-    const fetchTeams = async () => {
-      await getRecords('team')
-        .then((res: { teams: Team[] }) => setTeams(res.teams))
-        .catch((err: any) => {
-          setTeams([])
-          console.log('Error in fetching teams: ', err)
-        })
-    }
-    fetchTeams()
-  }, [orders])
 
   return (
     <div className='w-full grid grid-cols-1 gap-6 lg:grid-cols-4 px-6'>
@@ -111,7 +97,7 @@ export const SearchAndFilter = () => {
           name='paymentType'
           id='paymentType'
           className='h-full bg-transparent'
-          onChange={(e) => handleSelectPaymentType(e.target.value)}
+          onChange={(e) => handleFilterPaymentType(e.target.value)}
         >
           <option value=''>All</option>
           <option value='visa'>Visa</option>

@@ -5,7 +5,7 @@ import { EditOrder } from '../../orders/list/edit-order'
 import { Order } from '../../../interfaces'
 import { AddNotes } from '../../orders/list/add-notes'
 import { CheckedIcon } from '../../icons/table'
-import Image from 'next/image'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 
 interface Props {
   order: Order
@@ -13,32 +13,33 @@ interface Props {
 }
 
 export const RenderCell = ({ order, columnKey }: Props) => {
-  if (!order) return null
   // @ts-ignore
   const cellValue = order[columnKey]
 
+  if (!order) return null
+
   switch (columnKey) {
     case 'id':
-      return <p>#{cellValue}</p>
+      return <p>#{order.serial_number}</p>
 
     case 'client':
-      return <p>{order?.client.name}</p>
+      return <p>{order?.added_by?.username}</p>
 
     case 'driver':
-      return <p>{order?.driverName}</p>
+      return <p>{order?.currently_assigned_driver?.user.username}</p>
 
     case 'value':
       return (
         <p>
-          {cellValue}
+          {order.total_order_value}
           <small className='ml-1 text-xs text-gray-400'>SAR</small>
         </p>
       )
 
-    case 'deliveryFee':
+    case 'delivery_fee':
       return (
         <p>
-          {cellValue}
+          {order.delivery}
           <small className='ml-1 text-xs text-gray-400'>SAR</small>
         </p>
       )
@@ -46,62 +47,117 @@ export const RenderCell = ({ order, columnKey }: Props) => {
     case 'distance':
       return (
         <p>
-          {cellValue}
+          {order?.distance || 0}
           <small className='ml-1 text-xs text-gray-400'>KM</small>
         </p>
       )
 
-    case 'clientPaid':
+    case 'client_paid':
       // return a checkbox
+      if (order.client_is_paid_at)
+        return (
+          <div className='w-6 h-6 flex items-center justify-center p-1 border-[3px] border-primary rounded-full'>
+            <CheckedIcon />
+          </div>
+        )
       return (
-        // <Checkbox
-        //   aria-label='Checkbox-driver-status'
-        //   color='warning'
-        //   labelColor='warning'
-        //   defaultSelected={order?.isPaid}
-        //   //value={order?.isPaid}
-        //   onChange={() => {}}
-        //   size='md'
-        // ></Checkbox>
-        <div className='w-6 h-6 flex items-center justify-center p-1 border-[3px] border-primary rounded-full'>
-          <CheckedIcon />
+        <div className='w-6 h-6 flex items-center justify-center p-1 border-[3px] border-red-500 rounded-full'>
+          <XMarkIcon />
         </div>
       )
 
-    case 'driverPaid':
+    case 'driver_paid':
+      if (order.paid_driver)
+        return (
+          <div className='w-6 h-6 flex items-center justify-center p-1 border-[3px] border-primary rounded-full'>
+            <CheckedIcon />
+          </div>
+        )
       return (
-        <div className='w-6 h-6 flex items-center justify-center p-1 border-[3px] border-primary rounded-full'>
-          <CheckedIcon />
+        <div className='w-6 h-6 flex items-center justify-center p-1 border-[3px] border-red-500 rounded-full'>
+          <XMarkIcon />
         </div>
       )
 
-    case 'paymentType':
-      // return an icon: cash, visa, mastercard
+    case 'payment_type':
       return (
-        // <Image
-        //   src={`/images/icons/${cellValue}.png`}
-        //   width={cellValue === 'visa' ? 30 : 24}
-        //   height={24}
-        //   alt={cellValue}
-        //   className='w-full mx-auto'
-        // />
-        <p className='capitalize text-black font-medium'>{cellValue}</p>
+        <p className='capitalize text-black font-medium'>
+          {order.payment_type}
+        </p>
+      )
+
+    case 'city':
+      return (
+        <p className='capitalize text-black font-medium'>
+          {order.delivery_address.city.name}
+        </p>
+      )
+
+    case 'driver':
+      return (
+        <p className='capitalize text-black font-medium'>
+          {order?.currently_assigned_driver?.user.username}
+        </p>
+      )
+
+    case 'time':
+      // the substraction of : delivered_at from reached_client_at
+      return (
+        <p className='capitalize text-black font-medium'>
+          {new Date(
+            new Date(order.delivered_at).getTime() -
+              new Date(order.reached_client_at).getTime()
+          ).getMinutes() + ' min'}
+        </p>
+      )
+
+    case 'date':
+      return (
+        <p className='capitalize text-black font-medium'>
+          {new Date(order.added_at).toLocaleDateString()}
+        </p>
       )
 
     case 'status':
       return (
         <span
           className={`text-xs font-semibold inline-flex px-2 pt-1 pb-[2px] rounded-full text-white capitalize ${
-            cellValue === 'done'
-              ? 'bg-green-400'
-              : cellValue === 'assigned'
-              ? 'bg-yellow-400'
-              : cellValue === 'new'
+            order.status === 'new'
               ? 'bg-blue-400'
+              : order.status === 'searching_drivers'
+              ? 'bg-yellow-400'
+              : order.status === 'prompting_driver'
+              ? 'bg-yellow-400'
+              : order.status === 'assigned'
+              ? 'bg-yellow-400'
+              : order.status === 'failed'
+              ? 'bg-red-400'
+              : order.status === 'order_failed'
+              ? 'bg-red-400'
+              : order.status === 'client_reached'
+              ? 'bg-yellow-400'
+              : order.status === 'transitioning'
+              ? 'bg-yellow-400'
+              : order.status === 'delivering'
+              ? 'bg-yellow-400'
+              : order.status === 'driver_reached'
+              ? 'bg-yellow-400'
+              : order.status === 'customer_reached'
+              ? 'bg-yellow-400'
+              : order.status === 'paid'
+              ? 'bg-green-400'
+              : order.status === 'settled'
+              ? 'bg-green-400'
+              : order.status === 'cancelled'
+              ? 'bg-red-400'
+              : order.status === 'acquired'
+              ? 'bg-green-400'
+              : order.status === 'deposited'
+              ? 'bg-green-400'
               : 'bg-red-400'
           }`}
         >
-          {cellValue}
+          {order.status}
         </span>
       )
 

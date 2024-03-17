@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { RenderCell } from './render-orders-cell'
 import { ordersTableCols } from '../data'
 import { useOrdersContext } from '../../../context/orders'
-import { Sort } from '../../../interfaces'
+import { Order, Sort } from '../../../interfaces'
 
 export const OrdersTable = () => {
-  const { filteredOrders, handleSortOrders } = useOrdersContext()
+  const { filteredOrders, orders, handleSortOrders } = useOrdersContext()
   const [sorting, setSorting] = useState<Sort>({ column: '', direction: '' })
 
   useEffect(() => {
@@ -29,9 +29,9 @@ export const OrdersTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredOrders?.map((order: any, index: number) => (
+                {orders?.map((order: Order, index: number) => (
                   <tr
-                    key={index}
+                    key={order.id}
                     // make table striped by adding bg-gray-50 to odd rows
                     className={`border-b transition duration-200 ease-in-out hover:bg-yellow-100 
                       ${index % 2 === 0 ? ' bg-gray-200' : ''}

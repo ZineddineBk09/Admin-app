@@ -1,6 +1,5 @@
 import {
   Button,
-  Divider,
   Input,
   Modal,
   Text,
@@ -12,43 +11,106 @@ import { Flex } from '../../styles/flex'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { AddIcon } from '../../../components/icons/areas'
+import { useClientsBranchesContext } from '../../../context/clients/branches'
+import { useAreasCitiesContext } from '../../../context/areas/cities'
+import { useAreasGovernoratesContext } from '../../../context/areas/governorates'
+import { useAreasCountriesContext } from '../../../context/areas/countries'
+import { Account, City, Country, Governorate, User } from '../../../interfaces'
+import { useUsersContext } from '../../../context/users'
+import { useClientsAccountsContext } from '../../../context/clients/accounts'
+import { createRecord } from '../../../lib/api'
+import toast from 'react-hot-toast'
 
 export const AddBranch = () => {
+  const { refreshBranches } = useClientsBranchesContext()
+  const { accounts } = useClientsAccountsContext()
+  const { users } = useUsersContext()
+  const { cities } = useAreasCitiesContext()
+  const { governorates } = useAreasGovernoratesContext()
+  const { countries } = useAreasCountriesContext()
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
 
   const formik = useFormik({
     initialValues: {
-      name: '',
       country: '',
       governorate: '',
       city: '',
-      orderFees: 0,
-      driverFees: 0,
-      phone: '',
+      order_fees: 0,
+      driver_fees: 0,
+      phone_number: '',
       supervisor: '',
-      clientAccount: '',
+      account: '',
+      main: false,
     },
     validationSchema: Yup.object({
-      name: Yup.string().required('name is required'),
       country: Yup.string().required('price unit is required'),
       governorate: Yup.string().required('governorate is required'),
       city: Yup.string().required('city is required'),
-      orderFees: Yup.number().required('order fee is required'),
-      driverFees: Yup.number().required('driver fee is required'),
-      phone: Yup.string().required('phone is required'),
+      order_fees: Yup.number().required('order fee is required'),
+      driver_fees: Yup.number().required('driver fee is required'),
+      phone_number: Yup.string().required('phone number is required'),
       supervisor: Yup.string().required('supervisor is required'),
-      clientAccount: Yup.string().required('client account is required'),
+      account: Yup.string().required('client account is required'),
+      main: Yup.boolean().default(false),
     }),
-    onSubmit: (values) => {
-      console.log(values)
+    onSubmit: async (values) => {
+      // create address first, the use the id to create the branch
+      await createRecord(
+        {
+          country: values.country,
+          governorate: values.governorate,
+          city: values.city,
+        },
+        'address'
+      )
+        .then(async (res) => {
+          if (res) {
+            await createRecord(
+              {
+                address: res.id,
+                order_fees: values.order_fees,
+                driver_fees: values.driver_fees,
+                phone_number: values.phone_number,
+                supervisor: values.supervisor,
+                account: values.account,
+                main: values.main,
+              },
+              'branch'
+            )
+              .then((res) => {
+                if (res) {
+                  toast.success('Branch added successfully!')
+                  refreshBranches()
+                  setVisible(false)
+                }
+              })
+              .catch((err) => {
+                console.log('Error adding branch!: ', err)
+                toast.error('Error adding branch!')
+              })
+          }
+        })
+        .catch((err) => {
+          console.log('Error adding branch!: ', err)
+          toast.error('Error adding branch!')
+        })
     },
   })
+
+  console.log(formik.errors)
 
   const closeHandler = () => {
     setVisible(false)
   }
+
+  const countriesGovsCities = (label: string) =>
+    label === 'country'
+      ? countries
+      : label === 'governorate'
+      ? governorates
+      : cities
 
   return (
     <div>
@@ -60,7 +122,7 @@ export const AddBranch = () => {
       <Modal
         closeButton
         aria-labelledby='modal-title'
-        width='600px'
+        width='650px'
         open={visible}
         onClose={closeHandler}
         className='rounded-md'
@@ -82,53 +144,56 @@ export const AddBranch = () => {
             {/* <Divider css={{ my: '$5' }} /> */}
             <Modal.Body css={{ py: '$10' }}>
               <Flex
-                direction={'column'}
                 css={{
-                  flexWrap: 'wrap',
                   gap: '$8',
+                  flexWrap: 'wrap',
                   '@lg': { flexWrap: 'nowrap', gap: '$10' },
                 }}
               >
-                <Input
-                  label={
-                    formik.touched.name && formik.errors.name
-                      ? formik.errors.name
-                      : 'Name'
-                  }
-                  clearable
-                  fullWidth
-                  size='lg'
-                  placeholder='Name'
-                  name='name'
-                  id='name'
-                  value={formik.values.name}
-                  onChange={formik.handleChange}
-                  status={
-                    formik.touched.name && formik.errors.name
-                      ? 'error'
-                      : 'default'
-                  }
-                />
-                <Input
-                  label={
-                    formik.touched.country && formik.errors.country
-                      ? formik.errors.country
-                      : 'Country'
-                  }
-                  clearable
-                  fullWidth
-                  size='lg'
-                  placeholder='e.g: Saudi Arabia'
-                  name='country'
-                  id='country'
-                  value={formik.values.country}
-                  onChange={formik.handleChange}
-                  status={
-                    formik.touched.country && formik.errors.country
-                      ? 'error'
-                      : 'default'
-                  }
-                />
+                {['country', 'governorate', 'city'].map((field) => (
+                  <div className='w-1/3' key={field}>
+                    <label
+                      className={`block mb-2 ${
+                        // @ts-ignore
+                        formik.touched[field] && formik.errors[field]
+                          ? 'text-red-500'
+                          : 'text-gray-900'
+                      }`}
+                    >
+                      {
+                        // @ts-ignore
+                        formik.touched[field] && formik.errors[field]
+                          ? // @ts-ignore
+                            formik.errors[field]
+                          : field.replace(/^\w/, (c) => c.toUpperCase())
+                      }
+                    </label>
+                    <select
+                      id={field}
+                      name={field}
+                      onChange={formik.handleChange}
+                      // @ts-ignore
+                      value={formik.values[field]}
+                      className={`border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 ${
+                        // @ts-ignore
+                        formik.touched[field] && formik.errors[field]
+                          ? 'border-red-500 bg-red-200'
+                          : 'border-gray-300 bg-gray-100'
+                      }`}
+                    >
+                      <option value=''>
+                        Select {field.replace(/^\w/, (c) => c.toUpperCase())}
+                      </option>
+                      {countriesGovsCities(field).map(
+                        (item: City | Country | Governorate) => (
+                          <option key={item.id} value={item.id}>
+                            {item.name}
+                          </option>
+                        )
+                      )}
+                    </select>
+                  </div>
+                ))}
               </Flex>
 
               <Flex
@@ -140,89 +205,40 @@ export const AddBranch = () => {
               >
                 <Input
                   label={
-                    formik.touched.governorate && formik.errors.governorate
-                      ? formik.errors.governorate
-                      : 'Governorate'
-                  }
-                  clearable
-                  fullWidth
-                  size='lg'
-                  placeholder='e.g: Riyadh'
-                  name='governorate'
-                  id='governorate'
-                  value={formik.values.governorate}
-                  onChange={formik.handleChange}
-                  status={
-                    formik.touched.governorate && formik.errors.governorate
-                      ? 'error'
-                      : 'default'
-                  }
-                />
-                <Input
-                  label={
-                    formik.touched.city && formik.errors.city
-                      ? formik.errors.city
-                      : 'City'
-                  }
-                  clearable
-                  fullWidth
-                  size='lg'
-                  placeholder='e.g: Riyadh'
-                  name='city'
-                  id='city'
-                  value={formik.values.city}
-                  onChange={formik.handleChange}
-                  status={
-                    formik.touched.city && formik.errors.city
-                      ? 'error'
-                      : 'default'
-                  }
-                />
-              </Flex>
-
-              <Flex
-                css={{
-                  gap: '$8',
-                  flexWrap: 'wrap',
-                  '@lg': { flexWrap: 'nowrap', gap: '$10' },
-                }}
-              >
-                <Input
-                  label={
-                    formik.touched.orderFees && formik.errors.orderFees
-                      ? formik.errors.orderFees
+                    formik.touched.order_fees && formik.errors.order_fees
+                      ? formik.errors.order_fees
                       : 'Order Fee'
                   }
                   clearable
                   fullWidth
                   size='lg'
                   placeholder='e.g: 10'
-                  name='orderFees'
-                  id='orderFees'
-                  value={formik.values.orderFees}
+                  name='order_fees'
+                  id='order_fees'
+                  value={formik.values.order_fees}
                   onChange={formik.handleChange}
                   status={
-                    formik.touched.orderFees && formik.errors.orderFees
+                    formik.touched.order_fees && formik.errors.order_fees
                       ? 'error'
                       : 'default'
                   }
                 />
                 <Input
                   label={
-                    formik.touched.driverFees && formik.errors.driverFees
-                      ? formik.errors.driverFees
+                    formik.touched.driver_fees && formik.errors.driver_fees
+                      ? formik.errors.driver_fees
                       : 'Driver Fee'
                   }
                   clearable
                   fullWidth
                   size='lg'
                   placeholder='e.g: 10'
-                  name='driverFees'
-                  id='driverFees'
-                  value={formik.values.driverFees}
+                  name='driver_fees'
+                  id='driver_fees'
+                  value={formik.values.driver_fees}
                   onChange={formik.handleChange}
                   status={
-                    formik.touched.driverFees && formik.errors.driverFees
+                    formik.touched.driver_fees && formik.errors.driver_fees
                       ? 'error'
                       : 'default'
                   }
@@ -238,44 +254,55 @@ export const AddBranch = () => {
               >
                 <Input
                   label={
-                    formik.touched.phone && formik.errors.phone
-                      ? formik.errors.phone
+                    formik.touched.phone_number && formik.errors.phone_number
+                      ? formik.errors.phone_number
                       : 'Phone'
                   }
                   clearable
                   fullWidth
                   size='lg'
                   placeholder='e.g: 966555555555'
-                  name='phone'
-                  id='phone'
-                  value={formik.values.phone}
+                  name='phone_number'
+                  id='phone_number'
+                  value={formik.values.phone_number}
                   onChange={formik.handleChange}
                   status={
-                    formik.touched.phone && formik.errors.phone
+                    formik.touched.phone_number && formik.errors.phone_number
                       ? 'error'
                       : 'default'
                   }
                 />
-                <Input
-                  label={
-                    formik.touched.supervisor && formik.errors.supervisor
+                <div className='w-full'>
+                  <label
+                    className={`block mb-2 ${
+                      formik.touched.supervisor && formik.errors.supervisor
+                        ? 'text-red-500'
+                        : 'text-gray-900'
+                    }`}
+                  >
+                    {formik.touched.supervisor && formik.errors.supervisor
                       ? formik.errors.supervisor
-                      : 'Supervisor'
-                  }
-                  clearable
-                  fullWidth
-                  size='lg'
-                  placeholder='e.g: John Doe'
-                  name='supervisor'
-                  id='supervisor'
-                  value={formik.values.supervisor}
-                  onChange={formik.handleChange}
-                  status={
-                    formik.touched.supervisor && formik.errors.supervisor
-                      ? 'error'
-                      : 'default'
-                  }
-                />
+                      : 'Supervisor'}
+                  </label>
+                  <select
+                    id='supervisor'
+                    name='supervisor'
+                    onChange={formik.handleChange}
+                    value={formik.values.supervisor}
+                    className={`border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 ${
+                      formik.touched.supervisor && formik.errors.supervisor
+                        ? 'border-red-500 bg-red-200'
+                        : 'border-gray-300 bg-gray-100'
+                    }`}
+                  >
+                    <option value=''>Select Supervisor</option>
+                    {users.map((item: User) => (
+                      <option key={item.id} value={item.id}>
+                        {item.username}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </Flex>
 
               <Flex
@@ -285,26 +312,37 @@ export const AddBranch = () => {
                   '@lg': { flexWrap: 'nowrap', gap: '$10' },
                 }}
               >
-                <Input
-                  label={
-                    formik.touched.clientAccount && formik.errors.clientAccount
-                      ? formik.errors.clientAccount
-                      : 'Client Account'
-                  }
-                  clearable
-                  fullWidth
-                  size='lg'
-                  placeholder='e.g: John Doe'
-                  name='clientAccount'
-                  id='clientAccount'
-                  value={formik.values.clientAccount}
-                  onChange={formik.handleChange}
-                  status={
-                    formik.touched.clientAccount && formik.errors.clientAccount
-                      ? 'error'
-                      : 'default'
-                  }
-                />
+                <div className='w-full'>
+                  <label
+                    className={`block mb-2 ${
+                      formik.touched.account && formik.errors.account
+                        ? 'text-red-500'
+                        : 'text-gray-900'
+                    }`}
+                  >
+                    {formik.touched.account && formik.errors.account
+                      ? formik.errors.account
+                      : 'Client Account'}
+                  </label>
+                  <select
+                    id='account'
+                    name='account'
+                    onChange={formik.handleChange}
+                    value={formik.values.account}
+                    className={`border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 ${
+                      formik.touched.account && formik.errors.account
+                        ? 'border-red-500 bg-red-200'
+                        : 'border-gray-300 bg-gray-100'
+                    }`}
+                  >
+                    <option value=''>Select Client Account</option>
+                    {accounts.map((item: Account) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </Flex>
             </Modal.Body>
             {/* <Divider css={{ my: '$5' }} /> */}
