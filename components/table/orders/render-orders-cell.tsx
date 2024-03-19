@@ -23,7 +23,7 @@ export const RenderCell = ({ order, columnKey }: Props) => {
       return <p>#{order.serial_number}</p>
 
     case 'client':
-      return <p>{order?.added_by?.username}</p>
+      return <p>{order?.client.account.name}</p>
 
     case 'driver':
       return <p>{order?.currently_assigned_driver?.user.username}</p>

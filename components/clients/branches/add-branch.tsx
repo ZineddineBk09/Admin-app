@@ -1,11 +1,4 @@
-import {
-  Button,
-  Input,
-  Modal,
-  Text,
-  Loading,
-  Tooltip,
-} from '@nextui-org/react'
+import { Button, Input, Modal, Text, Loading, Tooltip } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../../styles/flex'
 import { useFormik } from 'formik'
@@ -101,9 +94,7 @@ export const AddBranch = () => {
 
   console.log(formik.errors)
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   const countriesGovsCities = (label: string) =>
     label === 'country'

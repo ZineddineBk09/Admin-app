@@ -67,9 +67,7 @@ export const AddDriverType = () => {
     },
   })
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   return (
     <div>

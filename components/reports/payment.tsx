@@ -10,9 +10,7 @@ export const MakePayment = ({ id }: { id: number }) => {
   const paymentRef = React.useRef(null)
   const handler = () => setVisible(true)
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   const handlePrint = useReactToPrint({
     content: () => paymentRef.current,
@@ -78,7 +76,8 @@ export const MakePayment = ({ id }: { id: number }) => {
         <Modal.Footer>
           {!loading && (
             <div className='w-full flex items-center justify-center gap-x-3'>
-              <button className='h-11 px-12 bg-gray-400 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'
+              <button
+                className='h-11 px-12 bg-gray-400 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'
                 onClick={closeHandler}
               >
                 Cancel

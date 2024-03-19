@@ -1,29 +1,19 @@
-import {
-  Button,
-  Divider,
-  Input,
-  Modal,
-  Text,
-  Tooltip,
-  Loading,
-  Radio,
-} from '@nextui-org/react'
+import { Divider, Modal, Text, Tooltip, Loading } from '@nextui-org/react'
 import { IconButton } from '../../table/table.styled'
 import React from 'react'
 import { Flex } from '../../styles/flex'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { NotesIcon } from '../../icons/table'
-import { Note, Order, Team } from '../../../interfaces'
-import { getRecords, updateRecord } from '../../../lib/api'
+import { Note, Order } from '../../../interfaces'
+import { createRecord } from '../../../lib/api'
 import { useOrdersContext } from '../../../context/orders'
+import toast from 'react-hot-toast'
 
 export const AddNotes = ({ order }: { order: Order }) => {
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
-  const [error, setError] = React.useState<string>('')
   const [loading, setLoading] = React.useState<boolean>(false)
-  const [teams, setTeams] = React.useState<Team[]>([])
   const { refreshOrders } = useOrdersContext()
 
   const formik = useFormik({
@@ -35,13 +25,24 @@ export const AddNotes = ({ order }: { order: Order }) => {
     }),
     onSubmit: async (values) => {
       setLoading(true)
-      const response = await updateRecord(
+      await createRecord(
         {
-          id: order?.id,
-          ...values,
+          order: order.id,
+          description: values.note,
         },
-        'order'
+        'note'
       )
+        .then((res) => {
+          if (res) {
+            setVisible(false)
+            toast.success('Note added successfully')
+            refreshOrders()
+          }
+        })
+        .catch((err) => {
+          console.log('Error adding note!: ', err)
+          toast.error('Error adding note!')
+        })
       setVisible(false)
       setLoading(false)
       // if (response.status) {
@@ -54,67 +55,7 @@ export const AddNotes = ({ order }: { order: Order }) => {
     },
   })
 
-  const notes: Note[] = [
-    {
-      time: '12:00pm',
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
-      date: '12/12/2021',
-    },
-    {
-      time: '12:00pm',
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
-      date: '12/12/2021',
-    },
-    {
-      time: '12:00pm',
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
-      date: '12/12/2021',
-    },
-    {
-      time: '12:00pm',
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
-      date: '12/12/2021',
-    },
-    {
-      time: '12:00pm',
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
-      date: '12/12/2021',
-    },
-    {
-      time: '12:00pm',
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
-      date: '12/12/2021',
-    },
-    {
-      time: '12:00pm',
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
-      date: '12/12/2021',
-    },
-    {
-      time: '12:00pm',
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
-      date: '12/12/2021',
-    },
-  ]
-
-  const closeHandler = () => {
-    setVisible(false)
-  }
-
-  React.useEffect(() => {
-    //set formik values
-    formik.setValues({ ...(order as any) })
-
-    const fetchTeams = async () => {
-      await getRecords('team')
-        .then((res: { teams: Team[] }) => setTeams(res.teams))
-        .catch((err: any) => {
-          setTeams([])
-          console.log('Error in fetching teams: ', err)
-        })
-    }
-    fetchTeams()
-  }, [])
+  const closeHandler = () => setVisible(false)
 
   return (
     <div>
@@ -155,13 +96,6 @@ export const AddNotes = ({ order }: { order: Order }) => {
                   '@lg': { flexWrap: 'nowrap', gap: '$12' },
                 }}
               >
-                {/* error */}
-                {error && (
-                  <span className='w-full text-center transition-all duration-300 bg-red-100 text-xs text-red-500 rounded p-2 mx-auto'>
-                    {error}
-                  </span>
-                )}
-
                 <div className='w-full flex flex-col items-end gap-y-3'>
                   <div className='w-full flex flex-col items-start gap-y-2'>
                     <label className='text-gray-500'>Note</label>
@@ -186,7 +120,7 @@ export const AddNotes = ({ order }: { order: Order }) => {
                 {/* Notes */}
                 <div className='flex flex-col items-start gap-y-2 max-h-[300px] overflow-y-auto bg-gray-50'>
                   <Divider css={{ my: '$5' }} />
-                  {notes?.map((note: Note, index: number) => (
+                  {order?.notes?.map((note: Note, index: number) => (
                     <div
                       className='w-full flex flex-col items-start gap-y-2'
                       key={index}
@@ -194,10 +128,14 @@ export const AddNotes = ({ order }: { order: Order }) => {
                       <div className='w-full p-2'>
                         <div className='flex justify-between items-center'>
                           <span className='text-gray-600 font-semibold'>
-                            {note.date + ' - ' + note.time}
+                            {new Date(note.added_at).toLocaleDateString() +
+                              '-' +
+                              new Date(note.added_at).toLocaleTimeString()}
                           </span>
                         </div>
-                        <div className='text-gray-500 text-sm'>{note.text}</div>
+                        <div className='text-gray-500 text-sm'>
+                          {note.description}
+                        </div>
                       </div>
                       <Divider css={{ my: '$5' }} />
                     </div>

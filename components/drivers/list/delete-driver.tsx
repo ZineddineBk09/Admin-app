@@ -20,9 +20,7 @@ export const DeleteDriver = ({
   const [loading, setLoading] = React.useState<boolean>(false)
   const { refreshDrivers } = useDriversContext()
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   const handleDelete = async () => {
     setLoading(true)

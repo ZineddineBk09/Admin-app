@@ -11,11 +11,31 @@ import { OrdersContextProvider } from '../../context/orders'
 import { NextPage } from 'next'
 import React from 'react'
 import Loading from '../../components/shared/loading'
+import { AreasCountriesContextProvider } from '../../context/areas/countries'
+import { AreasGovernoratesContextProvider } from '../../context/areas/governorates'
+import { AreasCitiesContextProvider } from '../../context/areas/cities'
+import { ClientsBranchesContextProvider } from '../../context/clients/branches'
 
 const OrdersPage: NextPage = () => {
   return (
-    <OrdersContextProvider>
+    <Context>
       <OrdersList />
+    </Context>
+  )
+}
+
+const Context = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <OrdersContextProvider>
+      <AreasCountriesContextProvider>
+        <AreasGovernoratesContextProvider>
+          <AreasCitiesContextProvider>
+            <ClientsBranchesContextProvider>
+              {children}
+            </ClientsBranchesContextProvider>
+          </AreasCitiesContextProvider>
+        </AreasGovernoratesContextProvider>
+      </AreasCountriesContextProvider>
     </OrdersContextProvider>
   )
 }

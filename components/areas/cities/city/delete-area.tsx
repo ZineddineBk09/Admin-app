@@ -21,9 +21,7 @@ export const DeleteArea = ({
   const [loading, setLoading] = React.useState<boolean>(false)
   const { refreshCities, cities } = useAreasCitiesContext()
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   const handleDelete = async () => {
     setLoading(true)

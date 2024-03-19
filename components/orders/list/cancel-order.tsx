@@ -2,10 +2,11 @@ import { Loading, Modal, Text, Tooltip } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../../styles/flex'
 import { IconButton } from '../../table/table.styled'
-import { deleteRecord } from '../../../lib/api'
 import { useOrdersContext } from '../../../context/orders'
 import { CancelIcon } from '../../icons/orders'
 import { ConfirmModal } from '../../shared/confirm-modal'
+import axios from '../../../lib/axios'
+import toast from 'react-hot-toast'
 
 export const CancelOrder = ({
   id,
@@ -16,20 +17,29 @@ export const CancelOrder = ({
 }) => {
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
-  const [error, setError] = React.useState<string>('')
   const [loading, setLoading] = React.useState<boolean>(false)
   const { refreshOrders } = useOrdersContext()
+  const [note, setNote] = React.useState('')
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
-  const handleDelete = async () => {
+  const handleCancel = async () => {
     setLoading(true)
-    await deleteRecord(id, 'driver')
-    closeHandler()
-    setLoading(false)
-    refreshOrders()
+    await axios
+      .put(`/order/${id}/?transition=cancel`, {
+        transition_description_field: note,
+      })
+      .then(() => {
+        toast.success('Order cancelled successfully')
+        closeHandler()
+        setLoading(false)
+        refreshOrders()
+      })
+      .catch((error) => {
+        toast.error('Failed to cancel order')
+        console.log(error)
+        setLoading(false)
+      })
   }
 
   return (
@@ -70,7 +80,7 @@ export const CancelOrder = ({
                 order #{id}?
               </Text>
 
-              <div className='w-full flex flex-col items-start gap-y-2'>
+              {/* <div className='w-full flex flex-col items-start gap-y-2'>
                 <label className='text-gray-500'>Reason</label>
                 <input
                   type='text'
@@ -79,7 +89,7 @@ export const CancelOrder = ({
                   id='reason'
                   className='w-full h-11 bg-gray-200 rounded px-4'
                 />
-              </div>
+              </div> */}
 
               <div className='w-full flex flex-col items-start gap-y-2'>
                 <label className='text-gray-500'>Note</label>
@@ -87,6 +97,8 @@ export const CancelOrder = ({
                   placeholder='Note'
                   name='note'
                   id='note'
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
                   className='w-full bg-gray-200 rounded p-4'
                   rows={4}
                 />
@@ -105,7 +117,7 @@ export const CancelOrder = ({
               </button>
 
               <ConfirmModal
-                handleConfirm={handleDelete}
+                handleConfirm={handleCancel}
                 title='Confirm'
                 text='Are you sure you want to cancel this order?'
                 clickButton={

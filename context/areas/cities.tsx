@@ -75,7 +75,7 @@ export const AreasCitiesContextProvider = ({
       { governorate__name: governorate },
       'city'
     )
-    
+
     if (records.results) {
       setCities(records.results)
     }
@@ -110,8 +110,8 @@ export const AreasCitiesContextProvider = ({
   }
 
   useEffect(() => {
-    refreshCities()
-  }, [])
+    cities.length === 0 && refreshCities()
+  })
 
   return (
     <AreasCitiesContext.Provider

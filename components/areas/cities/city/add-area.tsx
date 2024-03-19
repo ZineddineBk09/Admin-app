@@ -139,9 +139,7 @@ export const AddArea = ({ id }: { id: string }) => {
 
   const handler = () => setVisible(true)
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   return (
     <div>

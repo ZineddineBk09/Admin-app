@@ -87,9 +87,7 @@ export const AddCountry = () => {
     currencies?.find((currency: Currency) => currency.id === id)?.symbol ||
     'Unit'
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   return (
     <div>

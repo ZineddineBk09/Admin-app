@@ -9,7 +9,13 @@ const SearchLocation = dynamic(() => import('../map/search-location'), {
   ssr: false,
 })
 
-const LocationForm = () => {
+const LocationForm = ({
+  order_id,
+  token,
+}: {
+  order_id: string
+  token: string
+}) => {
   const formik = useFormik({
     initialValues: {
       search: '',

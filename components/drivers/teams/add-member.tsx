@@ -24,9 +24,7 @@ export const AddMember = ({ members }: { members: DriverTeamMember[] }) => {
 
   const handler = () => setVisible(true)
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value)

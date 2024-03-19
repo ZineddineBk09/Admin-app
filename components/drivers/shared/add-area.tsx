@@ -162,9 +162,7 @@ export const AddArea = ({
 
   const handler = () => setVisible(true)
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   return (
     <div>

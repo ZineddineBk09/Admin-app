@@ -1,4 +1,4 @@
-import { APIResponse, Order, Sort, Status } from '../../interfaces'
+import { APIResponse, Order, Pagination, Sort, Status } from '../../interfaces'
 import { filterRecords, getRecords } from '../../lib/api'
 import axios from '../../lib/axios'
 import { searchOrders } from '../../lib/search'
@@ -13,11 +13,25 @@ export const useOrdersContext: {
     loading: boolean
     hasMore: boolean
     isFetching: boolean
+    pagination: Pagination
+    filters: {
+      paymentType: string
+      dateFrom: Date
+      dateTo: Date
+    }
+    setFilters: React.Dispatch<
+      React.SetStateAction<{
+        paymentType: string
+        dateFrom: Date
+        dateTo: Date
+      }>
+    >
     fetchNextPage: () => Promise<void>
+    fetchPreviousPage: () => Promise<void>
     handleSearchOrders: (search: string) => void
     handleSortOrders: (sort: Sort) => void
     handleSelectStatus: (status: string) => void
-    handleSelectDate: ({
+    handleFilterDate: ({
       dateFrom,
       dateTo,
     }: {
@@ -35,16 +49,25 @@ export const OrdersContextProvider = ({
   children: React.ReactNode
 }) => {
   const [orders, setOrders] = useState<Order[]>([] as Order[])
+  const [pagination, setPagination] = useState<Pagination>({
+    limit: 10,
+    offset: 0,
+    total: 0,
+    page: 1,
+  })
+  const [filters, setFilters] = useState<{
+    paymentType: string
+    dateFrom: Date
+    dateTo: Date
+  }>({
+    paymentType: '',
+    dateFrom: new Date(),
+    dateTo: new Date(),
+  })
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [isFetching, setIsFetching] = useState<boolean>(false)
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([] as Order[])
   const [loading, setLoading] = useState(false)
-  const [orderStatus, setOrderStatus] = useState<Status[]>([
-    { value: 'assigned', checked: true },
-    { value: 'cancelled', checked: true },
-    { value: 'new', checked: true },
-    { value: 'done', checked: true },
-  ])
 
   const refreshOrders = async () => {
     setLoading(true)
@@ -53,8 +76,15 @@ export const OrdersContextProvider = ({
       setOrders(records.results)
     }
 
-    // check if there are more drivers we can fetch
+    // check if there are more orders we can fetch
     setHasMore(!!records.next)
+
+    setPagination({
+      limit: records?.results?.length,
+      offset: 0,
+      total: records.count,
+      page: 1,
+    })
 
     setLoading(false)
   }
@@ -68,14 +98,68 @@ export const OrdersContextProvider = ({
 
     // next url will of format: /order/?limit=10&offset=10
     try {
-      const response = await axios.get(
-        `/order/?limit=10&offset=${orders.length}`
-      )
-      const newDrivers = response.data.results
-      setOrders([...orders, ...newDrivers])
+      const url = `/order/?limit=${pagination.limit}&offset=${
+        pagination.offset + pagination.limit
+      }`
+      const params = {
+        payment_type: filters?.paymentType,
+        added_at__gte: filters?.dateFrom,
+        added_at__lte: filters?.dateTo,
+      }
+
+      const response = await axios.get(url, {
+        params,
+      })
+      const newOrders = response.data.results
+      setOrders(newOrders as Order[])
 
       // check if there are more orders we can fetch
       setHasMore(!!response.data.next)
+
+      setPagination({
+        ...pagination,
+        offset: pagination.offset + pagination.limit,
+        page: pagination.page + 1,
+      })
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    } finally {
+      setIsFetching(false)
+    }
+  }
+
+  const fetchPreviousPage = async () => {
+    if (isFetching || pagination.offset === 0) {
+      return
+    }
+
+    setIsFetching(true)
+
+    // next url will of format: /order/?limit=10&offset=10
+    try {
+      const url = `/order/?limit=${pagination.limit}&offset=${
+        pagination.offset - pagination.limit
+      }`
+      const params = {
+        payment_type: filters?.paymentType,
+        added_at__gte: filters?.dateFrom,
+        added_at__lte: filters?.dateTo,
+      }
+
+      const response = await axios.get(url, {
+        params,
+      })
+      const newOrders = response.data.results
+      setOrders(newOrders as Order[])
+
+      // check if there are more orders we can fetch
+      setHasMore(!!response.data.next)
+
+      setPagination({
+        ...pagination,
+        offset: pagination.offset - pagination.limit,
+        page: pagination.page - 1,
+      })
     } catch (error) {
       console.error('Error fetching data:', error)
     } finally {
@@ -118,7 +202,7 @@ export const OrdersContextProvider = ({
     setOrders(filteredOrders)
   }
 
-  const handleSelectDate = ({
+  const handleFilterDate = async ({
     dateFrom,
     dateTo,
   }: {
@@ -129,12 +213,19 @@ export const OrdersContextProvider = ({
       refreshOrders()
       return
     }
-    const filteredOrders = orders.filter(
-      (order) =>
-        new Date(order?.added_at).getTime() >= dateFrom.getTime() &&
-        new Date(order?.added_at).getTime() <= dateTo.getTime()
+
+    const records: APIResponse = await filterRecords(
+      {
+        added_at__gte: dateFrom,
+        added_at__lte: dateTo,
+        payment_type: filters?.paymentType,
+      },
+      'order'
     )
-    setOrders(filteredOrders)
+
+    if (records.results) {
+      setOrders(records.results)
+    }
   }
 
   const handleFilterPaymentType = async (payment_type: string) => {
@@ -145,7 +236,14 @@ export const OrdersContextProvider = ({
     }
 
     // fetch cities for the selected payment_type
-    const records: APIResponse = await filterRecords({ payment_type }, 'order')
+    const records: APIResponse = await filterRecords(
+      {
+        payment_type,
+        added_at__gte: filters?.dateFrom,
+        added_at__lte: filters?.dateTo,
+      },
+      'order'
+    )
 
     if (records.results) {
       setOrders(records.results)
@@ -154,12 +252,19 @@ export const OrdersContextProvider = ({
     // check if there are more cities we can fetch
     setHasMore(!!records.next)
 
+    setPagination({
+      limit: records?.results?.length,
+      offset: 0,
+      total: records.count,
+      page: 1,
+    })
+
     setLoading(false)
   }
 
   useEffect(() => {
-    refreshOrders()
-  }, [])
+    orders.length === 0 && refreshOrders()
+  })
 
   return (
     <OrdersContext.Provider
@@ -169,11 +274,15 @@ export const OrdersContextProvider = ({
         loading,
         hasMore,
         isFetching,
+        pagination,
+        filters,
+        setFilters,
         fetchNextPage,
+        fetchPreviousPage,
         handleSearchOrders,
         handleSortOrders,
         handleSelectStatus,
-        handleSelectDate,
+        handleFilterDate,
         handleFilterPaymentType,
         refreshOrders,
       }}

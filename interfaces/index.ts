@@ -140,6 +140,7 @@ export interface Order {
   external_id: string
   COD: boolean
   currently_assigned_driver: Driver | null
+  client: BranchMinimal
   delivery_address: Address
   pickup_address: Address
   customer: Customer
@@ -170,6 +171,16 @@ export interface Order {
   paid_driver: string
   added_by: User | null
   payment_type: 'cash' | 'visa' | 'mastercard'
+  notes: Note[]
+}
+
+export interface OrderItem {
+  id?: string
+  name: string
+  description: string
+  price: number
+  code: number
+  qty: number
 }
 
 export interface AutoCancelledOrder {
@@ -384,9 +395,9 @@ export interface Location {
 }
 
 export interface Note {
-  date: string
-  time: string
-  text: string
+  id: string
+  added_at: string
+  description: string
 }
 
 export interface SubLink {
@@ -440,3 +451,9 @@ export interface GeoJSONObject {
 
 export type GeoJSONCoordinate = number[]
 //--------------------------------------------------------------------
+export interface Pagination {
+  limit: number
+  offset: number
+  total: number
+  page: number
+}

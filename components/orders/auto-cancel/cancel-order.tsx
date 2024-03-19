@@ -20,9 +20,7 @@ export const CancelOrder = ({
   const [loading, setLoading] = React.useState<boolean>(false)
   const { refreshOrders } = useOrdersContext()
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   const handleDelete = async () => {
     setLoading(true)

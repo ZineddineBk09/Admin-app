@@ -55,8 +55,14 @@ export const OrdersPage = () => {
 }
 
 export const SearchAndFilter = () => {
-  const { orders, handleSearchOrders, handleFilterPaymentType } =
-    useOrdersContext()
+  const {
+    orders,
+    handleSearchOrders,
+    handleFilterPaymentType,
+    filters,
+    setFilters,
+    handleFilterDate,
+  } = useOrdersContext()
 
   return (
     <div className='w-full grid grid-cols-1 gap-6 lg:grid-cols-4 px-6'>
@@ -78,6 +84,16 @@ export const SearchAndFilter = () => {
           name='dateFrom'
           id='dateFrom'
           className='w-fit h-full bg-transparent'
+          onChange={(e) => {
+            setFilters({
+              ...filters,
+              dateFrom: new Date(e.target.value),
+            })
+            handleFilterDate({
+              dateFrom: new Date(e.target.value),
+              dateTo: filters.dateTo,
+            })
+          }}
         />
       </div>
       {/* Date To */}
@@ -88,6 +104,16 @@ export const SearchAndFilter = () => {
           name='dateTo'
           id='dateTo'
           className='w-fit h-full bg-transparent'
+          onChange={(e) => {
+            setFilters({
+              ...filters,
+              dateTo: new Date(e.target.value),
+            })
+            handleFilterDate({
+              dateFrom: filters.dateFrom,
+              dateTo: new Date(e.target.value),
+            })
+          }}
         />
       </div>
       {/* Payment type: visa or cash */}
@@ -97,9 +123,16 @@ export const SearchAndFilter = () => {
           name='paymentType'
           id='paymentType'
           className='h-full bg-transparent'
-          onChange={(e) => handleFilterPaymentType(e.target.value)}
+          value={filters.paymentType}
+          onChange={(e) => {
+            setFilters({
+              ...filters,
+              paymentType: e.target.value,
+            })
+            handleFilterPaymentType(e.target.value)
+          }}
         >
-          <option value=''>All</option>
+          <option value='all'>All</option>
           <option value='visa'>Visa</option>
           <option value='mastercard'>Mastercard</option>
           <option value='cash'>Cash</option>

@@ -32,9 +32,7 @@ export const AssignDriver = ({
 
   const handler = () => setVisible(true)
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value)

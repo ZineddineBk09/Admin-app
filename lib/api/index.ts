@@ -62,7 +62,7 @@ export const getRecords = async (endpoint: string) => {
 export const filterRecords = async (params: any, endpoint: string) => {
   try {
     const response = await axios.get(endpoint + '/', {
-      params,
+      params
     })
     const data = await response.data
     return data

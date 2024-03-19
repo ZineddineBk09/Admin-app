@@ -3,6 +3,7 @@ import { RenderCell } from './render-orders-cell'
 import { ordersTableCols } from '../data'
 import { useOrdersContext } from '../../../context/orders'
 import { Order, Sort } from '../../../interfaces'
+import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/24/outline'
 
 export const OrdersTable = () => {
   const { filteredOrders, orders, handleSortOrders } = useOrdersContext()
@@ -14,9 +15,9 @@ export const OrdersTable = () => {
   }, [sorting])
 
   return (
-    <div className='flex flex-col'>
-      <div className='overflow-x-auto sm:-mx-6 lg:-mx-8'>
-        <div className='inline-block min-w-full py-2 sm:px-6 lg:px-8'>
+    <div className='flex flex-col items-center'>
+      <div className='w-full overflow-x-auto'>
+        <div className='inline-block min-w-full pt-2'>
           <div className='overflow-hidden'>
             <table className='min-w-full text-left text-sm font-light'>
               <thead className='border-b font-medium border-gray-300'>
@@ -54,6 +55,38 @@ export const OrdersTable = () => {
           </div>
         </div>
       </div>
+      <Pagination />
+    </div>
+  )
+}
+
+export function Pagination() {
+  const { pagination, fetchNextPage, fetchPreviousPage } = useOrdersContext()
+
+  return (
+    <div className='flex items-center gap-8 h-12'>
+      <button
+        onClick={fetchPreviousPage}
+        disabled={pagination.page === 1}
+        className='border border-black p-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed'
+      >
+        <ArrowLeftIcon strokeWidth={2} className='h-4 w-4' />
+      </button>
+      <p color='gray' className='font-normal'>
+        Page <strong className='text-gray-900'>{pagination.page}</strong> of{' '}
+        <strong className='text-gray-900'>
+          {Math.ceil(pagination.total / pagination.limit)}
+        </strong>
+      </p>
+      <button
+        onClick={fetchNextPage}
+        disabled={
+          pagination.page === Math.ceil(pagination.total / pagination.limit)
+        }
+        className='border border-black p-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed'
+      >
+        <ArrowRightIcon strokeWidth={2} className='h-4 w-4' />
+      </button>
     </div>
   )
 }

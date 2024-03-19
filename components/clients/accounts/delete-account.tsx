@@ -12,9 +12,7 @@ export const DeleteAccount = ({ id }: { id: string }) => {
   const [loading, setLoading] = React.useState<boolean>(false)
   const { refreshCountries } = useAreasCountriesContext()
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   const handleDelete = async () => {
     setLoading(true)

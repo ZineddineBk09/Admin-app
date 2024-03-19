@@ -43,9 +43,7 @@ export const AddBonus = ({ order }: { order: AutoCancelledOrder }) => {
     },
   })
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   return (
     <div>

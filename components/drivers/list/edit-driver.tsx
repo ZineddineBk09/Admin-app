@@ -66,9 +66,7 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
     },
   })
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   React.useEffect(() => {
     //set formik values
