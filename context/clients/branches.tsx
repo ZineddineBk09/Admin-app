@@ -110,7 +110,7 @@ export const ClientsBranchesContextProvider = ({
   }
 
   useEffect(() => {
-    refreshBranches()
+   branches.length === 0 && refreshBranches()
   }, [])
 
   return (

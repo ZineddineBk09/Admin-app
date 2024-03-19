@@ -7,7 +7,6 @@ const AddOrder = dynamic(() =>
 )
 import { useOrdersContext } from '../../../context/orders'
 import { Team } from '../../../interfaces'
-import { getRecords } from '../../../lib/api'
 import dynamic from 'next/dynamic'
 
 export const OrdersPage = () => {

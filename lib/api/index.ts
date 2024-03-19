@@ -59,10 +59,21 @@ export const getRecords = async (endpoint: string) => {
   }
 }
 
+export const getRecord = async (id: string, endpoint: string) => {
+  try {
+    const response = await axios.get(endpoint + '/' + id + '/')
+    const data = await response.data
+    return data
+  } catch (error) {
+    console.log('Error retreiving record', error)
+    return {}
+  }
+}
+
 export const filterRecords = async (params: any, endpoint: string) => {
   try {
     const response = await axios.get(endpoint + '/', {
-      params
+      params,
     })
     const data = await response.data
     return data

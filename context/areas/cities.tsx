@@ -111,7 +111,7 @@ export const AreasCitiesContextProvider = ({
 
   useEffect(() => {
     cities.length === 0 && refreshCities()
-  })
+  }, [])
 
   return (
     <AreasCitiesContext.Provider

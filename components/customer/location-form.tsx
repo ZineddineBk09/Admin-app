@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { Location } from '../../interfaces'
+import { Address, Location, Order } from '../../interfaces'
 import Image from 'next/image'
+import { getRecord, partialUpdateRecord } from '../../lib/api'
+import { set } from 'lodash'
 const Map = dynamic(() => import('./map'), { ssr: false })
 const SearchLocation = dynamic(() => import('../map/search-location'), {
   ssr: false,
@@ -16,6 +18,9 @@ const LocationForm = ({
   order_id: string
   token: string
 }) => {
+  const [order, setOrder] = useState<Order>({} as Order)
+  const [delivery_address, setDeliveryAddress] = useState({} as Address)
+  const [success, setSuccess] = useState<boolean>(false)
   const formik = useFormik({
     initialValues: {
       search: '',
@@ -27,11 +32,54 @@ const LocationForm = ({
       latitude: Yup.number().required('Required'),
       longitude: Yup.number().required('Required'),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log(values)
+      // update order delivery address latitude and logitude fields
+      await partialUpdateRecord(
+        {
+          id: delivery_address.id,
+          latitude: values.latitude,
+          longitude: values.longitude,
+        },
+        'address'
+      ).then(
+        (res) => {
+          console.log(res)
+          setSuccess(true)
+        },
+        (err) => console.log(err)
+      )
     },
   })
 
+  useEffect(() => {
+    // get order
+    const getOrder = async () => {
+      console.log(order_id)
+      const res = await getRecord(order_id, 'order')
+      setOrder(res)
+      setDeliveryAddress(res.delivery_address)
+
+      // check if delivery_address has latitude and longitude
+      if (res.delivery_address.latitude && res.delivery_address.longitude) {
+        formik.setValues({
+          ...formik.values,
+          latitude: res.delivery_address.latitude,
+          longitude: res.delivery_address.longitude,
+        })
+      }
+    }
+    getOrder()
+  }, [order_id])
+
+  if (success)
+    return (
+      <div className='w-full h-full flex items-center justify-center m-auto'>
+        <p className='text-xl font-semibold'>
+          Your order is being processed, please wait...
+        </p>
+      </div>
+    )
   return (
     <div className='w-[90%] m-auto h-[100vh] rounded-xl relative lg:max-w-xl'>
       <div className='w-full flex items-center justify-start my-3'>
@@ -90,7 +138,7 @@ const LocationForm = ({
               : 'bg-opacity-50 cursor-not-allowed'
           }
           `}
-              onClick={() => console.log('Submit: ', formik.values)}
+              onClick={formik.handleSubmit as any}
               disabled={!formik.isValid}
             >
               Confirm Location

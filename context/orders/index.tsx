@@ -264,7 +264,7 @@ export const OrdersContextProvider = ({
 
   useEffect(() => {
     orders.length === 0 && refreshOrders()
-  })
+  }, [])
 
   return (
     <OrdersContext.Provider

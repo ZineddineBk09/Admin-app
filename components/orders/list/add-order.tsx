@@ -142,11 +142,13 @@ export const AddOrder = () => {
           if (res) {
             toast.success('Order added successfully')
             refreshOrders()
-            setVisible(false)
           }
         })
         .catch((err) => {
           toast.error('Error adding order!')
+        })
+        .finally(() => {
+          setVisible(false)
         })
     },
   })
@@ -687,7 +689,10 @@ const AddItem = ({ parentFormik }: { parentFormik: any }) => {
   return (
     <div>
       <Tooltip content='Add Item' onClick={handler}>
-        <button className='h-10 w-10 flex items-center justify-center text-4xl font-medium rounded-full bg-gray-200 pb-1'>
+        <button
+          type='button'
+          className='h-10 w-10 flex items-center justify-center text-4xl font-medium rounded-full bg-gray-200 pb-1'
+        >
           +
         </button>
       </Tooltip>

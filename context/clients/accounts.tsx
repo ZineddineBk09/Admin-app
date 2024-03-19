@@ -65,7 +65,7 @@ export const ClientsAccountsContextProvider = ({
   }
 
   useEffect(() => {
-    refreshAccounts()
+    accounts.length === 0 && refreshAccounts()
   }, [])
 
   return (

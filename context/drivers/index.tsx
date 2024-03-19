@@ -148,9 +148,9 @@ export const DriversContextProvider = ({
   }
 
   useEffect(() => {
-    refreshDrivers()
+    drivers.length === 0 && refreshDrivers()
     // refreshDriverTeams()
-    refreshDriverTypes()
+    driverTypes.length === 0 && refreshDriverTypes()
   }, [])
 
   return (
