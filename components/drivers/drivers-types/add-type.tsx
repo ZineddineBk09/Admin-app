@@ -151,7 +151,7 @@ export const AddDriverType = () => {
                         : 'border-gray-300 bg-gray-100'
                     }`}
                   >
-                    <option value=''>Select Price Unit</option>
+                    <option value=''>Select Vehicle</option>
                     {vehicleTypes?.map((type: string) => (
                       <option
                         key={type}

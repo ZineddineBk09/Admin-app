@@ -1,5 +1,5 @@
 import { Text, Loading } from '@nextui-org/react'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Flex } from '../../styles/flex'
 import { OrdersTable } from '../../table/orders/orders-table'
 const AddOrder = dynamic(() =>
@@ -8,6 +8,7 @@ const AddOrder = dynamic(() =>
 import { useOrdersContext } from '../../../context/orders'
 import { Team } from '../../../interfaces'
 import dynamic from 'next/dynamic'
+import { debounce } from 'lodash'
 
 export const OrdersPage = () => {
   const { orders, loading } = useOrdersContext()
@@ -55,13 +56,17 @@ export const OrdersPage = () => {
 
 export const SearchAndFilter = () => {
   const {
-    orders,
     handleSearchOrders,
     handleFilterPaymentType,
     filters,
     setFilters,
     handleFilterDate,
   } = useOrdersContext()
+
+  const debouncedSearch = useMemo(
+    () => debounce((e) => handleSearchOrders(e.target.value), 500),
+    [handleSearchOrders]
+  )
 
   return (
     <div className='w-full grid grid-cols-1 gap-6 lg:grid-cols-4 px-6'>
@@ -72,7 +77,7 @@ export const SearchAndFilter = () => {
         type='text'
         className='bg-gray-200 rounded-full px-4 py-2'
         placeholder='Search'
-        onChange={(e) => handleSearchOrders(e.target.value)}
+        onChange={debouncedSearch}
       />
 
       {/* Date From */}

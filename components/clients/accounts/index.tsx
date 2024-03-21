@@ -114,7 +114,7 @@ const AccountCard = ({ account }: { account: Account }) => {
           <Divider />
           <>
             <div className='flex items-center gap-x-6'>
-              <label className='text-gray-500 capitalize'>Driver Fees</label>
+              <label className='text-gray-500 capitalize'>Discount</label>
               <div className='h-11 max-w-xs bg-gray-200 rounded px-4 flex justify-between items-center'>
                 <input
                   id='discount_percentage'
@@ -130,7 +130,6 @@ const AccountCard = ({ account }: { account: Account }) => {
                 />
               </div>
               {
-                // Display save button if user changed driver fees
                 showSave.discount_percentage &&
                   discount_percentage !== formik.values.discount_percentage &&
                   SaveButton(formik.handleSubmit as any)
@@ -157,7 +156,6 @@ const AccountCard = ({ account }: { account: Account }) => {
                   />
                 </div>
                 {
-                  // Display save button if user changed driver fees
                   showSave.website &&
                     website !== formik.values.website &&
                     SaveButton(formik.handleSubmit as any)
@@ -182,7 +180,6 @@ const AccountCard = ({ account }: { account: Account }) => {
                   />
                 </div>
                 {
-                  // Display save button if user changed driver fees
                   showSave.phone_number &&
                     phone_number !== formik.values.phone_number &&
                     SaveButton(formik.handleSubmit as any)

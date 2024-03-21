@@ -18,7 +18,6 @@ import Loading from '../../../../components/shared/loading'
 import { partialUpdateRecord } from '../../../../lib/api'
 import { useClientsBranchesContext } from '../../../../context/clients/branches'
 import toast from 'react-hot-toast'
-import { set, update } from 'lodash'
 const EditControl = dynamic(
   import('react-leaflet-draw').then((mod) => mod.EditControl),
   {

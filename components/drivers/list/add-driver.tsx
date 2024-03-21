@@ -92,6 +92,9 @@ export const AddDriver = () => {
         })
         .catch((err) => {
           console.log('Error adding driver!: ', err)
+          if (err.response.data.user.username) {
+            setError(err.response.data.user.username[0])
+          }
           toast.error('Error adding driver!')
         })
     },

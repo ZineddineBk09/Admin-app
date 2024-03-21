@@ -5,7 +5,6 @@ import * as Yup from 'yup'
 import { Address, Location, Order } from '../../interfaces'
 import Image from 'next/image'
 import { getRecord, partialUpdateRecord } from '../../lib/api'
-import { set } from 'lodash'
 const Map = dynamic(() => import('./map'), { ssr: false })
 const SearchLocation = dynamic(() => import('../map/search-location'), {
   ssr: false,

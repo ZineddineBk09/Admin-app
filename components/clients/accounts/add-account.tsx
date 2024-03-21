@@ -4,11 +4,15 @@ import { Flex } from '../../styles/flex'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { AddIcon } from '../../../components/icons/areas'
+import { createRecord } from '../../../lib/api'
+import { useClientsAccountsContext } from '../../../context/clients/accounts'
+import toast from 'react-hot-toast'
 
 export const AddAccount = () => {
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
+  const { refreshAccounts } = useClientsAccountsContext()
 
   const formik = useFormik({
     initialValues: {
@@ -23,8 +27,26 @@ export const AddAccount = () => {
       website: Yup.string().required('website is required'),
       phone_number: Yup.string().required('phone number is required'),
     }),
-    onSubmit: (values) => {
-      console.log(values)
+    onSubmit: async (values) => {
+      await createRecord(
+        {
+          ...values,
+          teams: [],
+          branches: [],
+        },
+        'account'
+      )
+        .then((res) => {
+          if (res) {
+            setVisible(false)
+            toast.success('Account type added successfully')
+            refreshAccounts()
+          }
+        })
+        .catch((err) => {
+          console.log('Error adding account type!: ', err)
+          toast.error('Error adding account type!')
+        })
     },
   })
 

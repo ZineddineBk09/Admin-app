@@ -1,7 +1,7 @@
 import { APIResponse, Order, Pagination, Sort, Status } from '../../interfaces'
-import { filterRecords, getRecords } from '../../lib/api'
+import { filterRecords, getRecords, searchRecords } from '../../lib/api'
 import axios from '../../lib/axios'
-import { searchOrders } from '../../lib/search'
+import { debounce } from 'lodash'
 import React, { useEffect, useState } from 'react'
 
 export const OrdersContext = React.createContext({})
@@ -30,7 +30,6 @@ export const useOrdersContext: {
     fetchPreviousPage: () => Promise<void>
     handleSearchOrders: (search: string) => void
     handleSortOrders: (sort: Sort) => void
-    handleSelectStatus: (status: string) => void
     handleFilterDate: ({
       dateFrom,
       dateTo,
@@ -167,14 +166,17 @@ export const OrdersContextProvider = ({
     }
   }
 
-  const handleSearchOrders = (search: string) => {
+  const handleSearchOrders = async (search: string) => {
     if (search === '') {
       refreshOrders()
       return
     }
     // search inside orders array
-    const filtered: any = searchOrders(orders, search)
-    setFilteredOrders(filtered)
+    const filtered: APIResponse = await searchRecords(search, 'order')
+
+    if (filtered.results) {
+      setOrders(filtered.results)
+    }
   }
 
   const handleSortOrders = (sort: Sort) => {
@@ -191,15 +193,6 @@ export const OrdersContextProvider = ({
     })
 
     setFilteredOrders(sortedOrders)
-  }
-
-  const handleSelectStatus = (status: string) => {
-    if (status === '') {
-      refreshOrders()
-      return
-    }
-    const filteredOrders = orders.filter((driver) => driver?.status === status)
-    setOrders(filteredOrders)
   }
 
   const handleFilterDate = async ({
@@ -281,7 +274,6 @@ export const OrdersContextProvider = ({
         fetchPreviousPage,
         handleSearchOrders,
         handleSortOrders,
-        handleSelectStatus,
         handleFilterDate,
         handleFilterPaymentType,
         refreshOrders,

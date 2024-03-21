@@ -3,7 +3,7 @@ import { OpenStreetMapProvider } from 'leaflet-geosearch'
 import { MapPinIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { truncateTxt } from '../../utils'
 import { Divider, Tooltip } from '@nextui-org/react'
-import { debounce, throttle } from 'lodash'
+import { debounce } from 'lodash'
 
 const SearchLocation = ({ formik }: { formik: any }) => {
   const [search, setSearch] = useState('')
