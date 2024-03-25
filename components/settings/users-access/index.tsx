@@ -139,7 +139,7 @@ const UserAccessCard = ({ user }: { user: UserAccess }) => {
                   ))}
                 </div>
               ) : (
-                <p className='text-sm'>No clients found</p>
+                <p className='text-sm my-auto'>No clients found</p>
               )}
 
               <Tooltip content='Add Client'>
