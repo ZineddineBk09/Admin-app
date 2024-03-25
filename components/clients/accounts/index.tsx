@@ -10,6 +10,7 @@ import { partialUpdateRecord } from '../../../lib/api'
 import toast from 'react-hot-toast'
 import { useFormik } from 'formik'
 import { DeleteModal } from '../../modals/delete'
+import { AddTeam } from './add-team'
 
 const Accounts = () => {
   const { accounts, hasMore, fetchNextPage } = useClientsAccountsContext()
@@ -129,11 +130,9 @@ const AccountCard = ({ account }: { account: Account }) => {
                   className='bg-transparent w-full h-full outline-none'
                 />
               </div>
-              {
-                showSave.discount_percentage &&
-                  discount_percentage !== formik.values.discount_percentage &&
-                  SaveButton(formik.handleSubmit as any)
-              }
+              {showSave.discount_percentage &&
+                discount_percentage !== formik.values.discount_percentage &&
+                SaveButton(formik.handleSubmit as any)}
             </div>
             <Divider />
           </>
@@ -155,11 +154,9 @@ const AccountCard = ({ account }: { account: Account }) => {
                     className='bg-transparent w-full h-full outline-none'
                   />
                 </div>
-                {
-                  showSave.website &&
-                    website !== formik.values.website &&
-                    SaveButton(formik.handleSubmit as any)
-                }
+                {showSave.website &&
+                  website !== formik.values.website &&
+                  SaveButton(formik.handleSubmit as any)}
               </div>
             </>
             <>
@@ -179,11 +176,9 @@ const AccountCard = ({ account }: { account: Account }) => {
                     className='bg-transparent w-full h-full outline-none'
                   />
                 </div>
-                {
-                  showSave.phone_number &&
-                    phone_number !== formik.values.phone_number &&
-                    SaveButton(formik.handleSubmit as any)
-                }
+                {showSave.phone_number &&
+                  phone_number !== formik.values.phone_number &&
+                  SaveButton(formik.handleSubmit as any)}
               </div>
             </>
           </div>
@@ -193,7 +188,7 @@ const AccountCard = ({ account }: { account: Account }) => {
           <div className='w-full flex items-start gap-x-6'>
             <label className='mt-2 text-gray-600 text-sm'>Teams</label>
             {teams?.length > 0 ? (
-              <div className='w-full flex items-start gap-y-2'>
+              <div className='flex items-start gap-y-2 flex-wrap'>
                 {teams?.map(
                   (team: { id: string; name: string }, index: number) => (
                     <div key={id}>
@@ -216,27 +211,23 @@ const AccountCard = ({ account }: { account: Account }) => {
                 )}
               </div>
             ) : (
-              <p className='text-sm'>No teams found</p>
+              <p className='text-sm my-auto'>No teams found</p>
             )}
-
-            <Tooltip content='Add Team'>
-              <button className='h-10 w-16 flex items-center justify-center text-center text-4xl font-medium rounded-full'>
-                +
-              </button>
-            </Tooltip>
+            <AddTeam id={id} refresh={refreshAccounts} />
           </div>
 
           <Divider />
           {/* Admins */}
+
           <div className='w-full flex items-start gap-x-6'>
             <label className='mt-2 text-gray-600 text-sm'>Admins</label>
             {branches?.length > 0 ? (
-              <div className='w-full flex items-start gap-y-2'>
+              <div className='flex items-start gap-y-2 flex-wrap'>
                 {branches?.map((branch: BranchMinimal, index: number) => (
                   <div key={branch.id}>
                     <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
                       <p className='text-sm capitalize'>
-                        {branch.account.name}
+                        {branch.supervisor.username}
                       </p>
                       <Tooltip
                         content={'Delete "' + branch.account.name + '"'}
@@ -254,14 +245,8 @@ const AccountCard = ({ account }: { account: Account }) => {
                 ))}
               </div>
             ) : (
-              <p className='text-sm'>No branches found</p>
+              <p className='text-sm my-auto'>No branches found</p>
             )}
-
-            <Tooltip content='Add Team'>
-              <button className='h-10 w-16 flex items-center justify-center text-center text-4xl font-medium rounded-full'>
-                +
-              </button>
-            </Tooltip>
           </div>
 
           <Divider />

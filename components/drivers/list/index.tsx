@@ -6,11 +6,12 @@ import { useDriversContext } from '../../../context/drivers'
 import { Driver, Sort, Team } from '../../../interfaces'
 import { getRecords } from '../../../lib/api'
 import { DriverCard } from './driver/card'
+import { useTeamsContext } from '../../../context/drivers/teams'
 
 export const DriversPage = () => {
   const { drivers, handleSortDrivers, loading } = useDriversContext()
   const [sorting, setSorting] = useState<Sort>({ column: '', direction: '' })
-  
+
   useEffect(() => {
     if (sorting.column === '') return
     handleSortDrivers(sorting)
@@ -64,22 +65,15 @@ export const DriversPage = () => {
 }
 
 export const SearchAndFilter = () => {
-  const { drivers, handleSearchDrivers, handleSelectTeam, handleSelectStatus } =
-    useDriversContext()
+  const {
+    handleSearchDrivers,
+    handleSelectTeam,
+    handleSelectStatus,
+    filters,
+    setFilters,
+  } = useDriversContext()
   // get unique teams
-  const [teams, setTeams] = React.useState<Team[]>([])
-
-  React.useEffect(() => {
-    const fetchTeams = async () => {
-      await getRecords('team')
-        .then((res: { teams: Team[] }) => setTeams(res.teams))
-        .catch((err: any) => {
-          setTeams([])
-          console.log('Error in fetching teams: ', err)
-        })
-    }
-    fetchTeams()
-  }, [drivers])
+  const { teams } = useTeamsContext()
 
   return (
     <div className='w-full grid grid-cols-1 gap-6 lg:grid-cols-3 px-6'>
@@ -89,11 +83,17 @@ export const SearchAndFilter = () => {
           name='team'
           id='team'
           className='w-full h-full bg-transparent'
-          onChange={(e) => handleSelectTeam(e.target.value)}
+          onChange={(e) => {
+            setFilters({
+              ...filters,
+              team: e.target.value,
+            })
+            handleSelectTeam(e.target.value)
+          }}
         >
-          <option value=''>Select Team All</option>
+          <option value='all'>Select Team All</option>
           {teams?.map((team: Team, index: number) => (
-            <option key={index} value={team?.id}>
+            <option key={team.id} value={team?.name}>
               {team?.name}
             </option>
           ))}
@@ -106,11 +106,16 @@ export const SearchAndFilter = () => {
           name='driverStatus'
           id='driverStatus'
           className='w-full h-full bg-transparent'
-          onChange={(e) => handleSelectStatus(e.target.value)}
+          onChange={(e) => {
+            setFilters({
+              ...filters,
+              status: e.target.value,
+            })
+            handleSelectStatus(e.target.value)
+          }}
         >
-          <option value=''>Select Status (All)</option>
-          <option value='available'>Available</option>
-          <option value='busy'>Busy</option>
+          <option value='all'>Select Status (All)</option>
+          <option value='active'>Active</option>
           <option value='inactive'>Inactive</option>
         </select>
       </div>
