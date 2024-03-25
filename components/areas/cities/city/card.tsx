@@ -260,11 +260,7 @@ export const CityCard = ({ city }: { city: City }) => {
                       <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
                         <p className='text-sm capitalize'>{area?.name}</p>
 
-                        <DeleteArea
-                          areaId={area?.id}
-                          cityId={id}
-                          areaName={area?.name}
-                        />
+                        <DeleteArea areaId={area?.id} areaName={area?.name} />
                         {index < areas?.length - 1 && (
                           <span className='-ml-4'>,</span>
                         )}

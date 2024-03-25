@@ -33,7 +33,7 @@ const Geofence = ({ id, handler }: { id: string; handler: () => void }) => {
 
     await createRecord(
       {
-        name: city?.name + '-' + city.areas.length,
+        name: city?.name + ' - Area' + city.areas.length,
         vertices: apiFormat,
       },
       'geofence'
@@ -172,7 +172,7 @@ export const AddArea = ({ id }: { id: string }) => {
             </Modal.Header>
             <Modal.Body css={{ py: '$10' }}>
               <div className='h-96 flex flex-col items-start bg-gray-200 overflow-hidden rounded-md relative'>
-                <Geofence id={id} handler={handler} />
+                <Geofence id={id} handler={closeHandler} />
               </div>
             </Modal.Body>
           </>

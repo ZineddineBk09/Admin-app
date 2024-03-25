@@ -3,16 +3,13 @@ import React from 'react'
 import toast from 'react-hot-toast'
 import { BinIcon } from '../../../icons/areas'
 import { Flex } from '../../../styles/flex'
-import { deleteRecord, partialUpdateRecord } from '../../../../lib/api'
-import { City, Geofence } from '../../../../interfaces'
+import { deleteRecord } from '../../../../lib/api'
 import { useAreasCitiesContext } from '../../../../context/areas/cities'
 
 export const DeleteArea = ({
-  cityId,
   areaId,
   areaName,
 }: {
-  cityId: string
   areaId: number
   areaName: string
 }) => {
