@@ -96,8 +96,8 @@ export interface Team extends Pricing {
   fixed: number
   supervisor?: User
   city: City
-  areas?: Geofence[]
-  accounts?: string[]
+  areas: Geofence[]
+  accounts: AccountMinimal[]
 }
 
 export interface TeamMinimal {

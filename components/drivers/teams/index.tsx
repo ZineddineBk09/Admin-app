@@ -1,10 +1,8 @@
-import { Country, Team } from '../../../interfaces'
-import { Divider, Tooltip } from '@nextui-org/react'
+import { AccountMinimal, Country, Geofence, Team } from '../../../interfaces'
+import { Divider } from '@nextui-org/react'
 import React, { MouseEventHandler } from 'react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { AddTeam } from './add-team'
-import { DeleteDriverTeam } from './delete-team'
-import { BinIcon } from '../../../components/icons/areas'
 import { AddMember } from './add-member'
 import { useTeamsContext } from '../../../context/drivers/teams'
 import toast from 'react-hot-toast'
@@ -12,16 +10,10 @@ import { updateRecord } from '../../../lib/api'
 import { useFormik } from 'formik'
 import { useAreasCountriesContext } from '../../../context/areas/countries'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import dynamic from 'next/dynamic'
-import Loading from '../../shared/loading'
 import { DeleteModal } from '../../modals/delete'
-const AddArea = dynamic(
-  () => import('../shared/add-area').then((m) => m.AddArea),
-  {
-    ssr: false,
-    loading: () => <Loading />,
-  }
-)
+import { DeleteArea } from './delete-area'
+import { DeleteMember } from './delete-member'
+import { AddArea } from '../shared/add-area'
 
 const DriversTeams = () => {
   const { teams, hasMore, fetchNextPage } = useTeamsContext()
@@ -125,9 +117,6 @@ const DriverTeamCard = ({ team }: { team: Team }) => {
         })
     },
   })
-
-  const areas: any = []
-  const members: any = []
 
   return (
     <div className='w-full flex flex-col items-start gap-y-3 bg-white rounded-md p-4 shadow-lg'>
@@ -290,21 +279,19 @@ const DriverTeamCard = ({ team }: { team: Team }) => {
           {/* Members */}
           <div className='w-full flex items-start gap-x-6'>
             <label className='mt-2 text-gray-600 text-sm'>Members</label>
-            {members?.length > 0 ? (
-              <div className='w-full flex items-start gap-y-2'>
-                {members?.map((member: any, index: number) => (
-                  <div key={index}>
+            {team.accounts?.length > 0 ? (
+              <div className='flex items-start gap-y-2 flex-wrap'>
+                {team.accounts?.map((member: AccountMinimal, index: number) => (
+                  <div key={member.id}>
                     <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
                       <p className='text-sm'>{member.name} </p>
-                      <Tooltip
-                        content={'Delete "' + member.name + '"'}
-                        color='error'
-                      >
-                        <button>
-                          <BinIcon width={4} />
-                        </button>
-                      </Tooltip>
-                      {index < members?.length - 1 && (
+                      <DeleteMember
+                        id={id}
+                        memberId={member.id}
+                        memberName={member.name}
+                        refresh={refreshTeams}
+                      />
+                      {index < team.accounts?.length - 1 && (
                         <span className='-ml-4'>,</span>
                       )}
                     </div>
@@ -312,35 +299,29 @@ const DriverTeamCard = ({ team }: { team: Team }) => {
                 ))}
               </div>
             ) : (
-              <p className='text-sm'>No memberes found</p>
+              <p className='text-sm my-auto'>No members found</p>
             )}
 
-            <AddMember members={members} />
+            <AddMember id={id} refresh={refreshTeams} />
           </div>
           <Divider />
           {/* Areas */}
           <div className='w-full flex items-start gap-x-6'>
             <label className='mt-2 text-gray-600 text-sm'>Areas</label>
-            {areas?.length > 0 ? (
-              <div className='w-full flex items-start gap-y-2'>
-                {areas?.map((area: any, index: number) => (
+
+            {team.areas?.length > 0 ? (
+              <div className='flex items-start gap-y-2 flex-wrap'>
+                {team.areas?.map((area: Geofence, index: number) => (
                   <div key={index}>
                     <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
-                      {/* <label className='text-gray-600 text-sm'>
-                        Area #{index + 1}
-                      </label> */}
-                      <p className='text-sm capitalize'>
-                        {area}{' '}
-                        {/* <span className='ml-6 text-sm text-gray-400'>
-                          #{index}
-                        </span> */}
-                      </p>
-                      <Tooltip content={'Delete "' + area + '"'} color='error'>
-                        <button>
-                          <BinIcon width={4} />
-                        </button>
-                      </Tooltip>
-                      {index < areas?.length - 1 && (
+                      <p className='text-sm capitalize'>{area?.name}</p>
+
+                      <DeleteArea
+                        areaId={area?.id}
+                        areaName={area?.name}
+                        refresh={refreshTeams}
+                      />
+                      {index < team.areas?.length - 1 && (
                         <span className='-ml-4'>,</span>
                       )}
                     </div>
@@ -348,14 +329,9 @@ const DriverTeamCard = ({ team }: { team: Team }) => {
                 ))}
               </div>
             ) : (
-              <p className='text-sm'>No areas found</p>
+              <p className='text-sm my-auto'>No areas found</p>
             )}
-            <AddArea
-              id={id}
-              endpoint='team'
-              areas={areas}
-              refreshRecords={refreshTeams}
-            />
+            <AddArea id={id} />
           </div>
           <Divider />
           <div className='w-full flex items-center justify-between'>
