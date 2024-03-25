@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import {
-  APIResponse,
-  Driver,
-  DriverTeam,
-  DriverType,
-  Sort,
-} from '../../interfaces'
-import { getRecords } from '../../lib/api'
+import { APIResponse, Driver, DriverType, Sort } from '../../interfaces'
+import { filterRecords, getRecords, searchRecords } from '../../lib/api'
 import { searchDrivers } from '../../lib/search'
-import { faker } from '@faker-js/faker'
 import axios from '../../lib/axios'
 
 export const DriversContext = React.createContext({})
@@ -21,6 +14,16 @@ export const useDriversContext: {
     vehicleTypes: string[]
     hasMore: boolean
     isFetching: boolean
+    filters: {
+      team: string
+      status: string
+    }
+    setFilters: React.Dispatch<
+      React.SetStateAction<{
+        team: string
+        status: string
+      }>
+    >
     fetchNextPage: () => Promise<void>
     handleSearchDrivers: (search: string) => void
     handleSortDrivers: (sort: Sort) => void
@@ -40,6 +43,13 @@ export const DriversContextProvider = ({
   const [driverTypes, setDriverTypes] = useState<DriverType[]>(
     [] as DriverType[]
   )
+  const [filters, setFilters] = useState<{
+    team: string
+    status: string
+  }>({
+    team: 'all',
+    status: 'all',
+  })
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [isFetching, setIsFetching] = useState<boolean>(false)
@@ -77,14 +87,17 @@ export const DriversContextProvider = ({
     }
   }
 
-  const handleSearchDrivers = (search: string) => {
+  const handleSearchDrivers = async (search: string) => {
     if (search === '') {
       refreshDrivers()
       return
     }
-    // search inside drivers array
-    const filteredDrivers: any = searchDrivers(drivers, search)
-    setDrivers(filteredDrivers)
+    // search inside orders array
+    const filtered: APIResponse = await searchRecords(search, 'driver')
+
+    if (filtered.results) {
+      setDrivers(filtered.results)
+    }
   }
 
   const handleSortDrivers = (sort: Sort) => {
@@ -103,24 +116,47 @@ export const DriversContextProvider = ({
     setDrivers(sortedDrivers)
   }
 
-  const handleSelectTeam = (team: string) => {
-    if (team === '') {
+  const handleSelectTeam = async (team: string) => {
+    if (team == 'all') {
       refreshDrivers()
       return
     }
-    const filteredDrivers = drivers.filter((driver) => driver?.team.id === team)
-    setDrivers(filteredDrivers)
+
+    const records: APIResponse = await filterRecords(
+      {
+        team__name: team,
+        status: filters.status === 'all' ? undefined : filters.status,
+      },
+      'driver'
+    )
+
+    if (records.results) {
+      setDrivers(records.results)
+    }
+
+    setHasMore(!!records.next)
+
+    setLoading(false)
   }
 
-  const handleSelectStatus = (status: string) => {
-    if (status === '') {
+  const handleSelectStatus = async (status: string) => {
+    if (status == 'all') {
       refreshDrivers()
       return
     }
-    const filteredDrivers = drivers.filter(
-      (driver) => driver?.status === status
+
+    const records: APIResponse = await filterRecords(
+      { status, team__name: filters.team },
+      'driver'
     )
-    setDrivers(filteredDrivers)
+
+    if (records.results) {
+      setDrivers(records.results)
+    }
+
+    setHasMore(!!records.next)
+
+    setLoading(false)
   }
 
   const fetchNextPage = async () => {
@@ -162,6 +198,8 @@ export const DriversContextProvider = ({
         vehicleTypes,
         hasMore,
         isFetching,
+        filters,
+        setFilters,
         fetchNextPage,
         handleSearchDrivers,
         handleSortDrivers,
