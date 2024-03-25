@@ -3,13 +3,11 @@ import React, { MouseEventHandler } from 'react'
 import { useDriversContext } from '../../../../context/drivers'
 import { Driver, Team, DriverType, Geofence } from '../../../../interfaces'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { DeleteDriver } from '../../../drivers/list/delete-driver'
 import { BinIcon } from '../../../icons/areas'
 import { useFormik } from 'formik'
 import toast from 'react-hot-toast'
 import { useTeamsContext } from '../../../../context/drivers/teams'
 import * as Yup from 'yup'
-import { AddArea } from '../../shared/add-area'
 import { partialUpdateRecord } from '../../../../lib/api'
 import { DeleteModal } from '../../../modals/delete'
 
@@ -17,20 +15,7 @@ export const DriverCard = ({ driver }: { driver: Driver }) => {
   const [showInfos, setShowInfos] = React.useState(false)
   const { teams } = useTeamsContext()
   const { driverTypes, refreshDrivers } = useDriversContext()
-  const {
-    id,
-    user,
-    image,
-    status,
-    team,
-    phone_number,
-    driver_type,
-    vehicle_license,
-    residency_id,
-    is_idle,
-    code,
-    city,
-  } = driver
+  const { id, user, team, phone_number, driver_type, is_idle, city } = driver
 
   const [showSave, setShowSave] = React.useState({
     team: false,
@@ -53,7 +38,14 @@ export const DriverCard = ({ driver }: { driver: Driver }) => {
       driver_type: Yup.string(),
     }),
     onSubmit: async (values) => {
-      console.log('values', values)
+      console.log(
+        'update: ',
+        {
+          ...values,
+          id,
+        },
+        'driver'
+      )
       await partialUpdateRecord(
         {
           ...values,
