@@ -41,7 +41,8 @@ export const AddTeam = () => {
     initialValues: {
       name: '',
       city: '',
-      supervisor: '',
+      supervisor_name: '',
+      supervisor_password: '',
       order_fees: 0,
       price_ratio_nominator: '',
       price_ratio_denominator: '',
@@ -51,7 +52,10 @@ export const AddTeam = () => {
     validationSchema: Yup.object({
       name: Yup.string().required('name is required'),
       city: Yup.string().required('city is required'),
-      supervisor: Yup.string().required('supervisor is required'),
+      supervisor_name: Yup.string().required('supervisor name is required'),
+      supervisor_password: Yup.string().required(
+        'supervisor password is required'
+      ),
       order_fees: Yup.number().required('order fees is required'),
       price_ratio_nominator: Yup.number()
         .required('price ratio nominator is required')
@@ -76,6 +80,10 @@ export const AddTeam = () => {
       await createRecord(
         {
           ...values,
+          supervisor: {
+            username: values.supervisor_name,
+            password: values.supervisor_password,
+          },
           city: city?.id,
         },
         'team'
@@ -266,37 +274,60 @@ export const AddTeam = () => {
                   </select>
                 </div>
                 {/* Supervisor */}
-                <div>
+                <div className='flex flex-col items-start justify-start w-full'>
                   <label
-                    aria-label='Supervisor'
                     className={`block mb-2 ${
-                      formik.touched.supervisor && formik.errors.supervisor
+                      formik.touched.supervisor_name &&
+                      formik.errors.supervisor_name &&
+                      formik.touched.supervisor_password &&
+                      formik.errors.supervisor_password
                         ? 'text-red-500'
                         : 'text-gray-900'
                     }`}
                   >
-                    {formik.touched.supervisor && formik.errors.supervisor
-                      ? formik.errors.supervisor
-                      : 'Supervisor'}
+                    Supervisor
                   </label>
-                  <select
-                    id='supervisor'
-                    name='supervisor'
-                    onChange={formik.handleChange}
-                    value={formik.values.supervisor}
-                    className={`border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 ${
-                      formik.touched.supervisor && formik.errors.supervisor
-                        ? 'border-red-500 bg-red-200'
-                        : 'border-gray-300 bg-gray-100'
-                    }`}
+                  <Flex
+                    css={{
+                      gap: '$10',
+                      flexWrap: 'wrap',
+                      '@xl': { flexWrap: 'nowrap' },
+                    }}
                   >
-                    <option value=''>Select Supervisor</option>
-                    {users?.map((user: User) => (
-                      <option key={user.id} value={user.id}>
-                        {user.username}
-                      </option>
-                    ))}
-                  </select>
+                    <Input
+                      clearable
+                      fullWidth
+                      size='lg'
+                      placeholder='Name'
+                      name='supervisor_name'
+                      id='supervisor_name'
+                      value={formik.values.supervisor_name}
+                      onChange={formik.handleChange}
+                      status={
+                        formik.touched.supervisor_name &&
+                        formik.errors.supervisor_name
+                          ? 'error'
+                          : 'default'
+                      }
+                    />
+
+                    <Input
+                      clearable
+                      fullWidth
+                      size='lg'
+                      placeholder='Password'
+                      name='supervisor_password'
+                      id='supervisor_password'
+                      value={formik.values.supervisor_password}
+                      onChange={formik.handleChange}
+                      status={
+                        formik.touched.supervisor_password &&
+                        formik.errors.supervisor_password
+                          ? 'error'
+                          : 'default'
+                      }
+                    />
+                  </Flex>
                 </div>
                 {/* Order Fees */}
                 <Input
