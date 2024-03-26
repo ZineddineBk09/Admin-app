@@ -53,7 +53,6 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
     order_fees: false,
     driver_fees: false,
     phone_number: false,
-    supervisor: false,
     client: false,
   })
   const formik = useFormik({
@@ -63,7 +62,6 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
       order_fees,
       driver_fees,
       phone_number,
-      supervisor: supervisor.id,
       client: account.id,
     },
     onSubmit: async (values) => {
@@ -85,7 +83,6 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
               order_fees: false,
               driver_fees: false,
               phone_number: false,
-              supervisor: false,
               client: false,
             })
           }
@@ -284,7 +281,7 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
 
             <Divider />
 
-            <div className='w-full flex'>
+            {/* <div className='w-full flex'>
               <div className='w-1/2 flex items-center gap-x-6'>
                 <label className='text-gray-500 capitalize'>Supervisor</label>
 
@@ -344,6 +341,25 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
                 {showSave.client &&
                   account.id !== formik.values.client &&
                   SaveButton(formik.handleSubmit as any)}
+              </div>
+            </div> */}
+            <div className='w-full flex items-center justify-between'>
+              <div className='w-1/2 flex items-center gap-x-6'>
+                <label className='text-gray-600 text-sm w-32 lg:w-fit'>
+                  Supervisor
+                </label>
+                <div className='flex items-center justify-between w-60 bg-gray-200 rounded-md p-2 lg:w-40 xl:w-60'>
+                  <input
+                    name='supervisor'
+                    id='supervisor'
+                    type='text'
+                    value={supervisor?.username}
+                    onChange={(e) => {
+                      console.log(e.target.value)
+                    }}
+                    className='text-sm bg-transparent w-full outline-none'
+                  />
+                </div>
               </div>
             </div>
 
