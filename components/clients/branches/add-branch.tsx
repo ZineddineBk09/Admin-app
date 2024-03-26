@@ -17,7 +17,6 @@ import toast from 'react-hot-toast'
 export const AddBranch = () => {
   const { refreshBranches } = useClientsBranchesContext()
   const { accounts } = useClientsAccountsContext()
-  const { users } = useUsersContext()
   const { cities } = useAreasCitiesContext()
   const { governorates } = useAreasGovernoratesContext()
   const { countries } = useAreasCountriesContext()
@@ -33,7 +32,8 @@ export const AddBranch = () => {
       order_fees: 0,
       driver_fees: 0,
       phone_number: '',
-      supervisor: '',
+      supervisor_name: '',
+      supervisor_password: '',
       account: '',
       main: false,
     },
@@ -44,7 +44,16 @@ export const AddBranch = () => {
       order_fees: Yup.number().required('order fee is required'),
       driver_fees: Yup.number().required('driver fee is required'),
       phone_number: Yup.string().required('phone number is required'),
-      supervisor: Yup.string().required('supervisor is required'),
+      // supervisor name may contain only letters, numbers, and @/./+/-/_ characters.
+      supervisor_name: Yup.string()
+        .required('supervisor name is required')
+        .matches(
+          /^[a-zA-Z0-9@/./+/-/_]+$/,
+          'supervisor name must contain only letters, numbers, and @/./+/-/_ characters'
+        ),
+      supervisor_password: Yup.string().required(
+        'supervisor password is required'
+      ),
       account: Yup.string().required('client account is required'),
       main: Yup.boolean().default(false),
     }),
@@ -66,7 +75,10 @@ export const AddBranch = () => {
                 order_fees: values.order_fees,
                 driver_fees: values.driver_fees,
                 phone_number: values.phone_number,
-                supervisor: values.supervisor,
+                supervisor: {
+                  username: values.supervisor_name,
+                  password: values.supervisor_password,
+                },
                 account: values.account,
                 main: values.main,
               },
@@ -263,7 +275,7 @@ export const AddBranch = () => {
                       : 'default'
                   }
                 />
-                <div className='w-full'>
+                {/* <div className='w-full'>
                   <label
                     className={`block mb-2 ${
                       formik.touched.supervisor && formik.errors.supervisor
@@ -293,6 +305,70 @@ export const AddBranch = () => {
                       </option>
                     ))}
                   </select>
+                </div> */}
+              </Flex>
+
+              <Flex
+                css={{
+                  gap: '$8',
+                  flexWrap: 'wrap',
+                  '@lg': { flexWrap: 'nowrap', gap: '$10' },
+                }}
+              >
+                <div className='w-full'>
+                  <label
+                    className={`block mb-2 ${
+                      formik.touched.supervisor_name &&
+                      formik.errors.supervisor_name &&
+                      formik.touched.supervisor_password &&
+                      formik.errors.supervisor_password
+                        ? 'text-red-500'
+                        : 'text-gray-900'
+                    }`}
+                  >
+                    Supervisor
+                  </label>
+                  <Flex
+                    css={{
+                      gap: '$10',
+                      flexWrap: 'wrap',
+                      '@xl': { flexWrap: 'nowrap' },
+                    }}
+                  >
+                    <Input
+                      clearable
+                      fullWidth
+                      size='lg'
+                      placeholder='Name'
+                      name='supervisor_name'
+                      id='supervisor_name'
+                      value={formik.values.supervisor_name}
+                      onChange={formik.handleChange}
+                      status={
+                        formik.touched.supervisor_name &&
+                        formik.errors.supervisor_name
+                          ? 'error'
+                          : 'default'
+                      }
+                    />
+
+                    <Input
+                      clearable
+                      fullWidth
+                      size='lg'
+                      placeholder='Password'
+                      name='supervisor_password'
+                      id='supervisor_password'
+                      value={formik.values.supervisor_password}
+                      onChange={formik.handleChange}
+                      status={
+                        formik.touched.supervisor_password &&
+                        formik.errors.supervisor_password
+                          ? 'error'
+                          : 'default'
+                      }
+                    />
+                  </Flex>
                 </div>
               </Flex>
 
