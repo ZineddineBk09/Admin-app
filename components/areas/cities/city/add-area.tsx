@@ -33,7 +33,7 @@ const Geofence = ({ id, handler }: { id: string; handler: () => void }) => {
 
     await createRecord(
       {
-        name: city?.name + ' - Area' + city.areas.length,
+        name: city?.name + ' - Area ' + city.areas.length,
         vertices: apiFormat,
       },
       'geofence'
