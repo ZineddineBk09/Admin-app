@@ -37,7 +37,7 @@ const Geofence = ({ id, handler }: { id: string; handler: () => void }) => {
       {
         name:
           team?.name +
-          ' - Area' +
+          ' - Area ' +
           (team.areas.length < 10
             ? '0' + team.areas.length
             : team.areas.length),
