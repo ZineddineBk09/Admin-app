@@ -6,7 +6,7 @@ import { AddTeam } from './add-team'
 import { AddMember } from './add-member'
 import { useTeamsContext } from '../../../context/drivers/teams'
 import toast from 'react-hot-toast'
-import { updateRecord } from '../../../lib/api'
+import { partialUpdateRecord, updateRecord } from '../../../lib/api'
 import { useFormik } from 'formik'
 import { useAreasCountriesContext } from '../../../context/areas/countries'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -15,7 +15,7 @@ import { DeleteArea } from './delete-area'
 import { DeleteMember } from './delete-member'
 import { AddArea } from '../shared/add-area'
 
-const DriversTeams = () => {
+const Teams = () => {
   const { teams, hasMore, fetchNextPage } = useTeamsContext()
 
   return (
@@ -34,7 +34,7 @@ const DriversTeams = () => {
           className='w-full flex flex-col items-center gap-y-6'
         >
           {teams?.map((team: Team, index: number) => (
-            <DriverTeamCard key={team?.id} team={team} />
+            <TeamCard key={team?.id} team={team} />
           ))}
         </InfiniteScroll>
       </div>
@@ -56,7 +56,7 @@ const SaveButton = (submit: MouseEventHandler<HTMLButtonElement>) => {
   )
 }
 
-const DriverTeamCard = ({ team }: { team: Team }) => {
+const TeamCard = ({ team }: { team: Team }) => {
   const {
     id,
     name,
@@ -87,13 +87,10 @@ const DriverTeamCard = ({ team }: { team: Team }) => {
       additional_ratio_denominator: additional_ratio_denominator,
     },
     onSubmit: async (values) => {
-      await updateRecord(
+      await partialUpdateRecord(
         {
           ...values,
           id: id,
-          name: name,
-          city: city?.id,
-          supervisor: supervisor?.id,
         },
         'team'
       )
@@ -390,4 +387,4 @@ const FilterWithCountry = () => {
   )
 }
 
-export default DriversTeams
+export default Teams
