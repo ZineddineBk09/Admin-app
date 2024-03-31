@@ -7,6 +7,7 @@ import { CancelIcon } from '../../icons/orders'
 import { ConfirmModal } from '../../shared/confirm-modal'
 import axios from '../../../lib/axios'
 import toast from 'react-hot-toast'
+import { cancelRecord } from '../../../lib/api'
 
 export const CancelOrder = ({
   id,
@@ -24,22 +25,41 @@ export const CancelOrder = ({
   const closeHandler = () => setVisible(false)
 
   const handleCancel = async () => {
+    // setLoading(true)
+    // await axios
+    //   .put(`/order/${id}/?transition=cancel`, {
+    //     transition_description_field: note,
+    //   })
+    //   .then(() => {
+    //     toast.success('Order cancelled successfully')
+    //     closeHandler()
+    //     setLoading(false)
+    //     refreshOrders()
+    //   })
+    //   .catch((error) => {
+    //     toast.error('Failed to cancel order')
+    //     console.log(error)
+    //     setLoading(false)
+    //   })
+    //use cancelRecord function
     setLoading(true)
-    await axios
-      .put(`/order/${id}/?transition=cancel`, {
-        transition_description_field: note,
-      })
-      .then(() => {
-        toast.success('Order cancelled successfully')
-        closeHandler()
-        setLoading(false)
-        refreshOrders()
-      })
-      .catch((error) => {
-        toast.error('Failed to cancel order')
-        console.log(error)
-        setLoading(false)
-      })
+    try {
+      const response = await cancelRecord(id, 'order', note, 'cancel')
+        .then(() => {
+          toast.success('Order cancelled successfully')
+          closeHandler()
+          setLoading(false)
+          refreshOrders()
+        })
+        .catch((error) => {
+          toast.error('Failed to cancel order')
+          console.log(error)
+          setLoading(false)
+        })
+    } catch (error) {
+      toast.error('Failed to cancel order')
+      throw error
+    }
   }
 
   return (
