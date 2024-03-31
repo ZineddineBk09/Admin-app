@@ -7,18 +7,21 @@ import 'leaflet-easybutton/src/easy-button.js'
 import 'leaflet-easybutton/src/easy-button.css'
 import * as L from 'leaflet'
 import { MapPinIcon } from '../icons/map'
-import { getDriversInArea } from '../../lib/api/map'
 import { useMapContext } from '../../context/map'
-import { Driver } from '../../interfaces'
+import { APIResponse, MapDriver } from '../../interfaces'
+import { useSession } from 'next-auth/react'
+import mapSocket from '../../lib/socket'
+import { filterRecords } from '../../lib/api'
+import { get } from 'lodash'
 
 // create a custom icon with L.divIcon and reactDOM.renderToString
-const icon = (image?: string, symbol?: string) =>
+const icon = (symbol?: string) =>
   L.divIcon({
     html: renderToString(
       <div className='relative'>
         <MapPinIcon />
 
-        <div className='flex items-center justify-center font-semibold absolute top-[10px] left-[10px] bg-gray-400 rounded-full w-10 h-10 z-10'>
+        <div className='flex items-center justify-center font-semibold absolute top-[10px] left-1/2  bg-gray-400 rounded-full w-10 h-10 z-10'>
           {symbol ? symbol : 'N/A'}
         </div>
       </div>
@@ -30,6 +33,44 @@ const icon = (image?: string, symbol?: string) =>
 const Map = () => {
   const [map, setMap] = useState<any>(null)
   const { setDrivers } = useMapContext()
+  const { data: session, status } = useSession()
+
+  const getDriversData = async (
+    data: {
+      id: string
+      location: {
+        lat: number
+        lng: number
+      }
+      action: string
+    }[]
+  ) => {
+    if (data.length === 0) return
+
+    // use promise.all to fetch all drivers data
+    const drivers = await Promise.all(
+      data
+        .filter((driver) => driver.id.length === 36)
+        .map(async (dr) => {
+          const result: APIResponse = await filterRecords(
+            {
+              user_id: dr.id,
+            },
+            'driver'
+          )
+
+          return {
+            id: dr.id,
+            location: dr.location,
+            action: dr.action,
+            ...result.results[0],
+          }
+        })
+    )
+    console.log(drivers)
+
+    setDrivers(drivers)
+  }
 
   // add an event listener on map: load, move, zoom, etc.
   useEffect(() => {
@@ -41,92 +82,48 @@ const Map = () => {
         .toBBoxString()
         .split(',')
 
-      const records = await getDriversInArea({
-        min_lat,
-        min_lng,
-        max_lat,
-        max_lng,
-      })
+      // lat: -90 - 90
+      // lng: -180 - 180
+      // hamdle the case when the map is zoomed out
+      if (parseFloat(min_lat) < -90 || parseFloat(max_lat) > 90) return
+      if (parseFloat(min_lng) < -180 || parseFloat(max_lng) > 180) return
 
-      if (!records) return
-      setDrivers(
-        records?.map((record: any) => {
-          return {
-            id: record.pk,
-            username: record.fields.username,
-            email: record.fields.email,
-            team: record.fields.team_id,
-            completedTasks: record.fields.completed_tasks,
-            inProgressTasks: record.fields.in_progress_tasks,
-            warnings: record.fields.warnings,
-            activeHours: record.fields.active_hours,
-            image: record.fields.image,
-            status: record.fields.status,
-            location: {
-              latitude: record.location.latitude,
-              longitude: record.location.longitude,
-            },
-            orders: record.fields.orders,
-            phone: record.fields.phone_number,
-          }
-        })
-      )
-    })
-  }, [map])
+      const ws = mapSocket(session?.accessToken || '')
 
-  const fetchDriversEachInterval = async () => {
-    const [min_lat, min_lng, max_lat, max_lng] = map
-      .getBounds()
-      .toBBoxString()
-      .split(',')
+      ws.onopen = () => {
+        console.log('Connected to server')
+        ws.send(
+          JSON.stringify({
+            min_lat: parseFloat(min_lat),
+            min_lng: parseFloat(min_lng),
+            max_lat: parseFloat(max_lat),
+            max_lng: parseFloat(max_lng),
+          })
+        )
 
-    const records = await getDriversInArea({
-      min_lat,
-      min_lng,
-      max_lat,
-      max_lng,
-    })
+        ws.onmessage = (e) => {
+          const data: MapDriver[] = Array.isArray(JSON.parse(e.data))
+            ? JSON.parse(e.data)
+            : [JSON.parse(e.data)]
 
-    if (!records) return
-    setDrivers(
-      records?.map((record: any) => {
-        return {
-          id: record.pk,
-          username: record.fields.username,
-          email: record.fields.email,
-          team: record.fields.team_id,
-          completedTasks: record.fields.completed_tasks,
-          inProgressTasks: record.fields.in_progress_tasks,
-          warnings: record.fields.warnings,
-          activeHours: record.fields.active_hours,
-          image: record.fields.image,
-          status: record.fields.status,
-          location: {
-            latitude: record.location.latitude,
-            longitude: record.location.longitude,
-          },
-          orders: record.fields.orders,
-          phone: record.fields.phone_number,
+          // filter non uuid ids
+          getDriversData(data)
         }
-      })
-    )
-  }
-
-  // launch fetchDriversEachInterval every 5 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (!map) return
-      fetchDriversEachInterval()
-    }, 2000)
-    return () => clearInterval(interval)
+      }
+    })
   }, [map])
 
   return (
     <>
       <MapContainer
         center={[21.3891, 39.8579]}
-        zoom={10}
+        zoom={14}
+        minZoom={5}
         scrollWheelZoom={false}
+        maxBounds={[
+          [-89, -179],
+          [89, 179],
+        ]}
         ref={setMap}
         style={{
           height: '100%',
@@ -157,30 +154,18 @@ const Map = () => {
 const DriversMarkers = () => {
   const { drivers } = useMapContext()
 
-  // re-render the markers when drivers change
-  // useEffect(() => {
-  //   console.log(drivers)
-  // }, [drivers])
-
   return (
     <>
-      {drivers?.map((driver: Driver, index: number) => (
+      {drivers?.map((driver: MapDriver, index: number) => (
         <Marker
           key={driver?.id}
-          position={[0, 0]}
-          icon={icon(
-            driver?.image,
-            // first 2 letters of first name and last name
-            // driver?.username.split(' ')[0].slice(0, 1) +
-            //   driver?.username.split(' ')[1].slice(0, 1) +
-            //   ''
-            driver?.user.username
-          )}
+          position={[driver.location.lat, driver.location.lng]}
+          icon={icon(driver?.user.username)}
         >
           <Popup>
             <div className='flex flex-col items-center gap-y-1'>
               <p className=''>{driver?.user.username}</p>
-              <p className=''>{driver?.phone_number}</p>
+              <p className=''>{driver?.action}</p>
             </div>
           </Popup>
         </Marker>

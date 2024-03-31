@@ -15,17 +15,14 @@ const Lists = () => {
 }
 
 const Tabs = ({ color }: any) => {
+  // driver status: 'active' | 'inactive' | 'PickingUp' | 'delivering' | 'waiting'
   const orderStatus = [
     { value: 'assigned', checked: true },
     { value: 'cancelled', checked: true },
     { value: 'new', checked: true },
     { value: 'done', checked: true },
   ]
-  const driverStatus = [
-    { value: 'Available', checked: true },
-    { value: 'Busy', checked: true },
-    { value: 'Inactive', checked: true },
-  ]
+  
   const { openTab, hansleSelectTab } = useMapContext()
 
   return (
@@ -78,7 +75,7 @@ const Tabs = ({ color }: any) => {
                 <Orders orderStatus={orderStatus} />
               </div>
               <div className={openTab === 2 ? 'block' : 'hidden'} id='link2'>
-                <Drivers driverStatus={driverStatus} />
+                <Drivers />
               </div>
             </div>
           </div>
