@@ -99,3 +99,22 @@ export const searchRecords = async (search: string, endpoint: string) => {
     return []
   }
 }
+
+export const cancelRecord = async (
+  id: string,
+  endpoint: string,
+  note: string,
+  transition: string
+) => {
+  try {
+    const response = await axios.put(endpoint + '/' + id + '/', {
+      transition,
+      transition_description_field: note,
+    })
+    const data = await response.data
+    return data
+  } catch (error) {
+    console.log('Error cancelling record', error)
+    throw error
+  }
+}
