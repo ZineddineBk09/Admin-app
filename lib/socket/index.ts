@@ -1,9 +1,28 @@
-// setup socket io client
-import { io } from 'socket.io-client'
+// use native WebSocket
 
-const socket = io('ws://194.233.173.78:2110', {
-  transports: ['websocket'],
-  autoConnect: false,
-})
+const mapSocket = (token: string): WebSocket => {
+  const socket = new WebSocket(`ws://localhost:2110/map?token=${token}`)
+  
+  // automatically reconnect on close
+  socket.onclose = () => {
+    console.log('Socket closed')
+    setTimeout(() => {
+      mapSocket(token)
+    }, 1000)
+  }
 
-export default socket
+  // close the socket on error
+  socket.onerror = (e) => {
+    console.error('Socket error', e)
+    socket.close()
+  }
+
+  socket.onmessage = (e) => {
+    const data = JSON.parse(e.data)
+    console.log(data)
+  }
+
+  return socket
+}
+
+export default mapSocket
