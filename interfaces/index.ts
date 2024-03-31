@@ -45,7 +45,7 @@ export interface Driver {
   team: DriverTeam
   code: string
   phone_number: string
-  status: string
+  status: 'active' | 'inactive' | 'PickingUp' | 'delivering' | 'waiting'
   image: string
   vehicle_license: string
   residency_id: string
@@ -456,4 +456,13 @@ export interface Pagination {
   offset: number
   total: number
   page: number
+}
+
+export interface MapDriver extends Driver {
+  id: string
+  location: {
+    lat: number
+    lng: number
+  }
+  action: string
 }
