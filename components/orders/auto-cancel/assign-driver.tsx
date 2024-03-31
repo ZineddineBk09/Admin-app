@@ -32,9 +32,7 @@ export const AssignDriver = ({
 
   const handler = () => setVisible(true)
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value)
@@ -128,7 +126,7 @@ export const AssignDriver = ({
                       <div className='w-full flex items-center justify-between'>
                         {/* Username + id */}
                         <div className='flex flex-col items-start gap-y-1'>
-                          <span>{driver?.username}</span>
+                          <span>{driver?.user.username}</span>
                           <span className='text-gray-500'>
                             #{driver?.id.split('-')[0]}
                           </span>
@@ -148,8 +146,8 @@ export const AssignDriver = ({
                         {/* Distance from order */}
                         <span className='text-xs text-gray-500'>
                           {calculateDistance(
-                            driver?.location?.latitude || 0,
-                            driver?.location?.longitude || 0,
+                            0,
+                            0,
                             orderLocation?.latitude || 0,
                             orderLocation?.longitude || 0
                           )}{' '}

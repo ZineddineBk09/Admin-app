@@ -12,9 +12,7 @@ export const DeleteDriverTeam = ({ id }: { id: string }) => {
   const [loading, setLoading] = React.useState<boolean>(false)
   const { refreshTeams } = useTeamsContext()
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   const handleDelete = async () => {
     setLoading(true)

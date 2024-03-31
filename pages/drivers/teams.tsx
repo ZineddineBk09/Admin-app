@@ -14,13 +14,19 @@ import { AreasGovernoratesContextProvider } from '../../context/areas/governorat
 
 const DriversTeamsPage: NextPage = () => {
   return (
+    <Context>
+      <DriversTeams />
+    </Context>
+  )
+}
+
+const Context = ({ children }: { children: React.ReactNode }) => {
+  return (
     <TeamsContextProvider>
       <AreasCountriesContextProvider>
         <AreasGovernoratesContextProvider>
           <AreasCitiesContextProvider>
-            <UsersContextProvider>
-              <DriversTeams />
-            </UsersContextProvider>
+            <UsersContextProvider>{children}</UsersContextProvider>
           </AreasCitiesContextProvider>
         </AreasGovernoratesContextProvider>
       </AreasCountriesContextProvider>

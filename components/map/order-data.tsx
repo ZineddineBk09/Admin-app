@@ -34,7 +34,7 @@ export const OrderData = () => {
 
           {/* Order Items */}
           <div className='h-24 flex flex-col justify-between items-start gap-y-2'>
-            {order?.items?.map((item: Item, index: number) => (
+            {/* {order?.items?.map((item: Item, index: number) => (
               <div
                 key={index}
                 className='flex items-center gap-x-2 text-gray-500 text-sm font-medium'
@@ -42,7 +42,7 @@ export const OrderData = () => {
                 <span>x{item.quantity}</span>
                 <span>{item.name}</span>
               </div>
-            ))}
+            ))} */}
           </div>
         </div>
       </div>
@@ -68,21 +68,23 @@ export const OrderData = () => {
         <div className='w-full flex items-start justify-between'>
           <div className='flex flex-col items-start text-sm gap-y-1'>
             <Image
-              src={order?.client?.image || '/images/logo.png'}
+              src={'/images/logo.png'}
               alt='customer'
               objectFit='cover'
               className='rounded-md'
               width={70}
               height={70}
             />
-            <span className='font-semibold'>{order?.client?.name}</span>
-            <span className='text-gray-500'>{order?.client?.address}</span>
-            <span className='text-[#59AFFF]'>{order?.client?.phone}</span>
+            <span className='font-semibold'>{order?.client?.account.name}</span>
+            <span className='text-gray-500'>
+              {order?.client?.address.city.name}
+            </span>
+            {/* <span className='text-[#59AFFF]'>{order?.client?.phone}</span> */}
           </div>
 
           <div className='flex flex-col items-end text-sm gap-y-1'>
             <Image
-              src={order?.customer?.image || '/images/logo.png'}
+              src={'/images/logo.png'}
               alt='customer'
               objectFit='cover'
               className='rounded-md'
@@ -90,8 +92,8 @@ export const OrderData = () => {
               height={70}
             />
             <span className='font-semibold'>{order?.customer?.name}</span>
-            <span className='text-gray-500'>{order?.customer?.address}</span>
-            <span className='text-[#59AFFF]'>{order?.customer?.phone}</span>
+            <span className='text-gray-500'>{order?.customer?.name}</span>
+            {/* <span className='text-[#59AFFF]'>{order?.customer?.phone}</span> */}
           </div>
         </div>
       </div>
@@ -114,7 +116,7 @@ const OrderActions = () => {
 
   return (
     <div className='h-full flex flex-col justify-center gap-y-5'>
-      {order?.location ? (
+      {order?.delivery_address.latitude ? (
         <>
           {' '}
           <button className='h-11 px-12 bg-gray-400 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>

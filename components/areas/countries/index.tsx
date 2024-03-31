@@ -11,6 +11,7 @@ import { updateRecord } from '../../../lib/api'
 import toast from 'react-hot-toast'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import Loading from '../../shared/loading'
+import { DeleteModal } from '../../modals/delete'
 
 const Countries = () => {
   const { countries, hasMore, fetchNextPage } = useAreasCountriesContext()
@@ -42,17 +43,35 @@ const Countries = () => {
 const CountryCard = ({ country }: { country: Country }) => {
   const { currencies, refreshCountries } = useAreasCountriesContext()
   const [showInfos, setShowInfos] = React.useState(false)
-  const { id, name, price_unit } = country
+  const {
+    id,
+    name,
+    price_unit,
+    price_ratio_nominator,
+    price_ratio_denominator,
+    additional_ratio_nominator,
+    additional_ratio_denominator,
+    driver_fees,
+    order_fees,
+  } = country
   const [showSave, setShowSave] = React.useState({
     price_unit: false,
     driver_fees: false,
     order_fees: false,
+    price_ratio_nominator: false,
+    price_ratio_denominator: false,
+    additional_ratio_nominator: false,
+    additional_ratio_denominator: false,
   })
   const formik = useFormik({
     initialValues: {
       price_unit: country?.price_unit.id,
       driver_fees: country?.driver_fees,
       order_fees: country?.order_fees,
+      price_ratio_nominator: price_ratio_nominator,
+      price_ratio_denominator: price_ratio_denominator,
+      additional_ratio_nominator: additional_ratio_nominator,
+      additional_ratio_denominator: additional_ratio_denominator,
     },
     onSubmit: async (values) => {
       const price_unit = currencies?.find(
@@ -80,6 +99,10 @@ const CountryCard = ({ country }: { country: Country }) => {
               price_unit: false,
               driver_fees: false,
               order_fees: false,
+              price_ratio_nominator: false,
+              price_ratio_denominator: false,
+              additional_ratio_nominator: false,
+              additional_ratio_denominator: false,
             })
           }
         })
@@ -104,7 +127,7 @@ const CountryCard = ({ country }: { country: Country }) => {
             </h1>
           </div>
         </button>
-        <DeleteCountry id={id} />
+        <DeleteModal id={id} name='country' refresh={refreshCountries} />
       </div>
 
       {showInfos && (
@@ -137,10 +160,9 @@ const CountryCard = ({ country }: { country: Country }) => {
                 </select>
                 <span className='text-gray-500 w-10'>{price_unit.symbol}</span>
               </div>
-              {
-                // Display save button if user changed price unit
-                showSave.price_unit && SaveButton(formik.handleSubmit as any)
-              }
+              {showSave.price_unit &&
+                price_unit.id !== formik.values.price_unit &&
+                SaveButton(formik.handleSubmit as any)}
               <AddCurrency />
             </div>
             <Divider />
@@ -165,7 +187,9 @@ const CountryCard = ({ country }: { country: Country }) => {
               </div>
               {
                 // Display save button if user changed driver fees
-                showSave.driver_fees && SaveButton(formik.handleSubmit as any)
+                showSave.driver_fees &&
+                  driver_fees !== formik.values.driver_fees &&
+                  SaveButton(formik.handleSubmit as any)
               }
             </div>
             <Divider />
@@ -192,10 +216,110 @@ const CountryCard = ({ country }: { country: Country }) => {
               </div>
               {
                 // Display save button if user changed order fees
-                showSave.order_fees && SaveButton(formik.handleSubmit as any)
+                showSave.order_fees &&
+                  order_fees !== formik.values.order_fees &&
+                  SaveButton(formik.handleSubmit as any)
               }
             </div>
           </>
+          <Divider />
+          <div className='w-full flex justify-between'>
+            <div className='flex items-center gap-x-6'>
+              <label aria-label='Price' className='text-gray-500 capitalize'>
+                Price
+              </label>
+              <div className='h-11 max-w-xs bg-gray-200 rounded px-4 flex justify-between items-center'>
+                <>
+                  <input
+                    id='price_ratio_nominator'
+                    name='price_ratio_nominator'
+                    type='text'
+                    value={formik.values.price_ratio_nominator}
+                    placeholder='0'
+                    className='bg-transparent w-full h-full outline-none'
+                    onChange={(e) => {
+                      formik.handleChange(e)
+                      setShowSave({ ...showSave, price_ratio_nominator: true })
+                    }}
+                  />
+                  <span className='text-gray-500 w-32'>SAR</span>
+                </>
+                <b className='mx-5'>/</b>
+                <>
+                  <input
+                    id='price_ratio_denominator'
+                    name='price_ratio_denominator'
+                    type='text'
+                    value={formik.values.price_ratio_denominator}
+                    placeholder='0'
+                    className='bg-transparent w-full h-full outline-none'
+                    onChange={(e) => {
+                      formik.handleChange(e)
+                      setShowSave({
+                        ...showSave,
+                        price_ratio_denominator: true,
+                      })
+                    }}
+                  />
+                  <span className='text-gray-500 w-32'>KM</span>
+                </>
+              </div>
+              {(showSave.price_ratio_denominator ||
+                showSave.price_ratio_nominator) &&
+                SaveButton(formik.handleSubmit as any)}
+            </div>
+            <div className='flex items-center gap-x-6'>
+              <label
+                aria-label='Additional'
+                className='text-gray-500 capitalize'
+              >
+                Additional
+              </label>
+              <div className='h-11 max-w-xs bg-gray-200 rounded px-4 flex justify-between items-center'>
+                <>
+                  <input
+                    id='additional_ratio_nominator'
+                    name='additional_ratio_nominator'
+                    type='text'
+                    value={formik.values.additional_ratio_nominator}
+                    placeholder='0'
+                    className='bg-transparent w-full h-full outline-none'
+                    onChange={(e) => {
+                      formik.handleChange(e)
+                      setShowSave({
+                        ...showSave,
+                        additional_ratio_nominator: true,
+                      })
+                    }}
+                  />
+                  <span className='text-gray-500 w-32'>SAR</span>
+                </>
+                <b className='mx-5'>/</b>
+                <>
+                  <input
+                    id='additional_ratio_denominator'
+                    name='additional_ratio_denominator'
+                    type='text'
+                    value={formik.values.additional_ratio_denominator}
+                    placeholder='0'
+                    className='bg-transparent w-full h-full outline-none'
+                    onChange={(e) => {
+                      formik.handleChange(e)
+                      setShowSave({
+                        ...showSave,
+                        additional_ratio_denominator: true,
+                      })
+                    }}
+                  />
+                  <span className='text-gray-500 w-32'>KM</span>
+                </>
+              </div>
+              {(showSave.additional_ratio_denominator ||
+                showSave.additional_ratio_nominator) &&
+                SaveButton(formik.handleSubmit as any)}
+            </div>
+            <div />
+          </div>
         </>
       )}
     </div>

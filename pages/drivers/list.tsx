@@ -16,11 +16,17 @@ import { AreasCitiesContextProvider } from '../../context/areas/cities'
 
 const DriversPage: NextPage = () => {
   return (
+    <Context>
+      <DriversList />
+    </Context>
+  )
+}
+
+const Context = ({ children }: { children: React.ReactNode }) => {
+  return (
     <DriversContextProvider>
       <TeamsContextProvider>
-        <AreasCitiesContextProvider>
-          <DriversList />
-        </AreasCitiesContextProvider>
+        <AreasCitiesContextProvider>{children}</AreasCitiesContextProvider>
       </TeamsContextProvider>
     </DriversContextProvider>
   )

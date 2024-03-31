@@ -5,39 +5,74 @@ import {
   Loading,
   Tooltip,
   Divider,
-  Checkbox,
   Badge,
 } from '@nextui-org/react'
 import React from 'react'
 import { Flex } from '../../styles/flex'
-import { DriverTeamMember } from '../../../interfaces'
-import { searchMembers } from '../../../lib/search'
+import { Account, APIResponse, DriverTeamMember } from '../../../interfaces'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { partialUpdateRecord, searchRecords } from '../../../lib/api'
+import toast from 'react-hot-toast'
 
-export const AddMember = ({ members }: { members: DriverTeamMember[] }) => {
+export const AddMember = ({
+  id,
+  refresh,
+}: {
+  id: string
+  refresh: () => void
+}) => {
   const [visible, setVisible] = React.useState(false)
   const [loading, setLoading] = React.useState<boolean>(false)
   const [search, setSearch] = React.useState('')
-  const [searchResults, setSearchResults] =
-    React.useState<DriverTeamMember[]>(members)
-  const [selected, setSelected] = React.useState<DriverTeamMember[]>([])
+  const [searchResults, setSearchResults] = React.useState<Account[]>([])
+  const [selected, setSelected] = React.useState<Account[]>([])
 
   const handler = () => setVisible(true)
 
-  const closeHandler = () => {
-    setVisible(false)
+  const closeHandler = () => setVisible(false)
+
+  const handleSearch = async (search: string) => {
+    if (search === '') {
+      setSearchResults([])
+      return
+    }
+
+    const filtered: APIResponse = await searchRecords(search, 'account')
+    console.log(filtered)
+    if (filtered.results) {
+      setSearchResults(filtered.results)
+    }
   }
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value)
-    if (e.target.value === '') return setSearchResults(members)
-    setSearchResults(searchMembers(members, e.target.value))
+  const addMembers = async () => {
+    setLoading(true)
+    await partialUpdateRecord(
+      {
+        id,
+        accounts: selected.map((member: Account) => member.id),
+      },
+      'team'
+    )
+      .then((res) => {
+        if (res) {
+          toast.success('Member added successfully')
+          handler()
+          refresh()
+        }
+      })
+      .catch((err) => {
+        toast.error('Error assigning member!')
+      })
+
+    // await addMembersToTeam(members)
+    setLoading(false)
+    closeHandler()
   }
 
   return (
     <div>
       <Tooltip content='Add Member' onClick={handler}>
-        <button className='h-10 w-16 flex items-center justify-center text-center text-4xl font-medium rounded-full'>
+        <button className='h-10 w-10 flex items-center justify-center text-4xl font-medium rounded-full bg-gray-200 pb-1'>
           +
         </button>
       </Tooltip>
@@ -86,7 +121,10 @@ export const AddMember = ({ members }: { members: DriverTeamMember[] }) => {
                     type='text'
                     placeholder='search'
                     value={search}
-                    onChange={handleSearch}
+                    onChange={(e) => {
+                      setSearch(e.target.value)
+                      handleSearch(e.target.value)
+                    }}
                     className='w-full bg-gray-200 px-4 py-3 rounded-lg'
                   />
                 </Flex>
@@ -122,23 +160,7 @@ export const AddMember = ({ members }: { members: DriverTeamMember[] }) => {
                           <span>{member.name}</span>
                           <span className='text-gray-500'>#{member.id}</span>
                         </div>
-                        {/* <Checkbox
-                          id={member.id}
-                          aria-label='Checkbox'
-                          onChange={(e: boolean) => {
-                            if (e) {
-                              setSelected([...selected, member])
-                            } else {
-                              setSelected(
-                                selected.filter((item) => item.id !== member.id)
-                              )
-                            }
-                          }}
-                          value={member.id}
-                          size='lg'
-                          color='warning'
-                          aria-checked={selected.includes(member)}
-                        /> */}
+
                         <input
                           type='checkbox'
                           id={member.id}
@@ -164,11 +186,11 @@ export const AddMember = ({ members }: { members: DriverTeamMember[] }) => {
             <Modal.Footer>
               <Button
                 auto
-                type='submit'
                 className={`bg-primary text-black ${
                   selected?.length === 0 && 'opacity-50 cursor-not-allowed'
                 }`}
                 disabled={selected?.length === 0}
+                onClick={addMembers}
               >
                 Add {selected?.length > 0 && `(${selected?.length})`}
               </Button>

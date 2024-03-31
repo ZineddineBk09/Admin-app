@@ -14,7 +14,6 @@ export const EditOrder = ({ order }: { order: Order }) => {
   const handler = () => setVisible(true)
   const [error, setError] = React.useState<string>('')
   const [loading, setLoading] = React.useState<boolean>(false)
-  const [teams, setTeams] = React.useState<Team[]>([])
 
   const formik = useFormik({
     initialValues: {
@@ -48,24 +47,7 @@ export const EditOrder = ({ order }: { order: Order }) => {
     },
   })
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
-
-  React.useEffect(() => {
-    //set formik values
-    formik.setValues({ ...(order as any) })
-
-    const fetchTeams = async () => {
-      await getRecords('team')
-        .then((res: { teams: Team[] }) => setTeams(res.teams))
-        .catch((err: any) => {
-          setTeams([])
-          console.log('Error in fetching teams: ', err)
-        })
-    }
-    fetchTeams()
-  }, [])
+  const closeHandler = () => setVisible(false)
 
   return (
     <div>

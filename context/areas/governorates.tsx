@@ -90,8 +90,8 @@ export const AreasGovernoratesContextProvider = ({
   }
 
   useEffect(() => {
-    refreshGovernorates()
-  }, [])
+    governorates.length === 0 && refreshGovernorates()
+  },[])
 
   return (
     <AreasGovernoratesContext.Provider

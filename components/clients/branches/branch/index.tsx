@@ -1,6 +1,14 @@
-import { Branch } from '../../../../interfaces'
+import {
+  AccountMinimal,
+  Branch,
+  City,
+  Country,
+  CountryMinimal,
+  Governorate,
+  User,
+} from '../../../../interfaces'
 import { Divider, Input } from '@nextui-org/react'
-import React, { useState } from 'react'
+import React, { MouseEventHandler, useState } from 'react'
 import { DeleteBranch } from '../delete-branch'
 import dynamic from 'next/dynamic'
 import 'leaflet/dist/leaflet.css'
@@ -8,68 +16,82 @@ import 'leaflet-draw/dist/leaflet.draw.css'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useClientsBranchesContext } from '../../../../context/clients/branches'
 import Loading from '../../../../components/shared/loading'
+import { DeleteModal } from '../../../modals/delete'
+import { useFormik } from 'formik'
+import { partialUpdateRecord } from '../../../../lib/api'
+import toast from 'react-hot-toast'
+import { useUsersContext } from '../../../../context/users'
+import { useClientsAccountsContext } from '../../../../context/clients/accounts'
+import { useAreasGovernoratesContext } from '../../../../context/areas/governorates'
+import { useAreasCitiesContext } from '../../../../context/areas/cities'
+import { useAreasCountriesContext } from '../../../../context/areas/countries'
 const BranchMap = dynamic(() => import('./map'), {
   ssr: false,
   loading: () => <Loading />,
 })
 
 export const BranchCard = ({ branch }: { branch: Branch }) => {
+  const { refreshBranches } = useClientsBranchesContext()
+  const { accounts } = useClientsAccountsContext()
+  const { users } = useUsersContext()
+  const { governorates } = useAreasGovernoratesContext()
+  const { cities } = useAreasCitiesContext()
   const [showInfos, setShowInfos] = React.useState(false)
   const {
     id,
-    name,
-    country,
-    governorate,
-    city,
-    customOrderFee,
-    customDriverFee,
-    phone,
+    address,
     supervisor,
-    clientAccount,
+    account,
+    order_fees,
+    driver_fees,
+    phone_number,
+    main,
   } = branch
-  const fields = [
-    {
-      name: 'Governorate',
-      id: 'governorate',
-      defaultValue: governorate,
-      fees: true,
+  const [showSave, setShowSave] = React.useState({
+    governorate: false,
+    city: false,
+    order_fees: false,
+    driver_fees: false,
+    phone_number: false,
+    client: false,
+  })
+  const formik = useFormik({
+    initialValues: {
+      governorate: address.governorate.name,
+      city: address.city.name,
+      order_fees,
+      driver_fees,
+      phone_number,
+      client: account.id,
     },
-    {
-      name: 'City',
-      id: 'city',
-      defaultValue: city,
-      fees: true,
+    onSubmit: async (values) => {
+      await partialUpdateRecord(
+        {
+          ...values,
+          id,
+        },
+        'branch'
+      )
+        .then((res) => {
+          if (res) {
+            toast.success('Branch updated successfully')
+
+            refreshBranches()
+            setShowSave({
+              governorate: false,
+              city: false,
+              order_fees: false,
+              driver_fees: false,
+              phone_number: false,
+              client: false,
+            })
+          }
+        })
+        .catch((err) => {
+          toast.error('Error updating branch!')
+        })
     },
-    {
-      name: 'Custom Order Fees',
-      id: 'customOrderFee',
-      defaultValue: customOrderFee,
-      includeNextField: true,
-    },
-    {
-      name: 'Custom Driver Fees',
-      id: 'customDriverFee',
-      defaultValue: customDriverFee,
-      hidden: true,
-    },
-    {
-      name: 'Phone Number',
-      id: 'phone',
-      defaultValue: phone,
-    },
-    {
-      name: 'Supervisor',
-      id: 'supervisor',
-      defaultValue: supervisor,
-      includeNextField: true,
-    },
-    {
-      name: 'Client Account',
-      id: 'clientAccount',
-      defaultValue: clientAccount,
-      hidden: true,
-    },
-  ]
+  })
 
   return (
     <div
@@ -91,11 +113,12 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
             `}
               />
               <h1 className='text-lg font-semibold'>
-                {name} <span className='ml-6 text-sm text-gray-400'>#{id}</span>
+                {account.name + '-' + address.city.name} {main && ' (Main)'}
+                <span className='ml-6 text-sm text-gray-400'>#{id}</span>
               </h1>
             </div>
           </button>
-          <DeleteBranch id={id} />
+          <DeleteModal id={id} name='branch' refresh={refreshBranches} />
         </div>
 
         {showInfos && (
@@ -104,7 +127,7 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
             <div className='w-full grid grid-cols-2 lg:grid-cols-4'>
               <div className='w-full flex items-center gap-x-6 col-span-2'>
                 <label className='text-gray-600 text-sm'>Country</label>
-                <p className='font-medium text-sm'>{country}</p>
+                <p className='font-medium text-sm'>{address.country.name}</p>
               </div>
 
               <div className='w-full mx-auto flex justify-start gap-x-6 col-span-2 mt-4 lg:mt-0 lg:justify-evenly'>
@@ -112,87 +135,236 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
                   <label className='w-24 text-gray-600 text-sm'>
                     Order Fees
                   </label>
-                  <p className='font-medium'>24</p>
+                  <p className='font-medium'>{order_fees}</p>
                 </div>
                 <div className='flex items-center gap-x-3'>
                   <label className='w-24 text-gray-600 text-sm'>
-                    Order Fees
+                    Driver Fees
                   </label>
-                  <p className='font-medium'>24</p>
+                  <p className='font-medium'>{driver_fees}</p>
                 </div>
               </div>
             </div>
-            <Divider />
-            {fields
-              ?.filter(({ hidden }: any) => !hidden)
-              ?.map((field, index: number) => {
-                const { name, id, defaultValue, fees, includeNextField }: any =
-                  field
-                return (
-                  <div
-                    className='w-full flex flex-col items-start gap-y-3'
-                    key={index}
-                  >
-                    <div className='w-full grid grid-cols-2 lg:grid-cols-4'>
-                      <div className='w-full flex items-center gap-x-6 col-span-2'>
-                        <label className='text-gray-600 text-sm'>{name}</label>
-                        <input
-                          name={id}
-                          id={id}
-                          type='text'
-                          value={defaultValue}
-                          onChange={(e) => {
-                            console.log(e.target.value)
-                          }}
-                          className='w-60 bg-gray-200 rounded-md p-2 text-sm'
-                        />
-                      </div>
-                      {includeNextField && (
-                        <div className='w-full flex items-center gap-x-6 col-span-2 mt-4 lg:mt-0'>
-                          <label className='text-gray-600 text-sm'>
-                            {fields[fields.indexOf(field) + 1].name}
-                          </label>
-                          <input
-                            name={id}
-                            id={id}
-                            type='text'
-                            value={
-                              fields[fields.indexOf(field) + 1].defaultValue
-                                ? fields[fields.indexOf(field) + 1].defaultValue
-                                : ''
-                            }
-                            onChange={(e) => {
-                              console.log(e.target.value)
-                            }}
-                            className='w-60 bg-gray-200 rounded-md p-2 text-sm'
-                          />
-                        </div>
-                      )}
 
-                      {fees && (
-                        <div className='w-full mx-auto flex justify-start gap-x-6 col-span-2 mt-4 lg:mt-0 lg:justify-evenly'>
-                          <div className='flex items-center gap-x-3'>
-                            <label className='w-24 text-gray-600 text-sm'>
-                              Order Fees
-                            </label>
-                            <p className='font-medium'>24</p>
-                          </div>
-                          <div className='flex items-center gap-x-3'>
-                            <label className='w-24 text-gray-600 text-sm'>
-                              Order Fees
-                            </label>
-                            <p className='font-medium'>24</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    {index !==
-                      fields.filter(({ hidden }: any) => !hidden)?.length -
-                        1 && <Divider />}
-                  </div>
-                )
-              })}
             <Divider />
+
+            <div className='w-full flex'>
+              <div className='w-1/2 flex items-center gap-x-6'>
+                <label className='text-gray-500 capitalize'>Governorate</label>
+
+                <div className='min-w-[50%] h-11 bg-gray-200 rounded px-4 flex justify-between items-center'>
+                  <select
+                    id='governorate'
+                    name='governorate'
+                    onChange={(e) => {
+                      formik.handleChange(e)
+                      setShowSave({ ...showSave, governorate: true })
+                    }}
+                    value={formik.values.governorate}
+                    className={`w-full border text-gray-900 text-sm rounded-lg focus:ring-blue-500 block p-2.5 ${
+                      formik.touched.governorate && formik.errors.governorate
+                        ? 'border-red-500 bg-red-200'
+                        : 'border-gray-300 bg-transparent'
+                    }`}
+                  >
+                    {governorates?.map((governorate: Governorate) => (
+                      <option key={governorate.id} value={governorate.id}>
+                        {governorate.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {showSave.governorate &&
+                  address.governorate.id !== formik.values.governorate &&
+                  SaveButton(formik.handleSubmit as any)}
+              </div>
+              <div className='w-1/2 flex items-center gap-x-6'>
+                <label className='text-gray-500 capitalize'>City</label>
+
+                <div className='min-w-[50%] h-11 bg-gray-200 rounded px-4 flex justify-between items-center'>
+                  <select
+                    id='city'
+                    name='city'
+                    onChange={(e) => {
+                      formik.handleChange(e)
+                      setShowSave({ ...showSave, city: true })
+                    }}
+                    value={formik.values.city}
+                    className={`w-full border text-gray-900 text-sm rounded-lg focus:ring-blue-500 block p-2.5 ${
+                      formik.touched.city && formik.errors.city
+                        ? 'border-red-500 bg-red-200'
+                        : 'border-gray-300 bg-transparent'
+                    }`}
+                  >
+                    {cities?.map((city: City) => (
+                      <option key={city.id} value={city.id}>
+                        {city.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {showSave.city &&
+                  address.city.id !== formik.values.city &&
+                  SaveButton(formik.handleSubmit as any)}
+              </div>
+            </div>
+
+            <Divider />
+
+            <div className='w-full flex'>
+              <div className='w-1/2 flex items-center gap-x-6'>
+                <label className='text-gray-500 capitalize'>Order Fees</label>
+                <div className='h-11 max-w-xs bg-gray-200 rounded px-4 flex justify-between items-center'>
+                  <input
+                    id='order_fees'
+                    name='order_fees'
+                    type='text'
+                    value={formik.values.order_fees}
+                    placeholder='0'
+                    className='bg-transparent w-full h-full outline-none'
+                    onChange={(e) => {
+                      formik.handleChange(e)
+                      setShowSave({ ...showSave, order_fees: true })
+                    }}
+                  />
+                  <span className='text-gray-500 w-32'>SAR / order</span>
+                </div>
+                {showSave.order_fees &&
+                  order_fees !== formik.values.order_fees &&
+                  SaveButton(formik.handleSubmit as any)}
+              </div>
+              <div className='w-1/2 flex items-center gap-x-6'>
+                <label className='text-gray-500 capitalize'>Driver Fees</label>
+                <div className='h-11 max-w-xs bg-gray-200 rounded px-4 flex justify-between items-center'>
+                  <input
+                    id='driver_fees'
+                    name='driver_fees'
+                    type='text'
+                    value={formik.values.driver_fees}
+                    placeholder='0'
+                    className='bg-transparent w-full h-full outline-none'
+                    onChange={(e) => {
+                      formik.handleChange(e)
+                      setShowSave({ ...showSave, driver_fees: true })
+                    }}
+                  />
+                  <span className='text-gray-500 w-32'>SAR / order</span>
+                </div>
+                {showSave.driver_fees &&
+                  driver_fees !== formik.values.driver_fees &&
+                  SaveButton(formik.handleSubmit as any)}
+              </div>
+            </div>
+
+            <Divider />
+
+            <div className='w-1/2 flex items-center gap-x-6'>
+              <label className='text-gray-500 capitalize'>Phone Number</label>
+              <div className='h-11 max-w-xs bg-gray-200 rounded px-4 flex justify-between items-center'>
+                <input
+                  id='phone_number'
+                  name='phone_number'
+                  type='text'
+                  value={formik.values.phone_number}
+                  placeholder='0'
+                  className='bg-transparent w-full h-full outline-none'
+                  onChange={(e) => {
+                    formik.handleChange(e)
+                    setShowSave({ ...showSave, phone_number: true })
+                  }}
+                />
+              </div>
+              {showSave.phone_number &&
+                phone_number !== formik.values.phone_number &&
+                SaveButton(formik.handleSubmit as any)}
+            </div>
+
+            <Divider />
+
+            {/* <div className='w-full flex'>
+              <div className='w-1/2 flex items-center gap-x-6'>
+                <label className='text-gray-500 capitalize'>Supervisor</label>
+
+                <div className='min-w-[50%] h-11 bg-gray-200 rounded px-4 flex justify-between items-center'>
+                  <select
+                    id='supervisor'
+                    name='supervisor'
+                    onChange={(e) => {
+                      formik.handleChange(e)
+                      setShowSave({ ...showSave, supervisor: true })
+                    }}
+                    value={formik.values.supervisor}
+                    className={`w-full border text-gray-900 text-sm rounded-lg focus:ring-blue-500 block p-2.5 ${
+                      formik.touched.supervisor && formik.errors.supervisor
+                        ? 'border-red-500 bg-red-200'
+                        : 'border-gray-300 bg-transparent'
+                    }`}
+                  >
+                    {users?.map((user: User) => (
+                      <option key={user.id} value={user.id}>
+                        {user.username}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {showSave.supervisor &&
+                  supervisor.id !== formik.values.supervisor &&
+                  SaveButton(formik.handleSubmit as any)}
+              </div>
+              <div className='w-1/2 flex items-center gap-x-6'>
+                <label className='text-gray-500 capitalize'>
+                  Client Account
+                </label>
+
+                <div className='min-w-[50%] h-11 bg-gray-200 rounded px-4 flex justify-between items-center'>
+                  <select
+                    id='client'
+                    name='client'
+                    onChange={(e) => {
+                      formik.handleChange(e)
+                      setShowSave({ ...showSave, client: true })
+                    }}
+                    value={formik.values.client}
+                    className={`w-full border text-gray-900 text-sm rounded-lg focus:ring-blue-500 block p-2.5 ${
+                      formik.touched.client && formik.errors.client
+                        ? 'border-red-500 bg-red-200'
+                        : 'border-gray-300 bg-transparent'
+                    }`}
+                  >
+                    {accounts?.map((account: AccountMinimal) => (
+                      <option key={account.id} value={account.id}>
+                        {account.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {showSave.client &&
+                  account.id !== formik.values.client &&
+                  SaveButton(formik.handleSubmit as any)}
+              </div>
+            </div> */}
+            <div className='w-full flex items-center justify-between'>
+              <div className='w-1/2 flex items-center gap-x-6'>
+                <label className='text-gray-600 text-sm w-32 lg:w-fit'>
+                  Supervisor
+                </label>
+                <div className='flex items-center justify-between w-60 bg-gray-200 rounded-md p-2 lg:w-40 xl:w-60'>
+                  <input
+                    name='supervisor'
+                    id='supervisor'
+                    type='text'
+                    value={supervisor?.username}
+                    onChange={(e) => {
+                      console.log(e.target.value)
+                    }}
+                    className='text-sm bg-transparent w-full outline-none'
+                  />
+                </div>
+              </div>
+            </div>
+
+            <Divider />
+
             <AutoCancelSwitch />
           </>
         )}
@@ -205,19 +377,39 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
             showInfos && 'col-span-2 '
           }`}
         >
-          <BranchMap />
+          <BranchMap
+            id={address.id}
+            location={{
+              lat: address.latitude || 0,
+              lng: address.longitude || 0,
+            }}
+          />
         </div>
       )}
     </div>
   )
 }
 
+const SaveButton = (submit: MouseEventHandler<HTMLButtonElement>) => {
+  return (
+    <button
+      onClick={submit}
+      className='bg-primary-500 text-black px-6 py-2 rounded-md hover:bg-primary'
+      type='button'
+    >
+      Save
+    </button>
+  )
+}
+
 export const SearchBranch = () => {
-  const { handleSearchBranches, countries, clientAccounts } =
+  const { handleFilterClient, handleFilterCountry } =
     useClientsBranchesContext()
+  const { countries } = useAreasCountriesContext()
+  const { accounts } = useClientsAccountsContext()
 
   return (
-    <div className='mx-auto flex flex-col items-start  gap-y-4 lg:gap-y-0 lg:pl-0 lg:flex-row lg:items-center lg:justify-between lg:w-full'>
+    <div className='mx-auto flex flex-col items-start  gap-y-4 lg:gap-y-0 lg:pl-0 lg:flex-row lg:items-center  lg:w-full gap-x-6'>
       {/* Country */}
       <div className='flex items-center gap-x-3 lg:ml-12'>
         <label className='w-40 text-sm lg:w-fit'>Select Country</label>
@@ -226,11 +418,12 @@ export const SearchBranch = () => {
             name='country'
             id='country'
             className='w-full h-full bg-transparent '
+            onChange={(e) => handleFilterCountry(e.target.value)}
           >
             <option value=''>All</option>
-            {countries?.map((country: string, index: number) => (
-              <option key={index} value={country}>
-                {country}
+            {countries?.map((country: Country, index: number) => (
+              <option key={country.id} value={country.name}>
+                {country.name}
               </option>
             ))}
           </select>
@@ -241,30 +434,19 @@ export const SearchBranch = () => {
         <label className='w-40 text-sm lg:w-fit'>Select Client</label>
         <div className='w-72 h-10 bg-white rounded-full px-4'>
           <select
-            name='clientAccount'
-            id='clientAccount'
+            name='account'
+            id='account'
             className='w-full h-full bg-transparent '
+            onChange={(e) => handleFilterClient(e.target.value)}
           >
             <option value=''>All</option>
-            {clientAccounts?.map((clientAccount: string, index: number) => (
-              <option key={index} value={clientAccount}>
-                {clientAccount}
+            {accounts?.map((account: AccountMinimal, index: number) => (
+              <option key={account.id} value={account.name}>
+                {account.name}
               </option>
             ))}
           </select>
         </div>
-      </div>
-      {/* Search */}
-      <div className='flex items-center gap-x-3 lg:mr-12'>
-        <label className='w-40 text-sm lg:w-fit'>Search</label>
-        <input
-          name='search'
-          id='search'
-          type='text'
-          className='w-72 bg-white rounded-full px-4 py-2'
-          placeholder='Search'
-          onChange={(e) => handleSearchBranches(e.target.value)}
-        />
       </div>
     </div>
   )

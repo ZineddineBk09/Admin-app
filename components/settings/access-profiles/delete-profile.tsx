@@ -8,9 +8,7 @@ export const DeleteDriverType = ({ id }: { id: number }) => {
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   const handleDelete = async () => {
     setLoading(true)

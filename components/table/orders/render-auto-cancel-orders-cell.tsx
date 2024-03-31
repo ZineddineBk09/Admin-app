@@ -31,7 +31,7 @@ export const RenderCell = ({ order, columnKey }: Props) => {
         </p>
       )
 
-    case 'deliveryFee':
+    case 'delivery_fee':
       return (
         <p>
           {renderBigNums(cellValue)}

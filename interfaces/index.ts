@@ -1,3 +1,5 @@
+import { number } from 'yup'
+
 export interface Pricing {
   price_ratio_nominator: number
   price_ratio_denominator: number
@@ -43,11 +45,16 @@ export interface Driver {
   team: DriverTeam
   code: string
   phone_number: string
-  status: string
+  status: 'active' | 'inactive' | 'PickingUp' | 'delivering' | 'waiting'
   image: string
   vehicle_license: string
   residency_id: string
   is_idle: boolean
+}
+
+export interface DriverMinimal {
+  id: string
+  user: User
 }
 
 export interface DriverType extends Pricing {
@@ -89,8 +96,8 @@ export interface Team extends Pricing {
   fixed: number
   supervisor?: User
   city: City
-  areas?: Geofence[]
-  accounts?: string[]
+  areas: Geofence[]
+  accounts: AccountMinimal[]
 }
 
 export interface TeamMinimal {
@@ -124,32 +131,56 @@ export interface Item {
 interface Customer {
   id: string
   name: string
-  image: string
-  address: string
-  phone: string
+  number: string
 }
 
 export interface Order {
   id: string
-  date: string
-  time: string
+  serial_number: number
+  external_id: string
+  COD: boolean
+  currently_assigned_driver: Driver | null
+  client: BranchMinimal
+  delivery_address: Address
+  pickup_address: Address
   customer: Customer
-  client: Client
-  driverId: string
-  driverName: string
-  distance: number
-  city: string
-  value: number
-  deliveryFee: number
-  status: string
-  clientPaid: boolean
-  driverPaid: boolean
-  location: Location | null
-  duration: number
-  startTime: number
-  endTime: number
-  paymentType: 'cash' | 'visa' | 'mastercard'
-  items: Item[]
+  total_order_value: number
+  delivery: string
+  distance: number | null
+  status:
+    | 'new'
+    | 'searching_drivers'
+    | 'prompting_driver'
+    | 'assigned'
+    | 'failed'
+    | 'order_failed'
+    | 'client_reached'
+    | 'transitioning'
+    | 'delivering'
+    | 'driver_reached'
+    | 'customer_reached'
+    | 'paid'
+    | 'settled'
+    | 'cancelled'
+    | 'acquired'
+    | 'deposited'
+  added_at: string
+  reached_client_at: string
+  delivered_at: string
+  client_is_paid_at: string
+  paid_driver: string
+  added_by: User | null
+  payment_type: 'cash' | 'visa' | 'mastercard'
+  notes: Note[]
+}
+
+export interface OrderItem {
+  id?: string
+  name: string
+  description: string
+  price: number
+  code: number
+  qty: number
 }
 
 export interface AutoCancelledOrder {
@@ -161,7 +192,7 @@ export interface AutoCancelledOrder {
   distance: number
   city: string
   value: number
-  deliveryFee: number
+  delivery_fee: number
   location: Location | null
   paymentType: 'cash' | 'visa' | 'mastercard'
   timeLeft: number // the remained time before the order is auto cancelled
@@ -278,7 +309,9 @@ export interface Branch {
 
 export interface BranchMinimal {
   id: string
+  account: AccountMinimal
   supervisor: UserAccess
+  address: Address
 }
 //--------------------------------------------------------------------
 
@@ -362,9 +395,9 @@ export interface Location {
 }
 
 export interface Note {
-  date: string
-  time: string
-  text: string
+  id: string
+  added_at: string
+  description: string
 }
 
 export interface SubLink {
@@ -418,3 +451,18 @@ export interface GeoJSONObject {
 
 export type GeoJSONCoordinate = number[]
 //--------------------------------------------------------------------
+export interface Pagination {
+  limit: number
+  offset: number
+  total: number
+  page: number
+}
+
+export interface MapDriver extends Driver {
+  id: string
+  location: {
+    lat: number
+    lng: number
+  }
+  action: string
+}

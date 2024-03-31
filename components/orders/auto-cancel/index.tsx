@@ -67,20 +67,6 @@ export const OrdersPage = () => {
 const SearchAndFilter = () => {
   const { autoCancelledOrders, handleSearchAutoCancelledOrders } =
     useAutoCancelledOrdersContext()
-  // get unique teams
-  const [teams, setTeams] = React.useState<Team[]>([])
-
-  React.useEffect(() => {
-    const fetchTeams = async () => {
-      await getRecords('team')
-        .then((res: { teams: Team[] }) => setTeams(res.teams))
-        .catch((err: any) => {
-          setTeams([])
-          console.log('Error in fetching teams: ', err)
-        })
-    }
-    fetchTeams()
-  }, [autoCancelledOrders])
 
   return (
     <input

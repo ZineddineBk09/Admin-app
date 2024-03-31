@@ -43,17 +43,17 @@ export const AutoCancelledOrdersContextProvider = ({
             name: faker.company.name(),
             id: faker.string.uuid(),
             image: faker.image.url(),
-            address: faker.location.streetAddress(),
+            address: {},
             phone: faker.phone.number(),
           },
           customer: {
             id: faker.string.uuid(),
             name: faker.person.firstName(),
             image: faker.image.avatar(),
-            address: faker.location.streetAddress(),
+            address: {},
             phone: faker.phone.number(),
           },
-          deliveryFee: faker.number.int({ max: 100, min: 0 }),
+          delivery_fee: faker.number.int({ max: 100, min: 0 }),
           distance: faker.number.int(),
           time: faker.date.past().toLocaleTimeString(),
           city: faker.location.city(),
@@ -65,7 +65,9 @@ export const AutoCancelledOrdersContextProvider = ({
               min: 39,
             }),
           },
-          paymentType: ['cash', 'visa', 'mastercard'][faker.number.int({ max: 2, min: 0 })],
+          paymentType: ['cash', 'visa', 'mastercard'][
+            faker.number.int({ max: 2, min: 0 })
+          ],
           items: Array.from(
             { length: faker.number.int({ max: 5, min: 1 }) },
             () => ({

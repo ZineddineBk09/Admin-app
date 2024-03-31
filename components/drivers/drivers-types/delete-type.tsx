@@ -12,9 +12,7 @@ export const DeleteDriverType = ({ id }: { id: string }) => {
   const [loading, setLoading] = React.useState<boolean>(false)
   const { refreshDriverTypes } = useDriversContext()
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   const handleDelete = async () => {
     setLoading(true)

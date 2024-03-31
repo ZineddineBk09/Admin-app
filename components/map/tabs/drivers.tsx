@@ -1,22 +1,32 @@
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
-import { Driver } from '../../../interfaces'
 import { Card } from '@nextui-org/react'
 import { useMapContext } from '../../../context/map'
 import { DriverInboxIcon, DriverOrdersIcon } from '../../icons/drivers'
 import { truncateTxt } from '../../../utils'
+import { MapDriver } from '../../../interfaces'
 
-export const Drivers = ({ driverStatus }: { driverStatus: any }) => {
+export const Drivers = () => {
   const { drivers } = useMapContext()
+  const driverStatus = [
+    { value: 'active', checked: true },
+    { value: 'inactive', checked: true },
+    { value: 'PickingUp', checked: true },
+    { value: 'delivering', checked: true },
+    { value: 'waiting', checked: true },
+  ]
 
   return (
     <div className='w-full h-full flex flex-col items-center gap-y-3 overflow-y-auto px-2'>
       {drivers
-        ?.slice(0, drivers?.length / 2)
-        ?.filter((dr: any) =>
-          driverStatus.some(
-            (status: any) => status.value === dr.status && status.checked
-          )
+        ?.slice(0 /**drivers?.length / 2 */) // Show only half of the drivers
+        ?.filter(
+          (
+            dr: any // Filter drivers based on their status
+          ) =>
+            driverStatus.some(
+              (status: any) => status.value === dr.status && status.checked
+            )
         )
         ?.map((driver: any, index: number) => (
           <DriverCard key={driver?.id} driver={driver} />
@@ -25,9 +35,9 @@ export const Drivers = ({ driverStatus }: { driverStatus: any }) => {
   )
 }
 
-const DriverCard = ({ driver }: { driver: Driver }) => {
-  const { username, image, status, orders } = driver
-  const { handleSelectDriver, selectedDriver } = useMapContext()
+const DriverCard = ({ driver }: { driver: MapDriver }) => {
+  const { user, image, status } = driver
+  const { handleSelectDriver, selectedDriver, statusColor } = useMapContext()
   const [selected, setSelected] = useState(false)
 
   useEffect(() => {
@@ -60,11 +70,11 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
 
           {/* Infos */}
           <div className='h-full w-full flex flex-col text-gray-500'>
-            <p className='text-sm'>{truncateTxt(username, 25)}</p>
+            <p className='text-sm'>{truncateTxt(user.username, 25)}</p>
             <div className='w-full flex items-center justify-between'>
               <div className='flex items-end gap-x-1'>
                 <DriverOrdersIcon />
-                <small>{orders}</small>
+                <small>5</small>
               </div>
 
               <DriverInboxIcon />
@@ -75,13 +85,9 @@ const DriverCard = ({ driver }: { driver: Driver }) => {
               <p className='mt-1 text-black font-medium tracking-wide'>
                 {
                   <span
-                    className={`py-1 px-3 rounded-full text-xs ${
-                      status === 'Available'
-                        ? 'bg-green-400'
-                        : status === 'Busy'
-                        ? 'bg-orange-500'
-                        : 'bg-gray-400'
-                    }`}
+                    className={`py-1 px-3 rounded-full text-xs ${statusColor(
+                      status
+                    )}`}
                   >
                     {status}
                   </span>

@@ -41,6 +41,8 @@
     "react-to-print": "^2.14.15",
     "rsuite": "^5.50.0",
     "sharp": "^0.33.2",
+    "socket.io-client": "^1.4.0",
+    "ws": "^8.16.0",
     "yup": "^1.2.0"
   },
   "devDependencies": {

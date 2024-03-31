@@ -1,12 +1,22 @@
-import { Branch } from '../../interfaces'
-import { searchBranches } from '../../lib/search'
+import { APIResponse, Branch } from '../../interfaces'
 import React, { useEffect, useState } from 'react'
-import { faker } from '@faker-js/faker'
+import { filterRecords, getRecords } from '../../lib/api'
+import axios from '../../lib/axios'
 
 export const ClientsBranchesContext = React.createContext({})
 
-export const useClientsBranchesContext: any = () =>
-  React.useContext(ClientsBranchesContext)
+export const useClientsBranchesContext: {
+  (): {
+    branches: Branch[]
+    loading: boolean
+    hasMore: boolean
+    isFetching: boolean
+    fetchNextPage: () => Promise<void>
+    refreshBranches: () => Promise<void>
+    handleFilterClient: (client: string) => void
+    handleFilterCountry: (country: string) => void
+  }
+} = () => React.useContext(ClientsBranchesContext as any)
 
 export const ClientsBranchesContextProvider = ({
   children,
@@ -14,74 +24,106 @@ export const ClientsBranchesContextProvider = ({
   children: React.ReactNode
 }) => {
   const [branches, setBranches] = useState<Branch[]>([] as Branch[])
-  const [countries, setCountries] = useState<string[]>([] as string[])
-  const [clientAccounts, setClientAccounts] = useState<string[]>([] as string[])
+  const [hasMore, setHasMore] = useState<boolean>(true)
+  const [isFetching, setIsFetching] = useState<boolean>(false)
   const [loading, setLoading] = useState(true)
 
   const refreshBranches = async () => {
-    // setLoading(true)
-    // setBranches([] as Branch[])
-    // const records = await fetchBranches()
-    // setBranches(records)
-    // setLoading(false)
-    const rows: Branch[] = []
+    setLoading(true)
+    const records: APIResponse = await getRecords('branch')
 
-    for (let i = 0; i < 5; i++) {
-      rows.push({
-        id: faker.number.bigInt().toString(),
-        name: faker.company.name(),
-        country: faker.location.country(),
-        governorate: faker.location.state(),
-        city: faker.location.city(),
-        customOrderFee: faker.number.float(),
-        customDriverFee: faker.number.float(),
-        phone: faker.phone.number(),
-        supervisor: faker.person.firstName(),
-        clientAccount: faker.company.name(),
-        location: {
-          latitude: faker.location.latitude({ max: 22, min: 21 }),
-          longitude: faker.location.longitude({
-            max: 40,
-            min: 39,
-          }),
-        },
-      })
+    if (records.results) {
+      setBranches(records.results)
     }
-    setBranches(rows)
-    setCountries(
-      rows
-        ?.map((branch: Branch) => branch.country)
-        .filter((v, i, a) => a.indexOf(v) === i)
-    )
-    setClientAccounts(
-      rows
-        ?.map((branch: Branch) => branch.clientAccount)
-        .filter((v, i, a) => a.indexOf(v) === i)
-    )
+
+    // check if there are more branches we can fetch
+    setHasMore(!!records.next)
+
+    setLoading(false)
   }
 
-  const handleSearchBranches = (search: string) => {
-    if (search === '') {
+  const handleFilterClient = async (client: string) => {
+    // check if the user selected 'all' clients
+    if (client == 'all') {
       refreshBranches()
       return
     }
-    // search inside branches array
-    const filteredBranches: any = searchBranches(branches, search)
-    setBranches(filteredBranches)
+
+    // fetch branches for the selected client
+    const records: APIResponse = await filterRecords(
+      { account__name: client },
+      'branch'
+    )
+
+    if (records.results) {
+      setBranches(records.results)
+    }
+
+    // check if there are more branches we can fetch
+    setHasMore(!!records.next)
+
+    setLoading(false)
+  }
+
+  const handleFilterCountry = async (country: string) => {
+    if (country == 'all') {
+      refreshBranches()
+      return
+    }
+
+    const records: APIResponse = await filterRecords(
+      { address_country__name: country },
+      'branch'
+    )
+
+    if (records.results) {
+      setBranches(records.results)
+    }
+
+    setHasMore(!!records.next)
+
+    setLoading(false)
+  }
+
+  const fetchNextPage = async () => {
+    if (isFetching || !hasMore) {
+      return
+    }
+
+    setIsFetching(true)
+
+    // next url will of format: /city/?limit=10&offset=10
+    try {
+      const response = await axios.get(
+        `/branch/?limit=10&offset=${branches.length}`
+      )
+      const newBranches = response.data.results
+      setBranches([...branches, ...newBranches])
+
+      // check if there are more branches we can fetch
+      setHasMore(!!response.data.next)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    } finally {
+      setIsFetching(false)
+    }
   }
 
   useEffect(() => {
-    refreshBranches()
+    branches.length === 0 && refreshBranches()
   }, [])
 
   return (
     <ClientsBranchesContext.Provider
       value={{
         branches,
-        countries,
-        clientAccounts,
         loading,
-        handleSearchBranches,
+        hasMore,
+        isFetching,
+        fetchNextPage,
+        refreshBranches,
+        handleFilterClient,
+        handleFilterCountry,
       }}
     >
       {children}

@@ -1,7 +1,7 @@
-import { Order, Sort, Status } from '../../interfaces'
-import { getRecords } from '../../lib/api'
-import { searchOrders } from '../../lib/search'
-import { faker } from '@faker-js/faker'
+import { APIResponse, Order, Pagination, Sort, Status } from '../../interfaces'
+import { filterRecords, getRecords, searchRecords } from '../../lib/api'
+import axios from '../../lib/axios'
+import { debounce } from 'lodash'
 import React, { useEffect, useState } from 'react'
 
 export const OrdersContext = React.createContext({})
@@ -11,17 +11,33 @@ export const useOrdersContext: {
     orders: Order[]
     filteredOrders: Order[]
     loading: boolean
+    hasMore: boolean
+    isFetching: boolean
+    pagination: Pagination
+    filters: {
+      paymentType: string
+      dateFrom: Date
+      dateTo: Date
+    }
+    setFilters: React.Dispatch<
+      React.SetStateAction<{
+        paymentType: string
+        dateFrom: Date
+        dateTo: Date
+      }>
+    >
+    fetchNextPage: () => Promise<void>
+    fetchPreviousPage: () => Promise<void>
     handleSearchOrders: (search: string) => void
     handleSortOrders: (sort: Sort) => void
-    handleSelectStatus: (status: string) => void
-    handleSelectDate: ({
+    handleFilterDate: ({
       dateFrom,
       dateTo,
     }: {
       dateFrom: Date
       dateTo: Date
     }) => void
-    handleSelectPaymentType: (paymentType: string) => void
+    handleFilterPaymentType: (paymentType: string) => void
     refreshOrders: () => Promise<void>
   }
 } = () => React.useContext(OrdersContext as any)
@@ -32,90 +48,135 @@ export const OrdersContextProvider = ({
   children: React.ReactNode
 }) => {
   const [orders, setOrders] = useState<Order[]>([] as Order[])
+  const [pagination, setPagination] = useState<Pagination>({
+    limit: 10,
+    offset: 0,
+    total: 0,
+    page: 1,
+  })
+  const [filters, setFilters] = useState<{
+    paymentType: string
+    dateFrom: Date
+    dateTo: Date
+  }>({
+    paymentType: '',
+    dateFrom: new Date(),
+    dateTo: new Date(),
+  })
+  const [hasMore, setHasMore] = useState<boolean>(true)
+  const [isFetching, setIsFetching] = useState<boolean>(false)
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([] as Order[])
   const [loading, setLoading] = useState(false)
-  const [orderStatus, setOrderStatus] = useState<Status[]>([
-    { value: 'assigned', checked: true },
-    { value: 'cancelled', checked: true },
-    { value: 'new', checked: true },
-    { value: 'done', checked: true },
-  ])
 
   const refreshOrders = async () => {
     setLoading(true)
-    // setOrders([] as Order[])
-    const records = Array.from(
-      { length: 10 },
-      () =>
-        ({
-          id: faker.number.int({ min: 1000, max: 10000 }).toString(),
-          date: faker.date.past().toLocaleDateString(),
-          value: faker.number.int({ max: 1000, min: 0 }),
-          client: {
-            name: faker.company.name(),
-            id: faker.string.uuid(),
-            image: faker.image.url(),
-            address: faker.location.streetAddress(),
-            phone: faker.phone.number(),
-          },
-          customer: {
-            id: faker.string.uuid(),
-            name: faker.person.firstName(),
-            image: faker.image.avatar(),
-            address: faker.location.streetAddress(),
-            phone: faker.phone.number(),
-          },
-          duration: faker.number.int(),
-          startTime: faker.date.past().getTime(),
-          endTime: faker.date.future().getTime(),
-          distance: faker.number.int(),
-          time: faker.date.past().toLocaleTimeString(),
-          driverId: faker.string.uuid(),
-          driverName: faker.person.firstName(),
-          city: faker.location.city(),
-          paymentType: ['cash', 'visa', 'mastercard'][
-            faker.number.int({ max: 2, min: 0 })
-          ],
-          status: orderStatus[faker.number.int({ max: 3, min: 0 })].value,
-          deliveryFee: faker.number.int({ max: 100, min: 0 }),
-          location:
-            faker.number.int({ max: 2, min: 1 }) == 1
-              ? {
-                  latitude: faker.location.latitude({ max: 22, min: 21 }),
-                  longitude: faker.location.longitude({
-                    max: 40,
-                    min: 39,
-                  }),
-                }
-              : null,
-          items: Array.from(
-            { length: faker.number.int({ max: 5, min: 1 }) },
-            () => ({
-              id: faker.number.int({ min: 1000, max: 10000 }).toString(),
-              name: faker.commerce.productName(),
-              quantity: faker.number.int({ max: 5, min: 1 }),
-            })
-          ),
-          clientPaid: faker.datatype.boolean(),
-          driverPaid: faker.datatype.boolean(),
-        } as Order)
-    )
+    const records: APIResponse = await getRecords('order')
+    if (records.results) {
+      setOrders(records.results)
+    }
 
-    setOrders(records)
-    setFilteredOrders(records)
+    // check if there are more orders we can fetch
+    setHasMore(!!records.next)
+
+    setPagination({
+      limit: records?.results?.length,
+      offset: 0,
+      total: records.count,
+      page: 1,
+    })
 
     setLoading(false)
-    // setOrders(orders)
   }
 
-  const handleSearchOrders = (search: string) => {
+  const fetchNextPage = async () => {
+    if (isFetching || !hasMore) {
+      return
+    }
+
+    setIsFetching(true)
+
+    // next url will of format: /order/?limit=10&offset=10
+    try {
+      const url = `/order/?limit=${pagination.limit}&offset=${
+        pagination.offset + pagination.limit
+      }`
+      const params = {
+        payment_type: filters?.paymentType,
+        added_at__gte: filters?.dateFrom,
+        added_at__lte: filters?.dateTo,
+      }
+
+      const response = await axios.get(url, {
+        params,
+      })
+      const newOrders = response.data.results
+      setOrders(newOrders as Order[])
+
+      // check if there are more orders we can fetch
+      setHasMore(!!response.data.next)
+
+      setPagination({
+        ...pagination,
+        offset: pagination.offset + pagination.limit,
+        page: pagination.page + 1,
+      })
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    } finally {
+      setIsFetching(false)
+    }
+  }
+
+  const fetchPreviousPage = async () => {
+    if (isFetching || pagination.offset === 0) {
+      return
+    }
+
+    setIsFetching(true)
+
+    // next url will of format: /order/?limit=10&offset=10
+    try {
+      const url = `/order/?limit=${pagination.limit}&offset=${
+        pagination.offset - pagination.limit
+      }`
+      const params = {
+        payment_type: filters?.paymentType,
+        added_at__gte: filters?.dateFrom,
+        added_at__lte: filters?.dateTo,
+      }
+
+      const response = await axios.get(url, {
+        params,
+      })
+      const newOrders = response.data.results
+      setOrders(newOrders as Order[])
+
+      // check if there are more orders we can fetch
+      setHasMore(!!response.data.next)
+
+      setPagination({
+        ...pagination,
+        offset: pagination.offset - pagination.limit,
+        page: pagination.page - 1,
+      })
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    } finally {
+      setIsFetching(false)
+    }
+  }
+
+  const handleSearchOrders = async (search: string) => {
     if (search === '') {
       refreshOrders()
       return
     }
     // search inside orders array
-    const filtered: any = searchOrders(orders, search)
-    setFilteredOrders(filtered)
+    const filtered: APIResponse = await searchRecords(search, 'order')
+
+    if (filtered.results) {
+      setOrders(filtered.results)
+    }
   }
 
   const handleSortOrders = (sort: Sort) => {
@@ -134,16 +195,7 @@ export const OrdersContextProvider = ({
     setFilteredOrders(sortedOrders)
   }
 
-  const handleSelectStatus = (status: string) => {
-    if (status === '') {
-      refreshOrders()
-      return
-    }
-    const filteredOrders = orders.filter((driver) => driver?.status === status)
-    setOrders(filteredOrders)
-  }
-
-  const handleSelectDate = ({
+  const handleFilterDate = async ({
     dateFrom,
     dateTo,
   }: {
@@ -154,27 +206,57 @@ export const OrdersContextProvider = ({
       refreshOrders()
       return
     }
-    const filteredOrders = orders.filter(
-      (order) =>
-        new Date(order?.date).getTime() >= dateFrom.getTime() &&
-        new Date(order?.date).getTime() <= dateTo.getTime()
+
+    const records: APIResponse = await filterRecords(
+      {
+        added_at__gte: dateFrom,
+        added_at__lte: dateTo,
+        payment_type: filters?.paymentType,
+      },
+      'order'
     )
-    setOrders(filteredOrders)
+
+    if (records.results) {
+      setOrders(records.results)
+    }
   }
 
-  const handleSelectPaymentType = (paymentType: string) => {
-    if (paymentType === '') {
+  const handleFilterPaymentType = async (payment_type: string) => {
+    // check if the user selected 'all' countries
+    if (payment_type == 'all') {
       refreshOrders()
       return
     }
-    const filtered = orders.filter(
-      (order) => order?.paymentType === paymentType
+
+    // fetch cities for the selected payment_type
+    const records: APIResponse = await filterRecords(
+      {
+        payment_type,
+        added_at__gte: filters?.dateFrom,
+        added_at__lte: filters?.dateTo,
+      },
+      'order'
     )
-    setFilteredOrders(filtered)
+
+    if (records.results) {
+      setOrders(records.results)
+    }
+
+    // check if there are more cities we can fetch
+    setHasMore(!!records.next)
+
+    setPagination({
+      limit: records?.results?.length,
+      offset: 0,
+      total: records.count,
+      page: 1,
+    })
+
+    setLoading(false)
   }
 
   useEffect(() => {
-    refreshOrders()
+    orders.length === 0 && refreshOrders()
   }, [])
 
   return (
@@ -183,11 +265,17 @@ export const OrdersContextProvider = ({
         orders,
         filteredOrders,
         loading,
+        hasMore,
+        isFetching,
+        pagination,
+        filters,
+        setFilters,
+        fetchNextPage,
+        fetchPreviousPage,
         handleSearchOrders,
         handleSortOrders,
-        handleSelectStatus,
-        handleSelectDate,
-        handleSelectPaymentType,
+        handleFilterDate,
+        handleFilterPaymentType,
         refreshOrders,
       }}
     >

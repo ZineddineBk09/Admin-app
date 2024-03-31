@@ -79,9 +79,9 @@ export const AreasCountriesContextProvider = ({
   }
 
   useEffect(() => {
-    refreshCountries()
-    refreshCurrencies()
-  }, [])
+    countries.length === 0 && refreshCountries()
+    currencies.length === 0 && refreshCurrencies()
+  },[])
 
   return (
     <AreasCountriesContext.Provider

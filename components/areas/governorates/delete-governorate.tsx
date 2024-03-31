@@ -12,9 +12,7 @@ export const DeleteGovernorate = ({ id }: { id: string }) => {
   const [loading, setLoading] = React.useState<boolean>(false)
   const { refreshGovernorates } = useAreasGovernoratesContext()
 
-  const closeHandler = () => {
-    setVisible(false)
-  }
+  const closeHandler = () => setVisible(false)
 
   const handleDelete = async () => {
     setLoading(true)
@@ -29,7 +27,7 @@ export const DeleteGovernorate = ({ id }: { id: string }) => {
         toast.error('Error deleting governorate!')
       })
   }
-  
+
   return (
     <div>
       <Tooltip

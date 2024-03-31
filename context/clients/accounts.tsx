@@ -1,12 +1,20 @@
-import { Account } from '../../interfaces'
-import { searchAccounts } from '../../lib/search'
+import { APIResponse, Account } from '../../interfaces'
 import React, { useEffect, useState } from 'react'
-import { faker } from '@faker-js/faker'
+import { filterRecords, getRecords } from '../../lib/api'
+import axios from '../../lib/axios'
 
 export const ClientsAccountsContext = React.createContext({})
 
-export const useClientsAccountsContext: any = () =>
-  React.useContext(ClientsAccountsContext)
+export const useClientsAccountsContext: {
+  (): {
+    accounts: Account[]
+    loading: boolean
+    hasMore: boolean
+    isFetching: boolean
+    fetchNextPage: () => Promise<void>
+    refreshAccounts: () => Promise<void>
+  }
+} = () => React.useContext(ClientsAccountsContext as any)
 
 export const ClientsAccountsContextProvider = ({
   children,
@@ -14,107 +22,50 @@ export const ClientsAccountsContextProvider = ({
   children: React.ReactNode
 }) => {
   const [accounts, setAccounts] = useState<Account[]>([] as Account[])
+  const [hasMore, setHasMore] = useState<boolean>(true)
+  const [isFetching, setIsFetching] = useState<boolean>(false)
   const [loading, setLoading] = useState(true)
 
   const refreshAccounts = async () => {
-    // setLoading(true)
-    // setAccounts([] as Account[])
-    // const records = await fetchAccounts()
-    // setAccounts(records)
-    // setLoading(false)
-    setAccounts([
-      {
-        id: '215351',
-        name: 'McDonalds',
-        city: 'Riyadh',
-        discount: 10,
-        website: 'https://www.mcdonalds.com',
-        phone: '920000000',
-        branches: Array(3).fill({
-          id: faker.number.bigInt().toString(),
-          name: faker.company.name(),
-        }),
-        teams: Array(3).fill({
-          id: faker.number.bigInt().toString(),
-          name: faker.company.name(),
-        }),
-        admins: Array(3).fill({
-          id: faker.number.bigInt().toString(),
-          name: faker.company.name(),
-        }),
-      },
-      {
-        id: '215352',
-        name: 'KFC',
-        city: 'Riyadh',
-        discount: 10,
-        website: 'https://www.kfc.com',
-        phone: '920000000',
-        branches: Array(3).fill({
-          id: faker.number.bigInt().toString(),
-          name: faker.company.name(),
-        }),
-        teams: Array(3).fill({
-          id: faker.number.bigInt().toString(),
-          name: faker.company.name(),
-        }),
-        admins: Array(3).fill({
-          id: faker.number.bigInt().toString(),
-          name: faker.company.name(),
-        }),
-      },
-      {
-        id: '215353',
-        name: 'Burger King',
-        city: 'Riyadh',
-        discount: 10,
-        website: 'https://www.burgerking.com',
-        phone: '920000000',
-        branches: Array(3).fill({
-          id: faker.number.bigInt().toString(),
-          name: faker.company.name(),
-        }),
-        teams: Array(3).fill({
-          id: faker.number.bigInt().toString(),
-          name: faker.company.name(),
-        }),
-        admins: Array(3).fill({
-          id: faker.number.bigInt().toString(),
-          name: faker.company.name(),
-        }),
-      },
-      {
-        id: '215354',
-        name: 'Hardees',
-        city: 'Riyadh',
-        discount: 10,
-        website: 'https://www.hardees.com',
-        phone: '920000000',
-        branches: [],
-        teams: Array(3).fill({
-          id: faker.number.bigInt().toString(),
-          name: faker.company.name(),
-        }),
-        admins: Array(3).fill({
-          id: faker.number.bigInt().toString(),
-          name: faker.company.name(),
-        }),
-      },
-    ])
+    setLoading(true)
+    const records: APIResponse = await getRecords('account')
+
+    if (records.results) {
+      setAccounts(records.results)
+    }
+
+    // check if there are more accounts we can fetch
+    setHasMore(!!records.next)
+
+    setLoading(false)
   }
 
-  const handleSearchAccounts = (search: string) => {
-    if (search === '') {
-      refreshAccounts()
+  const fetchNextPage = async () => {
+    if (isFetching || !hasMore) {
       return
     }
-    // search inside accounts array
-    const filteredAccounts: any = searchAccounts(accounts, search)
-    setAccounts(filteredAccounts)
+
+    setIsFetching(true)
+
+    // next url will of format: /account/?limit=10&offset=10
+    try {
+      const response = await axios.get(
+        `/account/?limit=10&offset=${accounts.length}`
+      )
+      const newAccounts = response.data.results
+      setAccounts([...accounts, ...newAccounts])
+
+      // check if there are more accounts we can fetch
+      setHasMore(!!response.data.next)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    } finally {
+      setIsFetching(false)
+    }
   }
 
   useEffect(() => {
-    refreshAccounts()
+    accounts.length === 0 && refreshAccounts()
   }, [])
 
   return (
@@ -122,7 +73,10 @@ export const ClientsAccountsContextProvider = ({
       value={{
         accounts,
         loading,
-        handleSearchAccounts,
+        hasMore,
+        isFetching,
+        fetchNextPage,
+        refreshAccounts,
       }}
     >
       {children}

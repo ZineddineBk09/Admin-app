@@ -1,5 +1,5 @@
 import { Text, Loading } from '@nextui-org/react'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Flex } from '../../styles/flex'
 import { OrdersTable } from '../../table/orders/orders-table'
 const AddOrder = dynamic(() =>
@@ -7,8 +7,8 @@ const AddOrder = dynamic(() =>
 )
 import { useOrdersContext } from '../../../context/orders'
 import { Team } from '../../../interfaces'
-import { getRecords } from '../../../lib/api'
 import dynamic from 'next/dynamic'
+import { debounce } from 'lodash'
 
 export const OrdersPage = () => {
   const { orders, loading } = useOrdersContext()
@@ -55,22 +55,18 @@ export const OrdersPage = () => {
 }
 
 export const SearchAndFilter = () => {
-  const { orders, handleSearchOrders, handleSelectPaymentType } =
-    useOrdersContext()
-  // get unique teams
-  const [teams, setTeams] = React.useState<Team[]>([])
+  const {
+    handleSearchOrders,
+    handleFilterPaymentType,
+    filters,
+    setFilters,
+    handleFilterDate,
+  } = useOrdersContext()
 
-  React.useEffect(() => {
-    const fetchTeams = async () => {
-      await getRecords('team')
-        .then((res: { teams: Team[] }) => setTeams(res.teams))
-        .catch((err: any) => {
-          setTeams([])
-          console.log('Error in fetching teams: ', err)
-        })
-    }
-    fetchTeams()
-  }, [orders])
+  const debouncedSearch = useMemo(
+    () => debounce((e) => handleSearchOrders(e.target.value), 500),
+    [handleSearchOrders]
+  )
 
   return (
     <div className='w-full grid grid-cols-1 gap-6 lg:grid-cols-4 px-6'>
@@ -81,7 +77,7 @@ export const SearchAndFilter = () => {
         type='text'
         className='bg-gray-200 rounded-full px-4 py-2'
         placeholder='Search'
-        onChange={(e) => handleSearchOrders(e.target.value)}
+        onChange={debouncedSearch}
       />
 
       {/* Date From */}
@@ -92,6 +88,16 @@ export const SearchAndFilter = () => {
           name='dateFrom'
           id='dateFrom'
           className='w-fit h-full bg-transparent'
+          onChange={(e) => {
+            setFilters({
+              ...filters,
+              dateFrom: new Date(e.target.value),
+            })
+            handleFilterDate({
+              dateFrom: new Date(e.target.value),
+              dateTo: filters.dateTo,
+            })
+          }}
         />
       </div>
       {/* Date To */}
@@ -102,6 +108,16 @@ export const SearchAndFilter = () => {
           name='dateTo'
           id='dateTo'
           className='w-fit h-full bg-transparent'
+          onChange={(e) => {
+            setFilters({
+              ...filters,
+              dateTo: new Date(e.target.value),
+            })
+            handleFilterDate({
+              dateFrom: filters.dateFrom,
+              dateTo: new Date(e.target.value),
+            })
+          }}
         />
       </div>
       {/* Payment type: visa or cash */}
@@ -111,9 +127,16 @@ export const SearchAndFilter = () => {
           name='paymentType'
           id='paymentType'
           className='h-full bg-transparent'
-          onChange={(e) => handleSelectPaymentType(e.target.value)}
+          value={filters.paymentType}
+          onChange={(e) => {
+            setFilters({
+              ...filters,
+              paymentType: e.target.value,
+            })
+            handleFilterPaymentType(e.target.value)
+          }}
         >
-          <option value=''>All</option>
+          <option value='all'>All</option>
           <option value='visa'>Visa</option>
           <option value='mastercard'>Mastercard</option>
           <option value='cash'>Cash</option>

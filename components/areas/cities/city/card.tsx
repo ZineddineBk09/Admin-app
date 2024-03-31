@@ -1,7 +1,6 @@
-import { City, Country } from '../../../../interfaces'
+import { City, Country, Geofence } from '../../../../interfaces'
 import { Divider } from '@nextui-org/react'
 import React, { MouseEventHandler } from 'react'
-import { DeleteCity } from '../delete-city'
 import dynamic from 'next/dynamic'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-draw/dist/leaflet.draw.css'
@@ -13,6 +12,9 @@ import { updateRecord } from '../../../../lib/api'
 import { useAreasCitiesContext } from '../../../../context/areas/cities'
 import toast from 'react-hot-toast'
 import { useAreasGovernoratesContext } from '../../../../context/areas/governorates'
+import { AddArea } from './add-area'
+import { DeleteArea } from './delete-area'
+import { DeleteModal } from '../../../modals/delete'
 const CityMap = dynamic(() => import('./map'), {
   ssr: false,
   loading: () => <Loading />,
@@ -31,6 +33,7 @@ export const CityCard = ({ city }: { city: City }) => {
     price_ratio_denominator,
     additional_ratio_nominator,
     additional_ratio_denominator,
+    areas,
   } = city
 
   const [showSave, setShowSave] = React.useState({
@@ -99,7 +102,7 @@ export const CityCard = ({ city }: { city: City }) => {
               </h1>
             </div>
           </button>
-          <DeleteCity id={id} />
+          <DeleteModal id={id} name='city' refresh={refreshCities} />
         </div>
 
         {/* Display input fields */}
@@ -139,7 +142,9 @@ export const CityCard = ({ city }: { city: City }) => {
                 />
                 <span className='text-gray-500 w-32'>SAR / order</span>
               </div>
-              {showSave.order_fees && SaveButton(formik.handleSubmit as any)}
+              {showSave.order_fees &&
+                order_fees !== formik.values.order_fees &&
+                SaveButton(formik.handleSubmit as any)}
             </div>
             <Divider />
             <div className='flex items-center gap-x-6'>
@@ -187,6 +192,10 @@ export const CityCard = ({ city }: { city: City }) => {
               </div>
               {(showSave.price_ratio_denominator ||
                 showSave.price_ratio_nominator) &&
+                (price_ratio_denominator !==
+                  formik.values.price_ratio_denominator ||
+                  price_ratio_nominator !==
+                    formik.values.price_ratio_nominator) &&
                 SaveButton(formik.handleSubmit as any)}
             </div>
             <Divider />
@@ -239,6 +248,31 @@ export const CityCard = ({ city }: { city: City }) => {
               {(showSave.additional_ratio_denominator ||
                 showSave.additional_ratio_nominator) &&
                 SaveButton(formik.handleSubmit as any)}
+            </div>
+            <Divider />
+            {/* Areas */}
+            <div className='flex items-start gap-x-6 col-span-2'>
+              <label className='mt-2 text-gray-600 text-sm'>Areas</label>
+              {areas?.length > 0 ? (
+                <div className='flex items-start gap-y-2 flex-wrap'>
+                  {areas?.map((area: Geofence, index: number) => (
+                    <div key={index}>
+                      <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
+                        <p className='text-sm capitalize'>{area?.name}</p>
+
+                        <DeleteArea areaId={area?.id} areaName={area?.name} />
+                        {index < areas?.length - 1 && (
+                          <span className='-ml-4'>,</span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <></>
+              )}
+
+              <AddArea id={id} />
             </div>
             <div />
           </>
