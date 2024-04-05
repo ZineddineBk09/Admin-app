@@ -24,7 +24,11 @@ export const DeleteCountry = ({ id }: { id: string }) => {
         refreshCountries()
       })
       .catch((err) => {
+        setLoading(false)
         toast.error('Error deleting country!')
+      })
+      .finally(() => {
+        setLoading(false)
       })
   }
 
