@@ -18,7 +18,7 @@ const DriversTypes = () => {
       <SearchTypes />
       <div className='w-full flex flex-col items-center gap-y-6'>
         {driverTypes?.map((type: DriverType, index: number) => (
-          <CountryCard key={type.id} type={type} />
+          <VehicleTypeCard key={type.id} type={type} />
         ))}
       </div>
       {/* add type button */}
@@ -27,7 +27,7 @@ const DriversTypes = () => {
   )
 }
 
-const CountryCard = ({ type }: { type: DriverType }) => {
+const VehicleTypeCard = ({ type }: { type: DriverType }) => {
   const [showInfos, setShowInfos] = React.useState(false)
   const { refreshDriverTypes } = useDriversContext()
   const {
@@ -96,9 +96,10 @@ const CountryCard = ({ type }: { type: DriverType }) => {
         </button>
         <DeleteModal id={id} name='type' refresh={refreshDriverTypes} />
       </div>
-      {showInfos && <Divider />}
-      <div className='w-full flex flex-col gap-y-3 items-center lg:flex-row'>
-        {showInfos && (
+      {showInfos && (
+        <>
+        <Divider />
+        <div className='w-full flex flex-col gap-y-3 items-center lg:flex-row'>
           <>
             <div className='w-full flex justify-between'>
               <div className='flex items-center gap-x-6'>
@@ -209,8 +210,9 @@ const CountryCard = ({ type }: { type: DriverType }) => {
               <div />
             </div>
           </>
-        )}
-      </div>
+        </div>
+        </>
+      )}
     </div>
   )
 }
