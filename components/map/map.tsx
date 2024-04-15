@@ -38,7 +38,7 @@ const Map = () => {
 
   const getDriversData = async (
     data: {
-      id: string
+      id: string | number
       location: {
         lat: number
         lng: number
@@ -51,23 +51,21 @@ const Map = () => {
     // use promise.all to fetch all drivers data
     try {
       const drivers = await Promise.all(
-        data
-          .filter((driver) => driver.id.length === 36)
-          .map(async (dr) => {
-            const result: APIResponse = await filterRecords(
-              {
-                user_id: dr.id,
-              },
-              'driver'
-            )
+        data.map(async (driver) => {
+          const result: APIResponse = await filterRecords(
+            {
+              user_id: driver.id,
+            },
+            'driver'
+          )
 
-            return {
-              id: dr.id,
-              location: dr.location,
-              action: dr.action,
-              ...result.results[0],
-            }
-          })
+          return {
+            id: driver.id,
+            location: driver.location,
+            action: driver.action,
+            ...result.results[0],
+          }
+        })
       )
       console.log(drivers)
 

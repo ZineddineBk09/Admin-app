@@ -12,7 +12,7 @@ export const DeleteModal = ({
   name,
   refresh,
 }: {
-  id: string
+  id: string | number
   name: string
   refresh: () => void
 }) => {

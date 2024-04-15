@@ -17,7 +17,7 @@ export const AddTeam = ({
   id,
   refresh,
 }: {
-  id: string
+  id: string | number
   refresh: () => void
 }) => {
   const [visible, setVisible] = React.useState(false)
@@ -143,7 +143,7 @@ export const AddTeam = ({
 
                         <input
                           type='checkbox'
-                          id={member.id}
+                          id={member.id as string}
                           className='w-5 h-5 border-gray-400 border rounded-full'
                           checked={member.id === selected?.id}
                           onChange={(e) => {

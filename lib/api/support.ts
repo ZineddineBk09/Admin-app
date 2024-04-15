@@ -11,9 +11,9 @@ import { firestore, storage } from '../../firebase/support'
 import { ChatMessage } from '../../interfaces'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
-export const addMessage = async (chatId: string, message: any) => {
+export const addMessage = async (chatId: string | number, message: any) => {
   try {
-    const docRef = doc(firestore, 'chats', chatId)
+    const docRef = doc(firestore, 'chats', chatId as string)
     await addDoc(collection(docRef, 'messages'), {
       ...message,
       timestamp: new Date(),
@@ -69,29 +69,29 @@ export const uploadFile = async (
 // create uploadFiles function that accepts an array of files and uploads them all one by one to firebase storage using the uploadFile function
 export const uploadFiles = async (
   files: File[],
-  chatId: string,
+  chatId: string | number,
   senderId: string
 ) => {
   // loop through files array and upload each file to firebase storage
   const filesURLs: string[] = []
   for (const file of files) {
-    const fileURL = await uploadFile(file, chatId, senderId)
+    const fileURL = await uploadFile(file, chatId as string, senderId)
     filesURLs.push(fileURL)
   }
   return filesURLs
 }
 
 export const updateChatMessage = async (message: ChatMessage) => {
-  const docRef = doc(firestore, 'messages', message.id)
+  const docRef = doc(firestore, 'messages', message.id as string)
   await updateDoc(docRef, {
     ...message,
     lastUpdate: new Date(),
   })
 }
 
-export const fetchChatMessages = async (chatId: string) => {
+export const fetchChatMessages = async (chatId: string | number) => {
   const q = query(
-    collection(firestore, 'chats', chatId, 'messages'),
+    collection(firestore, 'chats', chatId as string, 'messages'),
     orderBy('timestamp', 'asc')
   )
   const querySnapshot = await getDocs(q)

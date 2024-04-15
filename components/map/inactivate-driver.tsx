@@ -9,7 +9,7 @@ export const InactivateDriver = ({
   id,
   refresh,
 }: {
-  id: string
+  id: string | number
   refresh?: () => void
 }) => {
   const [visible, setVisible] = React.useState(false)
@@ -40,7 +40,7 @@ export const InactivateDriver = ({
   }
 
   return (
-    <div >
+    <div>
       <Tooltip
         content='Inactivate'
         color='error'
@@ -76,8 +76,8 @@ export const InactivateDriver = ({
             >
               <Text h5 className='w-full text-center'>
                 Are you sure you want to{' '}
-                <span className='text-red-500 font-semibold'>inactivate</span> this
-                driver #{id}?
+                <span className='text-red-500 font-semibold'>inactivate</span>{' '}
+                this driver #{id}?
               </Text>
 
               <div className='w-full flex flex-col items-start gap-y-2'>
