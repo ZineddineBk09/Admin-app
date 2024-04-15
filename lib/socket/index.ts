@@ -2,7 +2,7 @@
 
 const mapSocket = (token: string): WebSocket => {
   const socket = new WebSocket(`ws://localhost:2110/map?token=${token}`)
-  
+
   // automatically reconnect on close
   socket.onclose = () => {
     console.log('Socket closed')

@@ -1,8 +1,7 @@
 import Loading from '../../components/shared/loading'
 import type { NextPage } from 'next'
-// import { Content } from '../../components/map/content'
 import dynamic from 'next/dynamic'
-import { MapDriversContextProvider } from '../../context/map/drivers'
+import { useEffect } from 'react'
 const Content = dynamic(
   () => import('../../components/map/content').then((mod) => mod.Content),
   {
