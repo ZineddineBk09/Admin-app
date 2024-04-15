@@ -17,7 +17,6 @@ const LocationForm = ({
   order_id: string
   token: string
 }) => {
-  const [order, setOrder] = useState<Order>({} as Order)
   const [delivery_address, setDeliveryAddress] = useState({} as Address)
   const [success, setSuccess] = useState<boolean>(false)
   const formik = useFormik({
@@ -56,15 +55,15 @@ const LocationForm = ({
     const getOrder = async () => {
       console.log(order_id)
       const res = await getRecord(order_id, 'order')
-      setOrder(res)
-      setDeliveryAddress(res.delivery_address)
+      console.log('Order:', res)
+      setDeliveryAddress(res?.delivery_address)
 
       // check if delivery_address has latitude and longitude
-      if (res.delivery_address.latitude && res.delivery_address.longitude) {
+      if (res?.delivery_address?.latitude && res?.delivery_address?.longitude) {
         formik.setValues({
           ...formik.values,
-          latitude: res.delivery_address.latitude,
-          longitude: res.delivery_address.longitude,
+          latitude: res?.delivery_address?.latitude,
+          longitude: res?.delivery_address?.longitude,
         })
       }
     }

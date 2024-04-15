@@ -247,6 +247,7 @@ const AccountCard = ({ account }: { account: Account }) => {
             ) : (
               <p className='text-sm my-auto'>No branches found</p>
             )}
+            
           </div>
 
           <Divider />
