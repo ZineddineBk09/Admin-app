@@ -63,7 +63,7 @@ export const getRecords = async (endpoint: string) => {
   }
 }
 
-export const getRecord = async (id: string, endpoint: string) => {
+export const getRecord = async (id: string | number, endpoint: string) => {
   try {
     const response = await axios.get(endpoint + '/' + id + '/')
     const data = await response.data
@@ -101,7 +101,7 @@ export const searchRecords = async (search: string, endpoint: string) => {
 }
 
 export const cancelRecord = async (
-  id: string,
+  id: string | number,
   endpoint: string,
   note: string,
   transition: string
@@ -109,7 +109,7 @@ export const cancelRecord = async (
   try {
     const response = await axios.put(endpoint + '/' + id + '/', {
       transition,
-      transition_description_field: note,
+      note,
     })
     const data = await response.data
     return data
