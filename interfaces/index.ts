@@ -365,11 +365,6 @@ export interface Chat {
   messages?: ChatMessage[]
   lastUpdate: Date
 }
-
-export interface SupportTeamMember {
-  id: number
-  name: string
-}
 //--------------------------------------------------------------------
 
 //------------------------- Settings --------------------------------
@@ -458,8 +453,12 @@ export interface Pagination {
   page: number
 }
 
-export interface MapDriver extends Driver {
+export interface MapDriver {
   id: string | number
+  username: string
+  image: string
+  phone_number: string
+  status: string
   location: {
     lat: number
     lng: number
