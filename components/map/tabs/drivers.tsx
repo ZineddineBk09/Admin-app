@@ -36,7 +36,7 @@ export const Drivers = () => {
 }
 
 const DriverCard = ({ driver }: { driver: MapDriver }) => {
-  const { user, image, status } = driver
+  const { username, image, status } = driver
   const { handleSelectDriver, selectedDriver, statusColor } = useMapContext()
   const [selected, setSelected] = useState(false)
 
@@ -44,6 +44,11 @@ const DriverCard = ({ driver }: { driver: MapDriver }) => {
     if (selectedDriver === driver?.id) setSelected(true)
     else setSelected(false)
   }, [selectedDriver])
+
+  const checkValidUrl = (url: string) => {
+    const urlRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/g
+    return urlRegex.test(url)
+  }
 
   return (
     <Card
@@ -60,7 +65,11 @@ const DriverCard = ({ driver }: { driver: MapDriver }) => {
         >
           {/* Image */}
           <Image
-            src={image}
+            src={
+              checkValidUrl(image)
+                ? image
+                : '/images/logo.png'
+            }
             alt='Driver Image'
             objectFit='cover'
             width={95}
@@ -70,7 +79,7 @@ const DriverCard = ({ driver }: { driver: MapDriver }) => {
 
           {/* Infos */}
           <div className='h-full w-full flex flex-col text-gray-500'>
-            <p className='text-sm'>{truncateTxt(user.username, 25)}</p>
+            <p className='text-sm'>{truncateTxt(username, 25)}</p>
             <div className='w-full flex items-center justify-between'>
               <div className='flex items-end gap-x-1'>
                 <DriverOrdersIcon />

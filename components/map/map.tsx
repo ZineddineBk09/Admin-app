@@ -115,9 +115,10 @@ const Map = () => {
             : [JSON.parse(e.data)]
 
           console.log('Drivers:', data)
+          setDrivers(data)
 
           // filter non uuid ids
-          getDriversData(data)
+          // getDriversData(data)
         }
       }
     })
@@ -171,11 +172,11 @@ const DriversMarkers = () => {
         <Marker
           key={driver?.id}
           position={[driver.location.lat, driver.location.lng]}
-          icon={icon(driver?.user.username)}
+          icon={icon(driver?.username)}
         >
           <Popup>
             <div className='flex flex-col items-center gap-y-1'>
-              <p className=''>{driver?.user.username}</p>
+              <p className=''>{driver?.username}</p>
               <p className=''>{driver?.action}</p>
             </div>
           </Popup>
