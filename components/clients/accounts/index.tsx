@@ -103,7 +103,7 @@ const AccountCard = ({ account }: { account: Account }) => {
             </h1>
           </div>
         </button>
-        <DeleteModal id={id} name='client' refresh={refreshAccounts} />
+        <DeleteModal id={id} name='account' refresh={refreshAccounts} />
       </div>
       {showInfos && (
         <>

@@ -42,6 +42,8 @@ const BranchMap = ({
   const [control, setControl] = useState<any>(null)
   const [updateLocation, setUpdateLocation] = useState<boolean>(false)
 
+  console.log(position)
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if (!map) return
