@@ -104,7 +104,6 @@ export const AddBranch = () => {
     },
   })
 
-  console.log(formik.errors)
 
   const closeHandler = () => setVisible(false)
 
