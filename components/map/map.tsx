@@ -12,7 +12,6 @@ import { APIResponse, MapDriver } from '../../interfaces'
 import { useSession } from 'next-auth/react'
 import mapSocket from '../../lib/socket'
 import { filterRecords } from '../../lib/api'
-import { get } from 'lodash'
 import toast from 'react-hot-toast'
 
 // create a custom icon with L.divIcon and reactDOM.renderToString
@@ -110,6 +109,7 @@ const Map = () => {
         )
 
         ws.onmessage = (e) => {
+          console.log('data:', e.data)
           const data: MapDriver[] = Array.isArray(JSON.parse(e.data))
             ? JSON.parse(e.data)
             : [JSON.parse(e.data)]
