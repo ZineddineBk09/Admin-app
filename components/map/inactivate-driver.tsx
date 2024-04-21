@@ -9,7 +9,7 @@ export const InactivateDriver = ({
   id,
   refresh,
 }: {
-  id: string
+  id: string | number
   refresh?: () => void
 }) => {
   const [visible, setVisible] = React.useState(false)
@@ -41,10 +41,13 @@ export const InactivateDriver = ({
 
   return (
     <div>
-      <Tooltip content='Inactivate' color='error' onClick={handler}>
-        <button className='w-full h-11 px-12 bg-red-500 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>
-          Inactivate
-        </button>
+      <Tooltip
+        content='Inactivate'
+        color='error'
+        onClick={handler}
+        className='w-full h-11 px-12 bg-red-500 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300 flex items-center justify-center'
+      >
+        Inactivate
       </Tooltip>
       <Modal
         closeButton
@@ -73,8 +76,8 @@ export const InactivateDriver = ({
             >
               <Text h5 className='w-full text-center'>
                 Are you sure you want to{' '}
-                <span className='text-red-500 font-semibold'>cancel</span> this
-                order #{id}?
+                <span className='text-red-500 font-semibold'>inactivate</span>{' '}
+                this driver #{id}?
               </Text>
 
               <div className='w-full flex flex-col items-start gap-y-2'>

@@ -12,7 +12,7 @@ import { APIResponse, MapDriver } from '../../interfaces'
 import { useSession } from 'next-auth/react'
 import mapSocket from '../../lib/socket'
 import { filterRecords } from '../../lib/api'
-import { get } from 'lodash'
+import toast from 'react-hot-toast'
 
 // create a custom icon with L.divIcon and reactDOM.renderToString
 const icon = (symbol?: string) =>
@@ -37,7 +37,7 @@ const Map = () => {
 
   const getDriversData = async (
     data: {
-      id: string
+      id: string | number
       location: {
         lat: number
         lng: number
@@ -48,28 +48,30 @@ const Map = () => {
     if (data.length === 0) return
 
     // use promise.all to fetch all drivers data
-    const drivers = await Promise.all(
-      data
-        .filter((driver) => driver.id.length === 36)
-        .map(async (dr) => {
+    try {
+      const drivers = await Promise.all(
+        data.map(async (driver) => {
           const result: APIResponse = await filterRecords(
             {
-              user_id: dr.id,
+              user_id: driver.id,
             },
             'driver'
           )
 
           return {
-            id: dr.id,
-            location: dr.location,
-            action: dr.action,
+            id: driver.id,
+            location: driver.location,
+            action: driver.action,
             ...result.results[0],
           }
         })
-    )
-    console.log(drivers)
+      )
+      console.log(drivers)
 
-    setDrivers(drivers)
+      setDrivers(drivers)
+    } catch (err) {
+      toast.error('An error occurred')
+    }
   }
 
   // add an event listener on map: load, move, zoom, etc.
@@ -91,7 +93,12 @@ const Map = () => {
       const ws = mapSocket(session?.accessToken || '')
 
       ws.onopen = () => {
-        console.log('Connected to server')
+        console.log('Connected to server', {
+          min_lat: parseFloat(min_lat),
+          min_lng: parseFloat(min_lng),
+          max_lat: parseFloat(max_lat),
+          max_lng: parseFloat(max_lng),
+        })
         ws.send(
           JSON.stringify({
             min_lat: parseFloat(min_lat),
@@ -102,12 +109,16 @@ const Map = () => {
         )
 
         ws.onmessage = (e) => {
+          console.log('data:', e.data)
           const data: MapDriver[] = Array.isArray(JSON.parse(e.data))
             ? JSON.parse(e.data)
             : [JSON.parse(e.data)]
 
+          console.log('Drivers:', data)
+          setDrivers(data)
+
           // filter non uuid ids
-          getDriversData(data)
+          // getDriversData(data)
         }
       }
     })
@@ -154,17 +165,18 @@ const Map = () => {
 const DriversMarkers = () => {
   const { drivers } = useMapContext()
 
+  if (!drivers) return null
   return (
     <>
       {drivers?.map((driver: MapDriver, index: number) => (
         <Marker
           key={driver?.id}
           position={[driver.location.lat, driver.location.lng]}
-          icon={icon(driver?.user.username)}
+          icon={icon(driver?.username)}
         >
           <Popup>
             <div className='flex flex-col items-center gap-y-1'>
-              <p className=''>{driver?.user.username}</p>
+              <p className=''>{driver?.username}</p>
               <p className=''>{driver?.action}</p>
             </div>
           </Popup>

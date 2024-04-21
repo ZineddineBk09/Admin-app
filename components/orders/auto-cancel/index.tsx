@@ -2,12 +2,10 @@ import { Text, Loading, Input } from '@nextui-org/react'
 import React, { useState } from 'react'
 import { Flex } from '../../styles/flex'
 import { OrdersTable } from '../../table/orders/auto-cancel-orders-table'
-import { Team } from '../../../interfaces'
-import { getRecords } from '../../../lib/api'
 import { useAutoCancelledOrdersContext } from '../../../context/auto-cancelled-orders'
 
 export const OrdersPage = () => {
-  const { enabled, autoCancelledOrders, loading } =
+  const { autoCancelledOrders, loading } =
     useAutoCancelledOrdersContext()
   const [openTab, setOpenTab] = React.useState(0)
 

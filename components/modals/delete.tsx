@@ -12,7 +12,7 @@ export const DeleteModal = ({
   name,
   refresh,
 }: {
-  id: string
+  id: string | number
   name: string
   refresh: () => void
 }) => {
@@ -25,13 +25,15 @@ export const DeleteModal = ({
     setLoading(true)
     await deleteRecord(id, name)
       .then((res: any) => {
-        setLoading(false)
-        closeHandler()
         toast.success(name.toUpperCase() + ' deleted successfully')
         refresh()
       })
       .catch((err) => {
         toast.error('Error deleting ' + name + '!')
+      })
+      .finally(() => {
+        setLoading(false)
+        closeHandler()
       })
   }
 

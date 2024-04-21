@@ -83,7 +83,7 @@ export const AddCity = () => {
   // wrire a function that handles reating a country, so that the governorate can inherit the values: order_fees, price_unit from the country
   const handleGovernorateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const govern = governorates?.find(
-      (govern: Governorate) => govern.id === e.target.value
+      (govern: Governorate) => govern.id == e.target.value
     )
     if (govern) {
       formik.setFieldValue('order_fees', govern.order_fees)

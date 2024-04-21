@@ -12,7 +12,7 @@ export const useSupportContext: {
     chatMessages: ChatMessage[]
     selectedChat: Chat
     loading: boolean
-    handleSelectChat: (id: string) => void
+    handleSelectChat: (id: string | number) => void
   }
 } = () => React.useContext(SupportContext as any)
 
@@ -26,7 +26,7 @@ export const SupportContextProvider = ({
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
   const [loading, setLoading] = useState(false)
 
-  const handleSelectChat = async (id: string) => {
+  const handleSelectChat = async (id: string | number) => {
     const chat = chats?.find((chat) => chat.id === id)
 
     if (chat) {

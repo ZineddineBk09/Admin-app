@@ -1,8 +1,14 @@
 // use native WebSocket
 
 const mapSocket = (token: string): WebSocket => {
-  const socket = new WebSocket(`ws://localhost:2110/map?token=${token}`)
+  const socket: WebSocket = new WebSocket(
+    `ws://localhost:2110/map?token=${token}`
+  )
   
+  socket.onopen = () => {
+    console.log('Socket opened')
+  }
+
   // automatically reconnect on close
   socket.onclose = () => {
     console.log('Socket closed')
@@ -11,13 +17,14 @@ const mapSocket = (token: string): WebSocket => {
     }, 1000)
   }
 
+
   // close the socket on error
-  socket.onerror = (e) => {
+  socket.onerror = (e: any) => {
     console.error('Socket error', e)
     socket.close()
   }
 
-  socket.onmessage = (e) => {
+  socket.onmessage = (e: any) => {
     const data = JSON.parse(e.data)
     console.log(data)
   }

@@ -15,6 +15,7 @@ export const useAutoCancelledOrdersContext: {
     handleSortAutoCancelledOrders: (sort: Sort) => void
     refreshAutoCancelledOrders: () => Promise<void>
     handleEnableAutoCancelledOrders: () => void
+    driverStatusColor: (status: string) => string
   }
 } = () => React.useContext(AutoCancelledOrdersContext as any)
 
@@ -120,6 +121,23 @@ export const AutoCancelledOrdersContextProvider = ({
     setEnabled(!enabled)
   }
 
+    const driverStatusColor = (status: string) => {
+      switch (status) {
+        case 'active':
+          return 'bg-green-400'
+        case 'inactive':
+          return 'bg-red-400'
+        case 'PickingUp':
+          return 'bg-yellow-400'
+        case 'delivering':
+          return 'bg-blue-400'
+        case 'waiting':
+          return 'bg-gray-400'
+        default:
+          return 'bg-gray-400'
+      }
+    }
+
   useEffect(() => {
     refreshAutoCancelledOrders()
   }, [])
@@ -134,6 +152,7 @@ export const AutoCancelledOrdersContextProvider = ({
         handleSortAutoCancelledOrders,
         refreshAutoCancelledOrders,
         handleEnableAutoCancelledOrders,
+        driverStatusColor,
       }}
     >
       {children}

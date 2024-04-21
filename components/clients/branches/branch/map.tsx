@@ -5,7 +5,6 @@ import {
   MapContainer,
   TileLayer,
   Marker,
-  Popup,
 } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-easybutton/src/easy-button.js'
@@ -34,7 +33,7 @@ const BranchMap = ({
   id,
   location,
 }: {
-  id: string
+  id: string | number
   location: { lat: number; lng: number }
 }) => {
   const { refreshBranches } = useClientsBranchesContext()
@@ -42,6 +41,8 @@ const BranchMap = ({
   const [map, setMap] = useState<any>(null)
   const [control, setControl] = useState<any>(null)
   const [updateLocation, setUpdateLocation] = useState<boolean>(false)
+
+  console.log(position)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {

@@ -24,24 +24,6 @@ const options = {
   fieldNormWeight: 1,
 }
 
-export const searchAccounts = (list: Account[], pattern: string) => {
-  const fuse = new Fuse(list, {
-    ...options,
-    keys: ['name', 'city', 'phone', 'website'],
-  })
-
-  return fuse.search(pattern)?.map((item) => item.item)
-}
-
-export const searchOrders = (list: Order[], pattern: string) => {
-  const fuse = new Fuse(list, {
-    ...options,
-    keys: ['clientName', 'driverName', 'id', 'phone', 'address'],
-  })
-
-  return fuse.search(pattern)?.map((item) => item.item)
-}
-
 export const searchAutoCancelledOrders = (
   list: AutoCancelledOrder[],
   pattern: string
@@ -54,36 +36,10 @@ export const searchAutoCancelledOrders = (
   return fuse.search(pattern)?.map((item) => item.item)
 }
 
-export const searchBranches = (list: Branch[], pattern: string) => {
-  const fuse = new Fuse(list, {
-    ...options,
-    keys: [
-      'name',
-      'country',
-      'governorate',
-      'city',
-      'phone',
-      'supervisor',
-      'clientAccount',
-    ],
-  })
-
-  return fuse.search(pattern)?.map((item) => item.item)
-}
-
 export const searchDrivers = (list: Driver[], pattern: string) => {
   const fuse = new Fuse(list, {
     ...options,
     keys: ['username', 'email', 'team', 'phone'],
-  })
-
-  return fuse.search(pattern)?.map((item) => item.item)
-}
-
-export const searchDriverTypes = (list: DriverType[], pattern: string) => {
-  const fuse = new Fuse(list, {
-    ...options,
-    keys: ['vehicle_type'],
   })
 
   return fuse.search(pattern)?.map((item) => item.item)

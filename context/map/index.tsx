@@ -1,4 +1,4 @@
-import {MapDriver } from '../../interfaces'
+import { MapDriver } from '../../interfaces'
 import React, { useEffect, useState } from 'react'
 
 export const MapContext = React.createContext({})
@@ -13,8 +13,8 @@ export const useMapContext: {
     selectedDriver: string
     openTab: number
     filterOrders: any[]
-    handleSelectOrder: (id: string) => void
-    handleSelectDriver: (id: string) => void
+    handleSelectOrder: (id: string | number) => void
+    handleSelectDriver: (id: string | number) => void
     handleToggleOrders: () => void
     handleToggleDrivers: () => void
     hansleSelectTab: (tab: number) => void
@@ -34,8 +34,8 @@ export const MapContextProvider = ({
   const [orders, setOrders] = useState<any[]>([] as any[])
   const [filteredOrders, setFilteredOrders] = useState<any[]>([] as any[])
   const [drivers, setDrivers] = useState<MapDriver[]>([] as MapDriver[])
-  const [selectedOrder, setSelectedOrder] = useState<string>()
-  const [selectedDriver, setSelectedDriver] = useState<any>(null)
+  const [selectedOrder, setSelectedOrder] = useState<string | number>()
+  const [selectedDriver, setSelectedDriver] = useState<string | number>()
   const [openTab, setOpenTab] = React.useState(1)
 
   const handleToggleOrders = () => {
@@ -46,11 +46,11 @@ export const MapContextProvider = ({
     setShowDrivers(!showDrivers)
   }
 
-  const handleSelectOrder = (id: string) => {
+  const handleSelectOrder = (id: string | number) => {
     setSelectedOrder(id)
   }
 
-  const handleSelectDriver = (id: string) => {
+  const handleSelectDriver = (id: string | number) => {
     setSelectedDriver(id)
   }
 

@@ -81,6 +81,7 @@ export const ChatContent = () => {
   const dates = useMemo(() => {
     if (!chatMessages) return {}
 
+    // Group messages by date
     return chatMessages.reduce((acc: any, message: any) => {
       const date = new Date(
         message.timestamp.seconds * 1000

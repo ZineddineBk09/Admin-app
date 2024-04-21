@@ -103,7 +103,7 @@ const AccountCard = ({ account }: { account: Account }) => {
             </h1>
           </div>
         </button>
-        <DeleteModal id={id} name='client' refresh={refreshAccounts} />
+        <DeleteModal id={id} name='account' refresh={refreshAccounts} />
       </div>
       {showInfos && (
         <>
@@ -190,7 +190,10 @@ const AccountCard = ({ account }: { account: Account }) => {
             {teams?.length > 0 ? (
               <div className='flex items-start gap-y-2 flex-wrap'>
                 {teams?.map(
-                  (team: { id: string; name: string }, index: number) => (
+                  (
+                    team: { id: string | number; name: string },
+                    index: number
+                  ) => (
                     <div key={id}>
                       <div className='h-10 w-fit flex items-center gap-x-6 transition-all duration-300 hover:bg-gray-100 px-2 rounded-md'>
                         <p className='text-sm capitalize'>{team?.name}</p>

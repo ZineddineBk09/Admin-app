@@ -27,7 +27,7 @@ export const DriverData = () => {
       <div className='flex flex-col items-center gap-y-3'>
         <Image
           src={driver?.image}
-          alt={driver?.user.username}
+          alt={driver?.username}
           width={120}
           height={120}
           className='rounded-full'
@@ -45,7 +45,7 @@ export const DriverData = () => {
       <div className='flex flex-col gap-y-2 ml-4 items-start'>
         <div className='flex flex-col items-end'>
           <p className='text-xl text-gray-600 font-medium'>
-            {driver?.user.username}
+            {driver?.username}
           </p>
           <span className='text-sm'>#{driver?.id}</span>
         </div>

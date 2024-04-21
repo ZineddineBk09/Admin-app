@@ -64,6 +64,8 @@ export const AddBranch = () => {
           country: values.country,
           governorate: values.governorate,
           city: values.city,
+          latitude: 24.7136,
+          longitude: 46.6753,
         },
         'address'
       )
@@ -103,8 +105,6 @@ export const AddBranch = () => {
         })
     },
   })
-
-  console.log(formik.errors)
 
   const closeHandler = () => setVisible(false)
 

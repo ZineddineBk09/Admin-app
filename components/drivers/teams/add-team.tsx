@@ -51,7 +51,7 @@ export const AddTeam = () => {
     },
     validationSchema: Yup.object({
       name: Yup.string().required('name is required'),
-      city: Yup.string().required('city is required'),
+      city: Yup.number().required('city is required'),
       supervisor_name: Yup.string().required('supervisor name is required'),
       supervisor_password: Yup.string().required(
         'supervisor password is required'
@@ -71,7 +71,7 @@ export const AddTeam = () => {
         .min(1, 'price ratio denominator must be greater than 0'),
     }),
     onSubmit: async (values) => {
-      const city = cities?.find((city: City) => city?.id === values.city)
+      const city = cities?.find((city: City) => city?.id == values.city)
       if (!city) {
         toast.error('City not found!')
         return

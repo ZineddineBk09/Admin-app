@@ -15,7 +15,13 @@ import {
 import { useTeamsContext } from '../../../context/drivers/teams'
 import CityCard from '../../areas/cities/city/card'
 
-const Geofence = ({ id, handler }: { id: string; handler: () => void }) => {
+const Geofence = ({
+  id,
+  handler,
+}: {
+  id: string | number
+  handler: () => void
+}) => {
   const [map, setMap] = useState<any>(null)
   const [control, setControl] = useState<any>(null)
   const { refreshTeams, teams } = useTeamsContext()
@@ -139,7 +145,7 @@ const Geofence = ({ id, handler }: { id: string; handler: () => void }) => {
     </>
   )
 }
-export const AddArea = ({ id }: { id: string }) => {
+export const AddArea = ({ id }: { id: string | number }) => {
   const [visible, setVisible] = React.useState(false)
   const [loading, setLoading] = React.useState<boolean>(false)
   const [geofenceName, setGeofenceName] = React.useState<string>('')

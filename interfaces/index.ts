@@ -31,14 +31,14 @@ export interface RegisterUser {
 }
 
 export interface User {
-  id: string
+  id: string | number
   username: string
 }
 //--------------------------------------------------------------------
 
 //------------------------- Drivers ----------------------------
 export interface Driver {
-  id: string
+  id: string | number
   user: User
   city: City
   driver_type: DriverType
@@ -53,12 +53,12 @@ export interface Driver {
 }
 
 export interface DriverMinimal {
-  id: string
+  id: string | number
   user: User
 }
 
 export interface DriverType extends Pricing {
-  id: string
+  id: string | number
   vehicle_type:
     | 'car'
     | 'van'
@@ -72,12 +72,12 @@ export interface DriverType extends Pricing {
 }
 
 export interface DriverTeam extends Pricing {
-  id: string
+  id: string | number
   name: string
   fixed: number
   supervisor: User
   city: {
-    id: string
+    id: string | number
     name: string
   }
   areas?: Geofence[]
@@ -91,7 +91,7 @@ export interface DriverTeamMember {
 }
 
 export interface Team extends Pricing {
-  id: string
+  id: string | number
   name: string
   fixed: number
   supervisor?: User
@@ -101,12 +101,12 @@ export interface Team extends Pricing {
 }
 
 export interface TeamMinimal {
-  id: string
+  id: string | number
   name: string
 }
 
 interface APIDriver {
-  id: string
+  id: string | number
   username: string
   first_name: string
   last_name: string
@@ -123,19 +123,19 @@ interface APIDriver {
 
 //------------------------- Customers & Orders ----------------------------
 export interface Item {
-  id: string
+  id: string | number
   name: string
   quantity: number
 }
 
 interface Customer {
-  id: string
+  id: string | number
   name: string
   number: string
 }
 
 export interface Order {
-  id: string
+  id: string | number
   serial_number: number
   external_id: string
   COD: boolean
@@ -184,7 +184,7 @@ export interface OrderItem {
 }
 
 export interface AutoCancelledOrder {
-  id: string
+  id: string | number
   date: string
   time: string
   customer: Customer
@@ -202,7 +202,7 @@ export interface AutoCancelledOrder {
 
 //------------------------- Areas ----------------------------
 export interface Currency {
-  id: string
+  id: string | number
   name: string
   symbol: string
   symbol_native: string
@@ -214,12 +214,12 @@ export interface Currency {
 }
 
 export interface CurrencyMinimal {
-  id: string
+  id: string | number
   symbol: string
 }
 
 export interface Country extends Pricing {
-  id: string
+  id: string | number
   name: string
   price_unit: CurrencyMinimal
   order_fees: number
@@ -227,26 +227,26 @@ export interface Country extends Pricing {
 }
 
 export interface CountryMinimal {
-  id: string
+  id: string | number
   name: string
   price_unit: Currency
   order_fees: number
 }
 
 export interface Governorate extends Pricing {
-  id: string
+  id: string | number
   name: string
   country: Country
   order_fees: number
 }
 
 export interface GovernorateMinimal {
-  id: string
+  id: string | number
   name: string
 }
 
 export interface City extends Pricing {
-  id: string
+  id: string | number
   name: string
   governorate: Governorate
   geofence: Geofence
@@ -255,13 +255,13 @@ export interface City extends Pricing {
 }
 
 export interface CityMinimal {
-  id: string
+  id: string | number
   name: string
   areas: Geofence[]
 }
 
 export interface Address {
-  id: string
+  id: string | number
   decoded_address: string
   country: CountryMinimal
   governorate: GovernorateMinimal
@@ -274,7 +274,7 @@ export interface Address {
 
 //------------------------- Clients ----------------------------
 interface Client {
-  id: string
+  id: string | number
   name: string
   image: string
   address: string
@@ -282,7 +282,7 @@ interface Client {
 }
 
 export interface Account {
-  id: string
+  id: string | number
   name: string
   discount_percentage: number
   website: string
@@ -292,12 +292,12 @@ export interface Account {
 }
 
 export interface AccountMinimal {
-  id: string
+  id: string | number
   name: string
 }
 
 export interface Branch {
-  id: string
+  id: string | number
   address: Address
   supervisor: User
   account: AccountMinimal
@@ -308,7 +308,7 @@ export interface Branch {
 }
 
 export interface BranchMinimal {
-  id: string
+  id: string | number
   account: AccountMinimal
   supervisor: UserAccess
   address: Address
@@ -317,7 +317,7 @@ export interface BranchMinimal {
 
 //------------------------- Reports --------------------------------
 interface Report {
-  id: string
+  id: string | number
   client: string
   clientName: string
   clientPhone: string
@@ -347,7 +347,7 @@ export interface TeamsReport extends ClientsReport {}
 
 //------------------------- Support --------------------------------
 export interface ChatMessage {
-  id: string
+  id: string | number
   senderId: string
   content: string
   timestamp: {
@@ -358,17 +358,12 @@ export interface ChatMessage {
 }
 
 export interface Chat {
-  id: string
+  id: string | number
   customerName: string
   unread: number
   status: 'opened' | 'closed'
   messages?: ChatMessage[]
   lastUpdate: Date
-}
-
-export interface SupportTeamMember {
-  id: number
-  name: string
 }
 //--------------------------------------------------------------------
 
@@ -395,7 +390,7 @@ export interface Location {
 }
 
 export interface Note {
-  id: string
+  id: string | number
   added_at: string
   description: string
 }
@@ -458,8 +453,12 @@ export interface Pagination {
   page: number
 }
 
-export interface MapDriver extends Driver {
-  id: string
+export interface MapDriver {
+  id: string | number
+  username: string
+  image: string
+  phone_number: string
+  status: string
   location: {
     lat: number
     lng: number

@@ -13,7 +13,7 @@ export const CancelOrder = ({
   id,
   refresh,
 }: {
-  id: string
+  id: string | number
   refresh?: () => void
 }) => {
   const [visible, setVisible] = React.useState(false)

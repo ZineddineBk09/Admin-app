@@ -96,7 +96,7 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
   return (
     <div
       className='w-full grid grid-cols-7 bg-white rounded-md p-4 shadow-lg gap-x-4'
-      id={id}
+      id={id as string}
     >
       {/* Infos */}
       <div

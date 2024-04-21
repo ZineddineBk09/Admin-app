@@ -15,7 +15,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { EditIcon } from '../../icons/table'
 import { Driver, Team } from '../../../interfaces'
-import { getRecords, updateRecord } from '../../../lib/api'
+import { getRecords, partialUpdateRecord, updateRecord } from '../../../lib/api'
 import { useDriversContext } from '../../../context/drivers'
 
 export const EditDriver = ({ driver }: { driver: Driver }) => {
@@ -47,22 +47,33 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
     }),
     onSubmit: async (values) => {
       setLoading(true)
-      const response = await updateRecord(
+      const response = await partialUpdateRecord(
         {
           id: driver?.id,
           ...values,
         },
         'driver'
       )
-      setVisible(false)
-      setLoading(false)
-      // if (response.status) {
-      //   setVisible(false)
-      //   setLoading(false)
-      // } else {
-      //   setError('Something went wrong')
-      //   setLoading(false)
-      // }
+        .then(
+          (res) => {
+            if (res) {
+              setVisible(false)
+              refreshDrivers()
+            }
+          },
+          (err) => {
+            console.log('Error updating driver: ', err)
+            setError('Error updating driver')
+          }
+        )
+        .catch((err) => {
+          console.log('Error updating driver: ', err)
+          setError('Error updating driver')
+        })
+        .finally(() => {
+          setVisible(false)
+          setLoading(false)
+        })
     },
   })
 

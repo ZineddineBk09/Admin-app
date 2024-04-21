@@ -3,7 +3,7 @@ import React from 'react'
 import toast from 'react-hot-toast'
 import { BinIcon } from '../../icons/areas'
 import { Flex } from '../../styles/flex'
-import { deleteRecord, partialUpdateRecord } from '../../../lib/api'
+import { partialUpdateRecord } from '../../../lib/api'
 import { useTeamsContext } from '../../../context/drivers/teams'
 import { AccountMinimal } from '../../../interfaces'
 
@@ -13,8 +13,8 @@ export const DeleteMember = ({
   memberName,
   refresh,
 }: {
-  id: string
-  memberId: string
+  id: string | number
+  memberId: string | number
   memberName: string
   refresh: () => void
 }) => {

@@ -55,7 +55,7 @@ export const AddCountry = () => {
     }),
     onSubmit: async (values) => {
       const price_unit = currencies?.find(
-        (currency: Currency) => currency.id === values.price_unit
+        (currency: Currency) => currency.id == values.price_unit
       )
       if (!price_unit) {
         toast.error('Price unit not found!')

@@ -10,7 +10,6 @@ import { useFormik } from 'formik'
 import { updateRecord } from '../../../lib/api'
 import toast from 'react-hot-toast'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import Loading from '../../shared/loading'
 import { DeleteModal } from '../../modals/delete'
 
 const Countries = () => {

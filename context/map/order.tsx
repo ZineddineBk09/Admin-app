@@ -19,35 +19,35 @@ export const MapOrdersContextProvider = ({
   const [orders, setOrders] = useState<Order[]>([] as Order[])
   const [isConnected, setIsConnected] = useState<boolean>(false)
 
-  useEffect(() => {
-    socket.connect()
+  // useEffect(() => {
+  //   socket.connect()
 
-    // the return function is called when the component is unmounted
-    return () => {
-      socket.disconnect()
-    }
-  }, [])
+  //   // the return function is called when the component is unmounted
+  //   return () => {
+  //     socket.disconnect()
+  //   }
+  // }, [])
 
-  useEffect(() => {
-    socket.on('connect', () => {
-      setIsConnected(true)
-    })
+  // useEffect(() => {
+  //   socket.on('connect', () => {
+  //     setIsConnected(true)
+  //   })
 
-    socket.on('disconnect', () => {
-      setIsConnected(false)
-    })
+  //   socket.on('disconnect', () => {
+  //     setIsConnected(false)
+  //   })
 
-    socket.on('orders', (data: Order[]) => {
-      setOrders(data)
-    })
+  //   socket.on('orders', (data: Order[]) => {
+  //     setOrders(data)
+  //   })
 
-    // the return function is called when the component is unmounted
-    return () => {
-      socket.off('connect')
-      socket.off('disconnect')
-      socket.off('orders')
-    }
-  }, [])
+  //   // the return function is called when the component is unmounted
+  //   return () => {
+  //     socket.off('connect')
+  //     socket.off('disconnect')
+  //     socket.off('orders')
+  //   }
+  // }, [])
 
   return (
     <MapOrdersContext.Provider
