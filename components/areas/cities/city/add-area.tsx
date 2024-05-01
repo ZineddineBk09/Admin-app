@@ -25,7 +25,7 @@ const Geofence = ({
   const { refreshCities, cities } = useAreasCitiesContext()
 
   const handleCreated = async (e: any) => {
-    const city: City = cities.find((ct: City) => ct.id === id) as City
+    const city: City = cities.find((ct: City) => ct.id == id) as City
     const geojson: GeoJSONObject = e.layer.toGeoJSON()
     const apiFormat = geojson.geometry.coordinates[0].map(
       (coord: GeoJSONCoordinate, index: number) => {
