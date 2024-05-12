@@ -15,6 +15,7 @@ interface Props {
   isActive: boolean
   href: string
   subLinks?: SubLink[]
+  hidden: boolean
 }
 
 export const SidebarItem = ({
@@ -23,6 +24,7 @@ export const SidebarItem = ({
   isActive,
   href = '',
   subLinks = [],
+  hidden
 }: Props) => {
   const { setCollapsed } = useSidebarContext()
   const handleClick = () => {
@@ -30,6 +32,8 @@ export const SidebarItem = ({
       setCollapsed()
     }
   }
+
+  if (hidden) return null
   return (
     <NextLink href={href} className='relative'>
       <Link
