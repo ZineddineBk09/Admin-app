@@ -1,13 +1,12 @@
 import { Loading, Modal, Text, Tooltip } from '@nextui-org/react'
 import React from 'react'
-import { Flex } from '../../../styles/flex'
-import { IconButton } from '../../../table/admin/table.styled'
-import { useOrdersContext } from '../../../../context/admin/orders'
-import { CancelIcon } from '../../../icons/orders'
-import { ConfirmModal } from '../../../shared/confirm-modal'
-import axios from '../../../../lib/axios'
+import { Flex } from '../../styles/flex'
+import { IconButton } from '../../table/admin/table.styled'
+import { useOrdersContext } from '../../../context/admin/orders'
+import { CancelIcon } from '../../icons/orders'
+import { ConfirmModal } from '../../shared/confirm-modal'
 import toast from 'react-hot-toast'
-import { cancelRecord } from '../../../../lib/api'
+import { cancelRecord } from '../../../lib/api'
 
 export const CancelOrder = ({
   id,
@@ -26,7 +25,6 @@ export const CancelOrder = ({
 
   const handleCancel = async () => {
     // setLoading(true)
-    // await axios
     //   .put(`/order/${id}/?transition=cancel`, {
     //     transition_description_field: note,
     //   })
