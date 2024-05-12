@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { Address, Location, Order } from '../../interfaces'
+import { Address, Location } from '../../interfaces'
 import Image from 'next/image'
 import { getRecord, partialUpdateRecord } from '../../lib/api'
 const Map = dynamic(() => import('./map'), { ssr: false })
-const SearchLocation = dynamic(() => import('../map/search-location'), {
+const SearchLocation = dynamic(() => import('../admin/map/search-location'), {
   ssr: false,
 })
 
@@ -49,6 +49,51 @@ const LocationForm = ({
       )
     },
   })
+
+  const handleGetCurrentLocation = () => {
+    // Check if geolocation is supported by the browser
+    if ('geolocation' in navigator) {
+      // Request geolocation access
+      navigator.geolocation.getCurrentPosition(
+        // Success callback function
+        function (position) {
+          // Access granted, retrieve latitude and longitude
+          const latitude = position.coords.latitude
+          const longitude = position.coords.longitude
+
+          // Update formik values
+          formik.setValues({
+            ...formik.values,
+            latitude,
+            longitude,
+          })
+        },
+        // Error callback function
+        function (error) {
+          // Access denied or error occurred
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              console.log('Geolocation access denied by user.')
+              alert('Please enable location access')
+              break
+            case error.POSITION_UNAVAILABLE:
+              console.log('Geolocation information is unavailable.')
+              alert('Geolocation information is unavailable.')
+              break
+            case error.TIMEOUT:
+              console.log('Geolocation request timed out.')
+              break
+            default:
+              console.log('An unknown error occurred.')
+              break
+          }
+        }
+      )
+    } else {
+      // Geolocation not supported by the browser
+      console.log('Geolocation is not supported by this browser.')
+    }
+  }
 
   useEffect(() => {
     // get order
@@ -102,6 +147,13 @@ const LocationForm = ({
             formik.setValues({ ...formik.values, latitude, longitude })
           }}
         />
+        <button
+          className='absolute top-5 right-5 bg-primary px-3 py-2 text-sm rounded-md shadow'
+          onClick={handleGetCurrentLocation}
+        >
+          My Location
+        </button>
+
         <div className='absolute z-10 flex flex-col items-start gap-y-6 bg-gray-100 w-full inset-x-0 bottom-0 rounded-xl p-8 text-sm shadow-[0_-10px_30px_-20px_rgba(0,0,0,0.9)]'>
           <label>Select Location</label>
 

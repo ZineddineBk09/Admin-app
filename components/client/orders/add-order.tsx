@@ -19,13 +19,14 @@ import {
   Country,
   OrderItem,
 } from '../../../interfaces'
-import { useOrdersContext } from '../../../context/admin/orders'
+import { useOrdersContext } from '../../../context/client/orders'
 import { useAreasCitiesContext } from '../../../context/admin/areas/cities'
 import toast from 'react-hot-toast'
 import { useAreasGovernoratesContext } from '../../../context/admin/areas/governorates'
 import { useAreasCountriesContext } from '../../../context/admin/areas/countries'
 import { BinIcon } from '../../icons/areas'
 import { useCurrentUser } from '../../../hooks/current-user'
+import { useCurrentRole } from '../../../hooks/current-role'
 
 export const AddOrder = () => {
   const [visible, setVisible] = React.useState(false)
@@ -38,19 +39,22 @@ export const AddOrder = () => {
   const { governorates } = useAreasGovernoratesContext()
   const { cities } = useAreasCitiesContext()
   const user = useCurrentUser()
+  const role = useCurrentRole()
 
   useEffect(() => {
-    const getBranch = async () => {
-      const branch: APIResponse = await filterRecords(
-        {
-          supervisor_id: user.user_id,
-        },
-        'branch'
-      )
-
-      setBranch(branch.results[0])
+    const getClientAccount = async () => {
+      const params =
+        role === 'client'
+          ? {
+              client__account_id: user?.user_id,
+            }
+          : {
+              supervisor_id: user.user_id,
+            }
+      const branch: APIResponse = await filterRecords(params, 'branch')
+      if (branch.results) setBranch(branch.results[0])
     }
-    getBranch()
+    getClientAccount()
   }, [])
 
   const formik = useFormik({
@@ -61,7 +65,6 @@ export const AddOrder = () => {
       delivery_city: '',
       customer_name: '',
       customer_phone_number: '',
-      client: '',
       payment_type: 'cash',
       order_items: [] as OrderItem[],
     },
@@ -76,7 +79,6 @@ export const AddOrder = () => {
       customer_phone_number: Yup.string().required(
         'Customer Phone Number is required'
       ),
-      client: Yup.string(),
       payment_type: Yup.string().required('Payment Type is required'),
       order_items: Yup.array(
         Yup.object({
@@ -108,10 +110,6 @@ export const AddOrder = () => {
         .catch((err) => {
           console.log('Error adding delivery address', err)
         })
-      /**  {
-          pickup_address,
-          ,
-        } */
 
       await createRecord(
         {
@@ -122,7 +120,7 @@ export const AddOrder = () => {
             name: values.customer_name,
             number: values.customer_phone_number,
           },
-          client: values.client,
+          client: branch.id,
           payment_type: values.payment_type,
           order_items: values.order_items,
         },
@@ -131,11 +129,16 @@ export const AddOrder = () => {
         .then(async (res) => {
           if (res) {
             toast.success('Order added successfully')
-            refreshOrders()
+            refreshOrders({})
           }
         })
         .catch((err) => {
-          toast.error('Error adding order!')
+          console.log('Error adding order', err)
+          if (err.response.data.customer) {
+            toast.error(
+              'Error adding order: ' + err.response.data.customer.name[0] + '!'
+            )
+          } else toast.error('Error adding order!')
         })
         .finally(() => {
           setVisible(false)
@@ -204,12 +207,12 @@ export const AddOrder = () => {
                     label={
                       formik.touched.external_id && formik.errors.external_id
                         ? formik.errors.external_id
-                        : 'External ID (should match the order id in your system)'
+                        : 'ID'
                     }
                     clearable
                     fullWidth
                     size='lg'
-                    placeholder='External ID'
+                    placeholder='ID'
                     name='external_id'
                     id='external_id'
                     value={formik.values.external_id}
@@ -377,6 +380,7 @@ export const AddOrder = () => {
                   </label>
                   <Flex
                     css={{
+                      width: '100%',
                       gap: '$10',
                       flexWrap: 'wrap',
                       '@xl': { flexWrap: 'nowrap' },

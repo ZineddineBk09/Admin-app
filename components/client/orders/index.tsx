@@ -9,14 +9,45 @@ import { signOut } from 'next-auth/react'
 import { useCurrentUser } from '../../../hooks/current-user'
 import { useOrdersContext } from '../../../context/client/orders'
 import { AddOrder } from './add-order'
-import { filterRecords } from '../../../lib/api'
+import { filterRecords, getRecord } from '../../../lib/api'
 import { APIResponse, Branch } from '../../../interfaces'
 import { useCurrentRole } from '../../../hooks/current-role'
 
 export const ClientOrderPage = () => {
+  const user = useCurrentUser()
   const role = useCurrentRole()
-  const { orders, calculateUnpaidRoyalties, reportOrders } = useOrdersContext()
+  const [branch, setBranch] = useState<Branch>({} as Branch)
+  const [branches, setBranches] = useState<Branch[]>([] as Branch[])
+  const { orders, calculateUnpaidRoyalties, reportOrders, refreshOrders } =
+    useOrdersContext()
   const loading = false
+
+  useEffect(() => {
+    const getClientAccount = async () => {
+      const params =
+        role === 'client'
+          ? {
+              account_id: user?.user_id,
+            }
+          : {
+              supervisor_id: user?.user_id,
+            }
+
+      const branch: APIResponse = await filterRecords(params, 'branch')
+
+      setBranch(branch.results[0])
+    }
+    getClientAccount()
+  }, [])
+
+  useEffect(() => {
+    const getClientBranches = async () => {
+      const client = await getRecord(user?.user_id, 'account')
+
+      setBranches(client.branches)
+    }
+    if (role == 'client') getClientBranches()
+  }, [])
 
   return (
     <>
@@ -44,25 +75,35 @@ export const ClientOrderPage = () => {
           </div>
 
           {/* Select Branch */}
-          {role !== 'branch' && (
-            <input
-              type='text'
+          {role == 'client' && (
+            <select
               name='branch'
               id='branch'
               placeholder='Select Branch'
-              className='w-full h-10 py-4 bg-gray-200 rounded px-4 xl:max-w-[200px]'
-            />
+              className='w-full h-10 bg-gray-200 rounded px-4 xl:max-w-[200px]'
+              onChange={(e) => {
+                refreshOrders({ client_id: e.target.value })
+              }}
+            >
+              <option value='all'>Select Branch</option>
+              {branches.map((branch) => (
+                <option key={branch.id} value={branch.id}>
+                  {branch?.account?.name + '-' + branch?.address?.city.name}{' '}
+                  {branch.main && '(Main)'}
+                </option>
+              ))}
+            </select>
           )}
 
           <div className='h-full w-1 bg-gray-300 hidden xl:block' />
 
           {/* Search & dates*/}
-          <SearchAndFilter />
+          <SearchAndFilter branch={branch} />
 
           <div className='h-full w-1 bg-gray-300 hidden xl:block' />
 
           {/* Client */}
-          <Client />
+          <Client branch={branch} />
 
           <div className='h-full w-1 bg-gray-300 hidden xl:block' />
 
@@ -115,7 +156,7 @@ export const ClientOrderPage = () => {
   )
 }
 
-export const SearchAndFilter = () => {
+export const SearchAndFilter = ({ branch }: { branch: Branch }) => {
   const { handleFilterDate, handleSearchOrders } = useOrdersContext()
 
   return (
@@ -127,7 +168,9 @@ export const SearchAndFilter = () => {
         type='text'
         className='bg-gray-200 rounded-full px-4 py-2 w-full'
         placeholder='Search'
-        onChange={(e) => handleSearchOrders(e.target.value)}
+        onChange={(e) =>
+          handleSearchOrders(branch?.account?.name + e.target.value)
+        }
       />
 
       <DateRangePicker
@@ -144,24 +187,7 @@ export const SearchAndFilter = () => {
   )
 }
 
-const Client = () => {
-  const [branch, setBranch] = useState<Branch>({} as Branch)
-  const user = useCurrentUser()
-  useEffect(() => {
-    const getBranch = async () => {
-      const branch: APIResponse = await filterRecords(
-        {
-          supervisor_id: user.user_id,
-        },
-        'branch'
-      )
-
-      console.log(branch.results[0])
-      setBranch(branch.results[0])
-    }
-    getBranch()
-  }, [])
-
+const Client = ({ branch }: { branch: Branch }) => {
   return (
     <div className='h-full max-h-28 w-fit flex items-start gap-x-3'>
       <div className='h-full w-16 bg-gray-300 rounded-lg' />

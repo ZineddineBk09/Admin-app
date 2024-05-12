@@ -4,13 +4,28 @@ import { Flex } from '../styles/flex'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
+interface SubLink {
+  title: string
+  isActive?: boolean
+  href?: string
+}
+interface Props {
+  title: string
+  icon: React.ReactNode
+  isActive: boolean
+  href: string
+  subLinks: SubLink[]
+  hidden: boolean
+}
+
 export const CollapseItems = ({
   icon,
   subLinks,
   title,
-  href = '',
+  href ,
   isActive,
-}: any) => {
+  hidden,
+}: Props) => {
   const router = useRouter()
   const [open, setOpen] = useState(
     subLinks.some((item: any) => item.href === router.pathname)
@@ -25,6 +40,7 @@ export const CollapseItems = ({
       setOpen(false)
   }, [router.pathname])
 
+  if (hidden) return null
   return (
     <Flex
       css={{

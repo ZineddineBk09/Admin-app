@@ -1,13 +1,14 @@
 import { Modal, Text, Tooltip, Loading } from '@nextui-org/react'
-import { IconButton } from '../../../table/admin/table.styled'
+import { IconButton } from '../../table/admin/table.styled'
 import React from 'react'
-import { Flex } from '../../../styles/flex'
+import { Flex } from '../../styles/flex'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { EditIcon } from '../../../icons/table'
-import { Order, Team } from '../../../../interfaces'
-import { getRecords, updateRecord } from '../../../../lib/api'
-import { ConfirmModal } from '../../../shared/confirm-modal'
+import { EditIcon } from '../../icons/table'
+import { Order, Team } from '../../../interfaces'
+import { getRecords, updateRecord } from '../../../lib/api'
+import { ConfirmModal } from '../../shared/confirm-modal'
+import { LabelField } from '../../shared/text/label'
 
 export const EditOrder = ({ order }: { order: Order }) => {
   const [visible, setVisible] = React.useState(false)
@@ -101,7 +102,7 @@ export const EditOrder = ({ order }: { order: Order }) => {
                       className='w-full flex flex-col items-start gap-y-2'
                       key={index}
                     >
-                      <label className='text-gray-500 capitalize'>{item}</label>
+                      <LabelField>{item}</LabelField>
                       <div className='h-11 w-full bg-gray-200 rounded px-4 flex justify-between items-center'>
                         <input
                           id={item}

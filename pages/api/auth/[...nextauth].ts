@@ -1,45 +1,58 @@
 import axios from 'axios'
 import NextAuth from 'next-auth'
-import { RequestInternal } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import { jwtDecode } from 'jwt-decode'
+import { ExtendedUser } from '../../../types/next-auth'
+
+interface DecodedToken {
+  token_type: string
+  exp: number
+  iat: number
+  jti: string
+  user_id: number
+  username: string
+  role: string
+}
 
 async function refreshAccessToken(token: any) {
-  console.log('Refreshing access token')
   try {
-    const url = process.env.NEXT_PUBLIC_API_URL + '/token/refresh'
+    console.log('-------- REFRESHING TOKEN ----------')
+    const response = await axios.post(
+      (process.env.NEXT_PUBLIC_BASE_URL + 'token/refresh') as string,
+      { refresh: token.refreshToken }
+    )
 
-    const response = await fetch(url, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        refresh: token.refreshToken,
-      }),
-    })
-
-    const refreshedTokens = await response.json()
-
-    if (!response.ok) {
-      throw refreshedTokens
+    if (!response.data) {
+      throw new Error('No refresh token found')
     }
 
-    console.log('Refreshed access token')
-    console.log(refreshedTokens)
+    const {
+      refresh,
+      access,
+    }: {
+      refresh: string
+      access: string
+    } = response.data
+    if (refresh && access) {
+      const decoded: DecodedToken = jwtDecode(access) as DecodedToken
+      const user = {
+        user_id: decoded.user_id,
+        username: decoded.username,
+        role: decoded.role,
+      }
 
-    return {
-      ...token,
-      accessToken: refreshedTokens.data.access_token,
-      accessTokenExpires: Date.now() + refreshedTokens.data.expires,
-      refreshToken: refreshedTokens.data.refresh_token ?? token, // Fall back to old refresh token
+      return {
+        user,
+        accessToken: access,
+        refreshToken: refresh ?? token.refreshToken, // Fallback to the old refresh token
+        expires: decoded.exp * 1000,
+      }
+    } else {
+      throw new Error('Invalid credentials')
     }
-  } catch (error) {
-    console.log(error)
-
-    return {
-      ...token,
-      error: 'RefreshAccessTokenError',
-    }
+  } catch (error: any) {
+    console.log('Error refreshing token', error)
+    return { error: 'RefreshAccessTokenError' }
   }
 }
 
@@ -57,14 +70,14 @@ export default NextAuth({
         },
       },
 
-      async authorize(
-        credentials: Record<'username' | 'password', string> | undefined,
-        req: Pick<RequestInternal, 'method' | 'body' | 'query' | 'headers'>
-      ): Promise<any> {
+      async authorize(credentials: any, req: any): Promise<any> {
         try {
-          const { username, password } = credentials!
+          const { username, password } = credentials
+
+          if (!username || !password) return null
+
           const response = await axios.post(
-            process.env.NEXT_PUBLIC_API_URL + '/login',
+            (process.env.NEXT_PUBLIC_BASE_URL + 'login') as string,
             { username, password }
           )
           const {
@@ -74,60 +87,93 @@ export default NextAuth({
             refresh: string
             access: string
           } = response.data
-
           if (refresh && access) {
-            const token = {
-              user: {
-                username,
-              },
-              accessToken: access,
-              refreshToken: refresh,
+            const decoded: DecodedToken = jwtDecode(access) as DecodedToken
+            const user = {
+              user_id: decoded.user_id,
+              username: decoded.username,
+              role: decoded.role,
             }
 
-            return token
+            return {
+              ...user,
+              access,
+              refresh,
+              exp: decoded.exp * 1000,
+              iat: decoded.iat * 1000,
+              jti: decoded.jti,
+            }
           } else {
             throw new Error('Invalid credentials')
           }
         } catch (error: any) {
-          throw new Error(error.message)
+          console.log('Error logging in', error)
+          return null
         }
       },
     }),
   ],
+  // append the user to the session
   callbacks: {
-    async jwt({ token, user }: any) {
-      console.log('JWT callback')
-      console.log('token:', token)
+    async jwt({ token, user, account }: any) {
+      // Initial sign in
+      if (user && account) {
+        const roles = ['admin', 'client', 'branch']
+        // if user does not have a role "admin" or "client" return null
+        if (!roles.includes(user.role)) {
+          return null
+        }
 
-      if (user) {
-        console.log('user', user)
-        token.accessToken = user.accessToken
-        token.refreshToken = user.refreshToken
-        token.username = user.user.username
+        return {
+          user: {
+            user_id: user.user_id,
+            username: user.username,
+            role: user.role,
+          },
+          accessToken: user.access,
+          refreshToken: user.refresh,
+          expires: user.exp,
+        }
       }
 
-      return token
+      // Return previous token if the access token has not expired yet
+      if (Date.now() < token.expires) {
+        console.log(
+          'Time left for token to expire in mins:',
+          (((token.expires - Date.now()) / 3600000) * 60).toFixed(2) + ' mins'
+        )
+        return token
+      }
+
+      // Access token has expired, try to refresh it
+      try {
+        const refreshedToken = await refreshAccessToken(token)
+        // signout if the refresh token is invalid
+        if (
+          refreshedToken.error === 'RefreshAccessTokenError' ||
+          !refreshedToken
+        ) {
+          return null
+        }
+        return refreshedToken
+      } catch (error: any) {
+        // Return null to stop the session from being created
+        return null
+      }
     },
-    async session({ session, token }: any) {
-      console.log('Session callback')
-      session.accessToken = token.accessToken
-      session.refreshToken = token.refreshToken
-      session.user.username = token.username
-      session.iat = token.iat
-      session.exp = token.exp
-
-      console.log(
-        'Valid till: ' + new Date(session.exp * 1000).toLocaleString()
-      )
-
-      console.log(session)
+    async session({ session, token }) {
+      session.user = token?.user as ExtendedUser
+      session.accessToken = token?.accessToken as string
+      session.refreshToken = token?.refreshToken as string
       return session
     },
+  },
+  session: {
+    strategy: 'jwt',
   },
   pages: {
     signIn: '/',
   },
   secret: process.env.NEXTAUTH_SECRET,
+  debug: process.env.NODE_ENV === 'development',
 })
-
-

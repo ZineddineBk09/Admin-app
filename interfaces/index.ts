@@ -136,7 +136,6 @@ interface Customer {
 
 export interface Order {
   id: string | number
-  serial_number: number
   external_id: string
   COD: boolean
   currently_assigned_driver: Driver | null
@@ -150,6 +149,7 @@ export interface Order {
   status:
     | 'new'
     | 'searching_drivers'
+    | 'searching'
     | 'prompting_driver'
     | 'assigned'
     | 'failed'
@@ -312,6 +312,7 @@ export interface BranchMinimal {
   account: AccountMinimal
   supervisor: UserAccess
   address: Address
+  main: boolean
 }
 //--------------------------------------------------------------------
 
