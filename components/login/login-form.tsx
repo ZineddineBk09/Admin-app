@@ -4,11 +4,14 @@ import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useRouter } from 'next/router'
+import { signIn } from 'next-auth/react'
+import { useCurrentRole } from '../../hooks/current-role'
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const [error, setError] = React.useState<string>('')
   const router = useRouter()
+  const role = useCurrentRole()
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -22,18 +25,23 @@ const LoginForm = () => {
         .required('please enter a password'),
     }),
 
-    onSubmit: async (values) => {
+    onSubmit: async (values: any) => {
       try {
         // empty the error
         setError('')
-        const { signIn } = await import('next-auth/react')
         const signin = await signIn('fleetrun-auth', {
           username: values.username,
           password: values.password,
           redirect: false,
         })
         if (signin?.status === 200) {
-          router.push('/dashboard')
+          // if admin redirect to admin dashboard
+          if (role === 'admin') {
+            router.push('/admin/dashboard')
+          } else if (role === 'client' || role === 'branch') {
+            // if client redirect to client dashboard
+            router.push('/client/orders/list')
+          }
         } else {
           setError('username or password incorrect, please try again')
         }
@@ -90,7 +98,7 @@ const LoginForm = () => {
                 />
                 {formik.touched.username && formik.errors.username ? (
                   <span className='w-full transition-all duration-300 text-xs text-red-500 rounded py-1 px-2 mx-auto'>
-                    {formik.errors.username}
+                    {formik.errors.username as string}
                   </span>
                 ) : null}
               </div>
@@ -132,7 +140,7 @@ const LoginForm = () => {
                 </div>
                 {formik.touched.password && formik.errors.password ? (
                   <span className='w-full transition-all duration-300 text-xs text-red-500 rounded py-1 px-2 mx-auto'>
-                    {formik.errors.password}
+                    {formik.errors.password as string}
                   </span>
                 ) : null}
               </div>
