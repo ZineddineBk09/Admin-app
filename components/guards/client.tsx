@@ -9,7 +9,7 @@ export const ClientGuard = ({ children }: ClientGuardProps) => {
   const role = useCurrentRole()
   const router = useRouter()
 
-  if (role !== 'client') {
+  if (role !== 'client' && role !== 'branch') {
     // router.push('/404')
     return null
   }

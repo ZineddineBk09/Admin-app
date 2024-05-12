@@ -10,7 +10,8 @@ const AuthGuard = ({ children }: { children: React.ReactNode }): any => {
   const { data: session, status } = useSession()
   const router = useRouter()
   const role = useCurrentRole()
-  const path = useRouter().pathname.split('/')[1]
+  const path = useRouter().pathname.split('/')[2]
+
   console.log('session:', session)
 
   useEffect(() => {
@@ -20,7 +21,7 @@ const AuthGuard = ({ children }: { children: React.ReactNode }): any => {
       if (router.asPath === '/') {
         if (role === 'admin') {
           router.push('/admin/dashboard')
-        } else {
+        } else if (role === 'client' || role === 'branch') {
           // if client redirect to client dashboard
           router.push('/client/orders/list')
         }
