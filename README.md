@@ -2,96 +2,114 @@
 
 You can see the demo here: https://restaurant-driver-app.vercel.app/
 
-```
+```bash
 ├── components
-│   ├── areas
-│   │   ├── cities
-│   │   │   └── city
-│   │   ├── countries
-│   │   └── governorates
-│   ├── clients
-│   │   ├── accounts
-│   │   └── branches
-│   │       └── branch
-│   ├── customer
-│   ├── drivers
-│   │   ├── drivers-types
-│   │   ├── list
-│   │   └── teams
-│   ├── guards
-│   ├── hooks
-│   ├── icons
-│   │   ├── areas
-│   │   ├── drivers
-│   │   ├── map
-│   │   ├── navbar
-│   │   ├── orders
-│   │   ├── permissions
-│   │   ├── sidebar
-│   │   ├── support
-│   │   └── table
-│   ├── layout
-│   ├── login
-│   ├── map
-│   │   └── tabs
-│   ├── navbar
-│   ├── orders
-│   │   ├── auto-cancel
-│   │   └── list
-│   ├── reports
-│   ├── settings
-│   │   ├── access-profiles
-│   │   └── users-access
-│   ├── shared
-│   ├── sidebar
-│   ├── styles
-│   ├── support
-│   │   └── files-upload
-│   └── table
-│       ├── drivers
-│       ├── orders
-│       └── reports
+│   ├── admin
+│   │   ├── areas
+│   │   │   ├── cities
+│   │   │   │   └── city
+│   │   │   ├── countries
+│   │   │   └── governorates
+│   │   ├── clients
+│   │   │   ├── accounts
+│   │   │   └── branches
+│   │   │       └── branch
+│   │   ├── drivers
+│   │   │   ├── drivers-types
+│   │   │   ├── list
+│   │   │   │   └── driver
+│   │   │   ├── shared
+│   │   │   └── teams
+│   │   ├── map
+│   │   │   └── tabs
+│   │   ├── orders
+│   │   │   ├── auto-cancel
+│   │   │   └── list
+│   │   ├── reports
+│   │   ├── settings
+│   │   │   ├── access-profiles
+│   │   │   └── users-access
+│   │   └── support
+│   │       └── files-upload
+│   ├── client
+│   │   └── orders
+│   ├── customer
+│   ├── guards
+│   ├── hooks
+│   ├── icons
+│   │   ├── areas
+│   │   ├── drivers
+│   │   ├── map
+│   │   ├── navbar
+│   │   ├── orders
+│   │   ├── permissions
+│   │   ├── sidebar
+│   │   ├── support
+│   │   └── table
+│   ├── layout
+│   ├── login
+│   ├── modals
+│   ├── navbar
+│   ├── shared
+│   ├── sidebar
+│   ├── styles
+│   └── table
+│       ├── admin
+│       │   ├── orders
+│       │   └── reports
+│       └── client
+│           └── orders
 ├── context
-│   ├── areas
-│   ├── auto-cancelled-orders
-│   ├── clients
-│   ├── drivers
-│   ├── map
-│   ├── orders
-│   ├── reports
-│   ├── support
-│   └── users
+│   ├── admin
+│   │   ├── areas
+│   │   ├── auto-cancelled-orders
+│   │   ├── clients
+│   │   ├── drivers
+│   │   ├── map
+│   │   ├── orders
+│   │   ├── reports
+│   │   ├── support
+│   │   └── users
+│   └── client
+│       └── orders
+├── Dockerfile
 ├── docs
-│   ├── auto-cancel-orders
-│   ├── orders-payment-method
-│   ├── orders-payment-type-filter
-│   └── transfer-order-to-another-driver
+│   ├── auto-cancel-orders
+│   ├── orders-payment-method
+│   ├── orders-payment-type-filter
+│   └── transfer-order-to-another-driver
 ├── firebase
+├── hooks
 ├── interfaces
 ├── lib
-│   ├── api
-│   └── search
+│   ├── api
+│   ├── search
+│   └── socket
 ├── pages
-│   ├── api
-│   │   └── auth
-│   ├── areas
-│   ├── clients
-│   ├── customer
-│   │   └── select-location
-│   ├── customers
-│   ├── dashboard
-│   ├── drivers
-│   ├── orders
-│   ├── pricing
-│   ├── reports
-│   ├── settings
-│   └── support
+│   ├── admin
+│   │   ├── areas
+│   │   ├── clients
+│   │   ├── customers
+│   │   ├── dashboard
+│   │   ├── drivers
+│   │   ├── orders
+│   │   ├── pricing
+│   │   ├── reports
+│   │   ├── settings
+│   │   └── support
+│   ├── api
+│   │   └── auth
+│   ├── client
+│   │   ├── orders
+│   │   └── settings
+│   └── customer
+│       └── select-location
 ├── public
-│   └── images
-│       └── icons
+│   └── images
+│       └── icons
 ├── styles
 ├── types
-└── utils1
+└── utils
 ```
 ## For Run
 

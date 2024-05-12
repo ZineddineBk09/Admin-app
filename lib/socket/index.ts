@@ -2,9 +2,9 @@
 
 const mapSocket = (token: string): WebSocket => {
   const socket: WebSocket = new WebSocket(
-    `ws://localhost:2110/map?token=${token}`
+    `${process.env.NEXT_PUBLIC_WEBSOCKET_URL as string}/map?token=${token}`
   )
-  
+
   socket.onopen = () => {
     console.log('Socket opened')
   }
@@ -17,16 +17,10 @@ const mapSocket = (token: string): WebSocket => {
     }, 1000)
   }
 
-
   // close the socket on error
   socket.onerror = (e: any) => {
     console.error('Socket error', e)
     socket.close()
-  }
-
-  socket.onmessage = (e: any) => {
-    const data = JSON.parse(e.data)
-    console.log(data)
   }
 
   return socket
