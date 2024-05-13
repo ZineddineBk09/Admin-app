@@ -12,13 +12,14 @@ import { AddOrder } from './add-order'
 import { filterRecords, getRecord } from '../../../lib/api'
 import { APIResponse, Branch } from '../../../interfaces'
 import { useCurrentRole } from '../../../hooks/current-role'
+import { generateOrdersReport } from '../../../utils'
 
 export const ClientOrderPage = () => {
   const user = useCurrentUser()
   const role = useCurrentRole()
   const [branch, setBranch] = useState<Branch>({} as Branch)
   const [branches, setBranches] = useState<Branch[]>([] as Branch[])
-  const { orders, calculateUnpaidRoyalties, reportOrders, refreshOrders } =
+  const { orders, calculateUnpaidRoyalties, refreshOrders } =
     useOrdersContext()
   const loading = false
 
@@ -123,7 +124,14 @@ export const ClientOrderPage = () => {
                 className='flex items-center gap-x-2 ml-auto'
                 onClick={() =>
                   //Fleetrun - Branch Name - Date
-                  reportOrders()
+                  generateOrdersReport(
+                    orders,
+                    'FleetRun' +
+                      '-' +
+                      String(user.username as string) +
+                      '-' +
+                      new Date().toLocaleDateString()
+                  )
                 }
               >
                 <span>Print</span>
