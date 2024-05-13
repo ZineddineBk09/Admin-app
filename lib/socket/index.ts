@@ -1,5 +1,3 @@
-// use native WebSocket
-
 const mapSocket = (token: string): WebSocket => {
   const socket: WebSocket = new WebSocket(
     `${process.env.NEXT_PUBLIC_WEBSOCKET_URL as string}/map?token=${token}`

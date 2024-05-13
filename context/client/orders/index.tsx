@@ -41,7 +41,6 @@ export const useOrdersContext: {
     }) => void
     refreshOrders: (extraParams?: any) => Promise<void>
     calculateUnpaidRoyalties: (orders: Order[]) => string
-    reportOrders: () => any
   }
 } = () => React.useContext(OrdersContext as any)
 
@@ -276,56 +275,6 @@ export const OrdersContextProvider = ({
     return unpaidRoyalties.toFixed(2)
   }
 
-  const reportOrders = () => {
-    const flat_orders = orders.map((order) => ({
-      id: order.id,
-      COD: order.COD,
-      'Added At': order.added_at,
-      'Client Account': order.client.account.name,
-      'Client Address':
-        order.client.address.country.name +
-        '-' +
-        order.client.address.governorate.name +
-        '-' +
-        order.client.address.city.name,
-      'Client Supervisor': order.client.supervisor.username,
-      'Customer Name': order.customer.name,
-      'Customer Phone Number': order.customer.number,
-      'Total Order Value': order.total_order_value,
-      Status: order.status,
-      'Pickup Address':
-        order.pickup_address.country.name +
-        '-' +
-        order.pickup_address.governorate.name +
-        '-' +
-        order.pickup_address.city.name,
-    }))
-
-    exportFromJSON({
-      data: flat_orders,
-      fileName:
-        'FleetRun' +
-        '-' +
-        String(user.username as string) +
-        '-' +
-        new Date().toLocaleDateString(),
-      exportType: 'xls',
-      fields: {
-        id: 'ID',
-        COD: 'COD',
-        'Added At': 'Added At',
-        'Client Account': 'Client Account',
-        'Client Address': 'Client Address',
-        'Client Supervisor': 'Client Supervisor',
-        'Customer Name': 'Customer Name',
-        'Customer Phone Number': 'Customer Phone Number',
-        'Total Order Value': 'Total Order Value',
-        Status: 'Status',
-        'Pickup Address': 'Pickup Address',
-      },
-    })
-  }
-
   useEffect(() => {
     orders.length === 0 && refreshOrders()
   }, [])
@@ -348,7 +297,6 @@ export const OrdersContextProvider = ({
         handleFilterDate,
         refreshOrders,
         calculateUnpaidRoyalties,
-        reportOrders,
       }}
     >
       {children}

@@ -22,7 +22,6 @@ export const OrdersPage = () => {
       className='relative w-full bg-white rounded-lg shadow-lg py-6 px-2 overflow-x-auto'
     >
       <div className='w-full h-full px-4 flex flex-col items-start gap-y-4 justify-between xl:flex-row xl:items-end xl:gap-y-0'>
-        {/* <AutoCancelSwitch /> */}
         <Tabs
           tabs={[
             {
@@ -77,52 +76,6 @@ const SearchAndFilter = () => {
   )
 }
 
-const AutoCancelSwitch = () => {
-  const { enabled, handleEnableAutoCancelledOrders } =
-    useAutoCancelledOrdersContext()
-  const [value, setValue] = useState(10)
-
-  return (
-    <div className='max-w-md relative flex flex-col items-start justify-center overflow-hidden gap-y-3'>
-      <div className='flex'>
-        <span className='mr-2 font-bold text-gray-900'>Auto Cancel Orders</span>
-        <label className='inline-flex relative items-center mr-5 cursor-pointer'>
-          <input
-            type='checkbox'
-            className='sr-only peer'
-            checked={enabled}
-            readOnly
-          />
-          <div
-            onClick={handleEnableAutoCancelledOrders}
-            className="w-11 h-6 bg-gray-200 rounded-full peer  peer-focus:ring-primary-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"
-          />
-        </label>
-      </div>
-      <p className='text-gray-500'>
-        if this options is enabled, orders will be automatically cancelled after{' '}
-        <b>{value} minutes</b>, and it will applied to all clients orders.
-      </p>
-      <div className='flex items-center justify-between gap-x-3'>
-        <Input
-          type='number'
-          min={1}
-          disabled={!enabled}
-          value={value}
-          onChange={(e) => setValue(parseInt(e.target.value))}
-        />
-        <button
-          className={`px-4 py-2 bg-primary text-gray-700 rounded-lg ${
-            !enabled && 'opacity-50 cursor-not-allowed'
-          }`}
-          disabled={!enabled}
-        >
-          Save
-        </button>
-      </div>
-    </div>
-  )
-}
 
 const Tabs = ({
   tabs,

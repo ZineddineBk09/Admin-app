@@ -20,6 +20,7 @@ import { useAreasGovernoratesContext } from '../../../../context/admin/areas/gov
 import { useAreasCountriesContext } from '../../../../context/admin/areas/countries'
 import { useClientsBranchesContext } from '../../../../context/admin/clients/branches'
 import { BinIcon } from '../../../icons/areas'
+import BranchMap from './map'
 
 export const AddOrder = () => {
   const [visible, setVisible] = React.useState(false)
@@ -31,16 +32,14 @@ export const AddOrder = () => {
   const { governorates } = useAreasGovernoratesContext()
   const { cities } = useAreasCitiesContext()
   const { branches } = useClientsBranchesContext()
+  const [collectAddress, setCollectAddress] = React.useState<boolean>(true)
 
   const formik = useFormik({
     initialValues: {
       external_id: '',
-      delivery_country: '',
-      delivery_governorate: '',
-      delivery_city: '',
-      // pickup_country: '',
-      // pickup_governorate: '',
-      // pickup_city: '',
+      delivery_lat: 21.3879,
+      delivery_lng: 39.8579,
+      // delivery_city: '',
       customer_name: '',
       customer_phone_number: '',
       client: '',
@@ -49,16 +48,9 @@ export const AddOrder = () => {
     },
     validationSchema: Yup.object({
       external_id: Yup.string().required('External ID is required'),
-      delivery_country: Yup.string().required('Delivery Country is required'),
-      delivery_governorate: Yup.string().required(
-        'Delivery Governorate is required'
-      ),
-      delivery_city: Yup.string().required('Delivery City is required'),
-      // pickup_country: Yup.string().required('Pickup Country is required'),
-      // pickup_governorate: Yup.string().required(
-      //   'Pickup Governorate is required'
-      // ),
-      // pickup_city: Yup.string().required('Pickup City is required'),
+      delivery_lat: Yup.string().required('Delivery Country is required'),
+      delivery_lng: Yup.string().required('Delivery Governorate is required'),
+      // delivery_city: Yup.string().required('Delivery City is required'),
       customer_name: Yup.string().required('Customer is required'),
       customer_phone_number: Yup.string().required(
         'Customer Phone Number is required'
@@ -79,9 +71,9 @@ export const AddOrder = () => {
       console.log('values', values)
       const delivery_address = await createRecord(
         {
-          country: values.delivery_country,
-          governorate: values.delivery_governorate,
-          city: values.delivery_city,
+          latitude: values.delivery_lat,
+          longitude: values.delivery_lng,
+          // city: values.delivery_city,
         },
         'address'
       )
@@ -176,7 +168,6 @@ export const AddOrder = () => {
                     {error}
                   </span>
                 )}
-
                 <Flex
                   css={{
                     gap: '$10',
@@ -236,22 +227,55 @@ export const AddOrder = () => {
                     ))}
                   </select>
                 </div>
-
-                {/* <div className='flex flex-col items-start justify-start w-full'>
-                  <label
-                    className={`block mb-2 ${
-                      formik.touched.pickup_country &&
-                      formik.errors.pickup_country &&
-                      formik.touched.pickup_governorate &&
-                      formik.errors.pickup_governorate &&
-                      formik.touched.pickup_city &&
-                      formik.errors.pickup_city
-                        ? 'text-red-500'
-                        : 'text-gray-900'
-                    }`}
-                  >
-                    Pickup Address
+                <div className='flex'>
+                  <span className='mr-2 font-bold text-gray-900'>
+                    Collect delivery address from customer
+                  </span>
+                  <label className='inline-flex relative items-center mr-5 cursor-pointer'>
+                    <input
+                      type='checkbox'
+                      className='sr-only peer'
+                      checked={collectAddress}
+                      readOnly
+                    />
+                    <div
+                      onClick={() => setCollectAddress(!collectAddress)}
+                      className="w-11 h-6 bg-gray-200 rounded-full peer  peer-focus:ring-primary-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"
+                    />
                   </label>
+                </div>
+
+                <div
+                  className={`relative flex flex-col items-start justify-start w-full ${
+                    collectAddress && 'p-3'
+                  }`}
+                >
+                  <div className='relative w-full h-96'>
+                    <BranchMap
+                      position={
+                        !collectAddress
+                          ? {
+                              lat: formik.values.delivery_lat,
+                              lng: formik.values.delivery_lng,
+                            }
+                          : {
+                              lat: 21.3891,
+                              lng: 39.8579,
+                            }
+                      }
+                      setPosition={
+                        !collectAddress
+                          ? (position: any) => {
+                              formik.setFieldValue('delivery_lat', position.lat)
+                              formik.setFieldValue('delivery_lng', position.lng)
+                            }
+                          : () => {}
+                      }
+                    />
+                  </div>
+                  {collectAddress && (
+                    <div className='z-10 absolute bg-black/20 inset-0 rounded-lg' />
+                  )}
                   <Flex
                     css={{
                       gap: '$10',
@@ -259,16 +283,16 @@ export const AddOrder = () => {
                     }}
                     className='w-full'
                   >
-                    <select
-                      id='pickup_country'
-                      name='pickup_country'
+                    {/* <select
+                      id='delivery_lat'
+                      name='delivery_lat'
                       onChange={(e) => {
                         formik.handleChange(e)
                       }}
-                      value={formik.values.pickup_country}
+                      value={formik.values.delivery_lat}
                       className={`w-1/3 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block p-2.5 ${
-                        formik.touched.pickup_country &&
-                        formik.errors.pickup_country
+                        formik.touched.delivery_lat &&
+                        formik.errors.delivery_lat
                           ? 'border-red-500 bg-red-200'
                           : 'border-gray-300 bg-gray-100'
                       }`}
@@ -279,18 +303,40 @@ export const AddOrder = () => {
                           {Country.name}
                         </option>
                       ))}
-                    </select>
+                    </select> */}
+                    <Input
+                      label={
+                        formik.touched.delivery_lat &&
+                        formik.errors.delivery_lat
+                          ? formik.errors.delivery_lat
+                          : ''
+                      }
+                      clearable
+                      fullWidth
+                      size='lg'
+                      placeholder='Latitude'
+                      name='delivery_lat'
+                      id='delivery_lat'
+                      value={formik.values.delivery_lat}
+                      onChange={formik.handleChange}
+                      status={
+                        formik.touched.delivery_lat &&
+                        formik.errors.delivery_lat
+                          ? 'error'
+                          : 'default'
+                      }
+                    />
 
-                    <select
-                      id='pickup_governorate'
-                      name='pickup_governorate'
+                    {/* <select
+                      id='delivery_lng'
+                      name='delivery_lng'
                       onChange={(e) => {
                         formik.handleChange(e)
                       }}
-                      value={formik.values.pickup_governorate}
+                      value={formik.values.delivery_lng}
                       className={`w-1/3 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block p-2.5 ${
-                        formik.touched.pickup_governorate &&
-                        formik.errors.pickup_governorate
+                        formik.touched.delivery_lng &&
+                        formik.errors.delivery_lng
                           ? 'border-red-500 bg-red-200'
                           : 'border-gray-300 bg-gray-100'
                       }`}
@@ -301,98 +347,32 @@ export const AddOrder = () => {
                           {Governorate.name}
                         </option>
                       ))}
-                    </select>
+                    </select> */}
 
-                    <select
-                      id='pickup_city'
-                      name='pickup_city'
-                      onChange={(e) => {
-                        formik.handleChange(e)
-                      }}
-                      value={formik.values.pickup_city}
-                      className={`w-1/3 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block p-2.5 ${
-                        formik.touched.pickup_city && formik.errors.pickup_city
-                          ? 'border-red-500 bg-red-200'
-                          : 'border-gray-300 bg-gray-100'
-                      }`}
-                    >
-                      <option value=''>Select City</option>
-                      {cities?.map((City: City) => (
-                        <option key={City.id} value={City.id}>
-                          {City.name}
-                        </option>
-                      ))}
-                    </select>
-                  </Flex>
-                </div> */}
+                    <Input
+                      label={
+                        formik.touched.delivery_lng &&
+                        formik.errors.delivery_lng
+                          ? formik.errors.delivery_lng
+                          : ''
+                      }
+                      clearable
+                      fullWidth
+                      size='lg'
+                      placeholder='Longitude'
+                      name='delivery_lng'
+                      id='delivery_lng'
+                      value={formik.values.delivery_lng}
+                      onChange={formik.handleChange}
+                      status={
+                        formik.touched.delivery_lng &&
+                        formik.errors.delivery_lng
+                          ? 'error'
+                          : 'default'
+                      }
+                    />
 
-                <div className='flex flex-col items-start justify-start w-full'>
-                  <label
-                    className={`block mb-2 ${
-                      formik.touched.delivery_country &&
-                      formik.errors.delivery_country &&
-                      formik.touched.delivery_governorate &&
-                      formik.errors.delivery_governorate &&
-                      formik.touched.delivery_city &&
-                      formik.errors.delivery_city
-                        ? 'text-red-500'
-                        : 'text-gray-900'
-                    }`}
-                  >
-                    Delivery Address
-                  </label>
-                  <Flex
-                    css={{
-                      gap: '$10',
-                      flexWrap: 'nowrap',
-                    }}
-                    className='w-full'
-                  >
-                    <select
-                      id='delivery_country'
-                      name='delivery_country'
-                      onChange={(e) => {
-                        formik.handleChange(e)
-                      }}
-                      value={formik.values.delivery_country}
-                      className={`w-1/3 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block p-2.5 ${
-                        formik.touched.delivery_country &&
-                        formik.errors.delivery_country
-                          ? 'border-red-500 bg-red-200'
-                          : 'border-gray-300 bg-gray-100'
-                      }`}
-                    >
-                      <option value=''>Select Country</option>
-                      {countries?.map((Country: Country) => (
-                        <option key={Country.id} value={Country.id}>
-                          {Country.name}
-                        </option>
-                      ))}
-                    </select>
-
-                    <select
-                      id='delivery_governorate'
-                      name='delivery_governorate'
-                      onChange={(e) => {
-                        formik.handleChange(e)
-                      }}
-                      value={formik.values.delivery_governorate}
-                      className={`w-1/3 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block p-2.5 ${
-                        formik.touched.delivery_governorate &&
-                        formik.errors.delivery_governorate
-                          ? 'border-red-500 bg-red-200'
-                          : 'border-gray-300 bg-gray-100'
-                      }`}
-                    >
-                      <option value=''>Select Governorate</option>
-                      {governorates?.map((Governorate) => (
-                        <option key={Governorate.id} value={Governorate.id}>
-                          {Governorate.name}
-                        </option>
-                      ))}
-                    </select>
-
-                    <select
+                    {/* <select
                       id='delivery_city'
                       name='delivery_city'
                       onChange={(e) => {
@@ -412,10 +392,9 @@ export const AddOrder = () => {
                           {City.name}
                         </option>
                       ))}
-                    </select>
+                    </select> */}
                   </Flex>
                 </div>
-
                 <div>
                   <label
                     className={`block mb-2 ${
@@ -428,21 +407,7 @@ export const AddOrder = () => {
                       ? formik.errors.payment_type
                       : 'Payment Type'}
                   </label>
-                  {/* <select
-                    id='payment_type'
-                    name='payment_type'
-                    onChange={formik.handleChange}
-                    value={formik.values.payment_type}
-                    className={`border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 ${
-                      formik.touched.payment_type && formik.errors.payment_type
-                        ? 'border-red-500 bg-red-200'
-                        : 'border-gray-300 bg-gray-100'
-                    }`}
-                  >
-                    <option value='cash'>Cash</option>
-                    <option value='mastercard'>Mastercard</option>
-                    <option value='visa'>Visa</option>
-                  </select> */}
+
                   <Radio.Group
                     defaultValue='cash'
                     orientation='horizontal'
@@ -464,7 +429,6 @@ export const AddOrder = () => {
                     </Radio>
                   </Radio.Group>
                 </div>
-
                 <div className='flex flex-col items-start justify-start w-full'>
                   <label
                     className={`block mb-2 ${
@@ -521,7 +485,6 @@ export const AddOrder = () => {
                     />
                   </Flex>
                 </div>
-
                 <div className='flex flex-col items-start justify-start w-full'>
                   <label
                     className={`block mb-2 ${
