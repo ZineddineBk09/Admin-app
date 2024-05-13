@@ -1,4 +1,4 @@
-import { ChatMessage } from '../interfaces'
+import { ChatMessage, Order } from '../interfaces'
 import exportFromJSON from 'export-from-json'
 
 export const truncateTxt = (str: string, n: number) => {
@@ -64,4 +64,49 @@ export const calculateDistance = (
 
 const toRad = (value: number) => {
   return (value * Math.PI) / 180
+}
+
+export const generateOrdersReport = (orders: Order[], fileName: string) => {
+  const flat_orders = orders.map((order) => ({
+    id: order.id,
+    COD: order.COD,
+    'Added At': order.added_at,
+    'Client Account': order.client.account.name,
+    'Client Address':
+      order.client.address.country.name +
+      '-' +
+      order.client.address.governorate.name +
+      '-' +
+      order.client.address.city.name,
+    'Client Supervisor': order.client.supervisor.username,
+    'Customer Name': order.customer.name,
+    'Customer Phone Number': order.customer.number,
+    'Total Order Value': order.total_order_value,
+    Status: order.status,
+    'Pickup Address':
+      order.pickup_address.country.name +
+      '-' +
+      order.pickup_address.governorate.name +
+      '-' +
+      order.pickup_address.city.name,
+  }))
+
+  exportFromJSON({
+    data: flat_orders,
+    fileName,
+    exportType: 'xls',
+    fields: {
+      id: 'ID',
+      COD: 'COD',
+      'Added At': 'Added At',
+      'Client Account': 'Client Account',
+      'Client Address': 'Client Address',
+      'Client Supervisor': 'Client Supervisor',
+      'Customer Name': 'Customer Name',
+      'Customer Phone Number': 'Customer Phone Number',
+      'Total Order Value': 'Total Order Value',
+      Status: 'Status',
+      'Pickup Address': 'Pickup Address',
+    },
+  })
 }
