@@ -1,4 +1,4 @@
-import { Text, Loading } from '@nextui-org/react'
+import { Text, Loading, Tooltip } from '@nextui-org/react'
 import React, { useMemo } from 'react'
 import { Flex } from '../../../styles/flex'
 import { OrdersTable } from '../../../table/admin/orders/orders-table'
@@ -6,12 +6,15 @@ const AddOrder = dynamic(() =>
   import('./add-order').then((mod) => mod.AddOrder)
 )
 import { useOrdersContext } from '../../../../context/admin/orders'
-import { Team } from '../../../../interfaces'
 import dynamic from 'next/dynamic'
 import { debounce } from 'lodash'
+import { PrintIcon } from '../../../icons/table'
+import { generateOrdersReport } from '../../../../utils'
+import { useCurrentUser } from '../../../../hooks/current-user'
 
 export const OrdersPage = () => {
   const { orders, loading } = useOrdersContext()
+  const user = useCurrentUser()
 
   return (
     <Flex
@@ -30,8 +33,32 @@ export const OrdersPage = () => {
         <h1 className='font-semibold text-2xl'>Orders</h1>
         <AddOrder />
       </div>
+      <div className='w-full flex items-center'>
+        <SearchAndFilter />
 
-      <SearchAndFilter />
+        {/* Print report */}
+        <div className='flex flex-col items-end ml-auto'>
+          <Tooltip content='Export'>
+            <button
+              className='flex items-center gap-x-2 ml-auto'
+              onClick={() =>
+                //Fleetrun - Branch Name - Date
+                generateOrdersReport(
+                  orders,
+                  'FleetRun' +
+                    '-' +
+                    String(user.username as string) +
+                    '-' +
+                    new Date().toLocaleDateString()
+                )
+              }
+            >
+              <span>Print</span>
+              <PrintIcon />
+            </button>
+          </Tooltip>
+        </div>
+      </div>
 
       {loading ? (
         <Loading size='xl' className='mt-24 -mb-24' color='warning' />
@@ -62,6 +89,8 @@ export const SearchAndFilter = () => {
     setFilters,
     handleFilterDate,
   } = useOrdersContext()
+  const { orders } = useOrdersContext()
+  const user = useCurrentUser()
 
   const debouncedSearch = useMemo(
     () => debounce((e) => handleSearchOrders(e.target.value), 500),
@@ -69,7 +98,7 @@ export const SearchAndFilter = () => {
   )
 
   return (
-    <div className='w-full grid grid-cols-1 gap-6 lg:grid-cols-4 px-6'>
+    <div className='w-full grid grid-cols-1 gap-3 lg:grid-cols-4 px-6'>
       {/* Search */}
       <input
         name='search'
@@ -100,6 +129,7 @@ export const SearchAndFilter = () => {
           }}
         />
       </div>
+
       {/* Date To */}
       <div className='h-10 flex items-center gap-x-4 bg-gray-200 rounded px-4 relative lg:mx-auto lg:max-w-xs'>
         <span className='text-gray-400'>Date To</span>
@@ -120,6 +150,7 @@ export const SearchAndFilter = () => {
           }}
         />
       </div>
+
       {/* Payment type: visa or cash */}
       <div className='h-10 flex items-center gap-x-4 bg-gray-200 rounded px-4 relative lg:mx-auto lg:max-w-xs'>
         <span className='text-gray-400'>Payment type</span>
