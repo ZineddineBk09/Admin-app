@@ -110,3 +110,8 @@ export const generateOrdersReport = (orders: Order[], fileName: string) => {
     },
   })
 }
+
+export const checkValidImageUrl = (url: string) => {
+  const urlRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/g
+  return urlRegex.test(url)
+}
