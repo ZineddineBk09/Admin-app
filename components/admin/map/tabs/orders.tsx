@@ -1,23 +1,9 @@
-import Image from 'next/image'
-import React, { useEffect, useState } from 'react'
-import {
-  BagCheckedIcon,
-  BagCrossedIcon,
-  BagIcon,
-  TrajectoryIcon,
-} from '../../../icons/orders'
+import React, { useState } from 'react'
+import { BagIcon } from '../../../icons/orders'
 import { Order } from '../../../../interfaces'
 import { useMapContext } from '../../../../context/admin/map'
 import { FilterIcon } from '../../../icons/map'
-import {
-  Card,
-  Button,
-  Loading,
-  Modal,
-  Text,
-  Tooltip,
-  Checkbox,
-} from '@nextui-org/react'
+import { Button, Modal, Text, Checkbox } from '@nextui-org/react'
 import { Flex } from '../../../styles/flex'
 
 export const Orders = ({ orderStatus }: { orderStatus: any }) => {
