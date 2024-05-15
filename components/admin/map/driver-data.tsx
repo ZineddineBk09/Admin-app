@@ -5,6 +5,7 @@ import { MapDriver } from '../../../interfaces'
 import toast from 'react-hot-toast'
 import { cancelRecord } from '../../../lib/api'
 import { InactivateDriver } from './inactivate-driver'
+import { checkValidImageUrl } from '../../../utils'
 
 export const DriverData = () => {
   const { drivers, selectedDriver, statusColor } = useMapContext()
@@ -26,7 +27,11 @@ export const DriverData = () => {
       {/* Image & Status */}
       <div className='flex flex-col items-center gap-y-3'>
         <Image
-          src={driver?.image}
+          src={
+            checkValidImageUrl(driver?.image)
+              ? driver?.image
+              : '/images/logo.png'
+          }
           alt={driver?.username}
           width={120}
           height={120}

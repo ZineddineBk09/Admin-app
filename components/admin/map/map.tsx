@@ -1,34 +1,30 @@
 import React from 'react-dom'
 import { renderToString } from 'react-dom/server'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  useMapEvents,
-} from 'react-leaflet'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { MapContainer, TileLayer, useMapEvents, Marker } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-easybutton/src/easy-button.js'
 import 'leaflet-easybutton/src/easy-button.css'
 import * as L from 'leaflet'
 import { MapPinIcon } from '../../icons/map'
-import { BBox, MapDriver } from '../../../interfaces'
+import { MapDriver } from '../../../interfaces'
 import { useSession } from 'next-auth/react'
-import mapSocket, { keepAlive } from '../../../lib/socket'
+import mapSocket from '../../../lib/socket'
 import { throttle } from 'lodash'
 import toast from 'react-hot-toast'
 import { useMapContext } from '../../../context/admin/map'
+import { Icon } from '@mui/material'
 
 const THROTTLE_TIME: number = 500
 
-// create a custom icon with L.divIcon and reactDOM.renderToString
 const icon = (symbol?: string) =>
   L.divIcon({
     html: renderToString(
-      <div className='relative flex items-center justify-center'>
-        <p className='absolute top-0 text-xl font-bold'>{symbol}</p>
+      <div className='relative'>
         <MapPinIcon />
+        <p className='absolute -top-5 font-bold'>
+          {symbol}
+        </p>
       </div>
     ),
     iconSize: [60, 180],
@@ -145,14 +141,9 @@ const Map = () => {
 
     drivers.forEach((driver) => {
       markersRef.current.addLayer(
-        L.marker([driver.location.lat, driver.location.lng], {
-          icon: icon(driver.username),
-        }).bindPopup(
-          `<div class='flex flex-col items-center gap-y-1'>
-          <p>${driver.username}</p>
-          <p>${driver.action}</p>
-        </div>`
-        )
+        L.marker([driver.location.lat, driver.location.lng])
+          .setIcon(icon(driver.username))
+          .setLatLng([driver.location.lat, driver.location.lng])
       )
     })
 

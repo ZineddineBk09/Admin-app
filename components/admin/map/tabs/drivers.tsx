@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Card } from '@nextui-org/react'
 import { useMapContext } from '../../../../context/admin/map'
 import { DriverInboxIcon, DriverOrdersIcon } from '../../../icons/drivers'
-import { truncateTxt } from '../../../../utils'
+import { checkValidImageUrl, truncateTxt } from '../../../../utils'
 import { MapDriver } from '../../../../interfaces'
 
 export const Drivers = () => {
@@ -45,11 +45,6 @@ const DriverCard = ({ driver }: { driver: MapDriver }) => {
     else setSelected(false)
   }, [selectedDriver])
 
-  const checkValidUrl = (url: string) => {
-    const urlRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/g
-    return urlRegex.test(url)
-  }
-
   return (
     <Card
       isPressable
@@ -65,7 +60,7 @@ const DriverCard = ({ driver }: { driver: MapDriver }) => {
         >
           {/* Image */}
           <Image
-            src={checkValidUrl(image) ? image : '/images/logo.png'}
+            src={checkValidImageUrl(image) ? image : '/images/logo.png'}
             alt='Driver Image'
             objectFit='cover'
             width={95}
