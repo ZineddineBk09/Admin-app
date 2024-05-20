@@ -15,6 +15,7 @@ import { useAreasGovernoratesContext } from '../../../../../context/admin/areas/
 import { AddArea } from './add-area'
 import { DeleteArea } from './delete-area'
 import { DeleteModal } from '../../../../modals/delete'
+import Select from 'react-select'
 const CityMap = dynamic(() => import('./map'), {
   ssr: false,
   loading: () => <Loading />,
@@ -170,7 +171,9 @@ export const CityCard = ({ city }: { city: City }) => {
                       })
                     }}
                   />
-                  <span className='text-gray-500 w-32 text-xs md:text-sm'>SAR</span>
+                  <span className='text-gray-500 w-32 text-xs md:text-sm'>
+                    SAR
+                  </span>
                 </>
                 <b className='mx-5'>/</b>
                 <>
@@ -189,7 +192,9 @@ export const CityCard = ({ city }: { city: City }) => {
                       })
                     }}
                   />
-                  <span className='text-gray-500 w-32 text-xs md:text-sm'>KM</span>
+                  <span className='text-gray-500 w-32 text-xs md:text-sm'>
+                    KM
+                  </span>
                 </>
               </div>
               {(showSave.price_ratio_denominator ||
@@ -225,7 +230,9 @@ export const CityCard = ({ city }: { city: City }) => {
                       })
                     }}
                   />
-                  <span className='text-gray-500 w-32 text-xs md:text-sm'>SAR</span>
+                  <span className='text-gray-500 w-32 text-xs md:text-sm'>
+                    SAR
+                  </span>
                 </>
                 <b className='mx-5'>/</b>
                 <>
@@ -244,7 +251,9 @@ export const CityCard = ({ city }: { city: City }) => {
                       })
                     }}
                   />
-                  <span className='text-gray-500 w-32 text-xs md:text-sm'>KM</span>
+                  <span className='text-gray-500 w-32 text-xs md:text-sm'>
+                    KM
+                  </span>
                 </>
               </div>
               {(showSave.additional_ratio_denominator ||
@@ -296,8 +305,8 @@ export const CityCard = ({ city }: { city: City }) => {
 }
 
 export const SearchCity = () => {
-  const { countries } = useAreasCountriesContext()
-  const { governorates } = useAreasGovernoratesContext()
+  const countriesCtxt = useAreasCountriesContext()
+  const governoratesCtxt = useAreasGovernoratesContext()
   const { handleFilterCountry, handleFilterGovernorate } =
     useAreasCitiesContext()
   const [selectedCountry, setSelectedCountry] = React.useState('all')
@@ -306,6 +315,9 @@ export const SearchCity = () => {
   const handleSelectCountry = (country: string) => {
     setSelectedCountry(country)
     handleFilterCountry(country)
+
+    // Reset governorate
+    setSelectedGovernorate('all')
   }
 
   const handleSelectGovernorate = (governorate: string) => {
@@ -316,40 +328,73 @@ export const SearchCity = () => {
   return (
     <div className='w-full flex items-center gap-x-6 ml-12'>
       <label className='text-sm'>Select Country</label>
-      <div className='w-72 h-10 bg-white rounded-full px-4'>
-        <select
-          name='country'
+      <div className='w-72 h-10'>
+        <Select
           id='country'
-          className='w-72 h-10 bg-white rounded-full text-gray-900 text-sm block  p-2.5'
-          onChange={(e) => handleSelectCountry(e.target.value)}
-        >
-          <option value='all'>Select Country (All)</option>
-          {countries?.map((country: Country, index: number) => (
-            <option key={index} value={country.name} className='px-2'>
-              {country.name}
-            </option>
-          ))}
-        </select>
+          name='country'
+          classNames={{
+            control: (state) => 'p-1',
+          }}
+          isClearable={true}
+          isSearchable={true}
+          options={
+            countriesCtxt.countries?.map((country: Country) => ({
+              value: country.id,
+              label: country.name,
+            })) || []
+          }
+          onChange={(selectedOption) => {
+            handleSelectCountry(selectedOption?.label || 'all')
+          }}
+          onMenuScrollToBottom={() => {
+            countriesCtxt.fetchNextPage()
+          }}
+        />
       </div>
-      <div className='w-72 h-10 bg-white rounded-full px-4'>
-        <select
+      <div className='w-72 h-10 '>
+        {/* <select
           name='governorate'
           id='governorate'
-          className='w-72 h-10 bg-white rounded-full text-gray-900 text-sm block  p-2.5'
+          className='w-72 h-10'
           onChange={(e) => handleSelectGovernorate(e.target.value)}
         >
           <option value='all'>Select Governorate (All)</option>
 
           {governorates
             ?.filter(
-              (governorate) => governorate?.country.name === selectedCountry
+              (governorate) => governorate?.country?.name === selectedCountry
             )
             .map((governorate: any, index: number) => (
               <option key={index} value={governorate?.name} className='px-2'>
                 {governorate?.name}
               </option>
             ))}
-        </select>
+        </select> */}
+        <Select
+          id='governorate'
+          name='governorate'
+          classNames={{
+            control: (state) => 'p-1',
+          }}
+          isClearable={true}
+          isSearchable={false}
+          options={
+            governoratesCtxt.governorates
+              ?.filter(
+                (governorate) => governorate?.country?.name === selectedCountry
+              )
+              .map((governorate: any) => ({
+                value: governorate.id,
+                label: governorate.name,
+              })) || []
+          }
+          onChange={(selectedOption) => {
+            handleSelectGovernorate(selectedOption?.label || 'all')
+          }}
+          onMenuScrollToBottom={() => {
+            governoratesCtxt.fetchNextPage()
+          }}
+        />
       </div>
     </div>
   )
