@@ -121,7 +121,7 @@ const CountryCard = ({ country }: { country: Country }) => {
             ${showInfos ? 'rotate-90' : 'rotate-0'}
             `}
             />
-            <h1 className='text-lg font-semibold'>
+            <h1 className='text-lg font-semibold capitalize'>
               {name} <span className='ml-6 text-sm text-gray-400'>#{id}</span>
             </h1>
           </div>
