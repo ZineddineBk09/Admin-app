@@ -137,7 +137,7 @@ export const AddTeam = ({
                           <span>{member.name}</span>
                           <span className='w-full flex items-center text-gray-500 gap-x-2'>
                             <MapPinIcon className='h-7 mb-1 text-gray-400' />
-                            {member.city.name}
+                            {member.city?.name}
                           </span>
                         </div>
 
