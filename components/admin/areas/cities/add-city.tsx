@@ -19,14 +19,15 @@ import { createRecord } from '../../../../lib/api'
 import { useAreasCitiesContext } from '../../../../context/admin/areas/cities'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import { useAreasCountriesContext } from '../../../../context/admin/areas/countries'
+import Select from 'react-select'
 
 export const AddCity = () => {
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
   const { refreshCities } = useAreasCitiesContext()
-  const { governorates, handleFilter } = useAreasGovernoratesContext()
-  const { countries } = useAreasCountriesContext()
+  const governoratesCtxt = useAreasGovernoratesContext()
+  const countriesCtxt = useAreasCountriesContext()
   const [priceUnit, setPriceUnit] = React.useState<string>('')
   const [selectedCountry, setSelectedCountry] = React.useState<string>('')
 
@@ -80,10 +81,36 @@ export const AddCity = () => {
     },
   })
 
+  const handleCountryChange = (countryId: number) => {
+    const country = countriesCtxt.countries?.find(
+      (country: Country) => country?.id == countryId
+    )
+    if (country) {
+      formik.setFieldValue('order_fees', country?.order_fees)
+      formik.setFieldValue(
+        'price_ratio_nominator',
+        country?.price_ratio_nominator
+      )
+      formik.setFieldValue(
+        'price_ratio_denominator',
+        country?.price_ratio_denominator
+      )
+      formik.setFieldValue(
+        'additional_ratio_nominator',
+        country?.additional_ratio_nominator
+      )
+      formik.setFieldValue(
+        'additional_ratio_denominator',
+        country?.additional_ratio_denominator
+      )
+      setPriceUnit(country?.price_unit.symbol)
+    }
+  }
+
   // wrire a function that handles reating a country, so that the governorate can inherit the values: order_fees, price_unit from the country
-  const handleGovernorateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const govern = governorates?.find(
-      (govern: Governorate) => govern.id == e.target.value
+  const handleGovernorateChange = (governorateId: number) => {
+    const govern = governoratesCtxt.governorates?.find(
+      (govern: Governorate) => govern.id == governorateId
     )
     if (govern) {
       formik.setFieldValue('order_fees', govern.order_fees)
@@ -176,23 +203,46 @@ export const AddCity = () => {
                   >
                     Country
                   </label>
-                  <select
+                  {/* <select
                     id='country'
                     name='country'
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                       setSelectedCountry(e.target.value)
-                      handleFilter(e.target.value)
+                      governoratesCtxt.handleFilter(e.target.value)
                     }}
                     value={selectedCountry}
                     className='border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 border-gray-300 bg-gray-100'
                   >
                     <option value=''>Select Country</option>
-                    {countries?.map((country: Country) => (
+                    {countriesCtxt.countries?.map((country: Country) => (
                       <option key={country?.id} value={country?.name}>
                         {country?.name}
                       </option>
                     ))}
-                  </select>
+                  </select> */}
+
+                  <Select
+                    id='country'
+                    name='country'
+                    classNames={{
+                      control: (state) => 'p-1',
+                    }}
+                    isClearable={true}
+                    isSearchable={true}
+                    options={
+                      countriesCtxt.countries?.map((country: Country) => ({
+                        value: country.id,
+                        label: country.name,
+                      })) || []
+                    }
+                    onChange={(selectedOption) => {
+                      formik.setFieldValue('country', selectedOption?.value)
+                      handleCountryChange(selectedOption?.value as number)
+                    }}
+                    onMenuScrollToBottom={() => {
+                      countriesCtxt.fetchNextPage()
+                    }}
+                  />
                 </div>
                 {/* Governorate */}
                 <div>
@@ -208,7 +258,7 @@ export const AddCity = () => {
                       ? formik.errors.governorate
                       : 'Governorate'}
                   </label>
-                  <select
+                  {/* <select
                     id='governorate'
                     name='governorate'
                     onChange={(e) => {
@@ -223,12 +273,38 @@ export const AddCity = () => {
                     }`}
                   >
                     <option value=''>Select Governorate</option>
-                    {governorates?.map((governorate: Governorate) => (
-                      <option key={governorate?.id} value={governorate?.id}>
-                        {governorate?.name}
-                      </option>
-                    ))}
-                  </select>
+                    {governoratesCtxt.governorates?.map(
+                      (governorate: Governorate) => (
+                        <option key={governorate?.id} value={governorate?.id}>
+                          {governorate?.name}
+                        </option>
+                      )
+                    )}
+                  </select> */}
+                  <Select
+                    id='governorate'
+                    name='governorate'
+                    classNames={{
+                      control: (state) => 'p-1',
+                    }}
+                    isClearable={true}
+                    isSearchable={true}
+                    options={
+                      governoratesCtxt.governorates?.map(
+                        (governorate: Governorate) => ({
+                          value: governorate.id,
+                          label: governorate.name,
+                        })
+                      ) || []
+                    }
+                    onChange={(selectedOption) => {
+                      formik.setFieldValue('governorate', selectedOption?.value)
+                      handleGovernorateChange(selectedOption?.value as number)
+                    }}
+                    onMenuScrollToBottom={() => {
+                      governoratesCtxt.fetchNextPage()
+                    }}
+                  />
                 </div>
                 {/* Order Fees */}
                 <Input
