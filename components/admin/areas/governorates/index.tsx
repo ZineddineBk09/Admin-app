@@ -10,10 +10,10 @@ import toast from 'react-hot-toast'
 import { updateRecord } from '../../../../lib/api'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { DeleteModal } from '../../../modals/delete'
+import Select from 'react-select'
 
 const Governorates = () => {
-  const { governorates, hasMore, fetchNextPage, isFetching } =
-    useAreasGovernoratesContext()
+  const { governorates, hasMore, fetchNextPage } = useAreasGovernoratesContext()
 
   return (
     <div className='w-full mx-auto flex flex-col items-center gap-y-6'>
@@ -275,27 +275,36 @@ const GovernorateCard = ({ governorate }: { governorate: Governorate }) => {
 }
 
 const FilterWithCountry = () => {
-  const { countries } = useAreasCountriesContext()
-  const { handleFilter } = useAreasGovernoratesContext()
+  const countriesCtxt = useAreasCountriesContext()
+  const { handleSelectCountry } = useAreasGovernoratesContext()
 
   return (
     <div className='w-full flex items-center gap-x-6 ml-12'>
       <label aria-label='Country' className='text-sm'>
         Select Country
       </label>
-      <select
-        name='country'
+
+      <Select
         id='country'
-        className='w-72 h-10 bg-white rounded-full text-gray-900 text-sm block  p-2.5'
-        onChange={(e) => handleFilter(e.target.value)}
-      >
-        <option value='all'>Select Country (All)</option>
-        {countries?.map((country: Country, index: number) => (
-          <option key={index} value={country?.name} className='px-2'>
-            {country?.name}
-          </option>
-        ))}
-      </select>
+        name='country'
+        classNames={{
+          control: (state) => 'p-1 w-72',
+        }}
+        isClearable={true}
+        isSearchable={true}
+        options={
+          countriesCtxt.countries?.map((country: Country) => ({
+            value: country.id,
+            label: country.name,
+          })) || []
+        }
+        onChange={(selectedOption) => {
+          handleSelectCountry(selectedOption?.label || 'all')
+        }}
+        onMenuScrollToBottom={() => {
+          countriesCtxt.fetchNextPage()
+        }}
+      />
     </div>
   )
 }

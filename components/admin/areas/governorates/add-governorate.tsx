@@ -7,7 +7,7 @@ import {
   Tooltip,
   Popover,
 } from '@nextui-org/react'
-import React from 'react'
+import React, { useState } from 'react'
 import { Flex } from '../../../styles/flex'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -18,12 +18,13 @@ import toast from 'react-hot-toast'
 import { createRecord } from '../../../../lib/api'
 import { useAreasGovernoratesContext } from '../../../../context/admin/areas/governorates'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
+import Select from 'react-select'
 
 export const AddGovernorate = () => {
   const [visible, setVisible] = React.useState(false)
   const handler = () => setVisible(true)
   const [loading, setLoading] = React.useState<boolean>(false)
-  const { countries } = useAreasCountriesContext()
+  const { countries, fetchNextPage } = useAreasCountriesContext()
   const { refreshGovernorates } = useAreasGovernoratesContext()
   const [priceUnit, setPriceUnit] = React.useState<string>('SAR')
 
@@ -84,10 +85,9 @@ export const AddGovernorate = () => {
     },
   })
 
-  // wrire a function that handles reating a country, so that the governorate can inherit the values: order_fees, price_unit from the country
-  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleCountryChange = (countryId: number) => {
     const country = countries?.find(
-      (country: Country) => country?.id == e.target.value
+      (country: Country) => country?.id == countryId
     )
     if (country) {
       formik.setFieldValue('order_fees', country?.order_fees)
@@ -186,27 +186,29 @@ export const AddGovernorate = () => {
                       ? formik.errors.country
                       : 'Country'}
                   </label>
-                  <select
+
+                  <Select
                     id='country'
                     name='country'
-                    onChange={(e) => {
-                      formik.handleChange(e)
-                      handleCountryChange(e)
+                    classNames={{
+                      control: (state) => 'p-1',
                     }}
-                    value={formik.values.country}
-                    className={`border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 ${
-                      formik.touched.country && formik.errors.country
-                        ? 'border-red-500 bg-red-200'
-                        : 'border-gray-300 bg-gray-100'
-                    }`}
-                  >
-                    <option value=''>Select Country</option>
-                    {countries?.map((Country: Country) => (
-                      <option key={Country.id} value={Country.id}>
-                        {Country.name}
-                      </option>
-                    ))}
-                  </select>
+                    isClearable={true}
+                    isSearchable={true}
+                    options={
+                      countries?.map((country: Country) => ({
+                        value: country.id,
+                        label: country.name,
+                      })) || []
+                    }
+                    onChange={(selectedOption) => {
+                      formik.setFieldValue('country', selectedOption?.value)
+                      handleCountryChange(selectedOption?.value as number)
+                    }}
+                    onMenuScrollToBottom={() => {
+                      fetchNextPage()
+                    }}
+                  />
                 </div>
                 {/* Order Fees */}
                 <Input
