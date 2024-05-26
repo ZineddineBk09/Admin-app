@@ -12,12 +12,9 @@ import { Flex } from '../../../styles/flex'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { createRecord } from '../../../../lib/api'
-import { City, Country, OrderItem } from '../../../../interfaces'
+import { OrderItem } from '../../../../interfaces'
 import { useOrdersContext } from '../../../../context/admin/orders'
-import { useAreasCitiesContext } from '../../../../context/admin/areas/cities'
 import toast from 'react-hot-toast'
-import { useAreasGovernoratesContext } from '../../../../context/admin/areas/governorates'
-import { useAreasCountriesContext } from '../../../../context/admin/areas/countries'
 import { useClientsBranchesContext } from '../../../../context/admin/clients/branches'
 import { BinIcon } from '../../../icons/areas'
 import BranchMap from './map'
@@ -28,9 +25,6 @@ export const AddOrder = () => {
   const [error, setError] = React.useState<string>('')
   const [loading, setLoading] = React.useState<boolean>(false)
   const { refreshOrders } = useOrdersContext()
-  const { countries } = useAreasCountriesContext()
-  const { governorates } = useAreasGovernoratesContext()
-  const { cities } = useAreasCitiesContext()
   const { branches } = useClientsBranchesContext()
   const [collectAddress, setCollectAddress] = React.useState<boolean>(true)
 
@@ -39,7 +33,6 @@ export const AddOrder = () => {
       external_id: '',
       delivery_lat: 21.3879,
       delivery_lng: 39.8579,
-      // delivery_city: '',
       customer_name: '',
       customer_phone_number: '',
       client: '',
@@ -48,9 +41,12 @@ export const AddOrder = () => {
     },
     validationSchema: Yup.object({
       external_id: Yup.string().required('External ID is required'),
-      delivery_lat: Yup.string().required('Delivery Country is required'),
-      delivery_lng: Yup.string().required('Delivery Governorate is required'),
-      // delivery_city: Yup.string().required('Delivery City is required'),
+      delivery_lat: Yup.number().required(
+        'Delivery Address Latitude is required'
+      ),
+      delivery_lng: Yup.number().required(
+        'Delivery Address Longitude is required'
+      ),
       customer_name: Yup.string().required('Customer is required'),
       customer_phone_number: Yup.string().required(
         'Customer Phone Number is required'
@@ -73,7 +69,6 @@ export const AddOrder = () => {
         {
           latitude: values.delivery_lat,
           longitude: values.delivery_lng,
-          // city: values.delivery_city,
         },
         'address'
       )
@@ -221,7 +216,9 @@ export const AddOrder = () => {
                     <option value=''>Select Branch</option>
                     {branches?.map((branch) => (
                       <option key={branch.id} value={branch.id}>
-                        {branch.account.name + ' - ' + branch.address.city.name}{' '}
+                        {branch.account.name +
+                          ' - ' +
+                          branch.address.city?.name}{' '}
                         {branch.main && 'Main'}
                       </option>
                     ))}
@@ -283,27 +280,6 @@ export const AddOrder = () => {
                     }}
                     className='w-full'
                   >
-                    {/* <select
-                      id='delivery_lat'
-                      name='delivery_lat'
-                      onChange={(e) => {
-                        formik.handleChange(e)
-                      }}
-                      value={formik.values.delivery_lat}
-                      className={`w-1/3 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block p-2.5 ${
-                        formik.touched.delivery_lat &&
-                        formik.errors.delivery_lat
-                          ? 'border-red-500 bg-red-200'
-                          : 'border-gray-300 bg-gray-100'
-                      }`}
-                    >
-                      <option value=''>Select Country</option>
-                      {countries?.map((Country: Country) => (
-                        <option key={Country.id} value={Country.id}>
-                          {Country.name}
-                        </option>
-                      ))}
-                    </select> */}
                     <Input
                       label={
                         formik.touched.delivery_lat &&
@@ -327,28 +303,6 @@ export const AddOrder = () => {
                       }
                     />
 
-                    {/* <select
-                      id='delivery_lng'
-                      name='delivery_lng'
-                      onChange={(e) => {
-                        formik.handleChange(e)
-                      }}
-                      value={formik.values.delivery_lng}
-                      className={`w-1/3 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block p-2.5 ${
-                        formik.touched.delivery_lng &&
-                        formik.errors.delivery_lng
-                          ? 'border-red-500 bg-red-200'
-                          : 'border-gray-300 bg-gray-100'
-                      }`}
-                    >
-                      <option value=''>Select Governorate</option>
-                      {governorates?.map((Governorate) => (
-                        <option key={Governorate.id} value={Governorate.id}>
-                          {Governorate.name}
-                        </option>
-                      ))}
-                    </select> */}
-
                     <Input
                       label={
                         formik.touched.delivery_lng &&
@@ -371,28 +325,6 @@ export const AddOrder = () => {
                           : 'default'
                       }
                     />
-
-                    {/* <select
-                      id='delivery_city'
-                      name='delivery_city'
-                      onChange={(e) => {
-                        formik.handleChange(e)
-                      }}
-                      value={formik.values.delivery_city}
-                      className={`w-1/3 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block p-2.5 ${
-                        formik.touched.delivery_city &&
-                        formik.errors.delivery_city
-                          ? 'border-red-500 bg-red-200'
-                          : 'border-gray-300 bg-gray-100'
-                      }`}
-                    >
-                      <option value=''>Select City</option>
-                      {cities?.map((City: City) => (
-                        <option key={City.id} value={City.id}>
-                          {City.name}
-                        </option>
-                      ))}
-                    </select> */}
                   </Flex>
                 </div>
                 <div>

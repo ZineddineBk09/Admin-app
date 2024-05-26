@@ -13,7 +13,6 @@ import mapSocket from '../../../lib/socket'
 import { throttle } from 'lodash'
 import toast from 'react-hot-toast'
 import { useMapContext } from '../../../context/admin/map'
-import { Icon } from '@mui/material'
 
 const THROTTLE_TIME: number = 500
 

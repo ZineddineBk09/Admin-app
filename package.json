@@ -39,6 +39,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-leaflet": "^4.2.1",
     "react-leaflet-draw": "^0.20.4",
+    "react-select": "^5.8.0",
     "react-to-print": "^2.14.15",
     "rsuite": "^5.50.0",
     "sharp": "^0.33.2",

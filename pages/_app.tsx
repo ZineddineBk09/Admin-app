@@ -9,6 +9,8 @@ import { Toaster } from 'react-hot-toast'
 import 'rsuite/dist/rsuite-no-reset.min.css'
 import { CustomProvider } from 'rsuite'
 import { publicRoutes } from '../routes'
+import Head from 'next/head'
+import { getPageTitle } from '../utils'
 
 const theme = createTheme({
   type: 'light',
@@ -20,30 +22,39 @@ const theme = createTheme({
 })
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const path = useRouter().pathname.split('/')[1]
+  const pathname: string = useRouter().pathname
+  const path: string = pathname.split('/')[1]
+  const pageTitle: string = getPageTitle(pathname)
+    ? 'FleetRun | ' + getPageTitle(pathname)
+    : 'FleetRun'
   const { session }: any = pageProps
 
   return (
-    <SessionProvider session={session}>
-      <AuthGuard>
-        <CustomProvider>
-          <NextUIProvider theme={theme}>
-            {publicRoutes.includes(path) ? (
-              <main className='w-full h-fit flex flex-col items-center'>
-                <Component {...pageProps} />
-              </main>
-            ) : (
-              <Layout>
+    <>
+      <Head>
+        <title>{pageTitle}</title>
+      </Head>
+      <SessionProvider session={session}>
+        <AuthGuard>
+          <CustomProvider>
+            <NextUIProvider theme={theme}>
+              {publicRoutes.includes(path) ? (
                 <main className='w-full h-fit flex flex-col items-center'>
                   <Component {...pageProps} />
                 </main>
-              </Layout>
-            )}
-          </NextUIProvider>
-        </CustomProvider>
-      </AuthGuard>
-      <Toaster />
-    </SessionProvider>
+              ) : (
+                <Layout>
+                  <main className='w-full h-fit flex flex-col items-center'>
+                    <Component {...pageProps} />
+                  </main>
+                </Layout>
+              )}
+            </NextUIProvider>
+          </CustomProvider>
+        </AuthGuard>
+        <Toaster />
+      </SessionProvider>
+    </>
   )
 }
 

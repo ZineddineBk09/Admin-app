@@ -366,7 +366,7 @@ export const AddDriver = () => {
                           value={city.id}
                           className='capitalize h-20'
                         >
-                          {city.name}
+                          {city?.name}
                         </option>
                       ))}
                     </select>

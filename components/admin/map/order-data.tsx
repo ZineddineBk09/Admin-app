@@ -77,7 +77,7 @@ export const OrderData = () => {
             />
             <span className='font-semibold'>{order?.client?.account.name}</span>
             <span className='text-gray-500'>
-              {order?.client?.address.city.name}
+              {order?.client?.address.city?.name}
             </span>
             {/* <span className='text-[#59AFFF]'>{order?.client?.phone}</span> */}
           </div>
