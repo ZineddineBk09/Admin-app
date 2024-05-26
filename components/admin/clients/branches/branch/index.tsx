@@ -55,8 +55,8 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
   })
   const formik = useFormik({
     initialValues: {
-      governorate: address.governorate.name,
-      city: address.city.name,
+      governorate: address.governorate?.name,
+      city: address.city?.name,
       order_fees,
       driver_fees,
       phone_number,
@@ -111,7 +111,7 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
             `}
               />
               <h1 className='text-lg font-semibold'>
-                {account.name + '-' + address.city.name} {main && ' (Main)'}
+                {account.name + '-' + address.city?.name} {main && ' (Main)'}
                 <span className='ml-6 text-sm text-gray-400'>#{id}</span>
               </h1>
             </div>
@@ -125,7 +125,7 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
             <div className='w-full grid grid-cols-2 lg:grid-cols-4'>
               <div className='w-full flex items-center gap-x-6 col-span-2'>
                 <LabelField>Country</LabelField>
-                <p className='font-medium text-sm'>{address.country.name}</p>
+                <p className='font-medium text-sm'>{address.country?.name}</p>
               </div>
 
               <div className='w-full mx-auto flex justify-start gap-x-6 col-span-2 mt-4 lg:mt-0 lg:justify-evenly'>
@@ -163,7 +163,7 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
                   >
                     {governorates?.map((governorate: Governorate) => (
                       <option key={governorate.id} value={governorate.id}>
-                        {governorate.name}
+                        {governorate?.name}
                       </option>
                     ))}
                   </select>
@@ -191,7 +191,7 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
                   >
                     {cities?.map((city: City) => (
                       <option key={city.id} value={city.id}>
-                        {city.name}
+                        {city?.name}
                       </option>
                     ))}
                   </select>
@@ -420,8 +420,8 @@ export const SearchBranch = () => {
           >
             <option value=''>All</option>
             {countries?.map((country: Country, index: number) => (
-              <option key={country.id} value={country.name}>
-                {country.name}
+              <option key={country.id} value={country?.name}>
+                {country?.name}
               </option>
             ))}
           </select>

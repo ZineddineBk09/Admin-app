@@ -91,7 +91,7 @@ export const DriverData = () => {
         <button className='h-11 px-12 bg-gray-400 rounded font-medium text-lg shadow-lg hover:bg-opacity-90 transition-all duration-300'>
           Warning
         </button>
-        <InactivateDriver id={driver.id} />
+        {driver.status === 'active' && <InactivateDriver id={driver.id} />}
       </div>
     </div>
   )

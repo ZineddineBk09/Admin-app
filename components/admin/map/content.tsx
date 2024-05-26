@@ -45,7 +45,7 @@ export const Content = () => {
       </div>
 
       {/* Orders & Drivers */}
-      <div className='w-full h-full overflow-y-auto bg-gray-200'>
+      <div className='w-full h-full overflow-y-auto'>
         <OrdersAndDriversTabs />
       </div>
     </div>

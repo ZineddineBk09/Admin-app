@@ -152,7 +152,7 @@ const OrdersFilter = () => {
     <>
       <button
         onClick={handler}
-        className='flex items-center py-[6px] px-3 mb-2 rounded-full gap-x-16 bg-white shadow-lg text-sm ml-auto hover:bg-gray-100 transition-all duration-300'
+        className='flex items-center py-[6px] px-3 mb-2 rounded-full gap-x-16 bg-white  text-sm ml-auto hover:bg-gray-100 transition-all duration-300'
       >
         <span>Filter</span> <FilterIcon />
       </button>
