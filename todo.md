@@ -37,7 +37,7 @@
 - [ ] View all orders list
   - [x] Add action column
   - [x] Make sure all filters work
-  - [ ] Add pagination
+  - [x] Add pagination
 
 # Admin:
 
