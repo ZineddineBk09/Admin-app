@@ -13,14 +13,14 @@ import { filterRecords, getRecord } from '../../../lib/api'
 import { APIResponse, Branch } from '../../../interfaces'
 import { useCurrentRole } from '../../../hooks/current-role'
 import { generateOrdersReport } from '../../../utils'
+import { UserIcon } from '@heroicons/react/24/outline'
 
 export const ClientOrderPage = () => {
   const user = useCurrentUser()
   const role = useCurrentRole()
   const [branch, setBranch] = useState<Branch>({} as Branch)
   const [branches, setBranches] = useState<Branch[]>([] as Branch[])
-  const { orders, calculateUnpaidRoyalties, refreshOrders } =
-    useOrdersContext()
+  const { orders, calculateUnpaidRoyalties, refreshOrders } = useOrdersContext()
   const loading = false
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export const ClientOrderPage = () => {
         direction={'column'}
         className='relative w-full bg-white rounded-lg shadow-lg overflow-x-auto'
       >
-        <div className='w-full flex flex-col items-start justify-between gap-y-4 border-b border-gray-300 px-2 py-4 xl:items-center xl:flex-row xl:gap-x-6'>
+        <div className='w-full flex flex-col items-start justify-between gap-y-4 border-b border-gray-300 px-2 py-4 xl:items-center xl:flex-row xl:gap--6'>
           {/* Logo */}
           <div className='relative w-full h-40 flex items-center gap-x-6 xl:h-10 xl:w-20'>
             <Image
@@ -89,7 +89,7 @@ export const ClientOrderPage = () => {
               <option value='all'>Select Branch</option>
               {branches.map((branch) => (
                 <option key={branch.id} value={branch.id}>
-                  {branch?.account?.name + '-' + branch?.address?.city.name}{' '}
+                  {branch?.account?.name + '-' + branch?.address?.city?.name}{' '}
                   {branch.main && '(Main)'}
                 </option>
               ))}
@@ -165,7 +165,8 @@ export const ClientOrderPage = () => {
 }
 
 export const SearchAndFilter = ({ branch }: { branch: Branch }) => {
-  const { handleFilterDate, handleSearchOrders } = useOrdersContext()
+  const { handleFilterDate, handleSearchOrders, refreshOrders } =
+    useOrdersContext()
 
   return (
     <div className='w-full flex items-center gap-y-3 flex-col xl:flex-row xl:w-fit xl:gap-x-3'>
@@ -184,12 +185,16 @@ export const SearchAndFilter = ({ branch }: { branch: Branch }) => {
       <DateRangePicker
         placeholder='Select Date Range'
         size='lg'
-        onChange={(e: any) =>
+        onChange={(e: any) => {
+          if (!e) {
+            refreshOrders()
+            return
+          }
           handleFilterDate({
             dateFrom: e[0],
             dateTo: e[1],
           })
-        }
+        }}
       />
     </div>
   )
@@ -198,7 +203,9 @@ export const SearchAndFilter = ({ branch }: { branch: Branch }) => {
 const Client = ({ branch }: { branch: Branch }) => {
   return (
     <div className='h-full max-h-28 w-fit flex items-start gap-x-3'>
-      <div className='h-full w-16 bg-gray-300 rounded-lg' />
+      <div className='h-full w-16 flex items-center justify-center mr-auto bg-gray-300 rounded-lg p-2'>
+        <UserIcon className='text-gray-400' />
+      </div>
       <div className='h-full flex flex-col items-start justify-between'>
         <p className='text-xl font-semibold capitalize'>
           {branch?.account?.name + '-' + branch?.address?.city?.name}
