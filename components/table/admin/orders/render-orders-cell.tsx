@@ -89,7 +89,7 @@ export const RenderCell = ({ order, columnKey }: Props) => {
     case 'city':
       return (
         <p className='capitalize text-black font-medium'>
-          {order.delivery_address.city.name}
+          {order.delivery_address.city?.name}
         </p>
       )
 

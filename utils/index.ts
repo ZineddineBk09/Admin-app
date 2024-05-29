@@ -73,22 +73,22 @@ export const generateOrdersReport = (orders: Order[], fileName: string) => {
     'Added At': order.added_at,
     'Client Account': order.client.account.name,
     'Client Address':
-      order.client.address.country.name +
+      order.client.address.country?.name +
       '-' +
-      order.client.address.governorate.name +
+      order.client.address.governorate?.name +
       '-' +
-      order.client.address.city.name,
+      order.client.address.city?.name,
     'Client Supervisor': order.client.supervisor.username,
     'Customer Name': order.customer.name,
     'Customer Phone Number': order.customer.number,
     'Total Order Value': order.total_order_value,
     Status: order.status,
     'Pickup Address':
-      order.pickup_address.country.name +
+      order.pickup_address.country?.name +
       '-' +
-      order.pickup_address.governorate.name +
+      order.pickup_address.governorate?.name +
       '-' +
-      order.pickup_address.city.name,
+      order.pickup_address.city?.name,
   }))
 
   exportFromJSON({
@@ -114,4 +114,27 @@ export const generateOrdersReport = (orders: Order[], fileName: string) => {
 export const checkValidImageUrl = (url: string) => {
   const urlRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/g
   return urlRegex.test(url)
+}
+
+export const getPageTitle = (pathname: string) => {
+  // get the last part of the path
+  // if path is empty then return empty string
+  // if path contains "-" then split it and capitalize each part
+  // if path is equql to "list" then use the second last part of the path
+  // else capitalize the path
+  const path = pathname.split('/').pop() || ''
+  if (path === '') {
+    return 'Login'
+  } else if (path.includes('-')) {
+    const parts = path.split('-')
+    return parts.map((part) => capitalize(part)).join(' ')
+  } else if (path === 'list') {
+    return capitalize(pathname.split('/')[pathname.split('/').length - 2])
+  } else {
+    return capitalize(path)
+  }
+}
+
+const capitalize = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1)
 }

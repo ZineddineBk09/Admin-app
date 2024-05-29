@@ -21,9 +21,7 @@ const icon = (symbol?: string) =>
     html: renderToString(
       <div className='relative'>
         <MapPinIcon />
-        <p className='absolute -top-5 font-bold'>
-          {symbol}
-        </p>
+        <p className='absolute -top-5 font-bold'>{symbol}</p>
       </div>
     ),
     iconSize: [60, 180],
@@ -137,6 +135,8 @@ const Map = () => {
     if (!map || drivers?.length === 0) return
 
     markersRef.current.clearLayers()
+
+    console.log('Drivers:', drivers)
 
     drivers.forEach((driver) => {
       markersRef.current.addLayer(

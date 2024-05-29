@@ -120,7 +120,7 @@ export default NextAuth({
       if (user && account) {
         const roles = ['admin', 'client', 'branch']
         // if user does not have a role "admin" or "client" return null
-        if (!roles.includes(user.role)) {
+        if (!roles.includes(user?.role)) {
           return null
         }
 
