@@ -28,7 +28,7 @@ export const AddTeam = () => {
   const { cities, handleFilterGovernorate } =
     useAreasCitiesContext()
   const { refreshTeams } = useTeamsContext()
-  const { governorates, handleFilter } = useAreasGovernoratesContext()
+  const { governorates, handleSelectCountry } = useAreasGovernoratesContext()
   const { countries } = useAreasCountriesContext()
   const [priceUnit, setPriceUnit] = React.useState<string>('')
   const [selectedCountry, setSelectedCountry] = React.useState<string>('')
@@ -196,7 +196,7 @@ export const AddTeam = () => {
                     name='country'
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                       setSelectedCountry(e.target.value)
-                      handleFilter(e.target.value)
+                      handleSelectCountry(e.target.value)
                     }}
                     value={selectedCountry}
                     className='border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 border-gray-300 bg-gray-100'
