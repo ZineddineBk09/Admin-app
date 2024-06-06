@@ -4,7 +4,7 @@ import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useRouter } from 'next/router'
-import { signIn } from 'next-auth/react'
+import { signIn, signOut } from 'next-auth/react'
 import { useCurrentRole } from '../../hooks/current-role'
 
 const LoginForm = () => {
@@ -29,6 +29,7 @@ const LoginForm = () => {
       try {
         // empty the error
         setError('')
+        // await signOut()
         const signin = await signIn('fleetrun-auth', {
           username: values.username,
           password: values.password,
