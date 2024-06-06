@@ -9,7 +9,7 @@ import dynamic from 'next/dynamic'
 import { renderToString } from 'react-dom/server'
 import { MapPinIcon } from '../../../../../components/icons/map'
 import Loading from '../../../../../components/shared/loading'
-import { partialUpdateRecord } from '../../../../../lib/api'
+import { createRecord, partialUpdateRecord } from '../../../../../lib/api'
 import { useClientsBranchesContext } from '../../../../../context/admin/clients/branches'
 import toast from 'react-hot-toast'
 const EditControl = dynamic(
@@ -95,23 +95,39 @@ const BranchMap = ({
         },
         'address'
       )
-      await partialUpdateRecord(
+
+      await createRecord(
         {
           latitude: position.lat,
           longitude: position.lng,
-          id,
         },
         'address'
       )
-        .then((res) => {
+        .then(async (res) => {
           if (res) {
-            toast.success('Location updated successfully')
-            setUpdateLocation(false)
-            refreshBranches()
+            await partialUpdateRecord(
+              {
+                address: res.id,
+                id,
+              },
+              'branch'
+            )
+              .then((res) => {
+                if (res) {
+                  toast.success('Branch added successfully!')
+                  setUpdateLocation(false)
+                  refreshBranches()
+                }
+              })
+              .catch((err) => {
+                console.log('Error updating branch!: ', err)
+                toast.error('Error updating branch!')
+              })
           }
         })
         .catch((err) => {
-          toast.error('Error updating location!')
+          console.log('Error updating branch!: ', err)
+          toast.error('Error updating branch!')
         })
     } else {
       setUpdateLocation(true)
