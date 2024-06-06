@@ -44,7 +44,7 @@ export const CancelOrder = ({
     //use cancelRecord function
     setLoading(true)
     try {
-      const response = await cancelRecord(id, 'order', note, 'cancel')
+      const response = await cancelRecord(id, 'order', note, 'cancel_order')
         .then(() => {
           toast.success('Order cancelled successfully')
           closeHandler()
