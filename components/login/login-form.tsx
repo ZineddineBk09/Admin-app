@@ -149,7 +149,7 @@ const LoginForm = () => {
               <button
                 type='submit'
                 className={
-                  'w-full text-black bg-primary-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-3 text-center cursor-pointer' +
+                  'w-full text-black disabled:bg-gray-300 disabled:cursor-not-allowed focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-3 text-center cursor-pointer' +
                   ' ' +
                   (formik.errors.username ||
                   formik.errors.password ||
