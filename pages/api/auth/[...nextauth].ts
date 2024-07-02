@@ -73,6 +73,7 @@ export default NextAuth({
       async authorize(credentials: any, req: any): Promise<any> {
         try {
           const { username, password } = credentials
+          console.log('credentials', credentials)
 
           if (!username || !password) return null
 
@@ -80,6 +81,7 @@ export default NextAuth({
             (process.env.NEXT_PUBLIC_BASE_URL + 'login') as string,
             { username, password }
           )
+          console.log('response', response.data)
           const {
             refresh,
             access,
@@ -120,7 +122,7 @@ export default NextAuth({
       if (user && account) {
         const roles = ['admin', 'client', 'branch']
         // if user does not have a role "admin" or "client" return null
-        if (!roles.includes(user.role)) {
+        if (!roles.includes(user?.role)) {
           return null
         }
 

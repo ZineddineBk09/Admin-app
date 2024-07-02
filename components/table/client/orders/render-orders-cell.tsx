@@ -4,8 +4,6 @@ import { CancelOrder } from '../../../admin/orders/list/cancel-order'
 import { EditOrder } from '../../../admin/orders/list/edit-order'
 import { Order } from '../../../../interfaces'
 import { AddNotes } from '../../../admin/orders/list/add-notes'
-import { CheckedIcon } from '../../../icons/table'
-import { XMarkIcon } from '@heroicons/react/24/outline'
 
 interface Props {
   order: Order
@@ -28,7 +26,7 @@ export const RenderCell = ({ order, columnKey }: Props) => {
     case 'branch':
       return (
         <p>
-          {order?.client.account.name + '-' + order?.client.address.city.name}
+          {order?.client.account.name + '-' + order?.client.address.city?.name}
         </p>
       )
 
@@ -96,7 +94,7 @@ export const RenderCell = ({ order, columnKey }: Props) => {
     case 'city':
       return (
         <p className='capitalize text-black font-medium'>
-          {order.delivery_address.city.name}
+          {order.delivery_address.city?.name}
         </p>
       )
 
@@ -175,12 +173,12 @@ export const RenderCell = ({ order, columnKey }: Props) => {
           align='center'
           css={{ gap: '$8', '@md': { gap: 3 } }}
         >
-          <Col css={{ d: 'flex' }}>
+          {/* <Col css={{ d: 'flex' }}>
             <EditOrder order={order} />
-          </Col>
-          <Col css={{ d: 'flex' }}>
+          </Col> */}
+          {/* <Col css={{ d: 'flex' }}>
             <AddNotes order={order} />
-          </Col>
+          </Col> */}
           <Col css={{ d: 'flex' }}>
             <CancelOrder id={order?.id} />
           </Col>

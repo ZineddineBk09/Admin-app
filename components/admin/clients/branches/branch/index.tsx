@@ -376,7 +376,7 @@ export const BranchCard = ({ branch }: { branch: Branch }) => {
           }`}
         >
           <BranchMap
-            id={address.id}
+            id={id}
             location={{
               lat: address.latitude || 0,
               lng: address.longitude || 0,

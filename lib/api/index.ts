@@ -100,6 +100,7 @@ export const searchRecords = async (search: string, endpoint: string) => {
   }
 }
 
+// http://194.233.173.78:8000/api/v1/order/2/?transition=cancel_order
 export const cancelRecord = async (
   id: string | number,
   endpoint: string,
@@ -107,10 +108,12 @@ export const cancelRecord = async (
   transition: string
 ) => {
   try {
-    const response = await axios.put(endpoint + '/' + id + '/', {
-      transition,
-      note,
-    })
+    const response = await axios.put(
+      endpoint + '/' + id + '/?transition=' + transition,
+      {
+        transition_description_field: note,
+      }
+    )
     const data = await response.data
     return data
   } catch (error) {

@@ -13,7 +13,7 @@ export const useAreasGovernoratesContext: {
     isFetching: boolean
     fetchNextPage: () => Promise<void>
     refreshGovernorates: () => Promise<void>
-    handleFilter: (countryId: string) => void
+    handleSelectCountry: (countryId: string) => void
   }
 } = () => React.useContext(AreasGovernoratesContext as any)
 
@@ -41,7 +41,7 @@ export const AreasGovernoratesContextProvider = ({
     setLoading(false)
   }
 
-  const handleFilter = async (country: string) => {
+  const handleSelectCountry = async (country: string) => {
     // check if the user selected 'all' countries
     console.log('fitltering governorates on country:', country)
     if (country == 'all') {
@@ -102,7 +102,7 @@ export const AreasGovernoratesContextProvider = ({
         isFetching,
         fetchNextPage,
         refreshGovernorates,
-        handleFilter,
+        handleSelectCountry,
       }}
     >
       {children}

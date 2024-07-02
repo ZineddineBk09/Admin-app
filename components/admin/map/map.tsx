@@ -7,28 +7,16 @@ import 'leaflet-easybutton/src/easy-button.js'
 import 'leaflet-easybutton/src/easy-button.css'
 import * as L from 'leaflet'
 import { MapPinIcon } from '../../icons/map'
-import { MapDriver } from '../../../interfaces'
+import { APIResponse, MapDriver } from '../../../interfaces'
 import { useSession } from 'next-auth/react'
 import mapSocket from '../../../lib/socket'
 import { throttle } from 'lodash'
 import toast from 'react-hot-toast'
 import { useMapContext } from '../../../context/admin/map'
+import { getRecords } from '../../../lib/api'
+import { title } from 'process'
 
 const THROTTLE_TIME: number = 500
-
-const icon = (symbol?: string) =>
-  L.divIcon({
-    html: renderToString(
-      <div className='relative'>
-        <MapPinIcon />
-        <p className='absolute -top-5 font-bold'>
-          {symbol}
-        </p>
-      </div>
-    ),
-    iconSize: [60, 180],
-    className: 'leaflet-icon drop-shadow-lg',
-  })
 
 function MapEvents() {
   const { data: session } = useSession()
@@ -45,6 +33,8 @@ function MapEvents() {
         .getBounds()
         .toBBoxString()
         .split(',')
+
+      console.log(min_lng, min_lat, max_lng, max_lat)
 
       // handle invalid bounds
       if (parseFloat(min_lat) < -90 || parseFloat(max_lat) > 90) return
@@ -137,13 +127,36 @@ const Map = () => {
     if (!map || drivers?.length === 0) return
 
     markersRef.current.clearLayers()
+    console.log('Drivers:', drivers)
 
     drivers.forEach((driver) => {
-      markersRef.current.addLayer(
-        L.marker([driver.location.lat, driver.location.lng])
-          .setIcon(icon(driver.username))
-          .setLatLng([driver.location.lat, driver.location.lng])
+      console.log(
+        'Add Driver:',
+        driver.username,
+        driver.location.lat,
+        driver.location.lng
       )
+
+      const marker = L.marker([driver.location.lat, driver.location.lng])
+        .setIcon(
+          L.icon({
+            iconUrl: '/images/icons/motor-icon.svg',
+            iconSize: [35, 46],
+            iconAnchor: [17, 46],
+          })
+        )
+        .setLatLng([driver.location.lat, driver.location.lng])
+
+      // Bind a popup to the marker
+      marker.bindPopup(
+        `<div>
+           <p><strong>Username:</strong> ${driver.username}</p>
+           <p><strong>Phone:</strong> ${driver.phone_number}</p>
+           <p><strong>Status:</strong> ${driver.status}</p>
+         </div>`
+      )
+
+      markersRef.current.addLayer(marker)
     })
 
     const markers = markersRef.current
@@ -155,13 +168,60 @@ const Map = () => {
     }
   }, [map, drivers])
 
+  useEffect(() => {
+    // Branches
+    const refreshBranches = async () => {
+      const records: APIResponse = await getRecords('branch')
+      console.log('Branches:', records.results)
+      if (records.results) {
+        records.results.forEach((branch) => {
+          console.log(
+            'Branch:',
+            branch.account.name + ' ' + (branch.main ? ' main' : ''),
+            branch?.address?.latitude,
+            branch?.address?.longitude
+          )
+
+          const marker = L.marker([
+            branch?.address?.latitude,
+            branch?.address?.longitude,
+          ])
+            .setIcon(
+              L.icon({
+                iconUrl: '/images/icons/restaurant-icon.svg',
+                iconSize: [35, 46],
+                iconAnchor: [17, 46],
+              })
+            )
+            .setLatLng([branch?.address?.latitude, branch?.address?.longitude])
+
+          // Bind a popup to the marker
+          marker.bindPopup(
+            `<div>
+               <p><strong>Name:</strong> ${
+                 branch.account.name + ' ' + (branch.main ? ' (Main)' : '')
+               }</p>
+               <p><strong>Latitude:</strong> ${branch?.address?.latitude}</p>
+               <p><strong>Longitude:</strong> ${branch?.address?.longitude}</p>
+             </div>`
+          )
+
+          markersRef.current.addLayer(marker)
+        })
+      }
+    }
+
+    // if branches markers alrady exists, don't refresh
+    refreshBranches()
+  }, [map, drivers])
+
   const displayMap = useMemo(
     () => (
       <MapContainer
         center={[21.3891, 39.8579]}
         zoom={14}
         minZoom={5}
-        scrollWheelZoom={false}
+        scrollWheelZoom={true}
         maxBounds={[
           [-89, -179],
           [89, 179],
