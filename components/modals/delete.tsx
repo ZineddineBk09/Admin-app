@@ -63,7 +63,7 @@ export const DeleteModal = ({
           </Text>
         </Modal.Header>
         {loading ? (
-          <Loading size='xl' className='my-3' color='warning' />
+          <Loading size='xl' className='my-3'  />
         ) : (
           <Modal.Body>
             <Flex

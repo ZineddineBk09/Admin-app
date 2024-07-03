@@ -110,7 +110,7 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
       >
         {/* Form */}
         {loading ? (
-          <Loading size='xl' className='my-3' color='warning' />
+          <Loading size='xl' className='my-3'  />
         ) : (
           <form onSubmit={formik.handleSubmit}>
             <Modal.Header css={{ justifyContent: 'center' }}>
@@ -283,7 +283,7 @@ export const EditDriver = ({ driver }: { driver: Driver }) => {
                       }
                       name='isFreelance'
                       id='isFreelance'
-                      color='warning'
+                      
                       value={formik.values.isFreelance}
                       onChange={(e) => formik.setFieldValue('isFreelance', e)}
                       orientation='horizontal'

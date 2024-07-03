@@ -1,4 +1,3 @@
-// import { DriversPage as DriversList } from '../../components/drivers/list'
 import dynamic from 'next/dynamic'
 const DriversList = dynamic(
   () =>

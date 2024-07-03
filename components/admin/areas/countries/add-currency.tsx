@@ -89,7 +89,7 @@ export const AddCurrency = () => {
       >
         {/* Form */}
         {loading ? (
-          <Loading size='xl' className='my-3' color='warning' />
+          <Loading size='xl' className='my-3'  />
         ) : (
           <form onSubmit={formik.handleSubmit}>
             <Modal.Header css={{ justifyContent: 'center' }}>
@@ -274,7 +274,7 @@ export const AddCurrency = () => {
                       formik.setFieldValue('isSupported', e)
                     }}
                     defaultChecked={formik.values.isSupported}
-                    color='warning'
+                    
                   >
                     <span className='text-base'>Supported</span>
                   </Checkbox>

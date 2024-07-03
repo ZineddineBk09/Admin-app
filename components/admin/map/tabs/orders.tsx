@@ -182,7 +182,7 @@ const OrdersFilter = () => {
           >
             <Checkbox.Group
               label='Select one or more status to filter orders'
-              color='warning'
+              
               value={selected}
               onChange={(e: string[]) => setSelected(e)}
             >

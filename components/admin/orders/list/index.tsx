@@ -61,7 +61,7 @@ export const OrdersPage = () => {
       </div>
 
       {loading ? (
-        <Loading size='xl' className='mt-24 -mb-24' color='warning' />
+        <Loading size='xl' className='mt-24 -mb-24'  />
       ) : orders?.length > 0 ? (
         <OrdersTable />
       ) : (
