@@ -16,7 +16,16 @@ const theme = createTheme({
   type: 'light',
   theme: {
     colors: {
-      yellow: '#000',
+      primary: '#FFDB00',
+      primaryLight: '#FFED83',
+      // primaryLightHover: '$green300',
+      // primaryLightActive: '$green400',
+      // primaryLightContrast: '$green600',
+      // primaryBorder: '$green500',
+      // primaryBorderHover: '$green600',
+      // primarySolidHover: '$green700',
+      // primarySolidContrast: '$white',
+      primaryShadow: '#FFED83',
     },
   },
 })
