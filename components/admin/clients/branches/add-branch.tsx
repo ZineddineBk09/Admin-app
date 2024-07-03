@@ -142,7 +142,7 @@ export const AddBranch = () => {
       >
         {/* Form */}
         {loading ? (
-          <Loading size='xl' className='my-3' color='warning' />
+          <Loading size='xl' className='my-3'  />
         ) : (
           <form onSubmit={formik.handleSubmit}>
             <Modal.Header css={{ justifyContent: 'center' }}>
@@ -409,7 +409,7 @@ export const AddBranch = () => {
                 <div className='w-full mt-2'>
                   <Checkbox
                     aria-label='Main Branch'
-                    color='warning'
+                    
                     defaultSelected={false}
                     onChange={(e) => {
                       formik.setFieldValue('main', e)

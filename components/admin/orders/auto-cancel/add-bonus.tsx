@@ -63,7 +63,7 @@ export const AddBonus = ({ order }: { order: AutoCancelledOrder }) => {
       >
         {/* Form */}
         {loading ? (
-          <Loading size='xl' className='my-3' color='warning' />
+          <Loading size='xl' className='my-3'  />
         ) : (
           <form onSubmit={formik.handleSubmit}>
             <Modal.Header css={{ justifyContent: 'center' }}>

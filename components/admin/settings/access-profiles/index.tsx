@@ -297,7 +297,7 @@ export const SelectPermissions = () => {
           </Text>
         </Modal.Header>
         {loading ? (
-          <Loading size='xl' className='my-3' color='warning' />
+          <Loading size='xl' className='my-3'  />
         ) : (
           <Modal.Body>
             <Grid.Container gap={2}>
@@ -327,7 +327,7 @@ export const SelectPermissions = () => {
                               defaultChecked={item.read}
                               value={item.read ? 'read' : ''}
                               size='sm'
-                              color='warning'
+                              
                             >
                               Read
                             </Checkbox>
@@ -335,7 +335,7 @@ export const SelectPermissions = () => {
                               defaultChecked={item.add}
                               value={item.add ? 'add' : ''}
                               size='sm'
-                              color='warning'
+                              
                             >
                               Add
                             </Checkbox>
@@ -343,7 +343,7 @@ export const SelectPermissions = () => {
                               defaultChecked={item.edit}
                               value={item.edit ? 'edit' : ''}
                               size='sm'
-                              color='warning'
+                              
                             >
                               Edit
                             </Checkbox>
@@ -351,7 +351,7 @@ export const SelectPermissions = () => {
                               defaultChecked={item.delete}
                               value={item.delete ? 'delete' : ''}
                               size='sm'
-                              color='warning'
+                              
                             >
                               Delete
                             </Checkbox>

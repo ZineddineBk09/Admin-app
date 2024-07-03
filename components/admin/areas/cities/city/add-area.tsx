@@ -164,7 +164,7 @@ export const AddArea = ({ id }: { id: string | number }) => {
       >
         {/* Form */}
         {loading ? (
-          <Loading size='xl' className='my-3' color='warning' />
+          <Loading size='xl' className='my-3'  />
         ) : (
           <>
             <Modal.Header css={{ justifyContent: 'center' }}>

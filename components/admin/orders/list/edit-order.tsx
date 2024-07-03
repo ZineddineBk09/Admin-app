@@ -67,7 +67,7 @@ export const EditOrder = ({ order }: { order: Order }) => {
       >
         {/* Form */}
         {loading ? (
-          <Loading size='xl' className='my-3' color='warning' />
+          <Loading size='xl' className='my-3'  />
         ) : (
           <form onSubmit={formik.handleSubmit}>
             <Modal.Header css={{ justifyContent: 'center' }}>

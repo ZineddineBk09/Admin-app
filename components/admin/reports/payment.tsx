@@ -33,7 +33,7 @@ export const MakePayment = ({ id }: { id: number }) => {
           </Text>
         </Modal.Header>
         {loading ? (
-          <Loading size='xl' className='my-3' color='warning' />
+          <Loading size='xl' className='my-3'  />
         ) : (
           <div ref={paymentRef}>
             <Modal.Body>

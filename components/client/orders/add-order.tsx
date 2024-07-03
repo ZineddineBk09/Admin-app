@@ -159,7 +159,7 @@ export const AddOrder = () => {
       >
         {/* Form */}
         {loading ? (
-          <Loading size='xl' className='my-3' color='warning' />
+          <Loading size='xl' className='my-3'  />
         ) : (
           <form onSubmit={formik.handleSubmit}>
             <Modal.Header css={{ justifyContent: 'center' }}>
@@ -335,7 +335,7 @@ export const AddOrder = () => {
                   <Radio.Group
                     defaultValue='cash'
                     orientation='horizontal'
-                    color='warning'
+                    
                     size='sm'
                     value={formik.values.payment_type}
                     onChange={(e) => {
